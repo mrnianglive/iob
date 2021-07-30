@@ -11,6 +11,7 @@
                 <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                     <thead>
                         <tr>
+                            <th class="border-top-0">ID</th>
                             <th class="border-top-0">Caisse</th>
                             <th class="border-top-0">Montant</th>
                             <th class="border-top-0">Date</th>
@@ -22,6 +23,9 @@
                     <tbody>
                         <?php foreach ($ListeAppro as $key => $value) { ?>
                         <tr>
+                            <td>
+                                <?= $value['RefOperations']; ?>
+                            </td>
                             <td>
                                 <?= $value['NameAgency'] . "  " . $value['NameCaisse']; ?>
                             </td>

@@ -304,6 +304,26 @@ class JournalManagerPDO extends JournalManager
         $requete->execute();
     }
 
+    public function NbreOperationCaissier($Date, $Caisse)
+    {
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse   WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleOperations.RefCaisse=:RefCaisse ');
+        $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requete->execute();
+        $result = $requete->fetchAll();
+        return $result[0][0];
+    }
+
+    public function NbreOperationAgence($Agence, $Date)
+    {
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND (TbleOperations.RefType=1 OR TbleOperations.RefType=2) AND TbleAgency.RefAgency=:agence');
+        $requete->bindValue(':agence', $Agence, \PDO::PARAM_INT);
+        $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requete->execute();
+        $result = $requete->fetchAll();
+        return $result[0][0];
+    }
+
     public function CaisseAgence($Agence, $Date)
     {
         $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency=:RefAgency');
@@ -311,6 +331,8 @@ class JournalManagerPDO extends JournalManager
         $requeteAgence->execute();
         $ListeCaisse = $requeteAgence->fetchAll();
         foreach ($ListeCaisse as $key => $value) {
+            $ListeCaisse[$key]['NbreOperation'] =  $this->NbreOperationCaissier($Date, $value['RefCaisse']);
+
             $ListeCaisse[$key]['SoldeInitial'] =  $this->SoldeInitialCaisse($Date, $value['RefCaisse']);
             $ListeCaisse[$key]['SoldeInitialGlobal'] =  $this->SoldeInitialCaisseGlobal($Date, $value['RefCaisse']);
             $ListeCaisse[$key]['TotalAppro'] =  $this->TotalApproCaisse($Date, $value['RefCaisse']);

@@ -44,4 +44,36 @@ class AnalyticsController extends \Library\BackController
         $this->page->addVar('totalRetrait', $TotalRetrait);
         $this->page->addVar('Commission', $Commission + $CommissionRetrait);
     }
+
+    public function executeChart(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Chart "); // Titre de la page
+        $Charts = $this->managers->getManagerOf('Analytics')->Chart();
+        $this->page->addVar('Chart', $Charts);
+        $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
+        foreach ($ListeAgence as $key => $agence) {
+            $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);
+            $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency']);
+        }
+        $this->page->addVar("ListeAgence", $ListeAgence);
+        $ListeCaisse  = $this->managers->getManagerOf("Pannel")->ListeCaisse();
+        foreach ($ListeCaisse as $key => $caisse) {
+            $ListeCaisse[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartCaisseVersement($caisse['RefCaisse']);
+            $ListeCaisse[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartCaisseRetrait($caisse['RefCaisse']);
+        }
+        $this->page->addVar("ListeCaisse", $ListeCaisse);
+    }
+
+    public function executePerformance(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Analyse des performances"); // Titre de la page
+        $ListeBanque  = $this->managers->getManagerOf("Pannel")->ListeBanque();
+        $this->page->addVar("ListeBanque", $ListeBanque);
+        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
+        foreach ($Agence as $key => $value) {
+            $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], date('Y-m-d'));
+            $Agence[$key]['NbreOP'] = $this->managers->getManagerOf("Journal")->NbreOperationAgence($value['RefAgency'], date('Y-m-d'));
+        }
+        $this->page->addVar('Agence', $Agence);
+    }
 }

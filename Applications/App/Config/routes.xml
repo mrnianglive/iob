@@ -28,11 +28,6 @@
 	<route url="/Pannel/Produit" module="Pannel" action="listeproduit"/>
 	<route url="/Pannel/Produit/delete/([0-9]+)" module="Pannel" vars="id" action="deleteproduit"/>
 	<route url="/Arreter/reserve" module="Arreter" action="reserve"/>
-
-
-
-
-
 	<route url="/Users/myprofile" module="Users" action="profile"/>
 	<route url="/Users/NewPassword" module="Users" action="newpassword"/>
 	<route url="/Users/index" module="Users" action="index"/>
@@ -40,16 +35,6 @@
 	<route url="/Users/UpdateUsers/([0-9]+)" vars="id" action="updateusers" module="Users"/>
 	<route url="/Analytics/index" module="Analytics" action="index"/>
 	<route url="/Journal/petite_caisse" module="Journal" action="petitecaisse"/>
-
-
-
-
-
-
-
-
-
-
-
-
+	 <route url="/Analytics/chart" module="Analytics" action="chart"/>
+	  <route url="/Analytics/performance" module="Analytics" action="performance"/>
 </routes>

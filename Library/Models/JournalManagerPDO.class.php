@@ -291,10 +291,12 @@ class JournalManagerPDO extends JournalManager
     }
     public function ValidateOperations()
     {
-        $requete = $this->dao->prepare("UPDATE TbleOperations SET Validate= 2,DateValidate=:date,RefValidate=:RefUsers WHERE RefOperations=:RefOperations");
+        $validate = date('Y-m-d H:i:s');
+        $requete = $this->dao->prepare("UPDATE TbleOperations SET Validate= 2,DateValidate=:date,RefValidate=:RefUsers,ValidateDate=:validate WHERE RefOperations=:RefOperations");
         $requete->bindValue(':RefOperations', $_POST['RefOperations'], \PDO::PARAM_STR);
         $requete->bindValue(':date', $_POST['DateValidate'], \PDO::PARAM_STR);
         $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->bindValue(':validate', $validate, \PDO::PARAM_STR);
         $requete->execute();
     }
     public function CancelValidate($id)

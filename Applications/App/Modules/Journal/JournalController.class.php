@@ -61,7 +61,11 @@ class JournalController extends \Library\BackController
     public function executeValidate(\Library\HTTPRequest $request)
     {
         $this->managers->getManagerOf("Journal")->ValidateOperations($request);
-        $this->app()->httpResponse()->redirect("/Journal/index/" . $request->postData('Debut') . "/" . $request->postData('Fin') . "/" . $request->postData('RefAgency')); //Retour en arriere
+        if (!empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {
+            $this->app()->httpResponse()->redirect("/Journal/index/" . $request->postData('Debut') . "/" . $request->postData('Fin') . "/" . $request->postData('RefAgency')); //Retour en arriere
+        } else {
+            $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
+        }
     }
 
     public function executeCancelvalidate(\Library\HTTPRequest $request)

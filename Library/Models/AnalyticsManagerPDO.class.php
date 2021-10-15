@@ -111,4 +111,49 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $ChartList['RDecembre'] = $this->ChartRetrait(12);
         return $ChartList;
     }
+
+    public function CountDayValidate()
+    {
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND DATE(ValidateDate)=:jour');
+        $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result['Nbre'];
+    }
+
+    public function CountMonthValidate()
+    {
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND YEAR(ValidateDate)=:year AND MONTH(ValidateDate)=:mois');
+        $requete->bindValue(':mois', date('m'), \PDO::PARAM_STR);
+        $requete->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result['Nbre'];
+    }
+
+    public function CountMonthOperations()
+    {
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND YEAR(Approve2_time)=:year AND MONTH(Approve2_time)=:mois');
+        $requete->bindValue(':mois', date('m'), \PDO::PARAM_STR);
+        $requete->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result['Nbre'];
+    }
+
+    public function CountWeekOperations()
+    {
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_time > NOW() - INTERVAL 7 DAY');
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result['Nbre'];
+    }
+
+    public function CountWeekValidate()
+    {
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND ValidateDate > NOW() - INTERVAL 7 DAY');
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result['Nbre'];
+    }
 }

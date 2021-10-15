@@ -75,5 +75,19 @@ class AnalyticsController extends \Library\BackController
             $Agence[$key]['NbreOP'] = $this->managers->getManagerOf("Journal")->NbreOperationAgence($value['RefAgency'], date('Y-m-d'));
         }
         $this->page->addVar('Agence', $Agence);
+
+        $DailyValidate = $this->managers->getManagerOf('Analytics')->CountDayValidate();
+        $this->page->addVar('DailyValidate', $DailyValidate);
+        $MonthValidate = $this->managers->getManagerOf('Analytics')->CountMonthValidate();
+        $this->page->addVar('MonthValidate', $MonthValidate);
+
+        $MonthOperations = $this->managers->getManagerOf('Analytics')->CountMonthOperations();
+        $this->page->addVar('MonthOperations', $MonthOperations);
+
+        $CountWeekOperations = $this->managers->getManagerOf('Analytics')->CountWeekOperations();
+        $this->page->addVar('CountWeekOperations', $CountWeekOperations);
+
+        $CountWeekValidate = $this->managers->getManagerOf('Analytics')->CountWeekValidate();
+        $this->page->addVar('CountWeekValidate', $CountWeekValidate);
     }
 }

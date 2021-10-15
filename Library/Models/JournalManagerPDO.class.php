@@ -306,24 +306,23 @@ class JournalManagerPDO extends JournalManager
 
     public function NbreOperationCaissier($Date, $Caisse)
     {
-        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse   WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleOperations.RefCaisse=:RefCaisse ');
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse   WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleOperations.RefCaisse=:RefCaisse ');
         $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requete->execute();
-        $result = $requete->fetchAll();
-        return $result[0][0];
+        $result = $requete->fetch();
+        return $result['Nbre'];
     }
 
     public function NbreOperationAgence($Agence, $Date)
     {
-        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND (TbleOperations.RefType=1 OR TbleOperations.RefType=2) AND TbleAgency.RefAgency=:agence');
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations)AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND (TbleOperations.RefType=1 OR TbleOperations.RefType=2) AND TbleAgency.RefAgency=:agence');
         $requete->bindValue(':agence', $Agence, \PDO::PARAM_INT);
         $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requete->execute();
-        $result = $requete->fetchAll();
-        return $result[0][0];
+        $result = $requete->fetch();
+        return $result['Nbre'];
     }
-
     public function CaisseAgence($Agence, $Date)
     {
         $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency=:RefAgency');

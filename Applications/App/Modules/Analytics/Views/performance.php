@@ -1,34 +1,69 @@
 <div class="row">
-    <div class="col-md-12">
-
+    <div class="col-md-6">
         <div class="white-box">
             <h3 class="box-title">Performance Validation</h3>
             <div class="table-responsive">
                 <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th class="border-top-0">Jour</th>
-                            <th class="border-top-0">Semaine</th>
-                            <th class="border-top-0">Mois</th>
+                            <th class="border-top-0">OP VALIDATEE | <?= date('d/m/Y'); ?> </th>
+                            <th class="border-top-0">Semaine(D-7)</th>
+                            <th class="border-top-0"><?= date('M/Y'); ?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td><?= $DailyValidate; ?></td>
+                            <td><?= $CountWeekValidate; ?>/<?= $CountWeekOperations; ?></td>
+                            <td><?= $MonthValidate; ?>/<?= $MonthOperations; ?> </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="white-box">
+            <canvas id="myChart" width="50" height="1"></canvas>
+            <script>
+            var ctx = document.getElementById('myChart');
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Nbre Validate | Semaine', 'Nbre OP  Week | Semaine'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [<?= $CountWeekValidate; ?>, <?= $CountWeekOperations; ?>],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            </script>
+        </div>
+    </div>
+
 </div>
 
 <div class="row">
     <div class="col-md-12">
         <div class="white-box">
-            <h3 class="box-title">Petite Caisse</h3>
+            <h3 class="box-title">Performance Journaliere</h3>
             <div class="table-responsive">
                 <table id="dataTable1" class="display nowrap" cellspacing="0" width="100%">
                     <thead>

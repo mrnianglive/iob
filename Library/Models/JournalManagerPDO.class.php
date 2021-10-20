@@ -318,7 +318,7 @@ class JournalManagerPDO extends JournalManager
 
     public function NbreOperationAgence($Agence, $Date)
     {
-        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND DATE(Approve2_Time)=:jour AND TbleCaisse.RefAgency=agence');
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND DATE(Approve2_Time)=:jour AND TbleCaisse.RefAgency=:agence');
         $requete->bindValue(':agence', $Agence, \PDO::PARAM_INT);
         $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requete->execute();

@@ -28,60 +28,60 @@
                       </thead>
                       <tbody>
                           <?php foreach ($Agence as $value) { ?>
-                              <tr>
-                                  <td><?= $value['NameAgency']; ?></td>
-                                  <td>
-                                      <ul>
-                                          <?php foreach ($value['Afficher'] as $print) { ?>
-                                              <li><?= $print['NameCaisse']; ?></li>
-                                          <?php } ?>
-                                      </ul>
-                                  </td>
-                                  <td>
-                                      <ul>
-                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                              <li><?= $afficher['SoldeInitial']; ?></li>
-                                          <?php } ?>
-                                      </ul>
-                                  </td>
+                          <tr>
+                              <td><?= $value['NameAgency']; ?></td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $print) { ?>
+                                      <li><?= $print['NameCaisse']; ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= $afficher['SoldeInitial']; ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
 
 
-                                  <td>
-                                      <ul>
-                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                              <li><?= $afficher['TotalAppro']; ?></li>
-                                          <?php } ?>
-                                      </ul>
-                                  </td>
-                                  <td>
-                                      <ul>
-                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                              <li><?= $afficher['TotalSortieCaisse']; ?></li>
-                                          <?php } ?>
-                                      </ul>
-                                  </td>
-                                  <td>
-                                      <ul>
-                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                              <li><?= $afficher['TotalVersement']; ?></li>
-                                          <?php } ?>
-                                      </ul>
-                                  </td>
-                                  <td>
-                                      <ul>
-                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                              <li><?= $afficher['TotalRetrait']; ?></li>
-                                          <?php } ?>
-                                      </ul>
-                                  </td>
-                                  <td>
-                                      <ul>
-                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                              <li><?= $afficher['SoldeDisponible']; ?></li>
-                                          <?php } ?>
-                                      </ul>
-                                  </td>
-                              </tr>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= $afficher['TotalAppro']; ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= $afficher['TotalSortieCaisse']; ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= $afficher['TotalVersement']; ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= $afficher['TotalRetrait']; ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= $afficher['SoldeDisponible']; ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+                          </tr>
                           <?php } ?>
                       </tbody>
                   </table>
@@ -103,32 +103,34 @@
                               <th class="border-top-0">Retrait</th>
                               <th class="border-top-0">Solde Agence</th>
                               <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
-                                  <th class="border-top-0">Action</th>
+                              <th class="border-top-0">Action</th>
                               <?php } ?>
 
                           </tr>
                       </thead>
                       <tbody>
                           <?php foreach ($Agence as $value) { ?>
-                              <tr>
-                                  <td><?= $value['NameAgency']; ?></td>
-                                  <td><?= $value['YesterdayReserve']; ?></td>
-                                  <td><?= $value['DayReserve']; ?></td>
-                                  <td><?= $value['SommeDepot']; ?></td>
-                                  <td><?= $value['SommeSortie']; ?></td>
-                                  <td><?= $value['ReserveActuelle']; ?></td>
-                                  <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
-                                      <td> <?php if (!empty($value['validate'])) { ?><a class="btn btn-success"><i class="fa  fa-lock"></i></a> <?php } else { ?>
-                                              <form method="POST" action="/Arreter/reserve">
-                                                  <input type="hidden" value="<?= $value['ReserveActuelle']; ?>" name="ReserveActuelle">
+                          <tr>
+                              <td><?= $value['NameAgency']; ?></td>
+                              <td><?= $value['YesterdayReserve']; ?></td>
+                              <td><?= $value['DayReserve']; ?></td>
+                              <td><?= $value['SommeDepot']; ?></td>
+                              <td><?= $value['SommeSortie']; ?></td>
+                              <td><?= $value['ReserveActuelle']; ?></td>
+                              <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
+                              <td> <?php if (!empty($value['validate'])) { ?><a class="btn btn-success"><i
+                                          class="fa  fa-lock"></i></a> <?php } else { ?>
+                                  <form method="POST" action="/Arreter/reserve">
+                                      <input type="hidden" value="<?= $value['ReserveActuelle']; ?>"
+                                          name="ReserveActuelle">
 
-                                                  <input type="hidden" value="<?= $day; ?>" name="daycloture">
-                                                  <input type="hidden" value="<?= $value['RefAgency']; ?>" name="RefAgency">
-                                                  <button type="submit" class="btn btn-danger"><i class="fa fa-unlock"></i></button>
-                                              </form> <?php } ?>
-                                      </td>
-                                  <?php } ?>
-                              </tr>
+                                      <input type="hidden" value="<?= $day; ?>" name="daycloture">
+                                      <input type="hidden" value="<?= $value['RefAgency']; ?>" name="RefAgency">
+                                      <button type="submit" class="btn btn-danger"><i class="fa fa-unlock"></i></button>
+                                  </form> <?php } ?>
+                              </td>
+                              <?php } ?>
+                          </tr>
                           <?php } ?>
                       </tbody>
                   </table>

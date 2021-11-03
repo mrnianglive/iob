@@ -60,7 +60,7 @@ class BielletageManagerPDO extends BielletageManager
     public  function GetCaisse()
     {
 
-        $requeteCaisse = $this->dao->prepare('SELECT * FROM TbleOperations LEFT JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit  INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse  WHERE TbleOperations.Reset_Id IS NULL AND TbleOperations.Insert_Time=:today AND TbleChmod.RefUsers=:RefUsers ');
+        $requeteCaisse = $this->dao->prepare('SELECT * FROM TbleOperations LEFT JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit  INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse  WHERE TbleOperations.Reset_Id IS NULL AND TbleOperations.Insert_Time=:today AND TbleChmod.RefUsers=:RefUsers ORDER BY TbleOperations.RefOperations DESC ');
         $requeteCaisse->bindValue(':today', date('Y-m-d'), \PDO::PARAM_STR);
         $requeteCaisse->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requeteCaisse->execute();

@@ -476,11 +476,11 @@ class JournalManagerPDO extends JournalManager
         $data = $requeteSUm->fetch();
         return $data['TotalRetrait'];
     }
-    public function CheckDailyClose($Agence)
+    public function CheckDailyClose($Agence, $date)
     {
         $requete = $this->dao->prepare("SELECT * FROM TbleCompte WHERE RefAgency=:RefAgency AND date(DateSolde)=:jour");
         $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-        $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
+        $requete->bindValue(':jour', $date, \PDO::PARAM_STR);
         $requete->execute();
         $Result = $requete->fetch();
         return $Result;

@@ -88,8 +88,10 @@ class JournalController extends \Library\BackController
         foreach ($Agence as $key => $value) {
             if (!empty($request->postData('jour'))) {
                 $date = $request->postData('jour');
+                $this->page->addVar('day', $request->postData('jour'));
             } else {
                 $date = date('Y-m-d');
+                $this->page->addVar('day', $date);
             }
             $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], $date);
             $Agence[$key]['validate'] = $this->managers->getManagerOf("Journal")->CheckDailyClose($value['RefAgency'], $date);

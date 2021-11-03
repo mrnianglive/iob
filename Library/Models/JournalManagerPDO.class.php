@@ -345,11 +345,11 @@ class JournalManagerPDO extends JournalManager
         return $ListeCaisse;
     }
 
-    public function YesterdayReserve($Agence)
+    public function YesterdayReserve($Agence, $date)
     {
         $requeteSoldeInittial = $this->dao->prepare("SELECT SoldeCompte FROM TbleCompte WHERE DateSolde=(SELECT MAX(DateSolde) FROM TbleCompte WHERE RefAgency=:RefAgency AND DateSolde <:today)");
         $requeteSoldeInittial->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-        $requeteSoldeInittial->bindValue(':today', date('Y-m-d'), \PDO::PARAM_STR);
+        $requeteSoldeInittial->bindValue(':today', $date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
         return $result['SoldeCompte'];

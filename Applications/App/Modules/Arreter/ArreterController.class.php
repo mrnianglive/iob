@@ -44,7 +44,7 @@ class ArreterController extends \Library\BackController
                 $SommeVersement = $this->managers->getManagerOf('Bielletage')->SommeVersementAgence($data['RefCaisse'], $request->postData('daycloture'));
                 $SommeRetrait = $this->managers->getManagerOf('Bielletage')->SommeRetraitAgence($data['RefCaisse'], $request->postData('daycloture'));
                 $Solde = $SommeVersement -   $SommeRetrait;
-                $this->managers->getManagerOf('Arreter')->StopCaisse($data['RefCaisse'], $Solde);
+                $this->managers->getManagerOf('Arreter')->StopCaisse($data['RefCaisse'], $Solde, $request->postData('daycloture'));
             }
         }
 

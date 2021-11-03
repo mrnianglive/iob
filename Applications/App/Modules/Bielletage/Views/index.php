@@ -67,6 +67,7 @@
                   <table class="table no-wrap">
                       <thead>
                           <tr>
+                              <th class="border-top-0">RECU</th>
                               <th class="border-top-0">AGENCE</th>
                               <th class="border-top-0">CAISSE</th>
                               <th class="border-top-0">PRODUIT</th>
@@ -75,12 +76,14 @@
                               <th class="border-top-0">N°COMPTE</th>
                               <th class="border-top-0">MONTANT</th>
                               <th class="border-top-0">REMARQUE</th>
-                              <th class="border-top-0">RECU</th>
+
                           </tr>
                       </thead>
                       <tbody>
                           <?php foreach ($Operation as $key => $value) { ?>
                           <tr class="advance-table-row">
+                              <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
+                                      class="btn btn-secondary"><i class="fa fa-print"></i> </td>
                               <td> <?= $value['NameAgency']; ?></td>
                               <td> <?= $value['NameCaisse']; ?></td>
                               <td> <?= $value['NameProduit']; ?></td>
@@ -90,8 +93,6 @@
                               <td class="counter text-danger">
                                   <?= number_format($value['MontantVersement'], 0, '.', ','); ?></td>
                               <td><?= $value['Remarque']; ?></td>
-                              <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
-                                      class="btn btn-secondary"><i class="fa fa-print"> Reçu</i> </td>
                           </tr>
                           <?php } ?>
                       </tbody>

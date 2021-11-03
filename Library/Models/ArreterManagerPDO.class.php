@@ -17,12 +17,13 @@ class ArreterManagerPDO extends ArreterManager
         }
         return $ListeCaisse;
     }
-    public function StopCaisse($RefCaisse, $Solde)
+    public function StopCaisse($RefCaisse, $Solde, $date)
     {
         //Arreter de Caisse 
-        $StopCaisse = $this->dao->prepare('INSERT INTO TbleSolde(RefCaisse,Solde,RefUsers) VALUES(:RefCaisse,:Solde,:RefUsers)');
+        $StopCaisse = $this->dao->prepare('INSERT INTO TbleSolde(RefCaisse,Solde,DateSolde,RefUsers) VALUES(:RefCaisse,:Solde,:DateSolde,:RefUsers)');
         $StopCaisse->bindValue(':RefCaisse', $RefCaisse, \PDO::PARAM_INT);
         $StopCaisse->bindValue(':Solde', $Solde, \PDO::PARAM_STR);
+        $StopCaisse->bindValue(':DateSolde', $date, \PDO::PARAM_STR);
         $StopCaisse->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $StopCaisse->execute();
     }

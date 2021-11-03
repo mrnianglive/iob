@@ -14,7 +14,7 @@ abstract class ArreterManager extends \Library\Manager
     abstract protected function GetDailyBielletage($Date);
     abstract protected function Versement($Date);
     abstract protected function Retrait($Date);
-    abstract protected function StopCaisse($RefCaisse, $Solde);
+    abstract protected function StopCaisse($RefCaisse, $Solde, $date);
     abstract protected function CheckDailyClose($Caisse);
     abstract protected function ListeSolde($Caisse);
     abstract protected function DeleteSolde($RefSolde);

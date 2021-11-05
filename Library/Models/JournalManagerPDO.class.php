@@ -460,7 +460,7 @@ class JournalManagerPDO extends JournalManager
         $requeteAddService->bindValue(':DateSolde', $_POST['daycloture'], \PDO::PARAM_STR);
         $requeteAddService->execute();
         $RefCompte = $this->dao->lastInsertId();
-        $requete = $this->dao->prepare("UPDATE TbleCompte SET DateSolde = CONCAT(DATE(DateSolde),' '.$time'.') WHERE RefCompte=:RefCompte");
+        $requete = $this->dao->prepare("UPDATE TbleCompte SET DateSolde = CONCAT(DATE(DateSolde),' '$time'') WHERE RefCompte=:RefCompte");
         $requete->bindValue(':RefCompte', $RefCompte, \PDO::PARAM_INT);
         $requete->execute();
     }

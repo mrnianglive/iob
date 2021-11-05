@@ -456,7 +456,7 @@ class JournalManagerPDO extends JournalManager
         $requeteAddService = $this->dao->prepare("INSERT INTO TbleCompte(RefAgency,SoldeCompte,DateSolde) VALUES(:RefAgency,:SoldeCompte,:DateSolde)");
         $requeteAddService->bindValue(':RefAgency', $_POST['RefAgency'], \PDO::PARAM_INT);
         $requeteAddService->bindValue(':SoldeCompte', $_POST['ReserveActuelle'], \PDO::PARAM_STR);
-        $requeteAddService->bindValue(':DateSolde', date($_POST['daycloture'] . 'H:i:s'), \PDO::PARAM_STR);
+        $requeteAddService->bindValue(':DateSolde', date($_POST['daycloture']), \PDO::PARAM_STR);
         $requeteAddService->execute();
     }
     public function SomnmeVersementCaisse($Date, $Caisse)

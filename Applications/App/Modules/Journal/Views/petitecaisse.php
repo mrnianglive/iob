@@ -4,6 +4,7 @@
               <div class="input-group">
                   <div class="col-md-3">Date
                       <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control">
+                      <?= $time = date('H:i:s'); ?>
                   </div>
                   <div class="col-md-1"></br>
                       <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>

@@ -47,7 +47,7 @@ class ArreterController extends \Library\BackController
                 if (!empty($request->postData('daycloture'))) {
                     $datecloture = $request->postData('daycloture');
                 } else {
-                    $datecloture = date('y-m-d');
+                    $datecloture = ('Y-m-d H:i:s');
                 }
 
                 $this->managers->getManagerOf('Arreter')->StopCaisse($data['RefCaisse'], $Solde, $datecloture);

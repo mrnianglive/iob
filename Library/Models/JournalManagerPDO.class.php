@@ -453,14 +453,14 @@ class JournalManagerPDO extends JournalManager
 
     public function Reserve()
     {
-        $time = date(' H:i:s');
+        $time = date('H:i:s');
         $requeteAddService = $this->dao->prepare("INSERT INTO TbleCompte(RefAgency,SoldeCompte,DateSolde) VALUES(:RefAgency,:SoldeCompte,:DateSolde)");
         $requeteAddService->bindValue(':RefAgency', $_POST['RefAgency'], \PDO::PARAM_INT);
         $requeteAddService->bindValue(':SoldeCompte', $_POST['ReserveActuelle'], \PDO::PARAM_STR);
         $requeteAddService->bindValue(':DateSolde', $_POST['daycloture'], \PDO::PARAM_STR);
         $requeteAddService->execute();
         $RefCompte = $this->dao->lastInsertId();
-        $requete = $this->dao->prepare("UPDATE TbleCompte SET DateSolde = CONCAT(DATE(DateSolde),' .$time.') WHERE RefCompte=:RefCompte");
+        $requete = $this->dao->prepare("UPDATE TbleCompte SET DateSolde = CONCAT(DATE(DateSolde),' '.$time'.') WHERE RefCompte=:RefCompte");
         $requete->bindValue(':RefCompte', $RefCompte, \PDO::PARAM_INT);
         $requete->execute();
     }

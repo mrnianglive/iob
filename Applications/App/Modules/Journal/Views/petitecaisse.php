@@ -6,7 +6,7 @@
                       <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control">
                       <?php
                         $date = 'H:i:s';
-                        echo  date('Y-m-d H:i:s', strtotime($date, strtotime($day))); ?>
+                        echo  date('Y-m-d H:i:s', strtotime($date, strtotime('Y-m-d'))); ?>
                   </div>
                   <div class="col-md-1"></br>
                       <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>

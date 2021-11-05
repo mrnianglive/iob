@@ -90,7 +90,7 @@ class JournalController extends \Library\BackController
                 $date = $request->postData('jour');
                 $this->page->addVar('day', $request->postData('jour'));
             } else {
-                $date = date('Y-m-d');
+                $date = date('Y-m-d H:i:s');
                 $this->page->addVar('day', $date);
             }
             $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], $date);

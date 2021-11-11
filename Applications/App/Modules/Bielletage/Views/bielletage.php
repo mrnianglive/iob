@@ -284,7 +284,9 @@
                             <?php } ?>
                             <div class="form-group">
                                 <label class="control-label">Caisse</label>
-                                <select class="form-control" name="RefCaisse" tabindex="1" id="RefCaisse" required="">
+                                <select class="form-control" name="RefCaisse" tabindex="1"
+                                    <?php if ($_GET['id'] == 3 or $_GET['id'] == 4) { ?> id="RefCaisse" <?php } ?>
+                                    required="">
                                     <?php
                                         foreach ($CheckOuverture as $key => $Caisse) {
                                             if ($Caisse['caisse'] != $Caisse['RefCaisse']) {

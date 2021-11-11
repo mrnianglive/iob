@@ -284,8 +284,9 @@
                             <?php } ?>
                             <div class="form-group">
                                 <label class="control-label">Caisse</label>
-                                <select class="form-control" name="RefCaisse" tabindex="1" required="">
-                                    <?php foreach ($CheckOuverture as $key => $Caisse) {
+                                <select class="form-control" name="RefCaisse" tabindex="1" id="RefCaisse" required="">
+                                    <?php
+                                        foreach ($CheckOuverture as $key => $Caisse) {
                                             if ($Caisse['caisse'] != $Caisse['RefCaisse']) {
                                         ?>
                                     <option value="<?= $Caisse['RefCaisse']; ?>">
@@ -308,12 +309,21 @@
                             </div>
                         </div>
                         <?php } ?>
+                        <?php if ($_GET['id'] == 3) { ?>
                         <div class="col-md-6">
                             <div class="form-group has-error">
                                 <label class="control-label">Numéro de compte</label>
                                 <input type="int" id="NumCompte" class="form-control" name="NumCompte" required="">
                             </div>
                         </div>
+                        <?php } else { ?>
+                        <div class="col-md-6">
+                            <div class="form-group has-error">
+                                <label class="control-label">Numéro de compte</label>
+                                <input type="int" id="NumCompte" class="form-control" name="NumCompte" required="">
+                            </div>
+                        </div>
+                        <?php } ?>
                         <?php } else { ?>
                         <div class="col-md-6">
                             <div class="form-group">

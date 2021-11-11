@@ -284,9 +284,7 @@
                             <?php } ?>
                             <div class="form-group">
                                 <label class="control-label">Caisse</label>
-                                <select class="form-control" name="RefCaisse" tabindex="1"
-                                    <?php if ($_GET['id'] == 3 or $_GET['id'] == 4) { ?> id="RefCaisse" <?php } ?>
-                                    required="">
+                                <select class="form-control" name="RefCaisse" tabindex="1" required="">
                                     <?php
                                         foreach ($CheckOuverture as $key => $Caisse) {
                                             if ($Caisse['caisse'] != $Caisse['RefCaisse']) {
@@ -364,12 +362,33 @@
                                 <input type="text" id="NameClient" class="form-control" name="NameClient" required="">
                             </div>
                         </div>
+                        <?php if ($_GET['id'] == 2) { ?>
+                        <div class="col-md-2">
+                            <div class="form-group has-error">
+                                <label class="control-label">Montant</label>
+                                <input type="int" id="total" class="form-control" name="total" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group has-error">
+                                <label class="control-label">FRAIS</label>
+                                <input type="int" id="frais" class="form-control" name="fraismad" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group has-error">
+                                <label class="control-label">Montant à Payer</label>
+                                <input type="int" id="mtotal" class="form-control" name="MontantVersement" readonly>
+                            </div>
+                        </div>
+                        <?php } else { ?>
                         <div class="col-md-6">
                             <div class="form-group has-error">
                                 <label class="control-label">Montant</label>
                                 <input type="int" id="total" class="form-control" name="MontantVersement" readonly>
                             </div>
                         </div>
+                        <?php } ?>
                     </div>
                     <?php if ($_GET['id'] == 3) { ?>
                     <div class="row">

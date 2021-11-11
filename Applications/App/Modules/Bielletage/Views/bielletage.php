@@ -277,130 +277,153 @@
             <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                 <div class="row">
                     <?php if ($_GET['id'] == 3 or $_GET['id'] == 4) { ?>
-                        <?php if ($_GET['id'] == 3) { ?>
-                            <div class="col-md-3">
-                            <?php } else { ?>
-                                <div class="col-md-6">
-                                <?php } ?>
-                                <div class="form-group">
-                                    <label class="control-label">Caisse</label>
-                                    <select class="form-control" name="RefCaisse" tabindex="1" required="">
-                                        <?php foreach ($CheckOuverture as $key => $Caisse) {
+                    <?php if ($_GET['id'] == 3) { ?>
+                    <div class="col-md-3">
+                        <?php } else { ?>
+                        <div class="col-md-6">
+                            <?php } ?>
+                            <div class="form-group">
+                                <label class="control-label">Caisse</label>
+                                <select class="form-control" name="RefCaisse" tabindex="1" required="">
+                                    <?php foreach ($CheckOuverture as $key => $Caisse) {
                                             if ($Caisse['caisse'] != $Caisse['RefCaisse']) {
                                         ?>
-                                                <option value="<?= $Caisse['RefCaisse']; ?>">
-                                                    <?= $Caisse['NameCaisse'] . " " . $Caisse['NameAgency']; ?></option>
-                                        <?php }
+                                    <option value="<?= $Caisse['RefCaisse']; ?>">
+                                        <?= $Caisse['NameCaisse'] . " " . $Caisse['NameAgency']; ?></option>
+                                    <?php }
                                         }   ?>
-                                    </select>
-                                </div>
-                                </div>
-                                <?php if ($_GET['id'] == 3) { ?>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label class="control-label">Type Appro</label>
-                                            <select class="form-control" name="TypeAppro" tabindex="1" required="">
-                                                <?php foreach ($TypeAppro as $key => $type) { ?>
-                                                    <option value="<?= $type['RefTypeAppro']; ?>">
-                                                        <?= $type['NameTypeAppro']; ?></option>
-                                                <?php }   ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                                <div class="col-md-6">
-                                    <div class="form-group has-error">
-                                        <label class="control-label">Numéro de compte</label>
-                                        <input type="int" id="NumCompte" class="form-control" name="NumCompte" required="">
-                                    </div>
-                                </div>
-                            <?php } else { ?>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Caisse</label>
-                                        <select class="form-control" name="RefCaisse" id="RefCaisse" tabindex="1" required="">
+                                </select>
+                            </div>
+                        </div>
+                        <?php if ($_GET['id'] == 3) { ?>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Type Appro</label>
+                                <select class="form-control" name="TypeAppro" tabindex="1" required="">
+                                    <?php foreach ($TypeAppro as $key => $type) { ?>
+                                    <option value="<?= $type['RefTypeAppro']; ?>">
+                                        <?= $type['NameTypeAppro']; ?></option>
+                                    <?php }   ?>
+                                </select>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <div class="col-md-6">
+                            <div class="form-group has-error">
+                                <label class="control-label">Numéro de compte</label>
+                                <input type="int" id="NumCompte" class="form-control" name="NumCompte" required="">
+                            </div>
+                        </div>
+                        <?php } else { ?>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Caisse</label>
+                                <select class="form-control" name="RefCaisse" id="RefCaisse" tabindex="1" required="">
 
-                                            <?php foreach ($CheckOuverture as $key => $Caisse) {
+                                    <?php foreach ($CheckOuverture as $key => $Caisse) {
                                                 if ($Caisse['caisse'] != $Caisse['RefCaisse']) {
                                             ?>
-                                                    <option value="<?= $Caisse['RefCaisse']; ?>">
-                                                        <?= $Caisse['NameCaisse'] . " " . $Caisse['NameAgency']; ?></option>
-                                            <?php }
+                                    <option value="<?= $Caisse['RefCaisse']; ?>">
+                                        <?= $Caisse['NameCaisse'] . " " . $Caisse['NameAgency']; ?></option>
+                                    <?php }
                                             }   ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label class="control-label">Produit</label>
-                                        <select class="form-control" name="RefProduit" tabindex="1" id="RefProduit" required="">
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3" style="display: none;" id="hidden">
-                                    <div class="form-group has-error"><label class="control-label" id="label">Numéro de
-                                            compte</label><input type="int" id="NumCompte" class="form-control" name="NumCompte" required=""></div>
-                                </div>
-                            <?php } ?>
+                                </select>
                             </div>
-                            <div class=" row">
-                                <div class="col-md-6">
-                                    <div class="form-group has-error">
-                                        <label class="control-label">Client</label>
-                                        <input type="text" id="NameClient" class="form-control" name="NameClient" required="">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group has-error">
-                                        <label class="control-label">Montant</label>
-                                        <input type="int" id="total" class="form-control" name="MontantVersement" readonly>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Produit</label>
+                                <select class="form-control" name="RefProduit" tabindex="1" id="RefProduit" required="">
+                                    <option></option>
+                                </select>
                             </div>
-                            <?php if ($_GET['id'] == 3) { ?>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group has-error">
-                                            <label class="control-label">Remarque</label>
-                                            <input type="text" class="form-control" name="Remarque" value="NULL" readonly="">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group has-error">
-                                            <label class="control-label">Deposant/Auteur Retrait</label>
-                                            <input type="text" class="form-control" name="NameDeposant" value="<?= $_SESSION['PrenomUsers'], " " . $_SESSION['NomUsers']; ?>" readonly="">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group has-error">
-                                            <label class="control-label">Téléphone</label>
-                                            <input type="text" class="form-control" name="TelDeposant" value="NULL" readonly="">
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php } else { ?>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group has-error">
-                                            <label class="control-label">Remarque</label>
-                                            <input type="text" class="form-control" name="Remarque" required="">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group has-error">
-                                            <label class="control-label">Deposant/Auteur Retrait</label>
-                                            <input type="text" class="form-control" name="NameDeposant" required="">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group has-error">
-                                            <label class="control-label">Téléphone</label>
-                                            <input type="text" class="form-control" name="TelDeposant" required="">
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php } ?>
+                        </div>
+                        <div class="col-md-3" style="display: none;" id="hidden">
+                            <div class="form-group has-error"><label class="control-label" id="label">Numéro de
+                                    compte</label><input type="int" id="NumCompte" class="form-control" name="NumCompte"
+                                    required=""></div>
+                        </div>
+                        <?php } ?>
+                    </div>
+                    <div class=" row">
+                        <div class="col-md-6">
+                            <div class="form-group has-error">
+                                <label class="control-label">Client</label>
+                                <input type="text" id="NameClient" class="form-control" name="NameClient" required="">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-error">
+                                <label class="control-label">Montant</label>
+                                <input type="int" id="total" class="form-control" name="MontantVersement" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <?php if ($_GET['id'] == 3) { ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group has-error">
+                                <label class="control-label">Remarque</label>
+                                <input type="text" class="form-control" name="Remarque" value="NULL" readonly="">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group has-error">
+                                <label class="control-label">Deposant/Auteur Retrait</label>
+                                <input type="text" class="form-control" name="NameDeposant"
+                                    value="<?= $_SESSION['PrenomUsers'], " " . $_SESSION['NomUsers']; ?>" readonly="">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group has-error">
+                                <label class="control-label">Téléphone</label>
+                                <input type="text" class="form-control" name="TelDeposant" value="NULL" readonly="">
+                            </div>
+                        </div>
+                    </div>
+                    <?php } else { ?>
+                    <div class="row">
+                        <?php if ($_GET['id'] == 2) { ?>
+                        <div class="col-md-3">
+                            <div class="form-group has-error">
+                                <label class="control-label">Remarque</label>
+                                <input type="text" class="form-control" name="Remarque" required="">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group has-error">
+                                <label class="control-label">Type</label>
+                                <select class="form-control" name="TypeRetrait" tabindex="1" required="">
+                                    <?php foreach ($TypeRetrait as $type) { ?>
+                                    <option value="<?= $type['RefTypeRetrait']; ?>"><?= $type['NameTypeRetrait']; ?>
+                                    </option>
+                                    <?php } ?>
+
+                                </select>
+                            </div>
+                        </div>
+                        <?php  } else { ?>
+                        <div class="col-md-6">
+                            <div class="form-group has-error">
+                                <label class="control-label">Remarque</label>
+                                <input type="text" class="form-control" name="Remarque" required="">
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <div class="col-md-3">
+                            <div class="form-group has-error">
+                                <label class="control-label">Deposant/Auteur Retrait</label>
+                                <input type="text" class="form-control" name="NameDeposant" required="">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group has-error">
+                                <label class="control-label">Téléphone</label>
+                                <input type="text" class="form-control" name="TelDeposant" required="">
+                            </div>
+                        </div>
+                    </div>
+                    <?php } ?>
                 </div>
 
             </div>

@@ -59,6 +59,9 @@ class BielletageController extends \Library\BackController
         $TypeAppro  = $this->managers->getManagerOf("Journal")->TypeAppro(); //Recuperation de la liste
         $this->page->addVar("TypeAppro", $TypeAppro); // Creation de la variable, ajout d'une variable a la vue
 
+        $TypeRetrait  = $this->managers->getManagerOf("Bielletage")->TypeRetrait(); //Recuperation de la liste
+        $this->page->addVar("TypeRetrait", $TypeRetrait); // Creation de la variable, ajout d'une variable a la vue
+
     }
     public function executeInvoice(\Library\HTTPRequest $request)
     {

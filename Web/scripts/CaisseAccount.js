@@ -21,17 +21,6 @@ $(function () {
                 }
             }
         });
-           $.ajax({
-            url: '/config/client.php',
-            data: 'NumCompte=' + Name,
-            dataType: 'json',
-            success: function (json) {
-                if (json != null) {
-                    $NameClient.val(json);
-                } else {
-                    $NameClient.val('');
-                }
-            }
-        });
+  
     })
 });

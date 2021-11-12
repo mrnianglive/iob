@@ -2,8 +2,7 @@ $(function () {
     var $RefCaisse = $('#RefCaisse');
     var $NumCompte = $('#NumCompte');
    var $NameClient = $('#NameClient');
-
-    //var Name;
+    var Name;
     
     $RefCaisse.on('click', function () {
         var val = $(this).val();
@@ -15,7 +14,7 @@ $(function () {
             success: function (json) {
                 if (json != null) {
                     $NumCompte.val(json['NUMCOMPTE']);
-                    // Name = json['NUMCOMPTE'];
+                    Name = json['NUMCOMPTE'];
                 } else {
                     $NumCompte.val('');
                 }

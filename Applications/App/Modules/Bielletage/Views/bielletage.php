@@ -352,12 +352,34 @@
                                 <input type="text" id="NameClient" class="form-control" name="NameClient" required="">
                             </div>
                         </div>
+                        <?php if ($_GET['id'] == 2) { ?>
+                        <div class="col-md-2">
+                            <div class="form-group has-error">
+                                <label class="control-label">Montant</label>
+                                <input type="int" id="total" class="form-control" name="total" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group has-error">
+                                <label class="control-label">FRAIS</label>
+                                <input type="int" id="frais" class="form-control" name="fraismad" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group has-error">
+                                <label class="control-label">Montant à Payer</label>
+                                <input type="int" id="mtotal" class="form-control" name="MontantVersement" readonly>
+                            </div>
+                        </div>
+                        <?php } else { ?>
                         <div class="col-md-6">
                             <div class="form-group has-error">
                                 <label class="control-label">Montant</label>
                                 <input type="int" id="total" class="form-control" name="MontantVersement" readonly>
                             </div>
                         </div>
+                        <?php } ?>
+
                     </div>
                     <?php if ($_GET['id'] == 3) { ?>
                     <div class="row">

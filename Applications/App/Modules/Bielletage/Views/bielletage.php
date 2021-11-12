@@ -383,33 +383,12 @@
                     </div>
                     <?php } else { ?>
                     <div class="row">
-                        <?php if ($_GET['id'] == 2) { ?>
-                        <div class="col-md-3">
-                            <div class="form-group has-error">
-                                <label class="control-label">Remarque</label>
-                                <input type="text" class="form-control" name="Remarque" required="">
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group has-error">
-                                <label class="control-label">Type</label>
-                                <select class="form-control" name="TypeRetrait" tabindex="1" required="">
-                                    <?php foreach ($TypeRetrait as $type) { ?>
-                                    <option value="<?= $type['RefTypeRetrait']; ?>"><?= $type['NameTypeRetrait']; ?>
-                                    </option>
-                                    <?php } ?>
-
-                                </select>
-                            </div>
-                        </div>
-                        <?php  } else { ?>
                         <div class="col-md-6">
                             <div class="form-group has-error">
                                 <label class="control-label">Remarque</label>
                                 <input type="text" class="form-control" name="Remarque" required="">
                             </div>
                         </div>
-                        <?php } ?>
                         <div class="col-md-3">
                             <div class="form-group has-error">
                                 <label class="control-label">Deposant/Auteur Retrait</label>

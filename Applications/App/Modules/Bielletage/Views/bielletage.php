@@ -309,21 +309,13 @@
                             </div>
                         </div>
                         <?php } ?>
-                        <?php if ($_GET['id'] == 3) { ?>
+
                         <div class="col-md-6">
                             <div class="form-group has-error">
                                 <label class="control-label">Numéro de compte</label>
                                 <input type="int" id="NumCompte" class="form-control" name="NumCompte" required="">
                             </div>
                         </div>
-                        <?php } else { ?>
-                        <div class="col-md-6">
-                            <div class="form-group has-error">
-                                <label class="control-label">Numéro de compte</label>
-                                <input type="int" id="NumCompte" class="form-control" name="NumCompte" required="">
-                            </div>
-                        </div>
-                        <?php } ?>
                         <?php } else { ?>
                         <div class="col-md-6">
                             <div class="form-group">

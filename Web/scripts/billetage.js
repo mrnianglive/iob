@@ -5,7 +5,7 @@ $(function(){
   var $type = $('#TypeRetrait');
   var $mtotal = $('#mtotal');
 
-$type.on('click', function () {
+$type.on('change', function () {
     if ($type.val() == 2) {
       $frais.val(1000);
       

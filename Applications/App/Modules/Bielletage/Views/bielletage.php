@@ -362,7 +362,7 @@
                         <div class="col-md-2">
                             <div class="form-group has-error">
                                 <label class="control-label">FRAIS</label>
-                                <input type="int" id="frais" class="form-control" name="fraismad" readonly>
+                                <input type="int" id="frais" class="form-control" name="frais" readonly>
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -415,7 +415,8 @@
                         <div class="col-md-3">
                             <div class="form-group has-error">
                                 <label class="control-label">Type</label>
-                                <select class="form-control" name="TypeRetrait" tabindex="1" required="">
+                                <select class="form-control" name="TypeRetrait" tabindex="1" id="TypeRetrait"
+                                    required="">
                                     <?php foreach ($TypeRetrait as $type) { ?>
                                     <option value="<?= $type['RefTypeRetrait']; ?>"><?= $type['NameTypeRetrait']; ?>
                                     </option>

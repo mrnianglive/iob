@@ -1,12 +1,29 @@
 
 $(function(){
   var $total = $('#total');
+  var $frais = $('#frais');
+  var $type = $('#TypeRetrait');
+  var $mtotal = $('#mtotal');
+
+$type.on('click', function () {
+    if ($type.val() == 2) {
+      $frais.val(1000);
+      
+    } else {
+      $frais.val(0);
+    }
+    $mtotal.val($total.val() + $frais.val());
+ 
+  });
+
   var $a1 = $('#a1');
   var $a2 = $('#a2');
   var $a3 = $('#a3');
   $a2.on('change',function(){
     $a3.val($a1.val()*$a2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+      $mtotal.val($total.val() + $frais.val());
+ 
   });
   var $b1 = $('#b1');
   var $b2 = $('#b2');
@@ -14,6 +31,7 @@ $(function(){
   $b2.on('change',function(){
     $b3.val($b1.val()*$b2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+  $mtotal.val($total.val() + $frais.val());
   });
 
   var $c1 = $('#c1');
@@ -22,6 +40,7 @@ $(function(){
   $c2.on('change',function(){
     $c3.val($c1.val()*$c2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+  $mtotal.val($total.val() + $frais.val());
   });
 
   var $d1 = $('#d1');
@@ -30,8 +49,8 @@ $(function(){
   $d2.on('change',function(){
     $d3.val($d1.val()*$d2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+  $mtotal.val($total.val() + $frais.val());
   });
-
 
   var $e1 = $('#e1');
   var $e2 = $('#e2');
@@ -39,9 +58,9 @@ $(function(){
   $e2.on('change',function(){
     $e3.val($e1.val()*$e2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+  $mtotal.val($total.val() + $frais.val());
+  
   });
-
-
 
   var $f1 = $('#f1');
   var $f2 = $('#f2');
@@ -49,6 +68,7 @@ $(function(){
   $f2.on('change',function(){
     $f3.val($f1.val()*$f2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+    $mtotal.val($total.val() + $frais.val());
   });
 
   var $g1 = $('#g1');
@@ -56,9 +76,9 @@ $(function(){
   var $g3 = $('#g3');
   $g2.on('change',function(){
     $g3.val($g1.val()*$g2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  ); 
+   $mtotal.val($total.val() + $frais.val());
   });
-
 
   var $h1 = $('#h1');
   var $h2 = $('#h2');
@@ -66,6 +86,8 @@ $(function(){
   $h2.on('change',function(){
     $h3.val($h1.val()*$h2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+   
+   $mtotal.val($total.val() + $frais.val());
   });
 
   var $i1 = $('#i1');
@@ -74,8 +96,8 @@ $(function(){
   $i2.on('change',function(){
     $i3.val($i1.val()*$i2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+    $mtotal.val($total.val() + $frais.val());
   });
-
 
   var $j1 = $('#j1');
   var $j2 = $('#j2');
@@ -83,6 +105,7 @@ $(function(){
   $j2.on('change',function(){
     $j3.val($j1.val()*$j2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+ $mtotal.val($total.val() + $frais.val());
   });
 
   var $k1 = $('#k1');
@@ -91,6 +114,7 @@ $(function(){
   $k2.on('change',function(){
     $k3.val($k1.val()*$k2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+ $mtotal.val($total.val() + $frais.val());
   });
 
   var $l1 = $('#l1');
@@ -99,6 +123,7 @@ $(function(){
   $l2.on('change',function(){
     $l3.val($l1.val()*$l2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+ $mtotal.val($total.val() + $frais.val());
   });
 
   var $m1 = $('#m1');
@@ -107,10 +132,7 @@ $(function(){
   $m2.on('change',function(){
     $m3.val($m1.val()*$m2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val())+ Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val())  );
+   $mtotal.val($total.val() + $frais.val());
   });
-
-
-
-
 
 });

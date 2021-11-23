@@ -67,7 +67,7 @@
             <h3 class="box-title">Performance Journaliere</h3>
             <form method="POST">
                 <div class="input-group">
-                    <div class="col-md-3">Date
+                    <div class="col-md-3">
                         <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control">
                     </div>
                     <div class="col-md-1"></br>

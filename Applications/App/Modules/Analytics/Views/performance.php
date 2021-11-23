@@ -81,6 +81,8 @@
                         <tr>
                             <th class="border-top-0">Agence</th>
                             <th class="border-top-0">Caisse</th>
+                            <th class="border-top-0">VL|DEPOT</th>
+                            <th class="border-top-0">VL|RETRAIT</th>
                             <th class="border-top-0">NB|OP|TODAY</th>
                             <th class="border-top-0">NB|OP|TODAY</th>
                         </tr>
@@ -89,6 +91,20 @@
                         <?php foreach ($Agence as $value) { ?>
                         <tr>
                             <td><?= $value['NameAgency']; ?></td>
+                            <td>
+                                <ul>
+                                    <?php foreach ($value['Afficher'] as $print) { ?>
+                                    <li><?= $print['NameCaisse']; ?></li>
+                                    <?php } ?>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <?php foreach ($value['Afficher'] as $print) { ?>
+                                    <li><?= $print['NameCaisse']; ?></li>
+                                    <?php } ?>
+                                </ul>
+                            </td>
                             <td>
                                 <ul>
                                     <?php foreach ($value['Afficher'] as $print) { ?>

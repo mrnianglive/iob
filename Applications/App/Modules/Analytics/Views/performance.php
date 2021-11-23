@@ -62,19 +62,20 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form method="POST">
-            <div class="input-group">
-                <div class="col-md-3">Date
-                    <input type="date" id="jour" name="jour" value="<? //= $day; 
-                                                                    ?>" class="form-control">
-                </div>
-                <div class="col-md-1"></br>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                </div>
-            </div>
-        </form><br />
+
         <div class="white-box">
             <h3 class="box-title">Performance Journaliere</h3>
+            <form method="POST">
+                <div class="input-group">
+                    <div class="col-md-3">Date
+                        <input type="date" id="jour" name="jour" value="<? //= $day; 
+                                                                        ?>" class="form-control">
+                    </div>
+                    <div class="col-md-1"></br>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </form><br />
             <div class="table-responsive">
                 <table id="dataTable1" class="display nowrap" cellspacing="0" width="100%">
                     <thead>

@@ -100,15 +100,15 @@
                             </td>
                             <td>
                                 <ul>
-                                    <?php foreach ($value['Afficher'] as $print) { ?>
-                                    <li><?= $print['NameCaisse']; ?></li>
+                                    <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                    <li><?= $afficher['TotalVersement']; ?></li>
                                     <?php } ?>
                                 </ul>
                             </td>
                             <td>
                                 <ul>
-                                    <?php foreach ($value['Afficher'] as $print) { ?>
-                                    <li><?= $print['NameCaisse']; ?></li>
+                                    <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                    <li><?= $afficher['TotalRetrait']; ?></li>
                                     <?php } ?>
                                 </ul>
                             </td>

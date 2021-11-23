@@ -75,7 +75,7 @@
                         <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
-            </form>
+            </form><br />
             <div class="table-responsive">
                 <table id="dataTable1" class="display nowrap" cellspacing="0" width="100%">
                     <thead>

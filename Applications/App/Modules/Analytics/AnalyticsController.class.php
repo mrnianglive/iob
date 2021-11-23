@@ -70,6 +70,7 @@ class AnalyticsController extends \Library\BackController
         $ListeBanque  = $this->managers->getManagerOf("Pannel")->ListeBanque();
         $this->page->addVar("ListeBanque", $ListeBanque);
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
+
         foreach ($Agence as $key => $value) {
             $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], date('Y-m-d'));
             $Agence[$key]['NbreOP'] = $this->managers->getManagerOf("Journal")->NbreOperationAgence($value['RefAgency'], date('Y-m-d'));

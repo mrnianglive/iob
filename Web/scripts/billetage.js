@@ -132,7 +132,6 @@ $type.on('change', function () {
     $mtotal.val($total.val() - $mfrais);
      $fraisM.val($mfrais);
   });
-
   var $k1 = $('#k1');
   var $k2 = $('#k2');
   var $k3 = $('#k3');

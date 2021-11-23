@@ -72,8 +72,16 @@ class AnalyticsController extends \Library\BackController
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
 
         foreach ($Agence as $key => $value) {
-            $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], date('Y-m-d'));
-            $Agence[$key]['NbreOP'] = $this->managers->getManagerOf("Journal")->NbreOperationAgence($value['RefAgency'], date('Y-m-d'));
+
+            if (!empty($request->postData('jour'))) {
+                $date = $request->postData('jour');
+                $this->page->addVar('day', $request->postData('jour'));
+            } else {
+                $date = date('Y-m-d');
+                $this->page->addVar('day', $date);
+            }
+            $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], $date);
+            $Agence[$key]['NbreOP'] = $this->managers->getManagerOf("Journal")->NbreOperationAgence($value['RefAgency'], $date);
         }
         $this->page->addVar('Agence', $Agence);
 

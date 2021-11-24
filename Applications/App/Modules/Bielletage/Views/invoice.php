@@ -233,7 +233,7 @@
          <p style="text-align: right;"><?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?>
              <?= gmdate("H:i:s") . "\n"; // date("H:i:s", strtotime("-1 hour")); 
                 ?> </p>
-         </br>
+
          <h4 style="text-align:left;">MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement |
              www.malicreances-sa.com</h4>
      </div>

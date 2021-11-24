@@ -64,17 +64,16 @@
     <div class="col-md-12">
 
         <div class="white-box">
-            <h3 class="box-title">Performance Journaliere</h3>
-            <form method="POST">
+            <form method="POST" id="formulaire">
                 <div class="input-group">
-                    <div class="col-md-3">Date
-                        <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control">
-                    </div>
-                    <div class="col-md-1"></br>
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                    <div class="col-md-3">
+                        <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control"
+                            onchange="document.getElementById('formulaire').submit();">
                     </div>
                 </div>
             </form><br />
+            <h3 class="box-title">Performance Journaliere</h3>
+
             <div class="table-responsive">
                 <table id="dataTable1" class="display nowrap" cellspacing="0" width="100%">
                     <thead>
@@ -83,8 +82,8 @@
                             <th class="border-top-0">Caisse</th>
                             <th class="border-top-0">VL|DEPOT</th>
                             <th class="border-top-0">VL|RETRAIT</th>
-                            <th class="border-top-0">NB|OP|TODAY</th>
-                            <th class="border-top-0">NB|OP|TODAY</th>
+                            <th class="border-top-0">NB|OP</th>
+                            <th class="border-top-0">NB|OP</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,16 +99,26 @@
                             </td>
                             <td>
                                 <ul>
-                                    <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                    <li><?= $afficher['TotalVersement']; ?></li>
+                                    <?php
+                                        $sommeVersement = 0;
+                                        foreach ($value['Afficher'] as $afficher) {
+                                            $sommeVersement += $afficher['TotalVersement'];
+                                        ?>
+                                    <li><?= number_format($afficher['TotalVersement'], 0, '.', ','); ?></li>
                                     <?php } ?>
+                                    <li> Total : <?= number_format($sommeVersement, 0, '.', ','); ?></li>
                                 </ul>
                             </td>
                             <td>
                                 <ul>
-                                    <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                    <li><?= $afficher['TotalRetrait']; ?></li>
+                                    <?php
+                                        $sommeRetrait = 0;
+                                        foreach ($value['Afficher'] as $afficher) {
+                                            $sommeRetrait += $afficher['TotalRetrait'];
+                                        ?>
+                                    <li><?= number_format($afficher['TotalRetrait'], 0, '.', ','); ?></li>
                                     <?php } ?>
+                                    <li> Total :<?= number_format($sommeRetrait, 0, '.', ','); ?></li>
                                 </ul>
                             </td>
                             <td>

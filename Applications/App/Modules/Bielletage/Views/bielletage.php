@@ -406,13 +406,13 @@
                     <?php } else { ?>
                     <div class="row">
                         <?php if ($_GET['id'] == 2) { ?>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group has-error">
                                 <label class="control-label">Remarque</label>
                                 <input type="text" class="form-control" name="Remarque" required="">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group has-error">
                                 <label class="control-label">Type</label>
                                 <select class="form-control" name="TypeRetrait" tabindex="1" id="TypeRetrait"

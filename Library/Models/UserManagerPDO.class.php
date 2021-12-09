@@ -200,14 +200,14 @@ class UserManagerPDO extends UserManager
 
     public function LastConnexionUpdate($Last)
     {
-        $requete = $this->dao->prepare("UPDATE  logconexion SET LogoutH=:hour WHERE RefLog=:RefLog");
+        $requete = $this->dao->prepare("UPDATE  LogConnexion SET LogoutH=:hour WHERE RefLog=:RefLog");
         $requete->bindValue(':RefLog', $Last, \PDO::PARAM_INT);
         $requete->bindValue(':hour', date('H:i:s'), \PDO::PARAM_STR);
         $requete->execute();
     }
     public function LogConnexion($Users, $IP)
     {
-        $requete = $this->dao->prepare("INSERT INTO logconexion(RefUsers,IP,LogH) VALUES(:RefUsers,:IP,:LogH)");
+        $requete = $this->dao->prepare("INSERT INTO LogConnexion(RefUsers,IP,LogH) VALUES(:RefUsers,:IP,:LogH)");
         $requete->bindValue(':RefUsers', $Users, \PDO::PARAM_INT);
         $requete->bindValue(':IP', $IP, \PDO::PARAM_STR);
         $requete->bindValue(':LogH', date('H:i:s'), \PDO::PARAM_STR);

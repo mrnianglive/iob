@@ -68,6 +68,21 @@ class UsersController extends \Library\BackController
 
     }
 
+
+    public function executeDelogger(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Delogger user"); // Titre de la page
+        $this->managers->getManagerOf('User')->UpdateLog($request->getData('id'), 1);
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = 'réussie !';
+        $_SESSION['message']['number'] = 2;
+        $this->app()->httpResponse()->redirect('/Users/index'); //Retour en arriere
+
+    }
+
+
+
+
     public function executeUpdateusers(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Mettre à jour les informations "); // Titre de la page

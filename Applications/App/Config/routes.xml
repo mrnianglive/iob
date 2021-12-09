@@ -37,4 +37,6 @@
 	<route url="/Journal/petite_caisse" module="Journal" action="petitecaisse"/>
 	 <route url="/Analytics/chart" module="Analytics" action="chart"/>
 	  <route url="/Analytics/performance" module="Analytics" action="performance"/>
+
+	  <route url="/Users/delogger/([0-9]+)" vars="id" action="delogger" module="Users"/>
 </routes>

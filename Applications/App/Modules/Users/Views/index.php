@@ -13,6 +13,7 @@
                             <th class="border-top-0">Nom</th>
                             <th class="border-top-0">Statut</th>
                             <th class="border-top-0">Actions</th>
+                            <th class="border-top-0"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,6 +36,13 @@
                                     data-toggle="modal" data-target="#ChmodAppro-<?= $users['RefUsers']; ?>"
                                     data-whatever="@mdo"><i class="ticon ti-lock"></i></button>
                             </td>
+
+                            <td>
+                                <a href="/Users/delogger/<?= $users['RefUsers']; ?>">
+                                    <button type="button" class="btn btn-success btn-outline btn-circle btn-lg m-r-5"><i
+                                            class="fa fa-check"></i></button></a>
+                            </td>
+
                         </tr>
                         <div class="modal fade" id="Chmod-<?= $users['RefUsers']; ?>" tabindex="-1" role="dialog"
                             aria-labelledby="AddCaisse">

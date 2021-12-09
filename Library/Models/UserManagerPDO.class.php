@@ -6,14 +6,23 @@ use \Library\Entities\User;
 
 class UserManagerPDO extends UserManager
 {
-
     public function login($login, $Password)
     {
-        $requete = $this->dao->prepare("SELECT *  FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE login=:login");
+        $IP = $this->getIPAddress();
+
+        $requete = $this->dao->prepare("SELECT *  FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE login=:login AND log= 1");
         $requete->bindValue(':login', $login, \PDO::PARAM_STR);
         $requete->execute();
         $resultat = $requete->fetch();
+        if ($resultat == false) {
+            $_SESSION['message']['type'] = 'warning';
+            $_SESSION['message']['text'] = 'Utilisateur déjà connecté !';
+            $_SESSION['message']['number'] = 2;
+            header('Location: /');
+        }
         if (password_verify($_POST['password'], $resultat['password'])) {
+            $LastLog = $this->LogConnexion($resultat['RefUsers'], $IP);
+            $this->UpdateLog($resultat['RefUsers'], 2, $LastLog);
             return $resultat;
         }
     }
@@ -179,6 +188,49 @@ class UserManagerPDO extends UserManager
                     $requeteInsert->execute();
                 }
             }
+        }
+    }
+
+    public function UpdateLog($Users, $value, $LastLog = NULL)
+    {
+        $requete = $this->dao->prepare("UPDATE TbleUsers SET log='$value',LastLogID= '$LastLog'  WHERE RefUsers=:RefUsers");
+        $requete->bindValue(':RefUsers', $Users, \PDO::PARAM_INT);
+        $requete->execute();
+    }
+
+    public function LastConnexionUpdate($Last)
+    {
+        $requete = $this->dao->prepare("UPDATE  logconexion SET LogoutH=:hour WHERE RefLog=:RefLog");
+        $requete->bindValue(':RefLog', $Last, \PDO::PARAM_INT);
+        $requete->bindValue(':hour', date('H:i:s'), \PDO::PARAM_STR);
+        $requete->execute();
+    }
+    public function LogConnexion($Users, $IP)
+    {
+        $requete = $this->dao->prepare("INSERT INTO logconexion(RefUsers,IP,LogH) VALUES(:RefUsers,:IP,:LogH)");
+        $requete->bindValue(':RefUsers', $Users, \PDO::PARAM_INT);
+        $requete->bindValue(':IP', $IP, \PDO::PARAM_STR);
+        $requete->bindValue(':LogH', date('H:i:s'), \PDO::PARAM_STR);
+        $requete->execute();
+        $last = $this->dao->lastInsertId();
+        $_SESSION['LogID'] = $last;
+        return $last;
+    }
+
+    public function getIPAddress()
+    {
+        if (isset($_SERVER["HTTP_CLIENT_IP"])) {
+            return $_SERVER["HTTP_CLIENT_IP"];
+        } elseif (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+            return $_SERVER["HTTP_X_FORWARDED_FOR"];
+        } elseif (isset($_SERVER["HTTP_X_FORWARDED"])) {
+            return $_SERVER["HTTP_X_FORWARDED"];
+        } elseif (isset($_SERVER["HTTP_FORWARDED_FOR"])) {
+            return $_SERVER["HTTP_FORWARDED_FOR"];
+        } elseif (isset($_SERVER["HTTP_FORWARDED"])) {
+            return $_SERVER["HTTP_FORWARDED"];
+        } else {
+            return $_SERVER["REMOTE_ADDR"];
         }
     }
 }

@@ -74,6 +74,9 @@ class BielletageController extends \Library\BackController
         }
         $Invoice  = $this->managers->getManagerOf("Bielletage")->GetInvoice($reference); //Recuperation de la liste
         $this->page->addVar("GetInvoice", $Invoice); // Creation de la variable, ajout d'une variable a la vue
+        $getResetStatus = $this->managers->getManagerOf("Bielletage")->getResetStatus($reference);
+        $this->page->addVar("getResetStatus", $getResetStatus); // Creation de la variable, ajout d'une variable a la vue
+
     }
     public function executeAdd(\Library\HTTPRequest $request)
     {

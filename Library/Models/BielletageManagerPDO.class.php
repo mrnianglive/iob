@@ -289,4 +289,17 @@ class BielletageManagerPDO extends BielletageManager
         $result = $requete->fetchAll();
         return $result;
     }
+
+    public function getResetStatus($Refoperations)
+    {
+        $requete = $this->dao->prepare('SELECT * FROM TbleOperations WHERE RefOperations=:RefOperations');
+        $requete->bindValue(':RefOperations', $Refoperations, \PDO::PARAM_INT);
+        $requete->execute();
+        $result = $requete->fetch();
+        if ($result['Reset_Id'] == null && $result['Reset_At'] == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

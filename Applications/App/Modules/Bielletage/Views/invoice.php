@@ -13,7 +13,9 @@
                          <?php } elseif ($GetInvoice['RefType'] == 4) { ?> SORTIE DE FOND
                          <?php } elseif ($GetInvoice['RefType'] == 3) { ?> APPRO CAISSE
                          <?php } ?>ESPECES </h2>
-                     <h3>BANQUE</h3>
+                     <h3>BANQUE</h3> <?php if ($getResetStatus == true) { ?> <h3 style="color:#c62828;">Opération
+                         Annulée
+                     </h3> <?php } ?>
                  </div>
              </div>
              <br>
@@ -53,7 +55,7 @@
                          <br>
                      </div>
                      <table class="table table-bordered" style="border: none !important;">
-                         <tbody>
+                         <tbody style="<?php if ($getResetStatus == true) { ?>color:#c62828;<?php } ?>">
                              <tr>
                                  <td>10.000</td>
                                  <td><?= $GetInvoice['a2']; ?></td>
@@ -126,7 +128,9 @@
                          <?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETRAIT
                          <?php } elseif ($GetInvoice['RefType'] == 4) { ?> SORTIE DE FOND
                          <?php } elseif ($GetInvoice['RefType'] == 3) { ?> APPRO CAISSE <?php } ?>ESPECES </h2>
-                     <h3>CLIENT</h3>
+                     <h3>CLIENT</h3> <?php if ($getResetStatus == true) { ?> <h3 style="color:#c62828;">Opération
+                         Annulée
+                     </h3> <?php } ?>
                  </div>
              </div>
              <br>
@@ -166,7 +170,7 @@
                          <br>
                      </div>
                      <table class="table table-bordered" style="border: none !important;">
-                         <tbody>
+                         <tbody style="<?php if ($getResetStatus == true) { ?>color:#c62828;<?php } ?>">
                              <tr>
                                  <td>10.000</td>
                                  <td><?= $GetInvoice['a2']; ?></td>

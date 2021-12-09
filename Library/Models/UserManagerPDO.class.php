@@ -14,7 +14,11 @@ class UserManagerPDO extends UserManager
         $requete->bindValue(':login', $login, \PDO::PARAM_STR);
         $requete->execute();
         $resultat = $requete->fetch();
+
+        $LogHour = $this->getLastConnexionTime($resultat['LastLogID']);
         if ($resultat == false) {
+
+
             $_SESSION['message']['type'] = 'warning';
             $_SESSION['message']['text'] = 'Utilisateur déjà connecté !';
             $_SESSION['message']['number'] = 2;
@@ -215,6 +219,15 @@ class UserManagerPDO extends UserManager
         $last = $this->dao->lastInsertId();
         $_SESSION['LogID'] = $last;
         return $last;
+    }
+
+    public function getLastConnexionTime($LastLogID)
+    {
+        $requete = $this->dao->prepare("SELECT * FROM LogConnexion WHERE RefLog=:RefLog");
+        $requete->bindValue(':RefLog', $LastLogID, \PDO::PARAM_INT);
+        $requete->execute();
+        $display = $requete->fetch();
+        return $display['LogH'];
     }
 
     public function getIPAddress()

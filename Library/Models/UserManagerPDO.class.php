@@ -10,35 +10,28 @@ class UserManagerPDO extends UserManager
     {
         $IP = $this->getIPAddress();
 
-        $requete = $this->dao->prepare("SELECT *  FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE login=:login AND log= 1");
+        $requete = $this->dao->prepare("SELECT *  FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE login=:login");
         $requete->bindValue(':login', $login, \PDO::PARAM_STR);
         $requete->execute();
         $resultat = $requete->fetch();
 
         $LogHour = $this->getLastConnexionTime($resultat['LastLogID']);
-        //echo  $CurrentHour = date('Y-m-d H:i:s');
-        $Pastmin = date('Y-m-d H:i:s', strtotime('-3 min'));
-        echo  $lastLog = date('H:i:s', strtotime($LogHour['LogH'] . "+3 min"));
-
-        // echo  date("H:i:s"); // this format is string comparable
-        // if (($date_now > $lastLog) && ($date_now < date($LogHour['DateLog']))) {
-        //  echo 'greater than';
-        //  } else {
-        //    $_SESSION['message']['type'] = 'warning';
-        //     $_SESSION['message']['text'] = 'Utilisateur déjà connecté !';
-        //     $_SESSION['message']['number'] = 2;
-        //     header('Location: /');
-        // }
-
-
-        ///    if (password_verify($_POST['password'], $resultat['password'])) {
-        //       $LastLog = $this->LogConnexion($resultat['RefUsers'], $IP);
-        //       $this->UpdateLog($resultat['RefUsers'], 2, $LastLog);
-        //      return $resultat;
-
-        // }
+        $last = strtotime($LogHour['LogH'] . "+3 minutes");
+        //echo date('H:i:s', $last);
+        // echo gmdate("H:i:s");
+        if (password_verify($_POST['password'], $resultat['password'])) {
+            if (date('H:i:s', $last) > gmdate("H:i:s") && date('Y-m-d') == date('Y-m-d', strtotime($LogHour['DateLog']))) {
+                $_SESSION['message']['type'] = 'warning';
+                $_SESSION['message']['text'] = 'Utilisateur déjà connecté !';
+                $_SESSION['message']['number'] = 2;
+                header('Location: /');
+            } else {
+                $LastLog = $this->LogConnexion($resultat['RefUsers'], $IP);
+                $this->UpdateLog($resultat['RefUsers'], 2, $LastLog);
+                return $resultat;
+            }
+        }
     }
-
     public function SendUserinfo($to, $login, $Password)
     {
         $subject = "Identifiants de connexion | CAISSE MLC";
@@ -214,7 +207,7 @@ class UserManagerPDO extends UserManager
     {
         $requete = $this->dao->prepare("UPDATE  LogConnexion SET LogoutH=:hour WHERE RefLog=:RefLog");
         $requete->bindValue(':RefLog', $Last, \PDO::PARAM_INT);
-        $requete->bindValue(':hour', date('H:i:s'), \PDO::PARAM_STR);
+        $requete->bindValue(':hour', gmdate("H:i:s"), \PDO::PARAM_STR);
         $requete->execute();
     }
     public function LogConnexion($Users, $IP)
@@ -222,7 +215,7 @@ class UserManagerPDO extends UserManager
         $requete = $this->dao->prepare("INSERT INTO LogConnexion(RefUsers,IP,LogH) VALUES(:RefUsers,:IP,:LogH)");
         $requete->bindValue(':RefUsers', $Users, \PDO::PARAM_INT);
         $requete->bindValue(':IP', $IP, \PDO::PARAM_STR);
-        $requete->bindValue(':LogH', date('H:i:s'), \PDO::PARAM_STR);
+        $requete->bindValue(':LogH', gmdate("H:i:s"), \PDO::PARAM_STR);
         $requete->execute();
         $last = $this->dao->lastInsertId();
         $_SESSION['LogID'] = $last;
@@ -232,7 +225,7 @@ class UserManagerPDO extends UserManager
     public function getLastConnexionTime($LastLogID)
     {
         $requete = $this->dao->prepare("SELECT * FROM LogConnexion WHERE RefLog=:RefLog");
-        $requete->bindValue(':RefLog', 11, \PDO::PARAM_INT);
+        $requete->bindValue(':RefLog', $LastLogID, \PDO::PARAM_INT);
         $requete->execute();
         $display = $requete->fetch();
         return $display;

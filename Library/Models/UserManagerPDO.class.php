@@ -17,7 +17,7 @@ class UserManagerPDO extends UserManager
 
 
         $LogHour = $this->getLastConnexionTime($resultat['LastLogID']);
-        $_SESSION['LastConnexion'] = date('Y-m-d', strtotime($LogHour['DateLog'])) . '' . $LogHour['LogH'];
+        $_SESSION['LastConnexion'] = date('Y-m-d', strtotime($LogHour['DateLog'])) . ' ' . $LogHour['LogH'];
         $last = strtotime($LogHour['LogH'] . "+3 minutes");
         //echo date('H:i:s', $last);
         // echo gmdate("H:i:s");

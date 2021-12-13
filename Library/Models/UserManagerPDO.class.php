@@ -22,7 +22,7 @@ class UserManagerPDO extends UserManager
         //echo date('H:i:s', $last);
         // echo gmdate("H:i:s");
         if (password_verify($_POST['password'], $resultat['password'])) {
-            if (((date('H:i:s', $last) > gmdate("H:i:s")) && date('Y-m-d') == date('Y-m-d', strtotime($LogHour['DateLog']))) or $resultat['log'] == 1) {
+            if ((date('H:i:s', $last) > gmdate("H:i:s")) && date('Y-m-d') == date('Y-m-d', strtotime($LogHour['DateLog']))) {
                 $_SESSION['message']['type'] = 'warning';
                 $_SESSION['message']['text'] = 'Utilisateur déjà connecté !';
                 $_SESSION['message']['number'] = 2;

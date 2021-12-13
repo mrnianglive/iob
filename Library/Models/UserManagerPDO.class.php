@@ -21,14 +21,14 @@ class UserManagerPDO extends UserManager
         echo  $lastLog = date('H:i:s', strtotime($LogHour['LogH'] . "+3 min"));
 
         echo $date_now = date("H:i:s"); // this format is string comparable
-        if (($date_now > $lastLog) && ($date_now < date($LogHour['DateLog']))) {
-            echo 'greater than';
-        } else {
-            $_SESSION['message']['type'] = 'warning';
-            $_SESSION['message']['text'] = 'Utilisateur déjà connecté !';
-            $_SESSION['message']['number'] = 2;
-            header('Location: /');
-        }
+        // if (($date_now > $lastLog) && ($date_now < date($LogHour['DateLog']))) {
+        //  echo 'greater than';
+        //  } else {
+        //    $_SESSION['message']['type'] = 'warning';
+        //     $_SESSION['message']['text'] = 'Utilisateur déjà connecté !';
+        //     $_SESSION['message']['number'] = 2;
+        //     header('Location: /');
+        // }
 
 
         ///    if (password_verify($_POST['password'], $resultat['password'])) {

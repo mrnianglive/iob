@@ -16,11 +16,12 @@ class UserManagerPDO extends UserManager
         $resultat = $requete->fetch();
 
         $LogHour = $this->getLastConnexionTime($resultat['LastLogID']);
+        //echo  $CurrentHour = date('Y-m-d H:i:s');
+        $Pastmin = date('Y-m-d H:i:s', strtotime('-3 min'));
         $lastLog = date('H:i:s', strtotime($LogHour['LogH'] . "+3 min"));
 
-        $date_now = date("H:i:s");
-        echo $date_now;
-        if ($date_now > $lastLog) {
+        $date_now = date("H:i:s"); // this format is string comparable
+        if (($date_now > $lastLog) && ($date_now < date($LogHour['DateLog']))) {
             echo 'greater than';
         } else {
             $_SESSION['message']['type'] = 'warning';

@@ -42,7 +42,8 @@ class AnalyticsController extends \Library\BackController
         }
         $this->page->addVar('totalVersement', $TotalVersement);
         $this->page->addVar('totalRetrait', $TotalRetrait);
-        $this->page->addVar('Commission', $Commission + $CommissionRetrait);
+        $this->page->addVar('CommissionDepot', $Commission);
+        $this->page->addVar('CommissionRetrait', $CommissionRetrait);
     }
 
     public function executeChart(\Library\HTTPRequest $request)

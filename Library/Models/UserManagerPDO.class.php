@@ -17,12 +17,12 @@ class UserManagerPDO extends UserManager
 
 
         $LogHour = $this->getLastConnexionTime($resultat['LastLogID']);
-        $_SESSION['LastConnexion'] = date('d-m-Y', $LogHour['DateLog']) . '' . $LogHour['LogH'];
+        $_SESSION['LastConnexion'] = date('Y-m-d', strtotime($LogHour['DateLog'])) . ' ' .  $LogHour['LogH'];
         $last = strtotime($LogHour['LogH'] . "+3 minutes");
         //echo date('H:i:s', $last);
         // echo gmdate("H:i:s");
         if (password_verify($_POST['password'], $resultat['password'])) {
-            if (date('H:i:s', $last) > gmdate("H:i:s") && date('Y-m-d') == date('Y-m-d', strtotime($LogHour['DateLog']))) {
+            if ((date('H:i:s', $last) > gmdate("H:i:s")) && date('Y-m-d') == date('Y-m-d', strtotime($LogHour['DateLog']))) {
                 $_SESSION['message']['type'] = 'warning';
                 $_SESSION['message']['text'] = 'Utilisateur déjà connecté !';
                 $_SESSION['message']['number'] = 2;

@@ -13,6 +13,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requete->execute();
         $data = $requete->fetchAll();
+        foreach ($data as $key => $value) {
+            $data[$key]['SentFromAgency'] =  $this->SentFromAgency($value['SentFromAgency']);
+        }
         return $data;
     }
     public function GetOperations($debut, $fin, $Agence)
@@ -491,5 +494,14 @@ class JournalManagerPDO extends JournalManager
         $requete->execute();
         $Result = $requete->fetch();
         return $Result;
+    }
+
+    public function SentFromAgency($Agence)
+    {
+        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency WHERE RefAgency=:RefAgency');
+        $requeteAgence->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteAgence->execute();
+        $ListeAgence = $requeteAgence->fetch();
+        return $ListeAgence['NameAgency'];
     }
 }

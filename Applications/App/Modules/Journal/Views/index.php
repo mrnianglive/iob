@@ -55,6 +55,7 @@
                               <th class="border-top-0">Date</th>
                               <th class="border-top-0">Caissier</th>
                               <th class="border-top-0">RECU</th>
+                              <th class="border-top-0">From</th>
                               <?php if ($_SESSION['statut'] == 'admin') { ?>
                               <th class="border-top-0">Action</th>
                               <?php } ?>
@@ -89,6 +90,7 @@
                               <td><?= $value['login']; ?></td>
                               <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
                                       class="btn btn-secondary"><i class="fa fa-print"> Reçu</i> </td>
+                              <td></td>
                               <?php if ($_SESSION['statut'] == 'admin') { ?>
                               <td><a href="/Journal/delete/<?= $value['RefOperations']; ?>"
                                       class="btn btn-xs btn-danger"
@@ -113,6 +115,16 @@
                                                       value="<?= $value['RefOperations']; ?>">
                                                   <div class="form-group">
                                                       <input type="date" class="form-control" name="DateValidate">
+                                                  </div>
+                                                  <div class="form-group">
+                                                      <label for="recipient-name" class="control-label">Agence</label>
+                                                      <select name="RefAgency" class="form-control" name="RefAgency">
+                                                          <option value="">Veuillez Choisir l'agence</option>
+                                                          <?php foreach ($ListeAgence as $key => $value) { ?>
+                                                          <option value="<?= $value['RefAgency']; ?>">
+                                                              <?= $value['NameAgency']; ?></option>
+                                                          <?php   } ?>
+                                                      </select>
                                                   </div>
                                                   <input type="hidden" id="Debut" name="Debut" value="<?= $Debut; ?>"
                                                       class="form-control ">

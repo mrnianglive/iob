@@ -124,7 +124,7 @@
                                                           <option value="">Veuillez Choisir l'agence</option>
                                                           <?php foreach ($ListeAgence as $key => $agence) { ?>
                                                           <option value="<?= $agence['RefAgency']; ?>">
-                                                              <?= $value['NameAgency']; ?></option>
+                                                              <?= $agence['NameAgency']; ?></option>
                                                           <?php   } ?>
                                                       </select>
                                                   </div>

@@ -300,7 +300,7 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':date', $_POST['DateValidate'], \PDO::PARAM_STR);
         $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requete->bindValue(':validate', $validate, \PDO::PARAM_STR);
-        $requete->bindValue(':SentFromAgency', $_POST['RefAgency'], \PDO::PARAM_INT);
+        $requete->bindValue(':SentFromAgency', $_POST['SentFromAgency'], \PDO::PARAM_INT);
         $requete->execute();
     }
     public function CancelValidate($id)

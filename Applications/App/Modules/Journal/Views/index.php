@@ -120,11 +120,10 @@
                                                   </div>
                                                   <div class="form-group">
                                                       <label for="recipient-name" class="control-label">Agence</label>
-                                                      <select name="RefAgency" class="form-control" name="RefAgency"
-                                                          required>
+                                                      <select name="SentFromAgency" class="form-control" required>
                                                           <option value="">Veuillez Choisir l'agence</option>
-                                                          <?php foreach ($ListeAgence as $key => $value) { ?>
-                                                          <option value="<?= $value['RefAgency']; ?>">
+                                                          <?php foreach ($ListeAgence as $key => $agence) { ?>
+                                                          <option value="<?= $agence['RefAgency']; ?>">
                                                               <?= $value['NameAgency']; ?></option>
                                                           <?php   } ?>
                                                       </select>

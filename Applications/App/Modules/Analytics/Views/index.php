@@ -9,12 +9,22 @@
                       <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control"
                           onchange="document.getElementById('formulaire').submit();">
                   </div>
-                  <div class="col-md-2">Total Versement
+                  <div class="col-md-2">Total Depot
                       <input type="text" value="<?= number_format($totalVersement, 0, '.', ','); ?>"
                           class="form-control" readonly>
                   </div>
+
+                  <div class="col-md-2">Comission Depot
+                      <input type="text" value="<?= number_format($CommissionDepot, 0, '.', ',');   ?>"
+                          class="form-control" readonly>
+                  </div>
+
                   <div class="col-md-2">Total Retrait
                       <input type="text" value="<?= number_format($totalRetrait, 0, '.', ',');   ?>"
+                          class="form-control" readonly>
+                  </div>
+                  <div class="col-md-2">Commision Retrait
+                      <input type="text" value="<?= number_format($CommissionRetrait, 0, '.', ',');   ?>"
                           class="form-control" readonly>
                   </div>
               </div>

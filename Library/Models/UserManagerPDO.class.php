@@ -28,10 +28,12 @@ class UserManagerPDO extends UserManager
             //     $_SESSION['message']['number'] = 2;
             //     header('Location: /');
             // } else {
-            //     $LastLog = $this->LogConnexion($resultat['RefUsers'], $IP);
+            //     
             //     $this->UpdateLog($resultat['RefUsers'], 2, $LastLog);
             //    remove log checking
             // }
+            $LastLog = $this->LogConnexion($resultat['RefUsers'], $IP);
+            $this->UpdateLog($resultat['RefUsers'], 2, $LastLog);
             return $resultat;
         }
     }

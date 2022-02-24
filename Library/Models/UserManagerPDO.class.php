@@ -22,16 +22,17 @@ class UserManagerPDO extends UserManager
         //echo date('H:i:s', $last);
         // echo gmdate("H:i:s");
         if (password_verify($_POST['password'], $resultat['password'])) {
-            if ((date('H:i:s', $last) > gmdate("H:i:s")) && date('Y-m-d') == date('Y-m-d', strtotime($LogHour['DateLog']))) {
-                $_SESSION['message']['type'] = 'warning';
-                $_SESSION['message']['text'] = 'Utilisateur déjà connecté !';
-                $_SESSION['message']['number'] = 2;
-                header('Location: /');
-            } else {
-                $LastLog = $this->LogConnexion($resultat['RefUsers'], $IP);
-                $this->UpdateLog($resultat['RefUsers'], 2, $LastLog);
-                return $resultat;
-            }
+            // if ((date('H:i:s', $last) > gmdate("H:i:s")) && date('Y-m-d') == date('Y-m-d', strtotime($LogHour['DateLog']))) {
+            //     $_SESSION['message']['type'] = 'warning';
+            //     $_SESSION['message']['text'] = 'Utilisateur déjà connecté !';
+            //     $_SESSION['message']['number'] = 2;
+            //     header('Location: /');
+            // } else {
+            //     $LastLog = $this->LogConnexion($resultat['RefUsers'], $IP);
+            //     $this->UpdateLog($resultat['RefUsers'], 2, $LastLog);
+            //    remove log checking
+            // }
+            return $resultat;
         }
     }
     public function SendUserinfo($to, $login, $Password)

@@ -114,11 +114,14 @@
                                                   <input type="hidden" class="form-control" name="RefOperations"
                                                       value="<?= $value['RefOperations']; ?>">
                                                   <div class="form-group">
-                                                      <input type="date" class="form-control" name="DateValidate">
+                                                      <label for="recipient-name" class="control-label">Date</label>
+                                                      <input type="date" class="form-control" name="DateValidate"
+                                                          required>
                                                   </div>
                                                   <div class="form-group">
                                                       <label for="recipient-name" class="control-label">Agence</label>
-                                                      <select name="RefAgency" class="form-control" name="RefAgency">
+                                                      <select name="RefAgency" class="form-control" name="RefAgency"
+                                                          required>
                                                           <option value="">Veuillez Choisir l'agence</option>
                                                           <?php foreach ($ListeAgence as $key => $value) { ?>
                                                           <option value="<?= $value['RefAgency']; ?>">

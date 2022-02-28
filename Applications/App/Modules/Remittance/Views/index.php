@@ -11,8 +11,10 @@
         </form><br />
         <div class="white-box">
             <h3 class="box-title">Opérations</h3>
+            <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg"><i
                     class="fa fa-plus"> Ajouter</i></button> <br /> <br />
+            <?php } ?>
             <div class="table-responsive">
                 <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                     <thead>

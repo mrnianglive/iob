@@ -19,10 +19,18 @@ class BielletageController extends \Library\BackController
         $Solde = 0;
         $SommeVersement = 0;
         $SommeRetrait = 0;
+        $SommeRemittanceDepot = 0;
+        $SommeRemittanceRetrait = 0;
+        $SoldeRemittance = 0;
+        $SoldeGlobal = 0;
         foreach ($UsersCaisse as $key => $value) {
             $Solde += $value['SoldeDisponible'];
+            $SoldeGlobal += $value['SoldeDisponibleGlobal'];
             $SommeVersement += $value['TotalVersement'];
             $SommeRetrait += $value['TotalRetrait'];
+            $SommeRemittanceDepot += $value['SommeVersementRemittance'];
+            $SommeRemittanceRetrait += $value['SommeRetraitRemittance'];
+            $SoldeRemittance += $value['SoldeRemittance'];
         }
 
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
@@ -32,8 +40,14 @@ class BielletageController extends \Library\BackController
         }
         $this->page->addVar('Agence', $Agence);
         $this->page->addVar('Solde', $Solde);
+        $this->page->addVar('SoldeGlobal', $SoldeGlobal);
         $this->page->addVar('SommeVersement', $SommeVersement);
         $this->page->addVar('SommeRetrait', $SommeRetrait);
+        $this->page->addVar('SommeVersementGlobal', $SommeVersement + $SommeRemittanceDepot);
+        $this->page->addVar('SommeRetraitGlobal', $SommeRetrait + $SommeRemittanceRetrait);
+        $this->page->addVar('SommeRemittanceDepot', $SommeRemittanceDepot);
+        $this->page->addVar('SommeRemittanceRetrait', $SommeRemittanceRetrait);
+        $this->page->addVar('SoldeRemittance', $SoldeRemittance);
     }
     public function executeStopcaisse(\Library\HTTPRequest $request)
     {

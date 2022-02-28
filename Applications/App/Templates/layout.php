@@ -22,6 +22,8 @@
     <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet"
         type="text/css" />
     <link href="/js/sweetalert2/sweetalert2.css" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"
+        type="text/css">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
 
 </head>
@@ -129,6 +131,11 @@
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/bielletage/2" aria-expanded="false"><i class="fa fa-minus"
                                     aria-hidden="true"></i><span class="hide-menu">Retrait</span></a></li>
+
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/remittances/index" aria-expanded="false"><i class="fas fa-exchange"
+                                    aria-hidden="true"></i><span class="hide-menu">Remittance</span> <span
+                                    class="badge badge-danger"> Nouveau ! </span></a></li>
                         <?php } ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Journal/index" aria-expanded="false"><i class="fa fa-table"
@@ -245,6 +252,7 @@
     <script src="/scripts/Checklogin.js"></script>
     <script src="/scripts/clientName.js"></script>
     <script src="/scripts/produitlist.js"></script>
+    <script src="/scripts/produitlistRemittance.js"></script>
     <script src="/scripts/hidden.js"></script>
     <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/js/app-style-switcher.js"></script>

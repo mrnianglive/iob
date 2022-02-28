@@ -17,10 +17,10 @@
   <div class="row justify-content-center">
       <div class="col-lg-3 col-sm-6 col-xs-12">
           <div class="white-box analytics-info">
-              <h3 class="box-title">VERSEMENT</h3>
+              <h3 class="box-title">DEPOT</h3>
               <ul class="list-inline two-part d-flex align-items-center mb-0">
                   <li class="ml-auto"><span
-                          class="counter text-danger"><?= number_format($SommeVersement, 0, '.', ','); ?></span>
+                          class="counter text-danger"><?= number_format($SommeVersementGlobal, 0, '.', ','); ?></span>
                   </li>
               </ul>
               <span>CAISSE</span>
@@ -31,7 +31,7 @@
               <h3 class="box-title">RETRAIT</h3>
               <ul class="list-inline two-part d-flex align-items-center mb-0">
                   <li class="ml-auto"><span
-                          class="counter text-purple"><?= number_format($SommeRetrait, 0, '.', ','); ?></span>
+                          class="counter text-purple"><?= number_format($SommeRetraitGlobal, 0, '.', ','); ?></span>
                   </li>
               </ul>
               <span>CAISSE</span>
@@ -42,7 +42,7 @@
               <h5 class="box-title">SOLDE ESPECES</h5>
               <ul class="list-inline two-part d-flex align-items-center mb-0">
                   <li class="ml-auto"><span class="counter text-info">
-                          <?= number_format($Solde, 0, '.', ','); ?>
+                          <?= number_format($SoldeGlobal, 0, '.', ','); ?>
                       </span>
                   </li>
               </ul>
@@ -69,8 +69,8 @@
                           <tr>
                               <th class="border-top-0">RECU</th>
                               <th class="border-top-0">AGENCE</th>
-                              <th class="border-top-0">CAISSE</th>
                               <th class="border-top-0">PRODUIT</th>
+                              <th class="border-top-0">CAISSE</th>
                               <th class="border-top-0">OPERATION</th>
                               <th class="border-top-0">CLIENT</th>
                               <th class="border-top-0">N°COMPTE</th>
@@ -85,8 +85,8 @@
                               <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
                                       class="btn btn-secondary"><i class="fa fa-print"></i> </td>
                               <td> <?= $value['NameAgency']; ?></td>
-                              <td> <?= $value['NameCaisse']; ?></td>
                               <td> <?= $value['NameProduit']; ?></td>
+                              <td> <?= $value['NameCaisse']; ?></td>
                               <td><?= $value['NameType']; ?></td>
                               <td><?= $value['NameClient']; ?></td>
                               <td><?= $value['NumCompte']; ?></td>
@@ -161,13 +161,13 @@
       <div class="col-lg-4 col-md-12 col-sm-12">
           <div class="card">
               <div class="card-heading">
-                  Solde du Jour
+                  Solde du Jour <span class="badge badge-danger">New</span>
               </div>
               <div class="card-body">
                   <table class="table">
                       <tbody>
                           <tr>
-                              <td>Versement</td>
+                              <td>Depot</td>
                               <td><span class="counter text-danger">
                                       <?= number_format($SommeVersement, 0, '.', ','); ?>
                                   </span>
@@ -184,6 +184,30 @@
                               <td>Solde Especes</td>
                               <td><span class="counter text-danger">
                                       <?= number_format($Solde, 0, '.', ','); ?>
+                                  </span>
+                              </td>
+                          </tr>
+                      </tbody>
+
+                      <tbody>
+                          <tr>
+                              <td>REMITTANCE|Depot </td>
+                              <td><span class="counter text-danger">
+                                      <?= number_format($SommeRemittanceDepot, 0, '.', ','); ?>
+                                  </span>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>REMITTANCE|Retrait</td>
+                              <td><span class="counter text-danger">
+                                      <?= number_format($SommeRemittanceRetrait, 0, '.', ','); ?>
+                                  </span>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td> REMITTANCE|Solde </td>
+                              <td><span class="counter text-danger">
+                                      <?= number_format($SoldeRemittance, 0, '.', ','); ?>
                                   </span>
                               </td>
                           </tr>

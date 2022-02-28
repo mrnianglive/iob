@@ -95,6 +95,10 @@ class JournalController extends \Library\BackController
                 $date = date('Y-m-d');
                 $this->page->addVar('day', $date);
             }
+            $Agence[$key]['SommeDepotRemittance'] = $this->managers->getManagerOf("Journal")->SoldeRemittanceVersementAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeRetraitRemittance'] = $this->managers->getManagerOf("Journal")->SoldeRemittanceRetraitAgence($date, $value['RefAgency']);
+
+            $Agence[$key]['SoldeRemittanceAgence'] = $Agence[$key]['SommeDepotRemittance'] - $Agence[$key]['SommeRetraitRemittance'];
             $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], $date);
             $Agence[$key]['validate'] = $this->managers->getManagerOf("Journal")->CheckDailyClose($value['RefAgency'], $date);
             $Agence[$key]['YesterdayReserve'] = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], $date);
@@ -103,7 +107,7 @@ class JournalController extends \Library\BackController
             $Agence[$key]['TotalAppoAgenceSansApproInitial'] = $this->managers->getManagerOf("Journal")->TotalApproAgenceSansApproInitial($date, $value['RefAgency']);
             $Agence[$key]['TotalSortieAgence'] = $this->managers->getManagerOf("Journal")->TotalSortieAgence($date, $value['RefAgency']);
             $Agence[$key]['ReserveActuelle'] = $Agence[$key]['YesterdayReserve'] + $Agence[$key]['SommeDepot'] - $Agence[$key]['SommeSortie'] +
-                $Agence[$key]['TotalAppoAgenceSansApproInitial'] - $Agence[$key]['TotalSortieAgence'];
+                $Agence[$key]['TotalAppoAgenceSansApproInitial'] - $Agence[$key]['TotalSortieAgence'] + $Agence[$key]['SoldeRemittanceAgence'];
             $Agence[$key]['DayReserve'] =  $Agence[$key]['YesterdayReserve'] - $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal($date, $value['RefAgency']);
         }
         $this->page->addVar('Agence', $Agence);

@@ -43,7 +43,11 @@ class JournalManagerPDO extends JournalManager
             $listeCaisse[$key]['TotalVersement'] =  $this->SomnmeVersementCaisse($Date, $value['RefCaisse']);
             $listeCaisse[$key]['TotalRetrait'] =  $this->SommeRetraitCaisse($Date, $value['RefCaisse']);
             $listeCaisse[$key]['TotalSortieCaisse'] = $this->TotalSortieCaisse($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['SommeVersementRemittance'] = $this->SoldeRemittanceVersement($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['SommeRetraitRemittance'] = $this->SoldeRemittanceRetrait($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['SoldeRemittance'] = $listeCaisse[$key]['SommeVersementRemittance'] - $listeCaisse[$key]['SommeRetraitRemittance'];
             $listeCaisse[$key]['SoldeDisponible'] =   $listeCaisse[$key]['SoldeInitialGlobal']  + $listeCaisse[$key]['TotalVersement'] - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'];
+            $listeCaisse[$key]['SoldeDisponibleGlobal'] =   $listeCaisse[$key]['SoldeInitialGlobal']  + $listeCaisse[$key]['TotalVersement'] - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'] + $listeCaisse[$key]['SoldeRemittance'];
         }
         return $listeCaisse;
     }
@@ -336,17 +340,60 @@ class JournalManagerPDO extends JournalManager
         $requeteAgence->execute();
         $ListeCaisse = $requeteAgence->fetchAll();
         foreach ($ListeCaisse as $key => $value) {
-            $ListeCaisse[$key]['NbreOperation'] =  $this->NbreOperationCaissier($Date, $value['RefCaisse']);
 
+            $ListeCaisse[$key]['SoldeRemittanceVersement'] = $this->SoldeRemittanceVersement($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['SoldeRemittanceRetrait'] = $this->SoldeRemittanceRetrait($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['NbreOperation'] =  $this->NbreOperationCaissier($Date, $value['RefCaisse']);
             $ListeCaisse[$key]['SoldeInitial'] =  $this->SoldeInitialCaisse($Date, $value['RefCaisse']);
             $ListeCaisse[$key]['SoldeInitialGlobal'] =  $this->SoldeInitialCaisseGlobal($Date, $value['RefCaisse']);
             $ListeCaisse[$key]['TotalAppro'] =  $this->TotalApproCaisse($Date, $value['RefCaisse']);
             $ListeCaisse[$key]['TotalVersement'] =  $this->SomnmeVersementCaisse($Date, $value['RefCaisse']);
             $ListeCaisse[$key]['TotalRetrait'] =  $this->SommeRetraitCaisse($Date, $value['RefCaisse']);
             $ListeCaisse[$key]['TotalSortieCaisse'] = $this->TotalSortieCaisse($Date, $value['RefCaisse']);
-            $ListeCaisse[$key]['SoldeDisponible'] =   $ListeCaisse[$key]['SoldeInitialGlobal']  + $ListeCaisse[$key]['TotalVersement'] - $ListeCaisse[$key]['TotalRetrait'] - $ListeCaisse[$key]['TotalSortieCaisse'];
+            $ListeCaisse[$key]['SoldeRemittance'] = $ListeCaisse[$key]['SoldeRemittanceVersement'] - $ListeCaisse[$key]['SoldeRemittanceRetrait'];
+            $ListeCaisse[$key]['SoldeDisponible'] =   $ListeCaisse[$key]['SoldeInitialGlobal']  + $ListeCaisse[$key]['TotalVersement'] - $ListeCaisse[$key]['TotalRetrait'] - $ListeCaisse[$key]['TotalSortieCaisse'] + $ListeCaisse[$key]['SoldeRemittance'];
         }
         return $ListeCaisse;
+    }
+
+    public function SoldeRemittanceVersement($Date, $Caisse)
+    {
+        $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance WHERE DATE(Insert_time)=:jour AND RefCaisse=:RefCaisse AND RefType=1 AND Reset_Id IS NULL');  //AND RefCaisse=:RefCaisse  
+        $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result['SoldeRemittance'];
+    }
+
+
+    public function SoldeRemittanceVersementAgence($Date, $Agence)
+    {
+        $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE DATE(TbleRemittance.Insert_time)=:jour AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=1  AND TbleRemittance.Reset_Id IS NULL');  //AND RefCaisse=:RefCaisse  
+        $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result['SoldeRemittance'];
+    }
+
+    public function SoldeRemittanceRetrait($Date, $Caisse)
+    {
+        $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance WHERE DATE(Insert_time)=:jour AND RefCaisse=:RefCaisse AND RefType=2  AND Reset_Id IS NULL');  //AND RefCaisse=:RefCaisse  
+        $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result['SoldeRemittance'];
+    }
+    public function SoldeRemittanceRetraitAgence($Date, $Agence)
+    {
+        $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE DATE(TbleRemittance.Insert_time)=:jour AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=2  AND TbleRemittance.Reset_Id IS NULL');  //AND RefCaisse=:RefCaisse  
+        $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result['SoldeRemittance'];
     }
 
     public function YesterdayReserve($Agence, $date)

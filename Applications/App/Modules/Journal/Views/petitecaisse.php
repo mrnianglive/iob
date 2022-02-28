@@ -1,12 +1,10 @@
   <div class="row">
       <div class="col-md-12">
-          <form method="POST">
+          <form method="POST" id="formulaire">
               <div class="input-group">
                   <div class="col-md-3">Date
-                      <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control">
-                  </div>
-                  <div class="col-md-1"></br>
-                      <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                      <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control"
+                          onchange="document.getElementById('formulaire').submit();">
                   </div>
               </div>
           </form><br />
@@ -21,7 +19,7 @@
                               <th class="border-top-0">Appro initial</th>
                               <th class="border-top-0">Appro Caisse</th>
                               <th class="border-top-0">Sortie de Fond</th>
-                              <th class="border-top-0">Versement</th>
+                              <th class="border-top-0">Depot</th>
                               <th class="border-top-0">Retrait</th>
                               <th class="border-top-0">Solde Caisse</th>
                           </tr>
@@ -63,14 +61,15 @@
                               <td>
                                   <ul>
                                       <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= $afficher['TotalVersement']; ?></li>
+                                      <li><?= ($afficher['TotalVersement'] + $afficher['SoldeRemittanceVersement']); ?>
+                                      </li>
                                       <?php } ?>
                                   </ul>
                               </td>
                               <td>
                                   <ul>
                                       <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= $afficher['TotalRetrait']; ?></li>
+                                      <li><?= ($afficher['TotalRetrait'] + $afficher['SoldeRemittanceRetrait']); ?></li>
                                       <?php } ?>
                                   </ul>
                               </td>
@@ -99,7 +98,7 @@
                               <th class="border-top-0">Agence</th>
                               <th class="border-top-0">Solde Reserve(J-1)</th>
                               <th class="border-top-0">Solde Reserve</th>
-                              <th class="border-top-0">Versement</th>
+                              <th class="border-top-0">Depot</th>
                               <th class="border-top-0">Retrait</th>
                               <th class="border-top-0">Solde Agence</th>
                               <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>

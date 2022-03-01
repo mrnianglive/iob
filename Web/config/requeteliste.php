@@ -9,7 +9,9 @@ if (isset($_GET['Caisse'])) {
     $requete->execute();
     $resultat = $requete->fetchAll();
     foreach ($resultat as $key => $value) {
-        $tableau[$value['RefProduit']][] = $value['NameProduit'];
+        if ($value['RefProduit'] == 1) { // Uniquement Ecobank
+            $tableau[$value['RefProduit']][] = $value['NameProduit'];
+        }
     }
     echo json_encode($tableau);
 }

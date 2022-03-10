@@ -180,13 +180,14 @@
                                   </span>
                               </td>
                           </tr>
-                          <tr>
+                          <!-- <tr>
                               <td>Solde Especes</td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($Solde, 0, '.', ','); ?>
+                                      <? //= number_format($Solde, 0, '.', ','); 
+                                        ?>
                                   </span>
                               </td>
-                          </tr>
+                          </tr> -->
                       </tbody>
 
                       <tbody>
@@ -204,13 +205,14 @@
                                   </span>
                               </td>
                           </tr>
-                          <tr>
+                          <!-- <tr>
                               <td> REMITTANCE|Solde </td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($SoldeRemittance, 0, '.', ','); ?>
+                                      <? //= number_format($SoldeRemittance, 0, '.', ','); 
+                                        ?>
                                   </span>
                               </td>
-                          </tr>
+                          </tr> -->
                       </tbody>
                   </table>
               </div>

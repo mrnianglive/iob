@@ -38,7 +38,7 @@
                               <td>
                                   <ul>
                                       <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= $afficher['SoldeInitial']; ?></li>
+                                      <li><?= number_format($afficher['SoldeInitial'], 0, '.', '.'); ?></li>
                                       <?php } ?>
                                   </ul>
                               </td>
@@ -47,21 +47,21 @@
                               <td>
                                   <ul>
                                       <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= $afficher['TotalAppro']; ?></li>
+                                      <li><?= number_format($afficher['TotalAppro'], 0, '.', '.'); ?></li>
                                       <?php } ?>
                                   </ul>
                               </td>
                               <td>
                                   <ul>
                                       <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= $afficher['TotalSortieCaisse']; ?></li>
+                                      <li><?= number_format($afficher['TotalSortieCaisse'], 0, '.', '.'); ?></li>
                                       <?php } ?>
                                   </ul>
                               </td>
                               <td>
                                   <ul>
                                       <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= ($afficher['TotalVersement'] + $afficher['SoldeRemittanceVersement']); ?>
+                                      <li><?= number_format($afficher['TotalVersement'] + $afficher['SoldeRemittanceVersement'], 0, '.', '.'); ?>
                                       </li>
                                       <?php } ?>
                                   </ul>
@@ -69,14 +69,15 @@
                               <td>
                                   <ul>
                                       <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= ($afficher['TotalRetrait'] + $afficher['SoldeRemittanceRetrait']); ?></li>
+                                      <li><?= number_format($afficher['TotalRetrait'] + $afficher['SoldeRemittanceRetrait'], 0, '.', '.'); ?>
+                                      </li>
                                       <?php } ?>
                                   </ul>
                               </td>
                               <td>
                                   <ul>
                                       <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= $afficher['SoldeDisponible']; ?></li>
+                                      <li><?= number_format($afficher['SoldeDisponible'], 0, '.', '.'); ?></li>
                                       <?php } ?>
                                   </ul>
                               </td>
@@ -111,11 +112,11 @@
                           <?php foreach ($Agence as $value) { ?>
                           <tr>
                               <td><?= $value['NameAgency']; ?></td>
-                              <td><?= $value['YesterdayReserve']; ?></td>
-                              <td><?= $value['DayReserve']; ?></td>
-                              <td><?= $value['SommeDepot']; ?></td>
-                              <td><?= $value['SommeSortie']; ?></td>
-                              <td><?= $value['ReserveActuelle']; ?></td>
+                              <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?></td>
+                              <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
+                              <td><?= number_format($value['SommeDepot'], 0, '.', '.'); ?></td>
+                              <td><?= number_format($value['SommeSortie'], 0, '.', '.'); ?></td>
+                              <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
                               <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
                               <td> <?php if (!empty($value['validate'])) { ?><a class="btn btn-success"><i
                                           class="fa  fa-lock"></i></a> <?php } else { ?>

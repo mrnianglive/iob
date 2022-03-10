@@ -4,7 +4,7 @@
                 if ($value['SommeDepot'] ==  0) { ?>
       <div class="alert alert-danger" role="alert">
           <span class="badge badge-danger"><?= $value['NameAgency']; ?> | Appro</span> Le solde
-          de la reserve est : <?= number_format($value['YesterdayReserve'], 0, '.', ','); ?> | Merci d'Approvisonner
+          de la reserve est : <?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?> | Merci d'Approvisonner
           l'Agence
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -20,7 +20,7 @@
               <h3 class="box-title">DEPOT</h3>
               <ul class="list-inline two-part d-flex align-items-center mb-0">
                   <li class="ml-auto"><span
-                          class="counter text-danger"><?= number_format($SommeVersementGlobal, 0, '.', ','); ?></span>
+                          class="counter text-danger"><?= number_format($SommeVersementGlobal, 0, '.', '.'); ?></span>
                   </li>
               </ul>
               <span>CAISSE</span>
@@ -31,7 +31,7 @@
               <h3 class="box-title">RETRAIT</h3>
               <ul class="list-inline two-part d-flex align-items-center mb-0">
                   <li class="ml-auto"><span
-                          class="counter text-purple"><?= number_format($SommeRetraitGlobal, 0, '.', ','); ?></span>
+                          class="counter text-purple"><?= number_format($SommeRetraitGlobal, 0, '.', '.'); ?></span>
                   </li>
               </ul>
               <span>CAISSE</span>
@@ -42,7 +42,7 @@
               <h5 class="box-title">SOLDE ESPECES</h5>
               <ul class="list-inline two-part d-flex align-items-center mb-0">
                   <li class="ml-auto"><span class="counter text-info">
-                          <?= number_format($SoldeGlobal, 0, '.', ','); ?>
+                          <?= number_format($SoldeGlobal, 0, '.', '.'); ?>
                       </span>
                   </li>
               </ul>
@@ -91,7 +91,7 @@
                               <td><?= $value['NameClient']; ?></td>
                               <td><?= $value['NumCompte']; ?></td>
                               <td class="counter text-danger">
-                                  <?= number_format($value['MontantVersement'], 0, '.', ','); ?></td>
+                                  <?= number_format($value['MontantVersement'], 0, '.', '.'); ?></td>
                               <td><?= $value['Remarque']; ?></td>
                           </tr>
                           <?php } ?>
@@ -169,14 +169,14 @@
                           <tr>
                               <td>Depot</td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($SommeVersement, 0, '.', ','); ?>
+                                      <?= number_format($SommeVersement, 0, '.', '.'); ?>
                                   </span>
                               </td>
                           </tr>
                           <tr>
                               <td>Retrait</td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($SommeRetrait, 0, '.', ','); ?>
+                                      <?= number_format($SommeRetrait, 0, '.', '.'); ?>
                                   </span>
                               </td>
                           </tr>
@@ -194,21 +194,21 @@
                           <tr>
                               <td>REMITTANCE|Depot </td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($SommeRemittanceDepot, 0, '.', ','); ?>
+                                      <?= number_format($SommeRemittanceDepot, 0, '.', '.'); ?>
                                   </span>
                               </td>
                           </tr>
                           <tr>
                               <td>REMITTANCE|Retrait</td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($SommeRemittanceRetrait, 0, '.', ','); ?>
+                                      <?= number_format($SommeRemittanceRetrait, 0, '.', '.'); ?>
                                   </span>
                               </td>
                           </tr>
                           <!-- <tr>
                               <td> REMITTANCE|Solde </td>
                               <td><span class="counter text-danger">
-                                      <? //= number_format($SoldeRemittance, 0, '.', ','); 
+                                      <? //= number_format($SoldeRemittance, 0, '.', '.'); 
                                         ?>
                                   </span>
                               </td>

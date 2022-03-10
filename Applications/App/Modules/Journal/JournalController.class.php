@@ -51,10 +51,6 @@ class JournalController extends \Library\BackController
             $Biellet = $this->managers->getManagerOf('Journal')->GetBielletageJournal($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
             $this->page->addVar('Biellet', $Biellet);
         } else {
-
-            $SoldeRemittanceVersementAgencePeriode = $this->managers->getManagerOf('Journal')->SoldeRemittanceVersementAgencePeriode();
-            $SoldeRemittanceRetraitAgencePeriode = $this->managers->getManagerOf('Journal')->SoldeRemittanceRetraitAgencePeriode();
-            $SoldeRemittanceAgence = $SoldeRemittanceVersementAgencePeriode - $SoldeRemittanceRetraitAgencePeriode;
             $Operations = $this->managers->getManagerOf('Journal')->Operations();
             $this->page->addVar('Operations', $Operations);
             $sommeVersementPeriode = $this->managers->getManagerOf('Journal')->sommeVersementPeriode();
@@ -65,9 +61,13 @@ class JournalController extends \Library\BackController
             $this->page->addVar('sommeVersementPeriodeAvecAppro', $sommeVersementPeriodeAvecAppro);
             $sommeRetraitPeriodeAvecSortie = $this->managers->getManagerOf('Journal')->sommeRetraitPeriodeAvecSortie();
             $this->page->addVar('sommeRetraitPeriodeAvecSortie', $sommeRetraitPeriodeAvecSortie);
-            $Yesterday = $this->managers->getManagerOf('Bielletage')->YesterdaySolde();
-            $Solde = ($sommeVersementPeriode - $sommeRetraitPeriode + $SoldeRemittanceAgence) + $Yesterday + $sommeVersementPeriodeAvecAppro - $sommeRetraitPeriodeAvecSortie;
-            $this->page->addVar('Solde', $Solde);
+
+            $UsersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'));
+            $SoldeGlobal = 0;
+            foreach ($UsersCaisse as $key => $value) {
+                $SoldeGlobal += $value['SoldeDisponibleGlobal'];
+            }
+            $this->page->addVar('Solde', $SoldeGlobal);
         }
     }
     public function executeValidate(\Library\HTTPRequest $request)

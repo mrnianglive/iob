@@ -551,4 +551,43 @@ class JournalManagerPDO extends JournalManager
         $ListeAgence = $requeteAgence->fetch();
         return $ListeAgence['NameAgency'];
     }
+
+
+    public function SoldeRemittanceVersementAgencePeriode($debut = NULL, $fin = NULL, $Agence = NULL)
+    {
+        if (!empty($debut) && !empty($fin) && !empty($Agence)) {
+            $requete = $this->dao->prepare("SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin' AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=1  AND TbleRemittance.Reset_Id IS NULL");  //AND RefCaisse=:RefCaisse  
+            $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+            $requete->execute();
+            $result = $requete->fetch();
+            return $result['SoldeRemittance'];
+        } else {
+
+            $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleRemittance.RefCaisse  WHERE DATE(TbleRemittance.Insert_time)=:jour AND TbleChmod.RefUsers=:RefUsers AND TbleRemittance.RefType=1  AND TbleRemittance.Reset_Id IS NULL');  //AND RefCaisse=:RefCaisse  
+            $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
+            $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+            $requete->execute();
+            $result = $requete->fetch();
+            return $result['SoldeRemittance'];
+        }
+    }
+
+
+    public function SoldeRemittanceRetraitAgencePeriode($debut = NULL, $fin = NULL, $Agence = NULL)
+    {
+        if (!empty($debut) && !empty($fin) && !empty($Agence)) {
+            $requete = $this->dao->prepare("SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin' AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=2  AND TbleRemittance.Reset_Id IS NULL");  //AND RefCaisse=:RefCaisse  
+            $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+            $requete->execute();
+            $result = $requete->fetch();
+            return $result['SoldeRemittance'];
+        } else {
+            $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleRemittance.RefCaisse  WHERE DATE(TbleRemittance.Insert_time)=:jour AND TbleChmod.RefUsers=:RefUsers AND TbleRemittance.RefType=2  AND TbleRemittance.Reset_Id IS NULL');  //AND RefCaisse=:RefCaisse  
+            $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
+            $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+            $requete->execute();
+            $result = $requete->fetch();
+            return $result['SoldeRemittance'];
+        }
+    }
 }

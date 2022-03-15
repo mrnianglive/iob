@@ -122,11 +122,12 @@ class JournalController extends \Library\BackController
         }
 
         $ListeProduit = $this->managers->getManagerOf("Pannel")->ListeProduit(); //Recuperation de la liste
-        $ListAgence  = [1, 2, 3, 4]; //Recuperation de la liste
+        $Agenc  = $this->managers->getManagerOf("Pannel")->ListeAgence(); //Recuperation de la liste
         foreach ($ListeProduit as $key => $produit) {
-            foreach ($ListAgence as  $agency) {
-                $ListeProduit[$key]['UvDepot'] = $this->managers->getManagerOf("Analytics")->UvDepot($agency['RefAgency'], $produit['RefProduit']);
-                $ListeProduit[$key]['UvRetrait'] = $this->managers->getManagerOf("Analytics")->UvRetrait($agency['RefAgency'], $produit['RefProduit']);
+
+            foreach ($Agenc as  $agency) {
+                $ListeProduit[$key]['UvDepot'] = $this->managers->getManagerOf("Analytics")->UvDepot(4, $produit['RefProduit']);
+                $ListeProduit[$key]['UvRetrait'] = $this->managers->getManagerOf("Analytics")->UvRetrait(4, $produit['RefProduit']);
                 $ListeProduit[$key]['SoldeUv'] = $ListeProduit[$key]['UvDepot'] - $ListeProduit[$key]['UvRetrait'];
             }
         }

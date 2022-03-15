@@ -97,8 +97,6 @@ class JournalController extends \Library\BackController
     {
         $this->page->addVar("titles", "Petite Caisse"); // Titre de la page
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
-        $ListeProduit = $this->managers->getManagerOf("Pannel")->ListeProduit(); //Recuperation de la liste
-
         foreach ($Agence as $key => $value) {
             if (!empty($request->postData('jour'))) {
                 $date = $request->postData('jour');
@@ -121,16 +119,18 @@ class JournalController extends \Library\BackController
             $Agence[$key]['ReserveActuelle'] = $Agence[$key]['YesterdayReserve'] + $Agence[$key]['SommeDepot'] - $Agence[$key]['SommeSortie'] +
                 $Agence[$key]['TotalAppoAgenceSansApproInitial'] - $Agence[$key]['TotalSortieAgence'] + $Agence[$key]['SoldeRemittanceAgence'];
             $Agence[$key]['DayReserve'] =  $Agence[$key]['YesterdayReserve'] - $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal($date, $value['RefAgency']);
-
-
-            foreach ($ListeProduit as $prod => $produit) {
-                $Agence[$key][$prod]['UvDepot'] = $this->managers->getManagerOf("Analytics")->UvDepot($value['RefAgency'], $produit['RefProduit']);
-                $Agence[$key][$prod]['UvRetrait'] = $this->managers->getManagerOf("Analytics")->UvRetrait($value['RefAgency'], $produit['RefProduit']);
-                $Agence[$key][$prod]['SoldeUv'] = $Agence[$key][$prod]['UvDepot'] - $Agence[$key][$prod]['UvRetrait'];
-            }
         }
         $this->page->addVar('Agence', $Agence);
 
+        $ListeProduit = $this->managers->getManagerOf("Pannel")->ListeProduit(); //Recuperation de la liste
+
+        foreach ($ListeProduit as $key => $produit) {
+            foreach ($Agence as $value) {
+                $ListeProduit[$key]['UvDepot'] = $this->managers->getManagerOf("Analytics")->UvDepot($value['RefAgency'], $produit['RefProduit']);
+                $ListeProduit[$key]['UvRetrait'] = $this->managers->getManagerOf("Analytics")->UvRetrait($value['RefAgency'], $produit['RefProduit']);
+                $ListeProduit[$key]['SoldeUv'] = $ListeProduit[$key]['UvDepot'] - $ListeProduit[$key]['UvRetrait'];
+            }
+        }
 
         $this->page->addVar('ListeProduit', $ListeProduit);
     }

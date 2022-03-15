@@ -34,6 +34,9 @@
 	<route url="/Users/deleteUsers/([0-9]+)" vars="id" action="deleteusers" module="Users"/>
 	<route url="/Users/UpdateUsers/([0-9]+)" vars="id" action="updateusers" module="Users"/>
 	<route url="/Analytics/index" module="Analytics" action="index"/>
+	
+	<route url="/Analytics/uv" module="Analytics" action="uv"/>
+
 	<route url="/Journal/petite_caisse" module="Journal" action="petitecaisse"/>
 	 <route url="/Analytics/chart" module="Analytics" action="chart"/>
 	  <route url="/Analytics/performance" module="Analytics" action="performance"/>

@@ -137,4 +137,47 @@
               </div>
           </div>
       </div>
+
+
+      <div class="col-md-12">
+          <div class="white-box">
+              <h3 class="box-title">Gestion du Fond de Roulement</h3>
+              <div class="table-responsive">
+                  <table id="dataTable2" class="display nowrap" cellspacing="0" width="100%">
+                      <thead>
+                          <tr>
+                              <th class="border-top-0">Agence</th>
+                              <th class="border-top-0">Produit</th>
+                              <th class="border-top-0">Solde UV</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <?php foreach ($Agence as $value) { ?>
+                          <tr>
+                              <td><?= $value['NameAgency']; ?></td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($ListeProduit as $key => $value1) { ?>
+                                      <li><?= $value1['NameProduit']; ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+
+                              <td>
+                                  <ul>
+                                      <?php foreach ($ListeProduit as  $produit) {  ?>
+                                      <li>
+                                          <?= number_format($produit['SoldeUv'], 0, '.', '.');
+                                                    ?>
+                                      </li>
+                                      <?php }
+                                            ?>
+                                  </ul>
+                          </tr>
+                          <?php } ?>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
   </div>

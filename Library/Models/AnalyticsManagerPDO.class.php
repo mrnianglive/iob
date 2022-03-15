@@ -156,4 +156,41 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $result = $requete->fetch();
         return $result['Nbre'];
     }
+
+    public function AddUv()
+    {
+        $requete = $this->dao->prepare("INSERT INTO TbleUv(RefAgency,RefProduit,MontantDepot) VALUES(:RefAgency,:RefProduit,:MontantDepot)");
+        $requete->bindValue(':RefAgency', $_POST['RefAgency'], \PDO::PARAM_INT);
+        $requete->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
+        $requete->bindValue(':MontantDepot', $_POST['MontantDepot'], \PDO::PARAM_INT);
+        $requete->execute();
+    }
+
+    public function ListeDepot()
+    {
+        $requeteDepot = $this->dao->prepare('SELECT * FROM TbleUv INNER JOIN  TbleAgency ON TbleUv.RefAgency=TbleAgency.RefAgency INNER JOIN TbleProduit ON TbleUv.RefProduit=TbleProduit.RefProduit');
+        $requeteDepot->execute();
+        $ListeDepot = $requeteDepot->fetchAll();
+        return $ListeDepot;
+    }
+
+    public function UvDepot($Agence, $produit)
+    {
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS MontantDepot FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=1');
+        $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteSUm->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
+        $requeteSUm->execute();
+        $data = $requeteSUm->fetch();
+        return $data['MontantDepot'];
+    }
+
+    public function UvRetrait($Agence, $produit)
+    {
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS Montant FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=2');
+        $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteSUm->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
+        $requeteSUm->execute();
+        $data = $requeteSUm->fetch();
+        return $data['Montant'];
+    }
 }

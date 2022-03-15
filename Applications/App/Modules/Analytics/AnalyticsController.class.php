@@ -100,4 +100,26 @@ class AnalyticsController extends \Library\BackController
         $CountWeekValidate = $this->managers->getManagerOf('Analytics')->CountWeekValidate();
         $this->page->addVar('CountWeekValidate', $CountWeekValidate);
     }
+
+
+    public function executeUv(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Gestion des UV "); // Titre de la page
+        $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
+        $this->page->addVar('ListeAgence', $ListeAgence);
+        $ListeProduit  = $this->managers->getManagerOf("Pannel")->ListeProduit();
+        $this->page->addVar('ListeProduit', $ListeProduit);
+
+        $ListeDepot  = $this->managers->getManagerOf("Analytics")->ListeDepot();
+        $this->page->addVar('ListeDepot', $ListeDepot);
+
+        if ($request->method() == 'POST') {
+            $this->managers->getManagerOf("Analytics")->AddUv($request);
+            $_SESSION['message']['type'] = 'success';
+            $_SESSION['message']['text'] = 'Ajout réussie !';
+            $_SESSION['message']['number'] = 2;
+            $this->app()->httpResponse()->redirect('/Analytics/uv'); //Retour en arriere
+
+        }
+    }
 }

@@ -270,6 +270,12 @@
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ]
         });
+        $('#dataTable2').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
     });
     </script>
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>

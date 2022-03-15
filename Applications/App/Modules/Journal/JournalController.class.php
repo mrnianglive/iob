@@ -126,10 +126,9 @@ class JournalController extends \Library\BackController
         $refAgency = 0;
         foreach ($ListeProduit as $key => $produit) {
 
-            foreach ($Agenc as  $agency) {
-                $refAgency = $agency['RefAgency'];
-                $ListeProduit[$key]['UvDepot'] = $this->managers->getManagerOf("Analytics")->UvDepot($refAgency, $produit['RefProduit']);
-                $ListeProduit[$key]['UvRetrait'] = $this->managers->getManagerOf("Analytics")->UvRetrait($refAgency, $produit['RefProduit']);
+            foreach ($Agenc['RefAgency'] as  $agency) {
+                $ListeProduit[$key]['UvDepot'] = $this->managers->getManagerOf("Analytics")->UvDepot($agency['RefAgency'], $produit['RefProduit']);
+                $ListeProduit[$key]['UvRetrait'] = $this->managers->getManagerOf("Analytics")->UvRetrait($agency['RefAgency'], $produit['RefProduit']);
                 $ListeProduit[$key]['SoldeUv'] = $ListeProduit[$key]['UvDepot'] - $ListeProduit[$key]['UvRetrait'];
             }
         }

@@ -167,7 +167,7 @@
                                   <ul>
                                       <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
                                       <li>
-                                          <?= number_format($ListeProduit[$key][$keyproduit]['SoldeUv'], 0, '.', '.');
+                                          <?= number_format($tab[$key][$keyproduit]['SoldeUv'], 0, '.', '.');
                                                     ?>
                                       </li>
                                       <?php }

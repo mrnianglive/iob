@@ -131,7 +131,7 @@ class JournalController extends \Library\BackController
                 $ListeProduit[$key]['SoldeUv'] = $ListeProduit[$key]['UvDepot'] - $ListeProduit[$key]['UvRetrait'];
             }
         }
-
+        print_r($ListeProduit);
         $this->page->addVar('ListeProduit', $ListeProduit);
     }
 }

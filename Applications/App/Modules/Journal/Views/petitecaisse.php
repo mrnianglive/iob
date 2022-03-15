@@ -152,12 +152,12 @@
                           </tr>
                       </thead>
                       <tbody>
-                          <?php foreach ($Agence as $value) { ?>
+                          <?php foreach ($Agence as $key => $value) { ?>
                           <tr>
                               <td><?= $value['NameAgency']; ?></td>
                               <td>
                                   <ul>
-                                      <?php foreach ($ListeProduit as $key => $value1) { ?>
+                                      <?php foreach ($ListeProduit as  $value1) { ?>
                                       <li><?= $value1['NameProduit']; ?></li>
                                       <?php } ?>
                                   </ul>
@@ -165,9 +165,9 @@
 
                               <td>
                                   <ul>
-                                      <?php foreach ($ListeProduit as  $produit) {  ?>
+                                      <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
                                       <li>
-                                          <?= number_format($produit['SoldeUv'], 0, '.', '.');
+                                          <?= number_format($ListeProduit[$key][$keyproduit]['SoldeUv'], 0, '.', '.');
                                                     ?>
                                       </li>
                                       <?php }

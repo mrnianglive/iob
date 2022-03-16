@@ -5,7 +5,6 @@
                  <div style="width: 10%;display: inline-block;vertical-align: top;">
                      <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px;" width="100%">
                      <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px;" width="100%">
-                     <?php \QRcode::png('PHP QR Code :)'); ?>
                  </div>
                  <div style="text-align: center;width:88%;display: inline-block;">
                      <p>MALI CREANCES SA - PARTENAIRE ECOBANK MALI</p>
@@ -231,4 +230,8 @@
 
          <h5 style="text-align:left;">MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement |
              www.malicreances-sa.com</h5>
+
+         <?php
+            include('phpqrcode/qrlib.php');
+            QRcode::png('PHP QR Code :)'); ?>
      </div>

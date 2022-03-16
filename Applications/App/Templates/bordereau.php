@@ -45,9 +45,7 @@ include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php');
     </style><br>
     <strong>
         <?= $content; ?>
-        <?php
-        QRcode::png('PHP QR Code :)');
-        ?>
+
     </strong>
     <!-- Mainly scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

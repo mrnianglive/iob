@@ -1,5 +1,5 @@
 <?php
-include("include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php')");
+include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php');
 ?>
 
 

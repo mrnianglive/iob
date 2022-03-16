@@ -282,7 +282,7 @@ class ArreterManagerPDO extends ArreterManager
 
 
             foreach ($_POST['RefProduit'] as $key => $value) {
-                $requeteInsert = $this->dao->prepare("INSERT INTO TbleSoldeUV(RefAgency,RefProduit,SoldeUV,DateSoldeUV) VALUES (:RefAgency,:RefProduit,:SoldeUV,:DateSoldeUV)");
+                $requeteInsert = $this->dao->prepare("INSERT INTO TbleSoldeUv(RefAgency,RefProduit,SoldeUV,DateSoldeUV) VALUES (:RefAgency,:RefProduit,:SoldeUV,:DateSoldeUV)");
                 $requeteInsert->bindValue(':RefAgency', $_POST['RefAgency'], \PDO::PARAM_INT);
                 $requeteInsert->bindValue(':RefProduit', $_POST['RefProduit'][$key], \PDO::PARAM_INT);
                 $requeteInsert->bindValue(':SoldeUV', $_POST['SoldeUV'][$key], \PDO::PARAM_STR);

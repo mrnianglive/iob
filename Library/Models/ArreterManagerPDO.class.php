@@ -269,4 +269,26 @@ class ArreterManagerPDO extends ArreterManager
         $Biellet['un'] = $Versement['un'] - $Retrait['un'];
         return $Biellet;
     }
+
+
+    public function StopUV()
+    {
+        if (!empty($_POST['RefProduit'])) {
+            if (!empty($_POST['daycloture'])) {
+                $datecloture = $_POST['daycloture'];
+            } else {
+                $datecloture = ('Y-m-d H:i:s');
+            }
+
+
+            foreach ($_POST['RefProduit'] as $key => $value) {
+                $requeteInsert = $this->dao->prepare("INSERT INTO TbleSoldeUV(RefAgency,RefProduit,SoldeUV,DateSoldeUV) VALUES (:RefAgency,:RefProduit,:SoldeUV,:DateSoldeUV)");
+                $requeteInsert->bindValue(':RefAgency', $_POST['RefAgency'], \PDO::PARAM_INT);
+                $requeteInsert->bindValue(':RefProduit', $_POST['RefProduit'][$key], \PDO::PARAM_INT);
+                $requeteInsert->bindValue(':SoldeUV', $_POST['SoldeUV'][$key], \PDO::PARAM_STR);
+                $requeteInsert->bindValue(':DateSoldeUV', $datecloture, \PDO::PARAM_STR);
+                $requeteInsert->execute();
+            }
+        }
+    }
 }

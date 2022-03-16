@@ -56,4 +56,13 @@ class ArreterController extends \Library\BackController
 
         $this->app()->httpResponse()->redirect('/Journal/petite_caisse'); //Retour en arriere
     }
+
+
+    public function executeReserveuv(\Library\HTTPRequest $request)
+    {
+
+        $this->managers->getManagerOf('Arreter')->StopUV($request);
+        $this->app()->httpResponse()->redirect('/Journal/petite_caisse'); //Retour en arriere
+
+    }
 }

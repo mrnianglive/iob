@@ -112,7 +112,8 @@ class AnalyticsController extends \Library\BackController
 
         $ListeDepot  = $this->managers->getManagerOf("Analytics")->ListeDepot();
         $this->page->addVar('ListeDepot', $ListeDepot);
-
+        $ListeType  = $this->managers->getManagerOf("Remittance")->ListeType();
+        $this->page->addVar("ListeType", $ListeType);
         if ($request->method() == 'POST') {
             $this->managers->getManagerOf("Analytics")->AddUv($request);
             $_SESSION['message']['type'] = 'success';

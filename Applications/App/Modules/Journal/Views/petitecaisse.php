@@ -88,7 +88,6 @@
               </div>
           </div>
       </div>
-
       <div class="col-md-12">
           <div class="white-box">
               <h3 class="box-title">Solde Reserve</h3>
@@ -123,11 +122,11 @@
                                   <form method="POST" action="/Arreter/reserve">
                                       <input type="hidden" value="<?= $value['ReserveActuelle']; ?>"
                                           name="ReserveActuelle">
-
                                       <input type="hidden" value="<?= $day; ?>" name="daycloture">
                                       <input type="hidden" value="<?= $value['RefAgency']; ?>" name="RefAgency">
                                       <button type="submit" class="btn btn-danger"><i class="fa fa-unlock"></i></button>
-                                  </form> <?php } ?>
+                                  </form>
+                                  <?php } ?>
                               </td>
                               <?php } ?>
                           </tr>
@@ -148,7 +147,14 @@
                           <tr>
                               <th class="border-top-0">Agence</th>
                               <th class="border-top-0">Produit</th>
+                              <th class="border-top-0">Solde UV(J-1)</th>
+                              <th class="border-top-0">Appro UV</th>
+                              <th class="border-top-0">Retour UV</th>
+                              <th class="border-top-0">Depot</th>
+                              <th class="border-top-0">Retrait</th>
                               <th class="border-top-0">Solde UV</th>
+                              <th class="border-top-0">FR</th>
+                              <th class="border-top-0">Action</th>
                           </tr>
                       </thead>
                       <tbody>
@@ -167,12 +173,94 @@
                                   <ul>
                                       <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
                                       <li>
-                                          <?= number_format($tab[$key][$keyproduit]['SoldeUv'], 0, '.', '.');
+                                          <?= number_format($tab[$key][$keyproduit]['YesterdayReserveProduit'], 0, '.', '.');
                                                     ?>
                                       </li>
                                       <?php }
                                             ?>
                                   </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
+                                      <li>
+                                          <?= number_format($tab[$key][$keyproduit]['UvDepot'], 0, '.', '.');
+                                                    ?>
+                                      </li>
+                                      <?php }
+                                            ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
+                                      <li>
+                                          <?= number_format($tab[$key][$keyproduit]['UvRetrait'], 0, '.', '.');
+                                                    ?>
+                                      </li>
+                                      <?php }
+                                            ?>
+                                  </ul>
+                              </td>
+
+                              <td>
+                                  <ul>
+                                      <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
+                                      <li>
+                                          <?= number_format($tab[$key][$keyproduit]['SommeDepotRemittanceProduit'], 0, '.', '.');
+                                                    ?>
+                                      </li>
+                                      <?php }
+                                            ?>
+                                  </ul>
+                              </td>
+
+                              <td>
+                                  <ul>
+                                      <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
+                                      <li>
+                                          <?= number_format($tab[$key][$keyproduit]['SommeRetraitRemittanceProduit'], 0, '.', '.');
+                                                    ?>
+                                      </li>
+                                      <?php }  ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php
+                                            foreach ($ListeProduit as $keyproduit => $produit) {     ?>
+                                      <li>
+                                          <?= number_format($tab[$key][$keyproduit]['SoldeUvNow'], 0, '.', '.');
+                                                    ?>
+                                      </li>
+                                      <?php }  ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php
+                                            $total = 0;
+                                            foreach ($ListeProduit as $keyproduit => $produit) {
+                                                $total += $tab[$key][$keyproduit]['SoldeUvNow'];
+                                            }  ?>
+                                      <?= $total + $value['ReserveActuelle']; ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <form method="POST" action="/Arreter/reserve/uv">
+                                      <?php foreach ($ListeProduit as $keyproduit => $produit) { ?>
+                                      <input type="hidden" value="<?= $tab[$key][$keyproduit]['SoldeUvNow']; ?>"
+                                          name="SoldeUV[<?= $produit['RefProduit']; ?>]" multiple="">
+                                      <input type="hidden" value="<?= $day; ?>" name="daycloture">
+                                      <input type="hidden" value="<?= $produit['RefProduit']; ?>"
+                                          name="RefProduit[<?= $produit['RefProduit']; ?>]" multiple="">
+                                      <?php }  ?>
+                                      <input type="hidden" value="<?= $value['RefAgency']; ?>" name="RefAgency">
+
+                                      <button type="submit" class="btn btn-warning"><i
+                                              class="fa fa-unlock"></i></button>
+                                  </form>
+                              </td>
                           </tr>
                           <?php } ?>
                       </tbody>
@@ -180,4 +268,5 @@
               </div>
           </div>
       </div>
+
   </div>

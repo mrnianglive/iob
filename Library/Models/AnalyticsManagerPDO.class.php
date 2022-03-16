@@ -159,10 +159,11 @@ class AnalyticsManagerPDO extends AnalyticsManager
 
     public function AddUv()
     {
-        $requete = $this->dao->prepare("INSERT INTO TbleUv(RefAgency,RefProduit,MontantDepot) VALUES(:RefAgency,:RefProduit,:MontantDepot)");
+        $requete = $this->dao->prepare("INSERT INTO TbleUv(RefAgency,RefProduit,MontantDepot,RefType) VALUES(:RefAgency,:RefProduit,:MontantDepot,:RefType)");
         $requete->bindValue(':RefAgency', $_POST['RefAgency'], \PDO::PARAM_INT);
         $requete->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
         $requete->bindValue(':MontantDepot', $_POST['MontantDepot'], \PDO::PARAM_INT);
+        $requete->bindValue(':RefType', $_POST['RefType'], \PDO::PARAM_INT);
         $requete->execute();
     }
 
@@ -174,23 +175,87 @@ class AnalyticsManagerPDO extends AnalyticsManager
         return $ListeDepot;
     }
 
-    public function UvDepot($Agence, $produit)
+    public function UvDepot($Agence, $produit, $date)
     {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS MontantDepot FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=1');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS MontantDepot FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=1 AND DATE(TbleUv.DateDepot)=:jour');
         $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSUm->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
+        $requeteSUm->bindValue(':jour', $date, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         return $data['MontantDepot'];
     }
 
-    public function UvRetrait($Agence, $produit)
+    public function UvRetrait($Agence, $produit, $date)
     {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS Montant FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=2');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS Montant FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=2 AND DATE(TbleUv.DateDepot)=:jour');
         $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSUm->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
+        $requeteSUm->bindValue(':jour', $date, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         return $data['Montant'];
+    }
+
+    public function YesterdayReserveProduit($Agence, $date, $produit)
+    {
+        $requeteSoldeInittial = $this->dao->prepare("SELECT SoldeUV FROM TbleSoldeUV WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND DateSoldeUV=(SELECT MAX(DateSoldeUV) FROM TbleSoldeUV WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND DateSoldeUV <:today)");
+        $requeteSoldeInittial->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteSoldeInittial->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
+        $requeteSoldeInittial->bindValue(':today', $date, \PDO::PARAM_STR);
+        $requeteSoldeInittial->execute();
+        $result = $requeteSoldeInittial->fetch();
+        return $result['SoldeUV'];
+    }
+
+    public function SoldeRemittanceVersementAgenceProduit($Date, $Agence, $produit)
+    {
+        if ($produit != 1) {
+            $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE DATE(TbleRemittance.Insert_time)=:jour AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=1  AND TbleRemittance.Reset_Id IS NULL AND TbleRemittance.RefProduit=:RefProduit');  //AND RefCaisse=:RefCaisse  
+            $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
+            $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+            $requete->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
+            $requete->execute();
+            $result = $requete->fetch();
+            return $result['SoldeRemittance'];
+        } else {
+            $produitEcobank = $this->SommeDepotAgence($Date, $Agence);
+            return $produitEcobank;
+        }
+    }
+
+    public function SoldeRemittanceRetraitAgenceProduit($Date, $Agence, $produit)
+    {
+        if ($produit != 1) {
+            $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE DATE(TbleRemittance.Insert_time)=:jour AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=2  AND TbleRemittance.Reset_Id IS NULL AND TbleRemittance.RefProduit=:RefProduit');  //AND RefCaisse=:RefCaisse  
+            $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
+            $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+            $requete->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
+            $requete->execute();
+            $result = $requete->fetch();
+            return $result['SoldeRemittance'];
+        } else {
+            $produitEcobank = $this->SommeRetraitAgence($Date, $Agence);
+            return $produitEcobank;
+        }
+    }
+
+    public function SommeDepotAgence($Date, $Agence)
+    {
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleAgency.RefAgency=:RefAgency AND (TbleOperations.RefType=1)');
+        $requeteSUm->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteSUm->execute();
+        $data = $requeteSUm->fetch();
+        return $data['TotalVersment'];
+    }
+    public function SommeRetraitAgence($Date, $Agence)
+    {
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleAgency.RefAgency=:RefAgency AND (TbleOperations.RefType=2)');
+        $requeteSUm->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteSUm->execute();
+        $data = $requeteSUm->fetch();
+        return $data['TotalVersment'];
     }
 }

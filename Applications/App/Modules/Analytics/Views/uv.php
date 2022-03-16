@@ -91,6 +91,18 @@
                         <input type="text" class="form-control" name="MontantDepot" id="recipient-name1">
                     </div>
                 </div>
+                <div class="modal-body">
+                    <label for="recipient-name" class="control-label">Type Opération </label>
+                    <select name="RefType" class="form-control" required>
+                        <option>Veuillez Choisir</option>
+                        <?php foreach ($ListeType as $key => $value) {
+                            if ($value['RefType'] == 1 or $value['RefType'] == 2) {
+                        ?>
+                        <option value="<?= $value['RefType']; ?>"><?= $value['NameType']; ?></option>
+                        <?php   }
+                        } ?>
+                    </select>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
                     <button type="submit" class="btn btn-primary">Valider</button>

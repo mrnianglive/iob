@@ -44,4 +44,7 @@
 	<route url="/remittances/index" module="Remittance" action="index"/>
 		<route url="/remittances/delete/([0-9]+)" module="Remittance" vars="id" action="delete"/>
 
+
+	<route url="/Arreter/reserve/uv" module="Arreter" action="reserveuv"/>
+
 </routes>

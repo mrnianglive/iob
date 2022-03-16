@@ -125,14 +125,30 @@ class JournalController extends \Library\BackController
         $Agenc  = $this->managers->getManagerOf("Pannel")->ListeAgence(); //Recuperation de la liste
         $tab = [];
         foreach ($Agenc as $keyagence =>  $agency) {
+
+            if (!empty($request->postData('jour'))) {
+                $date = $request->postData('jour');
+                $this->page->addVar('day', $request->postData('jour'));
+            } else {
+                $date = date('Y-m-d');
+                $this->page->addVar('day', $date);
+            }
+
             foreach ($ListeProduit as $key => $produit) {
-                $tab[$keyagence][$key]['UvDepot'] = $this->managers->getManagerOf("Analytics")->UvDepot($agency['RefAgency'], $produit['RefProduit']);
-                $tab[$keyagence][$key]['UvRetrait'] = $this->managers->getManagerOf("Analytics")->UvRetrait($agency['RefAgency'], $produit['RefProduit']);
+                $tab[$keyagence][$key]['UvDepot'] = $this->managers->getManagerOf("Analytics")->UvDepot($agency['RefAgency'], $produit['RefProduit'], $date);
+                $tab[$keyagence][$key]['UvRetrait'] = $this->managers->getManagerOf("Analytics")->UvRetrait($agency['RefAgency'], $produit['RefProduit'], $date);
                 $tab[$keyagence][$key]['SoldeUv'] = $tab[$keyagence][$key]['UvDepot'] - $tab[$keyagence][$key]['UvRetrait'];
+
+                $tab[$keyagence][$key]['YesterdayReserveProduit'] = $this->managers->getManagerOf("Analytics")->YesterdayReserveProduit($agency['RefAgency'], $date, $produit['RefProduit']);
+                $tab[$keyagence][$key]['SommeDepotRemittanceProduit'] = $this->managers->getManagerOf("Analytics")->SoldeRemittanceVersementAgenceProduit($date, $agency['RefAgency'], $produit['RefProduit']);
+                $tab[$keyagence][$key]['SommeRetraitRemittanceProduit'] = $this->managers->getManagerOf("Analytics")->SoldeRemittanceRetraitAgenceProduit($date, $agency['RefAgency'], $produit['RefProduit']);
+                $tab[$keyagence][$key]['SoldeUvNow'] = (
+                    ($tab[$keyagence][$key]['YesterdayReserveProduit'] - $tab[$keyagence][$key]['SommeDepotRemittanceProduit']) + $tab[$keyagence][$key]['SommeRetraitRemittanceProduit'] + $tab[$keyagence][$key]['SoldeUv']);
+                // $tab[$keyagence]['SoldeUvAgence'] += $tab[$keyagence][$key]['SoldeUvNow'];
             }
         }
-        // print_r($Agenc);
         $this->page->addVar('ListeProduit', $ListeProduit);
+        $this->page->addVar('Agenc', $Agenc);
         $this->page->addVar('tab', $tab);
         $this->page->addVar('Agence', $Agence);
     }

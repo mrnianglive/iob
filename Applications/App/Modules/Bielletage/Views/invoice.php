@@ -227,20 +227,7 @@
          <p style="text-align: right;"><?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?>
              <?= gmdate("H:i:s") . "\n"; // date("H:i:s", strtotime("-1 hour")); 
                 ?> </p>
-         <?php $tempDir = '/images/qrcode';
 
-            // here our data
-            $skypeUserName = 'echo123';
-
-            // we building raw data
-            $codeContents = 'skype:' . urlencode($skypeUserName) . '?call';
-
-            // generating
-            QRcode::png($codeContents, $tempDir . '024.png', QR_ECLEVEL_L, 3);
-
-            // displaying
-            echo '<img src="' . '/images/qrcode' . '024.png" />';
-            ?>
 
          <h5 style="text-align:left;">MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement |
              www.malicreances-sa.com</h5>

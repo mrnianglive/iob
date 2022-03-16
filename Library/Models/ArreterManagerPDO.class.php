@@ -279,8 +279,6 @@ class ArreterManagerPDO extends ArreterManager
             } else {
                 $datecloture = ('Y-m-d H:i:s');
             }
-
-
             foreach ($_POST['RefProduit'] as $key => $value) {
                 $requeteInsert = $this->dao->prepare("INSERT INTO TbleSoldeUv(RefAgency,RefProduit,SoldeUV,DateSoldeUV) VALUES (:RefAgency,:RefProduit,:SoldeUV,:DateSoldeUV)");
                 $requeteInsert->bindValue(':RefAgency', $_POST['RefAgency'], \PDO::PARAM_INT);

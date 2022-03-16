@@ -154,7 +154,9 @@
                               <th class="border-top-0">Retrait</th>
                               <th class="border-top-0">Solde UV</th>
                               <th class="border-top-0">FR</th>
+                              <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
                               <th class="border-top-0">Action</th>
+                              <?php } ?>
                           </tr>
                       </thead>
                       <tbody>
@@ -168,7 +170,6 @@
                                       <?php } ?>
                                   </ul>
                               </td>
-
                               <td>
                                   <ul>
                                       <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
@@ -176,8 +177,7 @@
                                           <?= number_format($tab[$key][$keyproduit]['YesterdayReserveProduit'], 0, '.', '.');
                                                     ?>
                                       </li>
-                                      <?php }
-                                            ?>
+                                      <?php } ?>
                                   </ul>
                               </td>
                               <td>
@@ -246,7 +246,9 @@
                                       <?= $total + $value['ReserveActuelle']; ?>
                                   </ul>
                               </td>
-                              <td>
+                              <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
+                              <td> <?php if (!empty($value['validate'])) { ?><a class="btn btn-success"><i
+                                          class="fa  fa-lock"></i></a> <?php } else { ?>
                                   <form method="POST" action="/Arreter/reserve/uv">
                                       <?php foreach ($ListeProduit as $keyproduit => $produit) { ?>
                                       <input type="hidden" value="<?= $tab[$key][$keyproduit]['SoldeUvNow']; ?>"
@@ -260,7 +262,9 @@
                                       <button type="submit" class="btn btn-warning"><i
                                               class="fa fa-unlock"></i></button>
                                   </form>
+                                  <?php } ?>
                               </td>
+                              <?php } ?>
                           </tr>
                           <?php } ?>
                       </tbody>

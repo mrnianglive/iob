@@ -1,4 +1,3 @@
-<?php include('/phpqrcode/qrlib.php'); ?>
 <!DOCTYPE html>
 <html>
 

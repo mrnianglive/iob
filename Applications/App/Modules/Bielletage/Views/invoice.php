@@ -231,7 +231,5 @@
          <h5 style="text-align:left;">MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement |
              www.malicreances-sa.com</h5>
 
-         <?php
-            include(__DIR__ . '/../../../../../Web/phpqrcode/qrlib.php');
-            QRcode::png('PHP QR Code :)'); ?>
+
      </div>

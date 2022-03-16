@@ -1,6 +1,5 @@
 <?php
-
-include('/phpqrcode/qrlib.php');
+include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php');
 
 QRcode::png('PHP QR Code :)'); ?>
 

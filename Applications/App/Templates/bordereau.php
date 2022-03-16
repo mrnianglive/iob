@@ -1,6 +1,7 @@
 <?php
+include("include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php')");
+?>
 
-include("/phpqrcode/qrlib.php"); ?>
 
 <!DOCTYPE html>
 <html>

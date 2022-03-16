@@ -132,6 +132,7 @@
                          Annulée
                      </h3> <?php } ?>
                  </div>
+                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=Example" alt="QR Code">
              </div>
              <br>
              <div class="row">

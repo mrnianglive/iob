@@ -1,5 +1,3 @@
-<?php
-include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php'); ?>
 <!DOCTYPE html>
 <html>
 
@@ -41,7 +39,6 @@ include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php'); ?>
     }
     </style><br>
     <strong>
-
         <?= $content; ?>
     </strong>
     <!-- Mainly scripts -->

@@ -1,6 +1,6 @@
 <?php
 include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php'); ?>
-
+<?php QRcode::png('PHP QR Code :)'); ?>
 <!DOCTYPE html>
 <html>
 
@@ -42,7 +42,7 @@ include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php'); ?>
     }
     </style><br>
     <strong>
-        <?php QRcode::png('PHP QR Code :)'); ?>
+
         <?= $content; ?>
     </strong>
     <!-- Mainly scripts -->

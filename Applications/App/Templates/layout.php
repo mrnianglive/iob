@@ -163,8 +163,8 @@
                         <?php } ?>
                         <?php if ($_SESSION['statut'] == 'admin') { ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/Analytics/uv" aria-expanded="false"><i class="fa fa-columns"
-                                    aria-hidden="true"></i><span class="hide-menu">UV</span></a></li>
+                                href="/Analytics/index" aria-expanded="false"><i class="fa fa-columns"
+                                    aria-hidden="true"></i><span class="hide-menu">Analytics</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Caisse/solde" aria-expanded="false"><i class="fa fa-globe"
                                     aria-hidden="true"></i><span class="hide-menu">Ma Caisse</span></a></li>

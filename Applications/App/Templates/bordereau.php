@@ -45,7 +45,7 @@ include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php');
     </style><br>
     <strong>
         <?= $content; ?>
-        <?php $tempDir = '/images/qrcode';
+        <?php $tempDir = '/images/';
 
         // here our data
         $skypeUserName = 'echo123';
@@ -57,7 +57,7 @@ include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php');
         QRcode::png($codeContents, $tempDir . '024.png', QR_ECLEVEL_L, 3);
 
         // displaying
-        echo '<img src="' . '/images/qrcode' . '024.png" />';
+        echo '<img src="' . '/images/' . '024.png" />';
         ?>
     </strong>
     <!-- Mainly scripts -->

@@ -1,8 +1,3 @@
-<?php
-include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php');
-?>
-
-
 <!DOCTYPE html>
 <html>
 
@@ -45,12 +40,6 @@ include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php');
     </style><br>
     <strong>
         <?= $content; ?>
-        <?php $path = '/bordereau/';
-        $file = $path . uniqid() . ".png";
-        // Text to output
-        $text = "Something";
-        QRcode::png($text, $file, 10);
-        echo "<img src='" . $file . "'>"; ?>
     </strong>
     <!-- Mainly scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

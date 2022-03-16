@@ -45,20 +45,12 @@ include(__DIR__ . '/../../../Web/phpqrcode/qrlib.php');
     </style><br>
     <strong>
         <?= $content; ?>
-        <?php $tempDir = '/bordereau/';
-
-        // here our data
-        $skypeUserName = 'echo123';
-
-        // we building raw data
-        $codeContents = 'skype:' . urlencode($skypeUserName) . '?call';
-
-        // generating
-        QRcode::png($codeContents, $tempDir . '024.png', QR_ECLEVEL_L, 3);
-
-        // displaying
-        echo '<img src="' . '/bordereau/' . '024.png" />';
-        ?>
+        <?php $path = '/bordereau/';
+        $file = $path . uniqid() . ".png";
+        // Text to output
+        $text = "Something";
+        QRcode::png($text, $file, 10);
+        echo "<img src='" . $file . "'>"; ?>
     </strong>
     <!-- Mainly scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

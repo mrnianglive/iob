@@ -7,7 +7,10 @@
                      <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px;" width="100%">
                  </div>
                  <div style="text-align: center;width:88%;display: inline-block;">
-                     <p>MALI CREANCES SA - PARTENAIRE ECOBANK MALI</p>
+                     <p>MALI CREANCES SA - PARTENAIRE ECOBANK MALI <img style="float: right; margin-right: -15px;"
+                             src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=<?= $GetInvoice['uniqid']; ?>"
+                             alt="Logo">
+                     </p>
                      <h2><?php if ($GetInvoice['RefType'] == 1) { ?>VERSEMENT
                          <?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETRAIT
                          <?php } elseif ($GetInvoice['RefType'] == 4) { ?> SORTIE DE FOND
@@ -123,7 +126,10 @@
                      <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px;" width="100%">
                  </div>
                  <div style="text-align: center;width:88%;display: inline-block;">
-                     <p>MALI CREANCES SA - PARTENAIRE ECOBANK MALI</p>
+                     <p>MALI CREANCES SA - PARTENAIRE ECOBANK MALI <img style="float: right; margin-right: -15px;"
+                             src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=<?= $GetInvoice['uniqid']; ?>"
+                             alt="Logo">
+                     </p>
                      <h2><?php if ($GetInvoice['RefType'] == 1) { ?>VERSEMENT
                          <?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETRAIT
                          <?php } elseif ($GetInvoice['RefType'] == 4) { ?> SORTIE DE FOND
@@ -131,11 +137,6 @@
                      <h3>CLIENT</h3> <?php if ($getResetStatus == true) { ?> <h3 style="color:#c62828;">Opération
                          Annulée
                      </h3> <?php } ?>
-                 </div>
-
-                 <div style="width: 10%;display: inline-block;vertical-align: top;">
-                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=Example" alt="Logo"
-                         style="height: 40px;" width="100%">
                  </div>
              </div>
              <br>

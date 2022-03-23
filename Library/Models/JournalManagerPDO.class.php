@@ -14,7 +14,7 @@ class JournalManagerPDO extends JournalManager
         $requete->execute();
         $data = $requete->fetchAll();
         foreach ($data as $key => $value) {
-            $data[$key]['SentFromAgency'] =  $this->SentFromAgency($value['SentFromAgency']);
+            $data[$key]['FromAgency'] =  $this->SentFromAgency($value['SentFromAgency']);
         }
         return $data;
     }

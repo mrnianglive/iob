@@ -90,7 +90,7 @@
                               <td><?= $value['login']; ?></td>
                               <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
                                       class="btn btn-secondary"><i class="fa fa-print"> Reçu</i> </td>
-                              <td><?= $value['SentFromAgency']; ?></td>
+                              <td><?= $value['FromAgency']; ?></td>
                               <?php if ($_SESSION['statut'] == 'admin') { ?>
                               <td><a href="/Journal/delete/<?= $value['RefOperations']; ?>"
                                       class="btn btn-xs btn-danger"

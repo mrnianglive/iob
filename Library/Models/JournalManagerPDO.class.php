@@ -593,7 +593,7 @@ class JournalManagerPDO extends JournalManager
 
     public function getMytable()
     {
-        $query = $this->dao->prepare('SELECT * FROM mytable LIMIT 0, 10');
+        $query = $this->dao->prepare('SELECT * FROM mytable WHERE Payments OR Deposits=80000 ');
         $query->execute();
         $data = $query->fetchAll();
         return $data;

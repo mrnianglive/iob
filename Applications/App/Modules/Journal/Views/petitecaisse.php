@@ -3,8 +3,7 @@
           <form method="POST" id="formulaire">
               <div class="input-group">
                   <div class="col-md-3">Date
-                      <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control"
-                          onchange="document.getElementById('formulaire').submit();">
+                      <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control" onchange="document.getElementById('formulaire').submit();">
                   </div>
               </div>
           </form><br />
@@ -26,62 +25,62 @@
                       </thead>
                       <tbody>
                           <?php foreach ($Agence as $value) { ?>
-                          <tr>
-                              <td><?= $value['NameAgency']; ?></td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $print) { ?>
-                                      <li><?= $print['NameCaisse']; ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['SoldeInitial'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
+                              <tr>
+                                  <td><?= $value['NameAgency']; ?></td>
+                                  <td>
+                                      <ul>
+                                          <?php foreach ($value['Afficher'] as $print) { ?>
+                                              <li><?= $print['NameCaisse']; ?></li>
+                                          <?php } ?>
+                                      </ul>
+                                  </td>
+                                  <td>
+                                      <ul>
+                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                              <li><?= number_format($afficher['SoldeInitial'], 0, '.', '.'); ?></li>
+                                          <?php } ?>
+                                      </ul>
+                                  </td>
 
 
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['TotalAppro'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['TotalSortieCaisse'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['TotalVersement'] + $afficher['SoldeRemittanceVersement'], 0, '.', '.'); ?>
-                                      </li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['TotalRetrait'] + $afficher['SoldeRemittanceRetrait'], 0, '.', '.'); ?>
-                                      </li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['SoldeDisponible'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                          </tr>
+                                  <td>
+                                      <ul>
+                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                              <li><?= number_format($afficher['TotalAppro'], 0, '.', '.'); ?></li>
+                                          <?php } ?>
+                                      </ul>
+                                  </td>
+                                  <td>
+                                      <ul>
+                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                              <li><?= number_format($afficher['TotalSortieCaisse'], 0, '.', '.'); ?></li>
+                                          <?php } ?>
+                                      </ul>
+                                  </td>
+                                  <td>
+                                      <ul>
+                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                              <li><?= number_format($afficher['TotalVersement'] + $afficher['SoldeRemittanceVersement'], 0, '.', '.'); ?>
+                                              </li>
+                                          <?php } ?>
+                                      </ul>
+                                  </td>
+                                  <td>
+                                      <ul>
+                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                              <li><?= number_format($afficher['TotalRetrait'] + $afficher['SoldeRemittanceRetrait'], 0, '.', '.'); ?>
+                                              </li>
+                                          <?php } ?>
+                                      </ul>
+                                  </td>
+                                  <td>
+                                      <ul>
+                                          <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                              <li><?= number_format($afficher['SoldeDisponible'], 0, '.', '.'); ?></li>
+                                          <?php } ?>
+                                      </ul>
+                                  </td>
+                              </tr>
                           <?php } ?>
                       </tbody>
                   </table>
@@ -102,34 +101,32 @@
                               <th class="border-top-0">Retrait</th>
                               <th class="border-top-0">Solde Agence</th>
                               <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
-                              <th class="border-top-0">Action</th>
+                                  <th class="border-top-0">Action</th>
                               <?php } ?>
 
                           </tr>
                       </thead>
                       <tbody>
                           <?php foreach ($Agence as $value) { ?>
-                          <tr>
-                              <td><?= $value['NameAgency']; ?></td>
-                              <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?></td>
-                              <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
-                              <td><?= number_format($value['SommeDepot'], 0, '.', '.'); ?></td>
-                              <td><?= number_format($value['SommeSortie'], 0, '.', '.'); ?></td>
-                              <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
-                              <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
-                              <td> <?php if (!empty($value['validate'])) { ?><a class="btn btn-success"><i
-                                          class="fa  fa-lock"></i></a> <?php } else { ?>
-                                  <form method="POST" action="/Arreter/reserve">
-                                      <input type="hidden" value="<?= $value['ReserveActuelle']; ?>"
-                                          name="ReserveActuelle">
-                                      <input type="hidden" value="<?= $day; ?>" name="daycloture">
-                                      <input type="hidden" value="<?= $value['RefAgency']; ?>" name="RefAgency">
-                                      <button type="submit" class="btn btn-danger"><i class="fa fa-unlock"></i></button>
-                                  </form>
+                              <tr>
+                                  <td><?= $value['NameAgency']; ?></td>
+                                  <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?></td>
+                                  <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
+                                  <td><?= number_format($value['SommeDepot'], 0, '.', '.'); ?></td>
+                                  <td><?= number_format($value['SommeSortie'], 0, '.', '.'); ?></td>
+                                  <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
+                                  <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
+                                      <td> <?php if (!empty($value['validate'])) { ?><a class="btn btn-success"><i class="fa  fa-lock"></i></a> <?php } else { ?>
+                                              <form method="POST" action="/Arreter/reserve">
+                                                  <input type="hidden" value="<?= $value['ReserveActuelle']; ?>" name="ReserveActuelle">
+                                                  <input type="hidden" value="<?= $day; ?>" name="daycloture">
+                                                  <input type="hidden" value="<?= $value['RefAgency']; ?>" name="RefAgency">
+                                                  <button type="submit" class="btn btn-danger"><i class="fa fa-unlock"></i></button>
+                                              </form>
+                                          <?php } ?>
+                                      </td>
                                   <?php } ?>
-                              </td>
-                              <?php } ?>
-                          </tr>
+                              </tr>
                           <?php } ?>
                       </tbody>
                   </table>
@@ -138,140 +135,136 @@
       </div>
 
       <?php if ($_SESSION['statut'] == 'admin') { ?>
-      <div class="col-md-12">
-          <div class="white-box">
-              <h3 class="box-title">Gestion du Fond de Roulement</h3>
-              <div class="table-responsive">
-                  <table id="dataTable2" class="display nowrap" cellspacing="0" width="100%">
-                      <thead>
-                          <tr>
-                              <th class="border-top-0">Agence</th>
-                              <th class="border-top-0">Produit</th>
-                              <th class="border-top-0">Solde UV(J-1)</th>
-                              <th class="border-top-0">Appro UV</th>
-                              <th class="border-top-0">Retour UV</th>
-                              <th class="border-top-0">Depot</th>
-                              <th class="border-top-0">Retrait</th>
-                              <th class="border-top-0">Solde UV</th>
-                              <th class="border-top-0">FR</th>
-                              <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
-                              <th class="border-top-0">Action</th>
-                              <?php } ?>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <?php foreach ($Agence as $key => $value) { ?>
-                          <tr>
-                              <td><?= $value['NameAgency']; ?></td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($ListeProduit as  $value1) { ?>
-                                      <li><?= $value1['NameProduit']; ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
-                                      <li>
-                                          <?= number_format($tab[$key][$keyproduit]['YesterdayReserveProduit'], 0, '.', '.');
+          <div class="col-md-12">
+              <div class="white-box">
+                  <h3 class="box-title">Gestion du Fond de Roulement</h3>
+                  <div class="table-responsive">
+                      <table id="dataTable2" class="display nowrap" cellspacing="0" width="100%">
+                          <thead>
+                              <tr>
+                                  <th class="border-top-0">Agence</th>
+                                  <th class="border-top-0">Produit</th>
+                                  <th class="border-top-0">Solde UV(J-1)</th>
+                                  <th class="border-top-0">Appro UV</th>
+                                  <th class="border-top-0">Retour UV</th>
+                                  <th class="border-top-0">Depot</th>
+                                  <th class="border-top-0">Retrait</th>
+                                  <th class="border-top-0">Solde UV</th>
+                                  <th class="border-top-0">FR</th>
+                                  <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
+                                      <th class="border-top-0">Action</th>
+                                  <?php } ?>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <?php foreach ($Agence as $key => $value) { ?>
+                                  <tr>
+                                      <td><?= $value['NameAgency']; ?></td>
+                                      <td>
+                                          <ul>
+                                              <?php foreach ($ListeProduit as  $value1) { ?>
+                                                  <li><?= $value1['NameProduit']; ?></li>
+                                              <?php } ?>
+                                          </ul>
+                                      </td>
+                                      <td>
+                                          <ul>
+                                              <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
+                                                  <li>
+                                                      <?= number_format($tab[$key][$keyproduit]['YesterdayReserveProduit'], 0, '.', '.');
                                                         ?>
-                                      </li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
-                                      <li>
-                                          <?= number_format($tab[$key][$keyproduit]['UvDepot'], 0, '.', '.');
+                                                  </li>
+                                              <?php } ?>
+                                          </ul>
+                                      </td>
+                                      <td>
+                                          <ul>
+                                              <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
+                                                  <li>
+                                                      <?= number_format($tab[$key][$keyproduit]['UvDepot'], 0, '.', '.');
                                                         ?>
-                                      </li>
-                                      <?php }
+                                                  </li>
+                                              <?php }
                                                 ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
-                                      <li>
-                                          <?= number_format($tab[$key][$keyproduit]['UvRetrait'], 0, '.', '.');
+                                          </ul>
+                                      </td>
+                                      <td>
+                                          <ul>
+                                              <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
+                                                  <li>
+                                                      <?= number_format($tab[$key][$keyproduit]['UvRetrait'], 0, '.', '.');
                                                         ?>
-                                      </li>
-                                      <?php }
+                                                  </li>
+                                              <?php }
                                                 ?>
-                                  </ul>
-                              </td>
+                                          </ul>
+                                      </td>
 
-                              <td>
-                                  <ul>
-                                      <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
-                                      <li>
-                                          <?= number_format($tab[$key][$keyproduit]['SommeDepotRemittanceProduit'], 0, '.', '.');
+                                      <td>
+                                          <ul>
+                                              <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
+                                                  <li>
+                                                      <?= number_format($tab[$key][$keyproduit]['SommeDepotRemittanceProduit'], 0, '.', '.');
                                                         ?>
-                                      </li>
-                                      <?php }
+                                                  </li>
+                                              <?php }
                                                 ?>
-                                  </ul>
-                              </td>
+                                          </ul>
+                                      </td>
 
-                              <td>
-                                  <ul>
-                                      <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
-                                      <li>
-                                          <?= number_format($tab[$key][$keyproduit]['SommeRetraitRemittanceProduit'], 0, '.', '.');
+                                      <td>
+                                          <ul>
+                                              <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
+                                                  <li>
+                                                      <?= number_format($tab[$key][$keyproduit]['SommeRetraitRemittanceProduit'], 0, '.', '.');
                                                         ?>
-                                      </li>
-                                      <?php }  ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php
+                                                  </li>
+                                              <?php }  ?>
+                                          </ul>
+                                      </td>
+                                      <td>
+                                          <ul>
+                                              <?php
                                                 foreach ($ListeProduit as $keyproduit => $produit) {     ?>
-                                      <li>
-                                          <?= number_format($tab[$key][$keyproduit]['SoldeUvNow'], 0, '.', '.');
+                                                  <li>
+                                                      <?= number_format($tab[$key][$keyproduit]['SoldeUvNow'], 0, '.', '.');
                                                         ?>
-                                      </li>
-                                      <?php }  ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php
+                                                  </li>
+                                              <?php }  ?>
+                                          </ul>
+                                      </td>
+                                      <td>
+                                          <ul>
+                                              <?php
                                                 $total = 0;
                                                 foreach ($ListeProduit as $keyproduit => $produit) {
                                                     $total += $tab[$key][$keyproduit]['SoldeUvNow'];
                                                 }  ?>
-                                      <?= $total + $value['ReserveActuelle']; ?>
-                                  </ul>
-                              </td>
-                              <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
-                              <td> <?php if (!empty($value['validate'])) { ?><a class="btn btn-success"><i
-                                          class="fa  fa-lock"></i></a>
-                                  <?php } else { ?>
-                                  <form method="POST" action="/Arreter/reserve/uv">
-                                      <?php foreach ($ListeProduit as $keyproduit => $produit) { ?>
-                                      <input type="hidden" value="<?= $tab[$key][$keyproduit]['SoldeUvNow']; ?>"
-                                          name="SoldeUV[<?= $produit['RefProduit']; ?>]" multiple="">
-                                      <input type="hidden" value="<?= $day; ?>" name="daycloture">
-                                      <input type="hidden" value="<?= $produit['RefProduit']; ?>"
-                                          name="RefProduit[<?= $produit['RefProduit']; ?>]" multiple="">
-                                      <?php }  ?>
-                                      <input type="hidden" value="<?= $value['RefAgency']; ?>" name="RefAgency">
+                                              <?= $total + $value['ReserveActuelle']; ?>
+                                          </ul>
+                                      </td>
+                                      <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
+                                          <td> <?php if (!empty($value['validate'])) { ?><a class="btn btn-success"><i class="fa  fa-lock"></i></a>
+                                              <?php } else { ?>
+                                                  <form method="POST" action="/Arreter/reserve/uv">
+                                                      <?php foreach ($ListeProduit as $keyproduit => $produit) { ?>
+                                                          <input type="hidden" value="<?= $tab[$key][$keyproduit]['SoldeUvNow']; ?>" name="SoldeUV[<?= $produit['RefProduit']; ?>]" multiple="">
+                                                          <input type="hidden" value="<?= $day; ?>" name="daycloture">
+                                                          <input type="hidden" value="<?= $produit['RefProduit']; ?>" name="RefProduit[<?= $produit['RefProduit']; ?>]" multiple="">
+                                                      <?php }  ?>
+                                                      <input type="hidden" value="<?= $value['RefAgency']; ?>" name="RefAgency">
 
-                                      <button type="submit" class="btn btn-warning"><i
-                                              class="fa fa-unlock"></i></button>
-                                  </form>
-                                  <?php } ?>
-                              </td>
+                                                      <button type="submit" class="btn btn-warning"><i class="fa fa-unlock"></i></button>
+                                                  </form>
+                                              <?php } ?>
+                                          </td>
+                                      <?php } ?>
+                                  </tr>
                               <?php } ?>
-                          </tr>
-                          <?php } ?>
-                      </tbody>
-                  </table>
+                          </tbody>
+                      </table>
+                  </div>
               </div>
           </div>
-      </div>
       <?php } ?>
   </div>

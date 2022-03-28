@@ -137,7 +137,7 @@
           </div>
       </div>
 
-
+      <?php if ($_SESSION['statut'] == 'admin') { ?>
       <div class="col-md-12">
           <div class="white-box">
               <h3 class="box-title">Gestion du Fond de Roulement</h3>
@@ -175,7 +175,7 @@
                                       <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
                                       <li>
                                           <?= number_format($tab[$key][$keyproduit]['YesterdayReserveProduit'], 0, '.', '.');
-                                                    ?>
+                                                        ?>
                                       </li>
                                       <?php } ?>
                                   </ul>
@@ -185,10 +185,10 @@
                                       <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
                                       <li>
                                           <?= number_format($tab[$key][$keyproduit]['UvDepot'], 0, '.', '.');
-                                                    ?>
+                                                        ?>
                                       </li>
                                       <?php }
-                                            ?>
+                                                ?>
                                   </ul>
                               </td>
                               <td>
@@ -196,10 +196,10 @@
                                       <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
                                       <li>
                                           <?= number_format($tab[$key][$keyproduit]['UvRetrait'], 0, '.', '.');
-                                                    ?>
+                                                        ?>
                                       </li>
                                       <?php }
-                                            ?>
+                                                ?>
                                   </ul>
                               </td>
 
@@ -208,10 +208,10 @@
                                       <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
                                       <li>
                                           <?= number_format($tab[$key][$keyproduit]['SommeDepotRemittanceProduit'], 0, '.', '.');
-                                                    ?>
+                                                        ?>
                                       </li>
                                       <?php }
-                                            ?>
+                                                ?>
                                   </ul>
                               </td>
 
@@ -220,7 +220,7 @@
                                       <?php foreach ($ListeProduit as $keyproduit => $produit) {  ?>
                                       <li>
                                           <?= number_format($tab[$key][$keyproduit]['SommeRetraitRemittanceProduit'], 0, '.', '.');
-                                                    ?>
+                                                        ?>
                                       </li>
                                       <?php }  ?>
                                   </ul>
@@ -228,10 +228,10 @@
                               <td>
                                   <ul>
                                       <?php
-                                            foreach ($ListeProduit as $keyproduit => $produit) {     ?>
+                                                foreach ($ListeProduit as $keyproduit => $produit) {     ?>
                                       <li>
                                           <?= number_format($tab[$key][$keyproduit]['SoldeUvNow'], 0, '.', '.');
-                                                    ?>
+                                                        ?>
                                       </li>
                                       <?php }  ?>
                                   </ul>
@@ -239,16 +239,17 @@
                               <td>
                                   <ul>
                                       <?php
-                                            $total = 0;
-                                            foreach ($ListeProduit as $keyproduit => $produit) {
-                                                $total += $tab[$key][$keyproduit]['SoldeUvNow'];
-                                            }  ?>
+                                                $total = 0;
+                                                foreach ($ListeProduit as $keyproduit => $produit) {
+                                                    $total += $tab[$key][$keyproduit]['SoldeUvNow'];
+                                                }  ?>
                                       <?= $total + $value['ReserveActuelle']; ?>
                                   </ul>
                               </td>
                               <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
                               <td> <?php if (!empty($value['validate'])) { ?><a class="btn btn-success"><i
-                                          class="fa  fa-lock"></i></a> <?php } else { ?>
+                                          class="fa  fa-lock"></i></a>
+                                  <?php } else { ?>
                                   <form method="POST" action="/Arreter/reserve/uv">
                                       <?php foreach ($ListeProduit as $keyproduit => $produit) { ?>
                                       <input type="hidden" value="<?= $tab[$key][$keyproduit]['SoldeUvNow']; ?>"
@@ -272,5 +273,5 @@
               </div>
           </div>
       </div>
-
+      <?php } ?>
   </div>

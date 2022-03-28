@@ -38,6 +38,7 @@
 	<route url="/Analytics/uv" module="Analytics" action="uv"/>
 
 	<route url="/Journal/petite_caisse" module="Journal" action="petitecaisse"/>
+
 	 <route url="/Analytics/chart" module="Analytics" action="chart"/>
 	  <route url="/Analytics/performance" module="Analytics" action="performance"/>
 	  <route url="/Users/delogger/([0-9]+)" vars="id" action="delogger" module="Users"/>
@@ -46,5 +47,8 @@
 
 
 	<route url="/Arreter/reserve/uv" module="Arreter" action="reserveuv"/>
+
+		<route url="/Journal/control" module="Journal" action="control"/>
+
 
 </routes>

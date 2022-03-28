@@ -590,4 +590,28 @@ class JournalManagerPDO extends JournalManager
             return $result['SoldeRemittance'];
         }
     }
+
+    public function getMytable()
+    {
+        $query = $this->dao->prepare('SELECT * FROM mytable LIMIT 0, 10');
+        $query->execute();
+        $data = $query->fetchAll();
+        return $data;
+    }
+    public function match($description, $ref, $montant)
+    {
+        if (isset($description)) {
+            if (preg_match('/VT([A-Za-z]+)([0-9]+)/i', $description, $match) && preg_match_all("/([0-9]+\.[0-9]+)/", $description, $matches)) {
+                if ($match[2] == $ref) {
+                    $checkRef = 'ID EXIST';
+                    if ($matches[0][0] == $montant or round($matches[0][1]) == $montant) {
+                        $checkPayments = 'Payments EXIST';
+                    }
+                    return $checkRef . ' ' . $checkPayments . ' <br>ID : ' . $match[2] . ' | Payments : ' . $matches[0][0] . ' | Deposits : ' . $matches[0][1] . ' | Balance : ' . $matches[0][2] . '</b>';
+                } else {
+                    return "No data found";
+                }
+            }
+        }
+    }
 }

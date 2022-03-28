@@ -149,4 +149,81 @@ class JournalController extends \Library\BackController
         $this->page->addVar('tab', $tab);
         $this->page->addVar('Agence', $Agence);
     }
+
+    public function executeControl(\Library\HTTPRequest $request)
+    {
+
+        $this->page->addVar("titles", "Journal de Caisse"); // Titre de la page
+        $Chmod  = $this->managers->getManagerOf("Bielletage")->CheckOuverture(); //Recuperation de la liste
+        $this->page->addVar("CheckOuverture", $Chmod); // Creation de la variable, ajout d'une variable a la vue
+        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
+        $this->page->addVar('UserAgence', $Agence);
+        $this->page->addVar('Debut', $request->postData('Debut'));
+        $this->page->addVar('Fin', $request->postData('Fin'));
+        $this->page->addVar('Value', $request->postData('RefAgency'));
+        $Biellet = $this->managers->getManagerOf('Journal')->GetBielletageJournal(NULL, NULL, NULL);
+        $this->page->addVar('Biellet', $Biellet);
+        $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
+        $this->page->addVar("ListeAgence", $ListeAgence);
+        if (!empty($request->postData('RefAgency')) or isset($_GET['value'])) {
+            if (isset($_GET['debut']) && isset($_GET['fin']) && isset($_GET['value'])) {
+                $Operations = $this->managers->getManagerOf('Journal')->GetOperations($_GET['debut'], $_GET['fin'], $_GET['value']);
+                $this->page->addVar('Debut', $_GET['debut']);
+                $this->page->addVar('Fin', $_GET['fin']);
+                $this->page->addVar('Value', $_GET['value']);
+            } else {
+                $Operations = $this->managers->getManagerOf('Journal')->GetOperations($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+                $this->page->addVar('Debut', $request->postData('Debut'));
+                $this->page->addVar('Fin', $request->postData('Fin'));
+                $this->page->addVar('Value', $request->postData('RefAgency'));
+            }
+            $this->page->addVar('Operations', $Operations);
+
+
+            $SoldeRemittanceVersementAgencePeriode = $this->managers->getManagerOf('Journal')->SoldeRemittanceVersementAgencePeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $SoldeRemittanceRetraitAgencePeriode = $this->managers->getManagerOf('Journal')->SoldeRemittanceRetraitAgencePeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $SoldeRemittanceAgence = $SoldeRemittanceVersementAgencePeriode - $SoldeRemittanceRetraitAgencePeriode;
+
+            $sommeVersementPeriode = $this->managers->getManagerOf('Journal')->sommeVersementPeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $this->page->addVar('sommeVersementPeriode', $sommeVersementPeriode);
+            $sommeRetraitPeriode = $this->managers->getManagerOf('Journal')->sommeRetraitPeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $this->page->addVar('sommeRetraitPeriode', $sommeRetraitPeriode);
+            $sommeVersementPeriodeAvecAppro = $this->managers->getManagerOf('Journal')->sommeVersementPeriodeAvecAppro($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $this->page->addVar('sommeVersementPeriodeAvecAppro', $sommeVersementPeriodeAvecAppro);
+            $sommeRetraitPeriodeAvecSortie = $this->managers->getManagerOf('Journal')->sommeRetraitPeriodeAvecSortie($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $this->page->addVar('sommeRetraitPeriodeAvecSortie', $sommeRetraitPeriodeAvecSortie);
+            $Yesterday = $this->managers->getManagerOf('Journal')->YesterdaySoldeAgence($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $Solde = ($sommeVersementPeriodeAvecAppro - $sommeRetraitPeriodeAvecSortie) + $Yesterday + $SoldeRemittanceAgence;
+            $this->page->addVar('Solde', $Solde);
+            $Biellet = $this->managers->getManagerOf('Journal')->GetBielletageJournal($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $this->page->addVar('Biellet', $Biellet);
+        } else {
+            $Operations = $this->managers->getManagerOf('Journal')->Operations();
+            $sommeVersementPeriode = $this->managers->getManagerOf('Journal')->sommeVersementPeriode();
+            $this->page->addVar('sommeVersementPeriode', $sommeVersementPeriode);
+            $sommeRetraitPeriode = $this->managers->getManagerOf('Journal')->sommeRetraitPeriode();
+            $this->page->addVar('sommeRetraitPeriode', $sommeRetraitPeriode);
+            $sommeVersementPeriodeAvecAppro = $this->managers->getManagerOf('Journal')->sommeVersementPeriodeAvecAppro();
+            $this->page->addVar('sommeVersementPeriodeAvecAppro', $sommeVersementPeriodeAvecAppro);
+            $sommeRetraitPeriodeAvecSortie = $this->managers->getManagerOf('Journal')->sommeRetraitPeriodeAvecSortie();
+            $this->page->addVar('sommeRetraitPeriodeAvecSortie', $sommeRetraitPeriodeAvecSortie);
+
+            $UsersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'));
+            $SoldeGlobal = 0;
+            $tab = [];
+            foreach ($UsersCaisse as $key => $value) {
+                $SoldeGlobal += $value['SoldeDisponibleGlobal'];
+            }
+            $data = $this->managers->getManagerOf("Journal")->getMytable();
+            foreach ($Operations as $opkey => $op) {
+                foreach ($data as $key => $value) {
+                    $description = ($value['Description'] . ' ' . $value['Payments'] . ' ' . $value['Deposits'] . '  ' . $value['Balance']);
+                    $tab[$opkey][$key]['match'] = $this->managers->getManagerOf('Journal')->match($description, $op['RefOperations'], $op['MontantVersement']);
+                }
+            }
+
+            $this->page->addVar('Operations', $Operations);
+            $this->page->addVar('Solde', $SoldeGlobal);
+        }
+    }
 }

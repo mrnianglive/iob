@@ -113,6 +113,7 @@
                                               <div class="modal-body">
                                                   <input type="hidden" class="form-control" name="RefOperations"
                                                       value="<?= $value['RefOperations']; ?>">
+
                                                   <div class="form-group">
                                                       <label for="recipient-name" class="control-label">Date</label>
                                                       <input type="date" class="form-control" name="DateValidate"
@@ -136,7 +137,18 @@
                                                       value="<?= $value['RefAgency']; ?>" class="form-control ">
                                               </div>
                                           </div>
+                                          <?php if (isset($value['Match'])) { ?>
+                                          <input type="hidden" value="<?= $value['Match']['RefTraited']; ?>"
+                                              name="RefTraited">
+                                          <?php } ?>
                                           <div class="modal-footer">
+                                              <hr>
+                                              <span
+                                                  class="alert alert-<?= ($value['Match']) ? 'success' : 'warning'; ?>"><?= ($value['Match']) ? 'Correspondance Trouvée' : 'Correspondance non Trouvée'; ?>
+                                              </span>
+                                              <textarea
+                                                  class="form-control"><?= ($value['Match']) ? $value['Match']['Description'] : ''; ?></textarea>
+                                              <hr>
                                               <button type="button" class="btn btn-secondary"
                                                   data-dismiss="modal">Fermer</button>
                                               <button type="submit" class="btn btn-primary">Confirmer</button>

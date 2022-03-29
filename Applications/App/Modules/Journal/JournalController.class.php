@@ -151,14 +151,9 @@ class JournalController extends \Library\BackController
     }
 
     public function executeControl(\Library\HTTPRequest $request)
-    {
+    {   //Export mytable to Traited
+        $this->managers->getManagerOf('Journal')->PushtoTraited();
+        $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
 
-        $this->page->addVar('title', 'Control');
-        $data = $this->managers->getManagerOf("Journal")->getMytable();
-        foreach ($data as $key => $value) {
-            $description = ($value['Description'] . ' ' . $value['Payments'] . ' ' . $value['Deposits'] . '  ' . $value['Balance']);
-            $data[$key]['match'] = $this->managers->getManagerOf('Journal')->match($description, 3670, 800000);
-        }
-        $this->page->addVar('data', $data);
     }
 }

@@ -48,7 +48,6 @@
 
 	<route url="/Arreter/reserve/uv" module="Arreter" action="reserveuv"/>
 
-		<route url="/Journal/control" module="Journal" action="control"/>
-
+	<route url="/Journal/traited" module="Journal" action="control"/>
 
 </routes>

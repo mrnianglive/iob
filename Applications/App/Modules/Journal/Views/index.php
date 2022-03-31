@@ -152,7 +152,7 @@
                                               </span>
 
                                               <textarea class="form-control">
-                                                    <?= $result['Description'] . '<br>' . $result['Payments'] . '<br>' . $result['Deposits']; ?>
+                                                    <?= $result['Description'] . '&#13;&#10;' . $result['Payments'] . '&#13;&#10;' . $result['Deposits']; ?>
                                                 </textarea>
                                               <hr>
                                               <button type="button" class="btn btn-secondary"

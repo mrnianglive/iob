@@ -101,8 +101,7 @@
                           </tr>
                           <!--modalStatut-->
                           <?php $result = $match->NewMatch($value['RefOperations']);
-                                $montant = $result['Payements'] + $result['Deposits'];
-
+                                $montant = round($result['Payments'] + $result['Deposits']);
                                 ?>
                           <div class="modal fade" id="modal-<?= $value['RefOperations']; ?>" tabindex="-1" role="dialog"
                               aria-labelledby="modalStatut" aria-hidden="true">
@@ -147,17 +146,13 @@
                                           <?php } ?>
                                           <div class="modal-footer">
                                               <hr>
-                                              <?php
-                                                    if ($value['MontantVersement'] == round($montant)) {
-                                                        $statut = '<span class="alert alert-success">Montant Correspond</span>';
-                                                    }
-                                                    ?>
+
                                               <span
-                                                  class="alert alert-<?= ($value['Match']) ? 'success' : 'warning'; ?>"><?= ($value['Match']) ? 'Correspondance Trouvée' : 'Correspondance non Trouvée'; ?>
+                                                  class="alert alert-<?= ($value['MontantVersement']) ? $montant . 'success' : 'warning'; ?>"><?= ($value['Match']) ? 'Correspondance Montant Trouvée' : 'Correspondance Montant non Trouvée'; ?>
                                               </span>
+
                                               <textarea class="form-control">
-                                                    <?= $result['Description'] . '\n' . $result['Payments'] . ' - ' . $result['Deposits']; ?>
-                                                
+                                                    <?= $result['Description'] . '<br>' . $result['Payments'] . '<br>' . $result['Deposits']; ?>
                                                 </textarea>
                                               <hr>
                                               <button type="button" class="btn btn-secondary"

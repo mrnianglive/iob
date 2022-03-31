@@ -149,9 +149,8 @@
                                               <span
                                                   class="alert alert-<?= ($value['MontantVersement'] == $montant) ? 'success' : 'warning'; ?>"><?= ($value['MontantVersement'] == $montant) ? 'Correspondance Montant Trouvée' : 'Correspondance Montant non Trouvée'; ?>
                                               </span>
-
                                               <textarea class="form-control">
-                                                    <?= $result['Description'] . '&#13;&#10;' . $result['Payments'] . '&#13;&#10;' . $result['Deposits']; ?>
+                                                    <?= $result['Description'] . '&#13;&#10;' . round($result['Payments']) . '&#13;&#10;' . round($result['Deposits']); ?>
                                                 </textarea>
                                               <hr>
                                               <button type="button" class="btn btn-secondary"
@@ -169,7 +168,7 @@
               </div>
           </div>
       </div>
-      <div class="col-lg-12 col-md-12 col-sm-12">
+      <!-- <div class="col-lg-12 col-md-12 col-sm-12">
           <div class="card">
               <div class="card-heading">
                   Bielletage
@@ -223,5 +222,5 @@
                   </table>
               </div>
           </div>
-      </div>
+      </div> -->
   </div>

@@ -152,8 +152,10 @@ class JournalController extends \Library\BackController
 
     public function executeControl(\Library\HTTPRequest $request)
     {   //Export mytable to Traited
-        $this->managers->getManagerOf('Journal')->PushtoTraited();
-        $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
+        //    $this->managers->getManagerOf('Journal')->PushtoTraited();
+        //  $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
 
+        $match = $this->managers->getManagerOf('Journal')->NewMatch();
+        print_r($match);
     }
 }

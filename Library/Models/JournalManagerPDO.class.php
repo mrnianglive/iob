@@ -664,4 +664,13 @@ class JournalManagerPDO extends JournalManager
         $query->bindValue(':id', $id, \PDO::PARAM_STR);
         $query->execute();
     }
+
+
+    public function NewMatch()
+    {
+        $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . 41331 . '%\'');
+        $query->execute();
+        $data = $query->fetch();
+        return $data;
+    }
 }

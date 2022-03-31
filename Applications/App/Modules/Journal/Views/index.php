@@ -100,6 +100,7 @@
                               <?php } ?>
                           </tr>
                           <!--modalStatut-->
+                          <?php $result = $match->NewMatch($value['RefOperations']); ?>
                           <div class="modal fade" id="modal-<?= $value['RefOperations']; ?>" tabindex="-1" role="dialog"
                               aria-labelledby="modalStatut" aria-hidden="true">
                               <div class="modal-dialog" role="document">
@@ -146,8 +147,10 @@
                                               <span
                                                   class="alert alert-<?= ($value['Match']) ? 'success' : 'warning'; ?>"><?= ($value['Match']) ? 'Correspondance Trouvée' : 'Correspondance non Trouvée'; ?>
                                               </span>
-                                              <textarea
-                                                  class="form-control"><?= ($value['Match']) ? $value['Match']['Description'] : ''; ?></textarea>
+                                              <textarea class="form-control">
+                                                    <?= $result['Description'] . '\n' . $result['Payments'] . ' - ' . $result['Deposits']; ?>
+                                                
+                                                </textarea>
                                               <hr>
                                               <button type="button" class="btn btn-secondary"
                                                   data-dismiss="modal">Fermer</button>

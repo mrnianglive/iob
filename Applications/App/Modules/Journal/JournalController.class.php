@@ -68,6 +68,8 @@ class JournalController extends \Library\BackController
                 $SoldeGlobal += $value['SoldeDisponibleGlobal'];
             }
             $this->page->addVar('Solde', $SoldeGlobal);
+
+            $this->page->addVar('match', $this->managers->getManagerOf('Journal'));
         }
     }
     public function executeValidate(\Library\HTTPRequest $request)

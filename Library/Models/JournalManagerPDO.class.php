@@ -666,9 +666,9 @@ class JournalManagerPDO extends JournalManager
     }
 
 
-    public function NewMatch()
+    public function NewMatch($id)
     {
-        $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . 41331 . '%\'');
+        $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . $id . '%\'');
         $query->execute();
         $data = $query->fetch();
         return $data;

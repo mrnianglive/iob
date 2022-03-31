@@ -156,6 +156,6 @@ class JournalController extends \Library\BackController
         //  $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
 
         $match = $this->managers->getManagerOf('Journal')->NewMatch();
-        print_r($match);
+        $this->page->addVar('data', $match);
     }
 }

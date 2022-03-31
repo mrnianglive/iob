@@ -148,7 +148,7 @@
                                               <hr>
 
                                               <span
-                                                  class="alert alert-<?= ($value['MontantVersement']) ? $montant . 'success' : 'warning'; ?>"><?= ($value['Match']) ? 'Correspondance Montant Trouvée' : 'Correspondance Montant non Trouvée'; ?>
+                                                  class="alert alert-<?= ($value['MontantVersement'] == $montant) ? 'success' : 'warning'; ?>"><?= ($value['Match']) ? 'Correspondance Montant Trouvée' : 'Correspondance Montant non Trouvée'; ?>
                                               </span>
 
                                               <textarea class="form-control">

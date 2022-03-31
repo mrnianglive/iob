@@ -100,7 +100,10 @@
                               <?php } ?>
                           </tr>
                           <!--modalStatut-->
-                          <?php $result = $match->NewMatch($value['RefOperations']); ?>
+                          <?php $result = $match->NewMatch($value['RefOperations']);
+                                $montant = $result['Payements'] + $result['Deposits'];
+
+                                ?>
                           <div class="modal fade" id="modal-<?= $value['RefOperations']; ?>" tabindex="-1" role="dialog"
                               aria-labelledby="modalStatut" aria-hidden="true">
                               <div class="modal-dialog" role="document">
@@ -144,6 +147,11 @@
                                           <?php } ?>
                                           <div class="modal-footer">
                                               <hr>
+                                              <?php
+                                                    if ($value['MontantVersement'] == round($montant)) {
+                                                        $statut = '<span class="alert alert-success">Montant Correspond</span>';
+                                                    }
+                                                    ?>
                                               <span
                                                   class="alert alert-<?= ($value['Match']) ? 'success' : 'warning'; ?>"><?= ($value['Match']) ? 'Correspondance Trouvée' : 'Correspondance non Trouvée'; ?>
                                               </span>

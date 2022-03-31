@@ -68,9 +68,8 @@ class JournalController extends \Library\BackController
                 $SoldeGlobal += $value['SoldeDisponibleGlobal'];
             }
             $this->page->addVar('Solde', $SoldeGlobal);
-
-            $this->page->addVar('match', $this->managers->getManagerOf('Journal'));
         }
+        $this->page->addVar('match', $this->managers->getManagerOf('Journal'));
     }
     public function executeValidate(\Library\HTTPRequest $request)
     {
@@ -81,7 +80,6 @@ class JournalController extends \Library\BackController
             $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
         }
     }
-
     public function executeCancelvalidate(\Library\HTTPRequest $request)
     {
         $this->managers->getManagerOf("Journal")->CancelValidate($request->getData('id'));

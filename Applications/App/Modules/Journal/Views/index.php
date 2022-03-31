@@ -146,7 +146,6 @@
                                           <?php } ?>
                                           <div class="modal-footer">
                                               <hr>
-
                                               <span
                                                   class="alert alert-<?= ($value['MontantVersement'] == $montant) ? 'success' : 'warning'; ?>"><?= ($value['MontantVersement'] == $montant) ? 'Correspondance Montant Trouvée' : 'Correspondance Montant non Trouvée'; ?>
                                               </span>

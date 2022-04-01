@@ -585,7 +585,7 @@ class JournalManagerPDO extends JournalManager
     }
     public function CheckifRetrait($id)
     {
-        $query = $this->dao->prepare('DELETE FROM TbleOperations WHERE RefOperations = :RefOperations');
+        $query = $this->dao->prepare('SELECT * FROM TbleOperations WHERE RefOperations = :RefOperations');
         $query->bindValue(':RefOperations', $id, \PDO::PARAM_INT);
         $query->execute();
         $data = $query->fetch();

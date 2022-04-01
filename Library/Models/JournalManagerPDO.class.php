@@ -585,7 +585,7 @@ class JournalManagerPDO extends JournalManager
     }
     public function CheckifRetrait($id)
     {
-        $query = $this->dao->prepare("SELECT * FROM TbleOperations WHERE RefOperations=:RefOperations");
+        $query = $this->dao->prepare("SELECT * FROM TbleOperations WHERE RefOperations=:RefOperations AND RefType=2");
         $query->bindValue(':RefOperations', $id, \PDO::PARAM_INT);
         $query->execute();
         $result = $query->fetch();
@@ -595,7 +595,8 @@ class JournalManagerPDO extends JournalManager
     public function NewMatch($Ref)
     {
         $check = $this->CheckifRetrait($Ref);
-        if ($check['RefType'] == 2) {
+        $id = '';
+        if (!empty($check)) {
             $string = $check['Remarque'];
             preg_match_all('!\d+!', $string, $matches);
             $number = $matches[0][0];

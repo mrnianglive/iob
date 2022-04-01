@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes>
 	<route url="/" module="Bielletage" action="index"/>
+		<route url="/dashboard" module="Bielletage" action="dashboard"/>
+
 	<route url="/logout" module="Connexion" action="Logout"/>
 	<route url="/bielletage/([0-9]+)" vars="id" module="Bielletage" action="bielletage"/>
 	<route url="/bordereau/([0-9]+)" vars="id" module="Bielletage" action="invoice"/>

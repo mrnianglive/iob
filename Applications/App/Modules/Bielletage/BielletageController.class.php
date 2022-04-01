@@ -96,4 +96,46 @@ class BielletageController extends \Library\BackController
     {
         $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
     }
+
+    public function executeDashboard(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Dashboard"); // Titre de la page
+        $Biellet = $this->managers->getManagerOf('Arreter')->GetDailyBielletage(date('Y-m-d'));
+        $this->page->addVar('Biellet', $Biellet);
+        $DailyVersement = $this->managers->getManagerOf('Bielletage')->DailyVersement();
+        $this->page->addVar('DailyVersement', $DailyVersement);
+        $UsersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'));
+        $Solde = 0;
+        $SommeVersement = 0;
+        $SommeRetrait = 0;
+        $SommeRemittanceDepot = 0;
+        $SommeRemittanceRetrait = 0;
+        $SoldeRemittance = 0;
+        $SoldeGlobal = 0;
+        foreach ($UsersCaisse as $key => $value) {
+            $Solde += $value['SoldeDisponible'];
+            $SoldeGlobal += $value['SoldeDisponibleGlobal'];
+            $SommeVersement += $value['TotalVersement'];
+            $SommeRetrait += $value['TotalRetrait'];
+            $SommeRemittanceDepot += $value['SommeVersementRemittance'];
+            $SommeRemittanceRetrait += $value['SommeRetraitRemittance'];
+            $SoldeRemittance += $value['SoldeRemittance'];
+        }
+
+        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
+        foreach ($Agence as $key => $value) {
+            $Agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialCaisse(date('Y-m-d'), $value['RefAgency']);
+            $Agence[$key]['YesterdayReserve'] = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
+        }
+        $this->page->addVar('Agence', $Agence);
+        $this->page->addVar('Solde', $Solde);
+        $this->page->addVar('SoldeGlobal', $SoldeGlobal);
+        $this->page->addVar('SommeVersement', $SommeVersement);
+        $this->page->addVar('SommeRetrait', $SommeRetrait);
+        $this->page->addVar('SommeVersementGlobal', $SommeVersement + $SommeRemittanceDepot);
+        $this->page->addVar('SommeRetraitGlobal', $SommeRetrait + $SommeRemittanceRetrait);
+        $this->page->addVar('SommeRemittanceDepot', $SommeRemittanceDepot);
+        $this->page->addVar('SommeRemittanceRetrait', $SommeRemittanceRetrait);
+        $this->page->addVar('SoldeRemittance', $SoldeRemittance);
+    }
 }

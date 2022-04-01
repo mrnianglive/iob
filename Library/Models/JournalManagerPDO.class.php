@@ -583,15 +583,28 @@ class JournalManagerPDO extends JournalManager
             return $result['SoldeRemittance'];
         }
     }
-    public function deleteContent($id)
+    public function CheckifRetrait($id)
     {
-        $query = $this->dao->prepare('DELETE FROM mytable WHERE RefControl = :id');
-        $query->bindValue(':id', $id, \PDO::PARAM_INT);
+        $query = $this->dao->prepare('DELETE FROM TbleOperations WHERE RefOperations = :RefOperations');
+        $query->bindValue(':RefOperations', $id, \PDO::PARAM_INT);
         $query->execute();
+        $data = $query->fetch();
+        return $data;
     }
 
-    public function NewMatch($id)
+    public function NewMatch($Ref)
     {
+        $check = $this->CheckifRetrait($Ref);
+        if ($check['RefType'] == 2) {
+            $string = $check['Remarque'];
+            preg_match_all('!\d+!', $string, $matches);
+            $number = $matches[0][0];
+
+            $id = $number;
+        } else {
+            $id = $Ref;
+        }
+
         $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . $id . '%\'');
         $query->execute();
         $data = $query->fetch();

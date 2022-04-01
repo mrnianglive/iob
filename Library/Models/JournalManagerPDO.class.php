@@ -596,11 +596,10 @@ class JournalManagerPDO extends JournalManager
     {
         $check = $this->CheckifRetrait($Ref);
         $id = 0;
-        if (!empty($check)) {
+        if (!empty($check['RefOperations'])) {
             $string = $check['Remarque'];
             preg_match_all('!\d+!', $string, $matches);
-            $number = $matches[0][0];
-            $id = $number;
+            $id = $matches[0][0];
         } else {
             $id = $Ref;
         }

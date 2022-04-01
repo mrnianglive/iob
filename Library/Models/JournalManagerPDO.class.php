@@ -604,9 +604,13 @@ class JournalManagerPDO extends JournalManager
         } else {
             $id = $Ref;
         }
-        $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . $id . '%\'');
-        $query->execute();
-        $data = $query->fetch();
-        return $data;
+        if (isset($id)) {
+            $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . $id . '%\'');
+            $query->execute();
+            $data = $query->fetch();
+            return $data;
+        } else {
+            return 'No data found';
+        }
     }
 }

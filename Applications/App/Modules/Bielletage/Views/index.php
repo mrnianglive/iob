@@ -60,8 +60,9 @@
   <div class="row">
       <div class="col-md-12 col-lg-12 col-sm-12">
           <div class="white-box">
+
               <div class="d-md-flex mb-3">
-                  <h3 class="box-title mb-0">OPERATIONS DU <?= date('d-m-Y'); ?></h3>
+                  <h3 class="box-title mb-0">OPERATIONS DU <?= date('d-m-Y'); ?> </h3>
               </div>
               <div class="table-responsive">
                   <table class="table no-wrap">
@@ -101,3 +102,4 @@
           </div>
       </div>
   </div>
+  <a href="/dashboard" target="_blank" class="btn btn-info">Dashboard</a>

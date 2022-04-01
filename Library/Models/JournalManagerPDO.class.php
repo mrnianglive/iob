@@ -15,7 +15,6 @@ class JournalManagerPDO extends JournalManager
         $data = $requete->fetchAll();
         foreach ($data as $key => $value) {
             $data[$key]['SentFromAgency'] =  $this->SentFromAgency($value['SentFromAgency']);
-            $data[$key]['Match'] =  $this->Match($value['RefOperations'], $value['MontantVersement']);
         }
         return $data;
     }
@@ -28,7 +27,6 @@ class JournalManagerPDO extends JournalManager
         foreach ($data as $key => $value) {
             $data[$key]['Debut'] = $debut;
             $data[$key]['Debut'] = $fin;
-            $data[$key]['Match'] =  $this->Match($value['RefOperations'], $value['MontantVersement']);
         }
         return $data;
     }
@@ -308,9 +306,6 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':validate', $validate, \PDO::PARAM_STR);
         $requete->bindValue(':SentFromAgency', $_POST['SentFromAgency'], \PDO::PARAM_INT);
         $requete->execute();
-        if (isset($_POST['RefTraited'])) {
-            $this->deleteTraitedOperations($_POST['RefTraited']);
-        }
     }
     public function CancelValidate($id)
     {
@@ -515,10 +510,6 @@ class JournalManagerPDO extends JournalManager
         $requeteAddService->bindValue(':SoldeCompte', $_POST['ReserveActuelle'], \PDO::PARAM_STR);
         $requeteAddService->bindValue(':DateSolde', $time, \PDO::PARAM_STR);
         $requeteAddService->execute();
-        //   $RefCompte = $this->dao->lastInsertId();
-        // $requete = $this->dao->prepare("UPDATE TbleCompte SET DateSolde = CONCAT(DATE(DateSolde), '$time') WHERE RefCompte=:RefCompte ");
-        // $requete->bindValue(':RefCompte', $RefCompte, \PDO::PARAM_INT);
-        // $requete->execute();
     }
     public function SomnmeVersementCaisse($Date, $Caisse)
     {
@@ -547,7 +538,6 @@ class JournalManagerPDO extends JournalManager
         $Result = $requete->fetch();
         return $Result;
     }
-
     public function SentFromAgency($Agence)
     {
         $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency WHERE RefAgency=:RefAgency');
@@ -556,8 +546,6 @@ class JournalManagerPDO extends JournalManager
         $ListeAgence = $requeteAgence->fetch();
         return $ListeAgence['NameAgency'];
     }
-
-
     public function SoldeRemittanceVersementAgencePeriode($debut = NULL, $fin = NULL, $Agence = NULL)
     {
         if (!empty($debut) && !empty($fin) && !empty($Agence)) {
@@ -595,32 +583,6 @@ class JournalManagerPDO extends JournalManager
             return $result['SoldeRemittance'];
         }
     }
-
-    public function getMytable()
-    {
-        $query = $this->dao->prepare('SELECT * FROM mytable');
-        $query->execute();
-        $data = $query->fetchAll();
-        return $data;
-    }
-    public function OldMatch($description, $ref, $montant)
-    {
-        if (isset($description)) {
-            if (preg_match('/VT([A-Za-z]+)([0-9]+)/i', $description, $match) && preg_match_all("/([0-9]+\.[0-9]+)/", $description, $matches)) {
-                if ($match[2] == $ref) {
-                    $checkRef = 'ID EXIST';
-                    if (round($matches[0][0]) == $montant or round($matches[0][1]) == $montant) {
-                        $checkPayments = 'Payments EXIST';
-                    }
-                    return $checkRef . ' ' . $checkPayments . ' <br>ID : ' . $match[2] . ' | Payments : ' . $matches[0][0] . ' | Deposits : ' . $matches[0][1] . ' | Balance : ' . $matches[0][2] . '</b>';
-                } else {
-                    return "No data found";
-                }
-            }
-        }
-    }
-
-
     public function deleteContent($id)
     {
         $query = $this->dao->prepare('DELETE FROM mytable WHERE RefControl = :id');
@@ -628,50 +590,11 @@ class JournalManagerPDO extends JournalManager
         $query->execute();
     }
 
-
-    public function PushtoTraited()
-    {
-        $getMytable = $this->getMytable();
-        foreach ($getMytable as $key => $value) {
-            $description = ($value['Description'] . ' ' . $value['Payments'] . ' ' . $value['Deposits'] . '  ' . $value['Balance']);
-
-            if (preg_match('/VT([A-Za-z]+)([0-9]+)/i', $description, $match) && preg_match_all("/([0-9]+\.[0-9]+)/", $description, $matches)) {
-
-                $ref = $match[2];
-                $montant = round($matches[0][0] + $matches[0][1]);
-                $query = $this->dao->prepare('INSERT INTO traited (DescID,Montant,Description) VALUES (:DescID,:Montant,:Description)');
-                $query->bindValue(':DescID', $ref, \PDO::PARAM_STR);
-                $query->bindValue(':Montant', $montant, \PDO::PARAM_STR);
-                $query->bindValue(':Description', $description, \PDO::PARAM_STR);
-                $query->execute();
-                $this->deleteContent($value['RefControl']);
-            }
-        }
-    }
-
-    public function Match($id, $montant)
-    {
-        $query = $this->dao->prepare('SELECT * FROM traited WHERE DescID = :id');
-        $query->bindValue(':id', $id, \PDO::PARAM_STR);
-        $query->execute();
-        $data = $query->fetch();
-        return $data;
-    }
-
-    public function deleteTraitedOperations($id)
-    {
-        $query = $this->dao->prepare('DELETE FROM traited WHERE RefTraited = :id');
-        $query->bindValue(':id', $id, \PDO::PARAM_STR);
-        $query->execute();
-    }
-
-
     public function NewMatch($id)
     {
         $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . $id . '%\'');
         $query->execute();
         $data = $query->fetch();
-
         return $data;
     }
 }

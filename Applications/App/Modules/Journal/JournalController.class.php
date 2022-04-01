@@ -149,13 +149,4 @@ class JournalController extends \Library\BackController
         $this->page->addVar('tab', $tab);
         $this->page->addVar('Agence', $Agence);
     }
-
-    public function executeControl(\Library\HTTPRequest $request)
-    {   //Export mytable to Traited
-        //    $this->managers->getManagerOf('Journal')->PushtoTraited();
-        //  $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
-
-        $match = $this->managers->getManagerOf('Journal')->NewMatch();
-        $this->page->addVar('data', $match);
-    }
 }

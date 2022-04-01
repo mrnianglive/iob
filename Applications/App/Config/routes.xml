@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes>
 	<route url="/" module="Bielletage" action="index"/>
-		<route url="/dashboard" module="Bielletage" action="dashboard"/>
-
+	<route url="/dashboard" module="Bielletage" action="dashboard"/>
 	<route url="/logout" module="Connexion" action="Logout"/>
 	<route url="/bielletage/([0-9]+)" vars="id" module="Bielletage" action="bielletage"/>
 	<route url="/bordereau/([0-9]+)" vars="id" module="Bielletage" action="invoice"/>
@@ -36,20 +35,12 @@
 	<route url="/Users/deleteUsers/([0-9]+)" vars="id" action="deleteusers" module="Users"/>
 	<route url="/Users/UpdateUsers/([0-9]+)" vars="id" action="updateusers" module="Users"/>
 	<route url="/Analytics/index" module="Analytics" action="index"/>
-	
 	<route url="/Analytics/uv" module="Analytics" action="uv"/>
-
 	<route url="/Journal/petite_caisse" module="Journal" action="petitecaisse"/>
-
-	 <route url="/Analytics/chart" module="Analytics" action="chart"/>
-	  <route url="/Analytics/performance" module="Analytics" action="performance"/>
-	  <route url="/Users/delogger/([0-9]+)" vars="id" action="delogger" module="Users"/>
+	<route url="/Analytics/chart" module="Analytics" action="chart"/>
+	<route url="/Analytics/performance" module="Analytics" action="performance"/>
+	<route url="/Users/delogger/([0-9]+)" vars="id" action="delogger" module="Users"/>
 	<route url="/remittances/index" module="Remittance" action="index"/>
-		<route url="/remittances/delete/([0-9]+)" module="Remittance" vars="id" action="delete"/>
-
-
+	<route url="/remittances/delete/([0-9]+)" module="Remittance" vars="id" action="delete"/>
 	<route url="/Arreter/reserve/uv" module="Arreter" action="reserveuv"/>
-
-	<route url="/Journal/traited" module="Journal" action="control"/>
-
 </routes>

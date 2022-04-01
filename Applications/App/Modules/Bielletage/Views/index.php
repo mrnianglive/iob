@@ -102,4 +102,4 @@
           </div>
       </div>
   </div>
-  <a href="/dashboard" target="_blank" class="btn btn-info">Dashboard</a>
+  <a href="/dashboard" target="_blank" class="btn btn-secondary">Dashboard</a>

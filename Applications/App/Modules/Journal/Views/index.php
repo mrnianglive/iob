@@ -150,7 +150,7 @@
                                                   class="alert alert-<?= ($value['MontantVersement'] == $montant) ? 'success' : 'warning'; ?>"><?= ($value['MontantVersement'] == $montant) ? 'Correspondance Montant Trouvée' : 'Correspondance Montant non Trouvée'; ?>
                                               </span>
                                               <textarea class="form-control">
-                                                    <?= $result['Description'] . '&#13;&#10;' . round($result['Payments']) . '&#13;&#10;' . round($result['Deposits']); ?>
+                                                    <?= $result['DateControl'] . '&#13;&#10;' . $result['Description'] . '&#13;&#10;' . round($result['Payments']) . '&#13;&#10;' . round($result['Deposits']); ?>
                                                 </textarea>
                                               <hr>
                                               <button type="button" class="btn btn-secondary"

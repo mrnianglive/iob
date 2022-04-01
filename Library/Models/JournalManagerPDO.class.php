@@ -595,7 +595,7 @@ class JournalManagerPDO extends JournalManager
     public function NewMatch($Ref)
     {
         $check = $this->CheckifRetrait($Ref);
-        $id = '';
+        $id = 0;
         if (!empty($check)) {
             $string = $check['Remarque'];
             preg_match_all('!\d+!', $string, $matches);
@@ -604,7 +604,6 @@ class JournalManagerPDO extends JournalManager
         } else {
             $id = $Ref;
         }
-
         $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . $id . '%\'');
         $query->execute();
         $data = $query->fetch();

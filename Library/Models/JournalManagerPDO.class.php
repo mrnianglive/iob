@@ -585,11 +585,11 @@ class JournalManagerPDO extends JournalManager
     }
     public function CheckifRetrait($id)
     {
-        $query = $this->dao->prepare('SELECT * FROM TbleOperations WHERE RefOperations = :RefOperations');
+        $query = $this->dao->prepare("SELECT * FROM TbleOperations WHERE RefOperations=:RefOperations");
         $query->bindValue(':RefOperations', $id, \PDO::PARAM_INT);
         $query->execute();
-        $data = $query->fetch();
-        return $data;
+        $result = $query->fetch();
+        return $result;
     }
 
     public function NewMatch($Ref)
@@ -599,7 +599,6 @@ class JournalManagerPDO extends JournalManager
             $string = $check['Remarque'];
             preg_match_all('!\d+!', $string, $matches);
             $number = $matches[0][0];
-
             $id = $number;
         } else {
             $id = $Ref;

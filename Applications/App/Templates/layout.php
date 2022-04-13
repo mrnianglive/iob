@@ -12,9 +12,8 @@
         content="Ample Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
     <meta name="robots" content="noindex,nofollow">
     <title>App - <?= $titles; ?></title>
-    <link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/" />
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
+    <link rel="shortcut icon" href="/images/mlc.ico">
     <link href="/css/wizard.css" rel="stylesheet" type="text/css" />
     <!-- Custom CSS -->
     <link href="/css/style.min.css" rel="stylesheet">
@@ -59,7 +58,7 @@
                         <!-- Logo text -->
                         <span class="logo-text">
                             <!-- dark Logo text -->
-                            <img src="/plugins/images/logo-text.png" alt="homepage" />
+                            <img src="/images/mlc.png" alt="homepage" />
                         </span>
                     </a>
                     <!-- ============================================================== -->
@@ -102,8 +101,7 @@
                         <!-- ============================================================== -->
                         <li>
                             <a class="profile-pic" href="#">
-                                <img src="/plugins/images/users/varun.jpg" alt="user-img" width="36"
-                                    class="img-circle"><span
+                                <img src="/images/mlc.png" alt="user-img" width="36" class="img-circle"><span
                                     class="text-white font-medium"><?= $_SESSION['login']; ?></span></a>
                         </li>
                         <!-- ============================================================== -->

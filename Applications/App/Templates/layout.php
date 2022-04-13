@@ -59,7 +59,7 @@
                         <!-- Logo text -->
                         <span class="logo-text">
                             <!-- dark Logo text -->
-                            <img src="/images/mlc.png" alt="homepage" width="36" />
+                            <img src="/images/mlc.png" alt="homepage" width="50%" />
                         </span>
                     </a>
                     <!-- ============================================================== -->

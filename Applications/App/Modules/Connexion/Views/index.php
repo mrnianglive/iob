@@ -20,10 +20,9 @@
 <form method="post">
     <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72"
         height="72">
-    <h1 class="h3 mb-3 font-weight-normal">CAISSE | IOB </h1>
     <label for="inputEmail" class="sr-only">Login</label>
     <input type="text" id="login" class="form-control" name="login" required autofocus>
-    <span id="statut"></span>
+    <span id="statut"></span></br>
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" id="inputPassword" class="form-control" name="password" required>
     <div class="checkbox mb-3">

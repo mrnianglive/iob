@@ -20,14 +20,17 @@
 <form method="post">
     <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72"
         height="72">
-    <label for="inputEmail" class="sr-only">Login</label>
-    <input type="text" id="login" class="form-control" name="login" required autofocus>
-    <span id="statut"></span></br>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" class="form-control" name="password" required>
-    <div class="checkbox mb-3">
-
+    <div class="form-group">
+        <label class="small mb-1" for="inputEmailAddress">Login</label>
+        <input class="form-control py-4 " id="login" type="text" name="login" />
+        <span id="statut"></span>
     </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit" id="register">Se Connecter</button>
+    <div class="form-group">
+        <label class="small mb-1" for="inputPassword">Password</label>
+        <input class="form-control py-4" id="inputPassword" type="password" name="password" />
+    </div>
+    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+        <button class="btn btn-primary" id="register" type="submit">Login</button>
+    </div>
     <p class="mt-5 mb-3 text-muted">&copy; MALI CREANCES 2021</p>
 </form>

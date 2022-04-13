@@ -12,8 +12,6 @@
                               <?php if ($_SESSION['statut'] == 'admin') { ?>
                               <th class="border-top-0">Action</th>
                               <?php } ?>
-
-
                           </tr>
                       </thead>
                       <tbody>

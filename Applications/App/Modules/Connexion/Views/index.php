@@ -19,12 +19,14 @@
 
 <form method="post">
     <img class="mb-4" src="/images/mlc.png" alt="mlc" width="200" height="200">
+    <h1 class="h3 mb-3 font-weight-normal">Connectez Vous</h1>
+
     <label for="inputEmail" class="sr-only">Login</label>
     <input type="email" id="login" class="form-control" placeholder="Login" required autofocus>
     <span id="statut"></span>
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
     </br>
-    <button class="btn btn-lg btn-primary btn-block" type="submit" id="register">Login</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" id="register">Connexion</button>
     <p class="mt-5 mb-3 text-muted">&copy; MALI CREANCES 2021 Develop by NIANGALY</p>
 </form>

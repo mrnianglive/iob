@@ -18,7 +18,7 @@
 
 
 <form method="post">
-    <img class="mb-4" src="/images/mlc.png" alt="mlc" width="100" height="100">
+    <img class="mb-4" src="/images/mlc.png" alt="mlc" width="100" height="200">
     <label for="inputEmail" class="sr-only">Login</label>
     <input type="email" id="login" class="form-control" placeholder="Login" required autofocus>
     <span id="statut"></span>

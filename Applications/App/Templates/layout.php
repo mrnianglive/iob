@@ -12,8 +12,9 @@
         content="Ample Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
     <meta name="robots" content="noindex,nofollow">
     <title>App - <?= $titles; ?></title>
+    <link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/" />
     <!-- Favicon icon -->
-    <link rel="shortcut icon" href="/images/mlc.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/mlc.png">
     <link href="/css/wizard.css" rel="stylesheet" type="text/css" />
     <!-- Custom CSS -->
     <link href="/css/style.min.css" rel="stylesheet">
@@ -58,7 +59,7 @@
                         <!-- Logo text -->
                         <span class="logo-text">
                             <!-- dark Logo text -->
-                            <img src="/images/mlc.png" alt="homepage" />
+                            <img src="/images/mlc.png" alt="homepage" width="36" />
                         </span>
                     </a>
                     <!-- ============================================================== -->

@@ -3,8 +3,10 @@
 
         <div class="white-box">
             <h3 class="box-title">Gestion d'UV</h3>
+            <?php if ($_SESSION['statut'] == 'admin') { ?>
             <button type="button" class="btn btn-primary" id="button" data-toggle="modal" data-target="#addAgence"
                 data-whatever="@mdo"><i class="fa fa-plus"> Ajouter</i></button> <br /> <br />
+            <?php } ?>
             <div class="table-responsive">
                 <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                     <thead>
@@ -14,7 +16,9 @@
                             <th class="border-top-0">Produit</th>
                             <th class="border-top-0">Montant</th>
                             <th class="border-top-0">Date</th>
+                            <?php if ($_SESSION['statut'] == 'admin') { ?>
                             <th class="border-top-0">Actions</th>
+                            <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,17 +43,20 @@
                             <td>
                                 <?= $value['DateDepot']; ?>
                             </td>
+                            <?php if ($_SESSION['statut'] == 'admin') { ?>
+
                             <td>
                                 <a href="/Pannel/Produit/delete/<? //= $value['RefProduit']; 
-                                                                    ?>" class="btn btn-xs btn-danger"
+                                                                        ?>" class="btn btn-xs btn-danger"
                                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i
                                         class="fa fa-trash"></i></a>
                                 <a class="btn btn-xs  btn-warning" data-toggle="modal"
                                     data-target="#ChmodProduit-<? //= $value['RefProduit']; 
-                                                                                                                        ?>" data-whatever="@mdo"><i
+                                                                                                                            ?>" data-whatever="@mdo"><i
                                         class="fa fa-check"></i></a>
 
                             </td>
+                            <?php } ?>
                         </tr>
                         <?php  }
                         ?>

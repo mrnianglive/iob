@@ -595,19 +595,23 @@ class JournalManagerPDO extends JournalManager
     public function NewMatch($Ref)
     {
         $check = $this->CheckifRetrait($Ref);
-        $id = '';
-        if (!empty($check)) {
+        $id = 0;
+        if (!empty($check['RefOperations'])) {
             $string = $check['Remarque'];
             preg_match_all('!\d+!', $string, $matches);
-            $number = $matches[0][0];
-            $id = $number;
+            $id = $matches[0][0];
+            if (intval($id) > 0) {
+                $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . $id . '%\'');
+                $query->execute();
+                $data = $query->fetch();
+                return $data;
+            }
         } else {
             $id = $Ref;
+            $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . $id . '%\'');
+            $query->execute();
+            $data = $query->fetch();
+            return $data;
         }
-
-        $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . $id . '%\'');
-        $query->execute();
-        $data = $query->fetch();
-        return $data;
     }
 }

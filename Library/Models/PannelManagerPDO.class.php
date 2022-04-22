@@ -165,4 +165,15 @@ class PannelManagerPDO extends PannelManager
             }
         }
     }
+
+
+
+    public function GetAgencyUsingCaisseID($id)
+    {
+        $requete = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN TbleCaisse ON TbleCaisse.RefAgency=TbleAgency.RefAgency WHERE TbleCaisse.RefCaisse=:RefCaisse');
+        $requete->bindValue(':RefCaisse', $id, \PDO::PARAM_INT);
+        $requete->execute();
+        $data = $requete->fetch();
+        return $data;
+    }
 }

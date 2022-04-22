@@ -461,6 +461,21 @@ class JournalManagerPDO extends JournalManager
         $result = $requeteSoldeInittial->fetch();
         return $result['TotalAppro'];
     }
+    public function TotalApproAgenceAvecApproInitial($Date, $Agence)
+    {
+        $requeteSoldeInittial = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalAppro FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE TbleAgency.RefAgency=:RefAgency AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleOperations.RefType=3 AND TbleOperations.TypeAppro=1 ');
+        $requeteSoldeInittial->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requeteSoldeInittial->execute();
+        $result = $requeteSoldeInittial->fetch();
+        return $result['TotalAppro'];
+    }
+
+
+
+
+
+
     public function TotalApproAgenceGlobal($Date, $Agence)
     {
         $requeteSoldeInittial = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalAppro FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE TbleAgency.RefAgency=:RefAgency AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleOperations.RefType=3 ');
@@ -613,5 +628,20 @@ class JournalManagerPDO extends JournalManager
             $data = $query->fetch();
             return $data;
         }
+    }
+    public function SoldeActuelleCaisse($Date, $Caisse)
+    {
+        $SoldeInitial =  $this->SoldeInitialCaisse($Date, $Caisse);
+        $SoldeInitialGlobal =  $this->SoldeInitialCaisseGlobal($Date, $Caisse);
+        $TotalAppro =  $this->TotalApproCaisse($Date, $Caisse);
+        $TotalVersement =  $this->SomnmeVersementCaisse($Date, $Caisse);
+        $TotalRetrait =  $this->SommeRetraitCaisse($Date, $Caisse);
+        $TotalSortieCaisse = $this->TotalSortieCaisse($Date, $Caisse);
+        $SommeVersementRemittance = $this->SoldeRemittanceVersement($Date, $Caisse);
+        $SommeRetraitRemittance = $this->SoldeRemittanceRetrait($Date, $Caisse);
+        $SoldeRemittance = $SommeVersementRemittance - $SommeRetraitRemittance;
+        $SoldeDisponible =   $SoldeInitialGlobal  + $TotalVersement - $TotalRetrait - $TotalSortieCaisse;
+        $SoldeDisponibleGlobal =   $SoldeInitialGlobal  + $TotalVersement - $TotalRetrait - $TotalSortieCaisse + $SoldeRemittance;
+        return $SoldeDisponibleGlobal;
     }
 }

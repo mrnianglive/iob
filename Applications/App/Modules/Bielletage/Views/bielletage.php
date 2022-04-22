@@ -300,10 +300,24 @@
                             <div class="form-group">
                                 <label class="control-label">Type Appro</label>
                                 <select class="form-control" name="TypeAppro" tabindex="1" required="">
-                                    <?php foreach ($TypeAppro as $key => $type) { ?>
+
+                                    <?php
+
+                                                if ($_SESSION['statut'] == 'admin') {
+                                                    foreach ($TypeAppro as $key => $type) { ?>
                                     <option value="<?= $type['RefTypeAppro']; ?>">
                                         <?= $type['NameTypeAppro']; ?></option>
-                                    <?php }   ?>
+                                    <?php }
+                                                } else {
+                                                    foreach ($TypeAppro as $key => $type) {
+                                                        if ($type['RefTypeAppro'] == 1) { ?>
+                                    <option value="<?= $type['RefTypeAppro']; ?>">
+                                        <?= $type['NameTypeAppro']; ?></option>
+
+                                    <?php }
+                                                    }
+                                                } ?>
+
                                 </select>
                             </div>
                         </div>

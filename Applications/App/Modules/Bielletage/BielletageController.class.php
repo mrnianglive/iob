@@ -96,16 +96,27 @@ class BielletageController extends \Library\BackController
     {
         $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($request->postData('RefCaisse'));
         $YesterdayReserve = $this->managers->getManagerOf("Journal")->YesterdayReserve($GetAgencyUsingCaisseID['RefAgency'], date('Y-m-d'));
-        $ApproInital  = $this->managers->getManagerOf("Journal")->SoldeInitialCaisse(date('Y-m-d'), $GetAgencyUsingCaisseID['RefAgency']);
+        $VerifAppro  = $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal(date('Y-m-d'), $GetAgencyUsingCaisseID['RefAgency']);
 
-        if ($ApproInital > 0) {
+
+        if ($VerifAppro == 0 && ($request->postData('RefType') == 1 || $request->postData('RefType') == 2)) {
+            $_SESSION['message']['type'] = 'warning';
+            $_SESSION['message']['text'] = 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération';
+            $_SESSION['message']['number'] = 2;
+            $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
+        } else {
+
+
+
+
+
             if ($request->postData('RefType') == 3 && $request->postData('TypeAppro') == 1) {
                 if ($request->postData('MontantVersement') <= $YesterdayReserve) {
                     $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
                 } else {
                     $_SESSION['message']['type'] = 'warning';
                     $_SESSION['message']['text'] = 'Le Montant de la transaction est supérieur au solde de la reserve.';
-                    $_SESSION['message']['number'] = 5;
+                    $_SESSION['message']['number'] = 2;
                     $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
                 }
             } elseif ($request->postData('RefType') == 4 or $request->postData('RefType') == 2) {
@@ -115,17 +126,12 @@ class BielletageController extends \Library\BackController
                 } else {
                     $_SESSION['message']['type'] = 'warning';
                     $_SESSION['message']['text'] = 'Le Montant de la transaction supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou Contactez votre administrateur .';
-                    $_SESSION['message']['number'] = 5;
+                    $_SESSION['message']['number'] = 2;
                     $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
                 }
             } else {
                 $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
             }
-        } else {
-            $_SESSION['message']['type'] = 'warning';
-            $_SESSION['message']['text'] = 'Appro Inital non défini. Veuillez d\'abord le faire.';
-            $_SESSION['message']['number'] = 3;
-            $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
         }
     }
 

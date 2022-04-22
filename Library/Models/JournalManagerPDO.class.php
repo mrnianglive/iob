@@ -471,11 +471,6 @@ class JournalManagerPDO extends JournalManager
         return $result['TotalAppro'];
     }
 
-
-
-
-
-
     public function TotalApproAgenceGlobal($Date, $Agence)
     {
         $requeteSoldeInittial = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalAppro FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE TbleAgency.RefAgency=:RefAgency AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleOperations.RefType=3 ');
@@ -485,10 +480,6 @@ class JournalManagerPDO extends JournalManager
         $result = $requeteSoldeInittial->fetch();
         return $result['TotalAppro'];
     }
-
-
-
-
     public function TotalSortieCaisse($Date, $Caisse)
     {
         $requeteSoldeInittial = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalAppro FROM TbleOperations  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleOperations.RefType=4 AND TbleOperations.RefCaisse=:RefCaisse ');

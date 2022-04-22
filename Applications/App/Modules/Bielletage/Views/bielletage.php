@@ -303,7 +303,7 @@
 
                                     <?php
 
-                                                if ($_SESSION['statut'] == 'admin') {
+                                                if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control' or $_SESSION['statut'] == 'Head') {
                                                     foreach ($TypeAppro as $key => $type) { ?>
                                     <option value="<?= $type['RefTypeAppro']; ?>">
                                         <?= $type['NameTypeAppro']; ?></option>

@@ -105,7 +105,7 @@ class BielletageController extends \Library\BackController
                 } else {
                     $_SESSION['message']['type'] = 'warning';
                     $_SESSION['message']['text'] = 'Le Montant de la transaction est supérieur au solde de la reserve.';
-                    $_SESSION['message']['number'] = 3;
+                    $_SESSION['message']['number'] = 5;
                     $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
                 }
             } elseif ($request->postData('RefType') == 4 or $request->postData('RefType') == 2) {
@@ -114,8 +114,8 @@ class BielletageController extends \Library\BackController
                     $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
                 } else {
                     $_SESSION['message']['type'] = 'warning';
-                    $_SESSION['message']['text'] = 'Le Montant de la transaction supérieur au solde de la caisse.';
-                    $_SESSION['message']['number'] = 3;
+                    $_SESSION['message']['text'] = 'Le Montant de la transaction supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou Contactez votre administrateur .';
+                    $_SESSION['message']['number'] = 5;
                     $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
                 }
             } else {

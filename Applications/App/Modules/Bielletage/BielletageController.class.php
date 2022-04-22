@@ -108,7 +108,7 @@ class BielletageController extends \Library\BackController
                     $_SESSION['message']['number'] = 3;
                     $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
                 }
-            } elseif ($request->postData('RefType') == 4) {
+            } elseif ($request->postData('RefType') == 4 or $request->postData('RefType') == 2) {
                 $SoldeActuelleCaisse = $this->managers->getManagerOf("Journal")->SoldeActuelleCaisse(date('Y-m-d'), $request->postData('RefCaisse'));
                 if ($request->postData('MontantVersement') <= $SoldeActuelleCaisse) {
                     $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste

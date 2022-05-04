@@ -42,5 +42,9 @@
 	<route url="/Users/delogger/([0-9]+)" vars="id" action="delogger" module="Users"/>
 	<route url="/remittances/index" module="Remittance" action="index"/>
 	<route url="/remittances/delete/([0-9]+)" module="Remittance" vars="id" action="delete"/>
+	<route url="/remittances/validate" module="Remittance" action="validate"/>
+	<route url="/remittances/cancelvalidate/([0-9]+)" vars="id" module="Remittance" action="cancelvalidate"/>
+	<route url="/remittances/index/([0-9]{4}-[0-9]{2}-[0-9]{2})/([0-9]{4}-[0-9]{2}-[0-9]{2})/([0-9]+)" vars="debut,fin,value" module="Remittance" action="index"/>
+
 	<route url="/Arreter/reserve/uv" module="Arreter" action="reserveuv"/>
 </routes>

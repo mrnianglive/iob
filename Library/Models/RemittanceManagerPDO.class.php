@@ -48,4 +48,40 @@ class RemittanceManagerPDO extends RemittanceManager
         $requete->bindValue(':RefRemittance', $id, \PDO::PARAM_INT);
         $requete->execute();
     }
+
+
+
+
+    public function GetOperations($debut, $fin, $Agence)
+    {
+        $requete = $this->dao->prepare("SELECT * FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleProduit ON TbleProduit.RefProduit=TbleRemittance.RefProduit INNER JOIN TbleType ON TbleType.RefType=TbleRemittance.RefType  WHERE  date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin'  AND TbleAgency.RefAgency=:Agence AND TbleRemittance.Reset_Id IS NULL ORDER BY TbleRemittance.RefRemittance DESC");
+        $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
+        $requete->execute();
+        $data = $requete->fetchAll();
+        foreach ($data as $key => $value) {
+            $data[$key]['Debut'] = $debut;
+            $data[$key]['Debut'] = $fin;
+        }
+        return $data;
+    }
+
+
+
+    public function ValidateOperations()
+    {
+        $validate = date('Y-m-d H:i:s');
+        $requete = $this->dao->prepare("UPDATE TbleRemittance SET Validate= 2,DateValidate=:date,RefValidate=:RefUsers,DateValidate=:validate,SentFromAgency=:SentFromAgency WHERE RefRemittance=:RefRemittance");
+        $requete->bindValue(':RefRemittance', $_POST['RefRemittance'], \PDO::PARAM_INT);
+        $requete->bindValue(':date', $_POST['DateValidate'], \PDO::PARAM_STR);
+        $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->bindValue(':validate', $validate, \PDO::PARAM_STR);
+        $requete->bindValue(':SentFromAgency', $_POST['SentFromAgency'], \PDO::PARAM_INT);
+        $requete->execute();
+    }
+    public function CancelValidate($id)
+    {
+        $requete = $this->dao->prepare("UPDATE TbleRemittance SET Validate= 1,DateValidate=NULL,RefValidate=NULL,DateValidate=NULL,SentFromAgency=NULL WHERE RefRemittance=:RefRemittance");
+        $requete->bindValue(':RefRemittance', $id, \PDO::PARAM_STR);
+        $requete->execute();
+    }
 }

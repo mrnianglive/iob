@@ -3,10 +3,24 @@
     <div class="col-md-12">
         <form method="POST" id="formulaire">
             <div class="input-group">
-                <div class="col-md-3">Date
-                    <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control"
+                <div class="col-md-3">Agence
+                    <select class="form-control" name="RefAgency" tabindex="1" required="">
+                        <?php foreach ($UserAgence as $key => $Agence) {
+                        ?>
+                        <option value="<?= $Agence['RefAgency']; ?>" <?php if ($Agence['RefAgency'] == $Value) { ?>
+                            selected="" <?php } ?>>
+                            <?= $Agence['NameAgency']; ?></option>
+                        <?php }   ?>
+                    </select>
+                </div>
+                <div class="col-md-3">Du
+                    <input type="date" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
+                </div>
+                <div class="col-md-3">Au
+                    <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control"
                         onchange="document.getElementById('formulaire').submit();">
                 </div>
+
             </div>
         </form><br />
         <div class="white-box">
@@ -20,6 +34,9 @@
                     <thead>
                         <tr>
                             <th class="border-top-0">ID</th>
+                            <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
+                            <th class="border-top-0">Statut</th>
+                            <?php } ?>
                             <th class="border-top-0">AGENCE</th>
                             <th class="border-top-0">CAISSE</th>
                             <th class="border-top-0">PRODUIT</th>
@@ -35,7 +52,20 @@
                     <tbody>
                         <?php foreach ($Operation as $key => $value) { ?>
                         <tr>
-                            <td><?= $value['RefRemittance']; ?></td>
+                            <td
+                                style="<?php if ($value['Validate'] == 2 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color:#7ace4c;  <?php } elseif ($value['Validate'] == 1 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color: #f33155; <?php   } ?>">
+                                <?= $value['RefRemittance']; ?></td>
+                            <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
+                            <td> <?php if ($value['Validate'] == 1) { ?> <button class="btn btn-danger"
+                                    data-toggle="modal" data-target="#modal-<?= $value['RefRemittance']; ?>">Non
+                                    Vérifiée </button> <?php } else { ?> <a
+                                    href="/remittances/cancelvalidate/<?= $value['RefRemittance']; ?>"
+                                    class="btn btn-success"
+                                    onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vérifcation ?');">
+                                    Verifiée le <span><?= $value['DateValidate']; ?></span></a>
+                                <?php   } ?>
+                            </td>
+                            <?php } ?>
                             <td><?= $value['NameAgency']; ?></td>
                             <td> <?= $value['NameCaisse']; ?></td>
                             <td> <?= $value['NameProduit']; ?></td>
@@ -52,6 +82,59 @@
                             </td>
                             <?php } ?>
                         </tr>
+
+                        <div class="modal fade" id="modal-<?= $value['RefRemittance']; ?>" tabindex="-1" role="dialog"
+                            aria-labelledby="modalStatut" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Confirmation de l'Opération
+                                        </h5>
+                                    </div>
+                                    <form role="form" method="post" action="/remittances/validate">
+                                        <div class=" modal-body">
+                                            <div class="modal-body">
+                                                <input type="hidden" class="form-control" name="RefRemittance"
+                                                    value="<?= $value['RefRemittance']; ?>">
+
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="control-label">Date</label>
+                                                    <input type="date" class="form-control" name="DateValidate"
+                                                        required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="control-label">Agence</label>
+                                                    <select name="SentFromAgency" class="form-control" required>
+                                                        <option value="">Veuillez Choisir l'agence</option>
+                                                        <?php foreach ($ListeAgence as $key => $agence) { ?>
+                                                        <option value="<?= $agence['RefAgency']; ?>">
+                                                            <?= $agence['NameAgency']; ?></option>
+                                                        <?php   } ?>
+                                                    </select>
+                                                </div>
+                                                <input type="hidden" id="Debut" name="Debut" value="<?= $Debut; ?>"
+                                                    class="form-control ">
+                                                <input type="hidden" id="Fin" name="Fin" value="<?= $Fin; ?>"
+                                                    class="form-control ">
+                                                <input type="hidden" id="RefAgency" name="RefAgency"
+                                                    value="<?= $value['RefAgency']; ?>" class="form-control ">
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Fermer</button>
+                                            <button type="submit" class="btn btn-primary">Confirmer</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
                         <?php } ?>
                     </tbody>
                 </table>

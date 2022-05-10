@@ -75,7 +75,7 @@
                             <td><?= $value['NumPhone']; ?></td>
                             <td class="counter text-danger">
                                 <?= number_format($value['MontantTransaction'], 0, '.', ','); ?></td>
-                            <td><?= date('Y-m-d', strtotime($value['Insert_time'])); ?></td>
+                            <td><?= date('d/m/Y', strtotime($value['Insert_time'])); ?></td>
                             <?php if ($_SESSION['statut'] == 'admin') { ?>
                             <td><a href="/remittances/delete/<?= $value['RefRemittance']; ?>"
                                     class="btn btn-xs btn-danger"

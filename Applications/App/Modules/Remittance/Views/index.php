@@ -2,7 +2,7 @@
 
     <div class="col-md-12">
         <form method="POST">
-            <div class="input-group">
+            <div class="form-group">
                 <div class="col-md-3">Agence
                     <select class="form-control" name="RefAgency" tabindex="1" required="">
                         <?php foreach ($UserAgence as $key => $Agence) {
@@ -19,12 +19,9 @@
                 <div class="col-md-3">Au
                     <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
                 </div>
-
-                <div class="col-md-1">
-
-                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
-                </div>
             </div>
+
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search">Search</i></button>
         </form><br />
         <div class="white-box">
             <h3 class="box-title">Opérations</h3>

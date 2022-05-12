@@ -1,16 +1,20 @@
 <div class="row">
 
     <div class="col-md-12">
-        <form method="POST">
+        <!-- <form method="POST">
             <div class="input-group">
                 <div class="col-md-3">Agence
                     <select class="form-control" name="RefAgency" tabindex="1" required="">
-                        <?php foreach ($UserAgence as $key => $Agence) {
+                        <?php //foreach ($UserAgence as $key => $Agence) {
                         ?>
-                        <option value="<?= $Agence['RefAgency']; ?>" <?php if ($Agence['RefAgency'] == $Value) { ?>
-                            selected="" <?php } ?>>
-                            <?= $Agence['NameAgency']; ?></option>
-                        <?php }   ?>
+                            <option value="<? //= $Agence['RefAgency']; 
+                                            ?>" <?php //if ($Agence['RefAgency'] == $Value) { 
+                                                ?> selected="" <?php // } 
+                                                                ?>>
+                                <? //= $Agence['NameAgency']; 
+                                ?></option>
+                        <?php // }   
+                        ?>
                     </select>
                 </div>
                 <div class="col-md-3">Du
@@ -22,7 +26,41 @@
                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
 
             </div>
+        </form> -->
+
+
+        <form method="POST">
+            <div class="form-group mb-2">
+                <label for="staticEmail2" class="sr-only">Agence</label>
+                <select class="form-control" name="RefAgency" tabindex="1" required="">
+                    <?php foreach ($UserAgence as $key => $Agence) {
+                    ?>
+                    <option value="<?= $Agence['RefAgency']; ?>" <?php if ($Agence['RefAgency'] == $Value) { ?>
+                        selected="" <?php } ?>>
+                        <?= $Agence['NameAgency']; ?></option>
+                    <?php }   ?>
+                </select>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="inputPassword2" class="sr-only">Du</label>
+                <input type="date" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
+            </div>
+
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="inputPassword2" class="sr-only">Au</label>
+                <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-search"></i></button>
         </form><br />
+
+
+
+
+
+
+
+
+
         <div class="white-box">
             <h3 class="box-title">Opérations</h3>
             <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>

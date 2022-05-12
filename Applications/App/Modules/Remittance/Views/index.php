@@ -41,12 +41,12 @@
                     <?php }   ?>
                 </select>
             </div>
-            <div class="form-group mb-3">
+            <div class="form-group mx-sm-3 mb-2">
                 <label for="inputPassword2" class="sr-only">Du</label>
                 <input type="date" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
             </div>
 
-            <div class="form-group mb-3">
+            <div class="form-group mx-sm-3 mb-2">
                 <label for="inputPassword2" class="sr-only">Au</label>
                 <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
             </div>

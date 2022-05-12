@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="col-md-1">
-                    <br>
+
                     <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
                 </div>
             </div>

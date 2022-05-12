@@ -30,7 +30,7 @@
 
 
         <form class="form-inline" method="POST">
-            <div class="form-group col-md-3 mb-1">
+            <div class="form-group mx-sm-4 mb-1">
                 <label for="staticEmail2" class="sr-only">Agence</label>
                 <select class="form-control" name="RefAgency" tabindex="1" required="">
                     <?php foreach ($UserAgence as $key => $Agence) {
@@ -41,12 +41,12 @@
                     <?php }   ?>
                 </select>
             </div>
-            <div class="form-group col-md-3 mb-1">
+            <div class="form-group mx-sm-4 mb-1">
                 <label for="inputPassword2" class="sr-only">Du</label>
                 <input type="date" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
             </div>
 
-            <div class="form-group col-md-3 mb-1">
+            <div class="form-group mx-sm-4 mb-1">
                 <label for="inputPassword2" class="sr-only">Au</label>
                 <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
             </div>

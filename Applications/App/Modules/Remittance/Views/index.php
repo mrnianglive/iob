@@ -1,7 +1,7 @@
 <div class="row">
 
     <div class="col-md-12">
-        <form method="POST" id="formulaire">
+        <form method="POST">
             <div class="input-group">
                 <div class="col-md-3">Agence
                     <select class="form-control" name="RefAgency" tabindex="1" required="">
@@ -17,10 +17,10 @@
                     <input type="date" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
                 </div>
                 <div class="col-md-3">Au
-                    <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control"
-                        onchange="document.getElementById('formulaire').submit();">
+                    <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
                 </div>
 
+                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
             </div>
         </form><br />
         <div class="white-box">

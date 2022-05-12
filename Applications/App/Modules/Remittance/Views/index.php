@@ -2,7 +2,7 @@
 
     <div class="col-md-12">
         <form method="POST">
-            <div class="form-group">
+            <div class="input-group">
                 <div class="col-md-3">Agence
                     <select class="form-control" name="RefAgency" tabindex="1" required="">
                         <?php foreach ($UserAgence as $key => $Agence) {

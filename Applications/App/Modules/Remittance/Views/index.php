@@ -29,7 +29,7 @@
         </form> -->
 
 
-        <form method="POST">
+        <form class="form-inline" method="POST">
             <div class="form-group col-md-3">
                 <label for="staticEmail2" class="sr-only">Agence</label>
                 <select class="form-control" name="RefAgency" tabindex="1" required="">

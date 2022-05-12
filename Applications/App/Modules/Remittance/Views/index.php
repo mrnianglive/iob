@@ -19,8 +19,9 @@
                 <div class="col-md-3">Au
                     <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
                 </div>
-                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
-
+                <div class="col-md-1">
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                </div>
             </div>
         </form><br />
         <div class="white-box">

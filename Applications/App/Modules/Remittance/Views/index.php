@@ -30,7 +30,7 @@
 
 
         <form class="form-inline" method="POST">
-            <div class="form-group mb-3">
+            <div class="form-group mx-sm-3 mb-2">
                 <label for="staticEmail2" class="sr-only">Agence</label>
                 <select class="form-control" name="RefAgency" tabindex="1" required="">
                     <?php foreach ($UserAgence as $key => $Agence) {

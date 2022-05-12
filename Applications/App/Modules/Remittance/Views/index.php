@@ -20,8 +20,9 @@
                     <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
                 </div>
             </div>
-            <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
-
+            <div class="input-group">
+                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+            </div>
         </form><br />
         <div class="white-box">
             <h3 class="box-title">Opérations</h3>

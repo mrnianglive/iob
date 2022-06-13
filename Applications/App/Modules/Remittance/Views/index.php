@@ -73,7 +73,7 @@
                             <th class="border-top-0">TEL</th>
                             <th class="border-top-0">MONTANT</th>
                             <th class="border-top-0">Date</th>
-                            <?php if ($_SESSION['statut'] == 'admin') { ?>
+                            <?php if (in_array(2, $permission)) { ?>
                             <th class="border-top-0">Action</th>
                             <?php } ?>
                         </tr>
@@ -104,7 +104,7 @@
                             <td class="counter text-danger">
                                 <?= number_format($value['MontantTransaction'], 0, '.', ','); ?></td>
                             <td><?= date('d/m/Y', strtotime($value['Insert_time'])); ?></td>
-                            <?php if ($_SESSION['statut'] == 'admin') { ?>
+                            <?php if (in_array(2, $permission)) { ?>
                             <td><a href="/remittances/delete/<?= $value['RefRemittance']; ?>"
                                     class="btn btn-xs btn-danger"
                                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i

@@ -56,7 +56,7 @@
                               <th class="border-top-0">Caissier</th>
                               <th class="border-top-0">RECU</th>
                               <th class="border-top-0">From</th>
-                              <?php if ($_SESSION['statut'] == 'admin') { ?>
+                              <?php if (in_array(1, $permission)) { ?>
                               <th class="border-top-0">Action</th>
                               <?php } ?>
                           </tr>
@@ -91,7 +91,7 @@
                               <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
                                       class="btn btn-secondary"><i class="fa fa-print"> Reçu</i> </td>
                               <td><?= $value['SentFromAgency']; ?></td>
-                              <?php if ($_SESSION['statut'] == 'admin') { ?>
+                              <?php if (in_array(1, $permission)) { ?>
                               <td><a href="/Journal/delete/<?= $value['RefOperations']; ?>"
                                       class="btn btn-xs btn-danger"
                                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i

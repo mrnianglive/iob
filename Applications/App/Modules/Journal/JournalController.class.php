@@ -70,6 +70,13 @@ class JournalController extends \Library\BackController
             $this->page->addVar('Solde', $SoldeGlobal);
         }
         $this->page->addVar('match', $this->managers->getManagerOf('Journal'));
+
+        $permissions = array();
+        $AllPermissions = $this->managers->getManagerOf('Pannel')->UserPermission();
+        foreach ($AllPermissions as $key => $value) {
+            $permissions[] = $value['access'];
+        }
+        $this->page->addVar('permission', $permissions);
     }
     public function executeValidate(\Library\HTTPRequest $request)
     {

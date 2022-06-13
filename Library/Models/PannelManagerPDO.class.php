@@ -176,4 +176,14 @@ class PannelManagerPDO extends PannelManager
         $data = $requete->fetch();
         return $data;
     }
+
+
+    public function UserPermission()
+    {
+        $requete = $this->dao->prepare("SELECT * FROM permissions WHERE RefUsers=:RefUsers");
+        $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->execute();
+        $result = $requete->fetchAll();
+        return $result;
+    }
 }

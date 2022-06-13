@@ -22,7 +22,7 @@
                       <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                   </div>
 
-                  <div class="col-md-2 ">Total Versement
+                  <div class="col-md-2 ">Total Depot
                       <input type="text" value="<?= number_format($sommeVersementPeriode, 0, '.', '.'); ?>"
                           class="form-control" readonly>
                   </div>

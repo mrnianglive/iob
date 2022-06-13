@@ -1,33 +1,5 @@
 <div class="row">
-
     <div class="col-md-12">
-        <!-- <form method="POST">
-            <div class="input-group">
-                <div class="col-md-3">Agence
-                    <select class="form-control" name="RefAgency" tabindex="1" required="">
-                        <?php //foreach ($UserAgence as $key => $Agence) {
-                        ?>
-                            <option value="<? //= $Agence['RefAgency']; 
-                                            ?>" <?php //if ($Agence['RefAgency'] == $Value) { 
-                                                ?> selected="" <?php // } 
-                                                                ?>>
-                                <? //= $Agence['NameAgency']; 
-                                ?></option>
-                        <?php // }   
-                        ?>
-                    </select>
-                </div>
-                <div class="col-md-3">Du
-                    <input type="date" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
-                </div>
-                <div class="col-md-3">Au
-                    <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-
-            </div>
-        </form> -->
-
         <form class="form-inline" method="POST">
             <div class="form-group  mb-1">
                 <label for="staticEmail2" class="sr-only">Agence</label>
@@ -244,12 +216,19 @@
                                 </select>
                             </div>
                         </div>
+                        <?php if (in_array(4, $permission)) { ?>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Date</label>
+                                <input type="date" class="form-control" name="Antidate">
+                            </div>
+                            <?php } ?>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-primary">Valider</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-primary">Valider</button>
+                    </div>
             </form>
         </div>
     </div>

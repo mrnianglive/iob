@@ -32,9 +32,6 @@ class RemittanceController extends \Library\BackController
 
         }
 
-
-
-
         if (!empty($request->postData('RefAgency')) or isset($_GET['value'])) {
             if (isset($_GET['debut']) && isset($_GET['fin']) && isset($_GET['value'])) {
                 $Operation  = $this->managers->getManagerOf("Remittance")->GetOperations($_GET['debut'], $_GET['fin'], $_GET['value']);

@@ -459,6 +459,14 @@
                                 <input type="text" class="form-control" name="TelDeposant" required="">
                             </div>
                         </div>
+                        <?php if (in_array(3, $permission)) { ?>
+                        <div class="col-md-3">
+                            <div class="form-group has-error">
+                                <label class="control-label">Date</label>
+                                <input type="date" class="form-control" name="Antidate">
+                            </div>
+                        </div>
+                        <?php } ?>
                     </div>
                     <?php } ?>
                 </div>

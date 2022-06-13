@@ -15,6 +15,13 @@ class RemittanceManagerPDO extends RemittanceManager
         $ListeType = $requete->fetchAll();
         return $ListeType;
     }
+    public function Update($time, $id)
+    {
+        $requete = $this->dao->prepare('UPDATE TbleRemittance SET Insert_time=:time WHERE RefRemittance=:id');
+        $requete->bindValue(':time', $time);
+        $requete->bindValue(':id', $id);
+        $requete->execute();
+    }
 
     public function Add()
     {
@@ -27,6 +34,11 @@ class RemittanceManagerPDO extends RemittanceManager
         $requete->bindValue(':MontantTransaction', $_POST['MontantTransaction'], \PDO::PARAM_STR);
         $requete->bindValue(':Insert_id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requete->execute();
+        $id = $this->dao->lastInsertId();
+        if (!empty($_POST['Antidate'])) {
+            $time = $_POST['Antidate'] . ' ' . date('H:i:s');
+            $this->Update($time, $id);
+        }
     }
 
     public function ListeOperations($date)

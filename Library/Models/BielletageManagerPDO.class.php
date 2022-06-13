@@ -86,10 +86,12 @@ class BielletageManagerPDO extends BielletageManager
     }
     public function Add()
     {
-        $date = date('Y-m-d');
+        if (!empty($_POST['Antidate'])) {
+            $date = $_POST['Antidate'];
+        } else {
+            $date = date('Y-m-d');
+        }
         $result = uniqid();
-
-
         if (intval($_POST['MontantVersement']) > 0 && !empty($_POST['NumCompte']) && !empty($_POST['MontantVersement']) && !empty($_POST['NameClient']) && !empty($_POST['RefCaisse']) && !empty($_POST['TelDeposant'])) {
 
             $requeteAddversement = $this->dao->prepare('INSERT INTO TbleOperations(RefCaisse,NumCompte,NameClient,MontantVersement,Remarque,Insert_Id,Insert_Time,Approve1_Id,Approve1_Time,Approve2_Id,Approve2_Time,Bordereau,NameDeposant,TelDeposant,RefType,TypeAppro,RefProduit,TypeRetrait,uniqid) VALUES(:RefCaisse,:NumCompte,:NameClient,:MontantVersement,:Remarque,:Insert_Id,:Insert_Time,:Approve1_Id,:Approve1_Time,:Approve2_Id,:Approve2_Time,:Bordereau,:NameDeposant,:TelDeposant,:RefType,:TypeAppro,:RefProduit,:TypeRetrait,:uniqid)');

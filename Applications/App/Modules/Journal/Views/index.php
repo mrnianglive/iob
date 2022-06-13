@@ -2,7 +2,7 @@
       <div class="col-md-12">
           <form method="POST" action="/Journal/index" id="formulaire">
               <div class="input-group">
-                  <div class="col-md-2">Agence
+                  <div class="">Agence
                       <select class="form-control" name="RefAgency" tabindex="1" required="">
                           <?php foreach ($UserAgence as $key => $Agence) {
                             ?>
@@ -16,10 +16,13 @@
                       <input type="date" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
                   </div>
                   <div class="col-md-2">Au
-                      <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control"
-                          onchange="document.getElementById('formulaire').submit();">
+                      <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
                   </div>
-                  <div class="col-md-2">Total Versement
+                  <div class=""></br>
+                      <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                  </div>
+
+                  <div class="col-md-2 ">Total Versement
                       <input type="text" value="<?= number_format($sommeVersementPeriode, 0, '.', '.'); ?>"
                           class="form-control" readonly>
                   </div>
@@ -28,7 +31,7 @@
                           class="form-control" readonly>
                   </div>
                   <div class="col-md-2">Solde Especes
-                      <input type="text" value="<?= number_format($Solde, 0, '.', '.'); ?>" class="form-control"
+                      <input type="text" value="<?= number_format($Solde, 0, '.', '.');  ?>" class="form-control"
                           readonly>
                   </div>
               </div>
@@ -40,7 +43,6 @@
                   <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                       <thead>
                           <tr>
-
                               <th class="border-top-0">ID</th>
                               <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
                               <th class="border-top-0">Statut</th>

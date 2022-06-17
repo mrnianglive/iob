@@ -33,7 +33,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="a2" class="form-control" name="a2">
+                            <input type="int" id="a2" class="form-control" name="a2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -52,7 +52,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="b2" class="form-control" name="b2">
+                            <input type="int" id="b2" class="form-control" name="b2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -71,7 +71,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="c2" class="form-control" name="c2">
+                            <input type="int" id="c2" class="form-control" name="c2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -90,7 +90,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="d2" name="d2">
+                            <input type="int" class="form-control" id="d2" name="d2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -109,7 +109,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="e2" name="e2">
+                            <input type="int" class="form-control" id="e2" name="e2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -128,7 +128,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="f2" name="f2">
+                            <input type="int" class="form-control" id="f2" name="f2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -147,7 +147,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="g2" name="g2">
+                            <input type="int" class="form-control" id="g2" name="g2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -165,7 +165,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="h2" name="h2">
+                            <input type="int" class="form-control" id="h2" name="h2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -187,7 +187,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="i2" name="i2">
+                            <input type="int" class="form-control" id="i2" name="i2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -206,7 +206,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="j2" name="j2">
+                            <input type="int" class="form-control" id="j2" name="j2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -225,7 +225,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="k2" name="k2">
+                            <input type="int" class="form-control" id="k2" name="k2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -244,7 +244,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="l2" name="l2">
+                            <input type="int" class="form-control" id="l2" name="l2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -263,7 +263,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="m2" name="m2">
+                            <input type="int" class="form-control" id="m2" name="m2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -325,7 +325,8 @@
                         <div class="col-md-6">
                             <div class="form-group has-error">
                                 <label class="control-label">Numéro de compte</label>
-                                <input type="int" id="NumCompte" class="form-control" name="NumCompte" required="">
+                                <input type="int" id="NumCompte" class="form-control" name="NumCompte" required=""
+                                    autocomplete="OFF">
                             </div>
                         </div>
                         <?php } else { ?>
@@ -355,7 +356,7 @@
                         <div class="col-md-3" style="display: none;" id="hidden">
                             <div class="form-group has-error"><label class="control-label" id="label">Numéro de
                                     compte</label><input type="int" id="NumCompte" class="form-control" name="NumCompte"
-                                    required=""></div>
+                                    required="" autocomplete="OFF"></div>
                         </div>
                         <?php } ?>
                     </div>
@@ -363,7 +364,8 @@
                         <div class="col-md-6">
                             <div class="form-group has-error">
                                 <label class="control-label">Client</label>
-                                <input type="text" id="NameClient" class="form-control" name="NameClient" required="">
+                                <input type="text" id="NameClient" class="form-control" name="NameClient" required=""
+                                    autocomplete="OFF">
                             </div>
                         </div>
                         <?php if ($_GET['id'] == 2) { ?>
@@ -443,7 +445,7 @@
                         <div class="col-md-6">
                             <div class="form-group has-error">
                                 <label class="control-label">Remarque</label>
-                                <input type="text" class="form-control" name="Remarque" required="">
+                                <input type="text" class="form-control" name="Remarque" required="" autocomplete="OFF">
                             </div>
                         </div>
                         <?php } ?>
@@ -456,7 +458,8 @@
                         <div class="col-md-3">
                             <div class="form-group has-error">
                                 <label class="control-label">Téléphone</label>
-                                <input type="text" class="form-control" name="TelDeposant" required="">
+                                <input type="text" class="form-control" name="TelDeposant" required=""
+                                    autocomplete="OFF">
                             </div>
                         </div>
                         <?php if (in_array(3, $permission)) { ?>

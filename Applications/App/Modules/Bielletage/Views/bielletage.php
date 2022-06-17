@@ -402,20 +402,23 @@
                         <div class="col-md-6">
                             <div class="form-group has-error">
                                 <label class="control-label">Remarque</label>
-                                <input type="text" class="form-control" name="Remarque" value="NULL" readonly="">
+                                <input type="text" class="form-control" name="Remarque" value="NULL" readonly=""
+                                    autocomplete="OFF">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group has-error">
                                 <label class="control-label">Deposant/Auteur Retrait</label>
                                 <input type="text" class="form-control" name="NameDeposant"
-                                    value="<?= $_SESSION['PrenomUsers'], " " . $_SESSION['NomUsers']; ?>" readonly="">
+                                    value="<?= $_SESSION['PrenomUsers'], " " . $_SESSION['NomUsers']; ?>" readonly=""
+                                    autocomplete="OFF">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group has-error">
                                 <label class="control-label">Téléphone</label>
-                                <input type="text" class="form-control" name="TelDeposant" value="NULL" readonly="">
+                                <input type="text" class="form-control" name="TelDeposant" value="NULL" readonly=""
+                                    autocomplete="OFF">
                             </div>
                         </div>
                     </div>
@@ -425,7 +428,7 @@
                         <div class="col-md-4">
                             <div class="form-group has-error">
                                 <label class="control-label">Remarque</label>
-                                <input type="text" class="form-control" name="Remarque" required="">
+                                <input type="text" class="form-control" name="Remarque" required="" autocomplete="OFF">
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -452,7 +455,8 @@
                         <div class="col-md-3">
                             <div class="form-group has-error">
                                 <label class="control-label">Deposant/Auteur Retrait</label>
-                                <input type="text" class="form-control" name="NameDeposant" required="">
+                                <input type="text" class="form-control" name="NameDeposant" required=""
+                                    autocomplete="OFF">
                             </div>
                         </div>
                         <div class="col-md-3">

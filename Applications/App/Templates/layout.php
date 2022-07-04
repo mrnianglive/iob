@@ -306,7 +306,7 @@
     </script>
     <?php $_SESSION['message']['number']--;
     } ?>
-    <script type="text/javascript" src="/js/idle-timer/idle-timer.min.js"></script>
+    <!--<script type="text/javascript" src="/js/idle-timer/idle-timer.min.js"></script>
     <script>
     $(document).ready(function() {
         $(document).idleTimer(960000);
@@ -314,7 +314,7 @@
     $(document).on("idle.idleTimer", function(event, elem, obj) {
         window.location = "/logout";
     });
-    </script>
+    </script>-->
 </body>
 
 </html>

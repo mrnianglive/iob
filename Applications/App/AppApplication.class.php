@@ -14,8 +14,7 @@ class AppApplication extends \Library\Application
 		if ($this->user()->isAuthenticated()) {
 			$controller = $this->getController();
 		} else {
-			$controller = $this->getController();
-			//$controller = new Modules\Connexion\ConnexionController($this, 'Connexion', 'index');
+			$controller = new Modules\Connexion\ConnexionController($this, 'Connexion', 'index');
 		}
 
 		$controller->execute();

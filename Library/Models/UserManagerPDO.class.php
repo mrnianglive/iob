@@ -8,7 +8,7 @@ class UserManagerPDO extends UserManager
 {
     public function login($login, $Password)
     {
-        $IP = $this->getIPAddress();
+        //  $IP = $this->getIPAddress();
 
         $requete = $this->dao->prepare("SELECT *  FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE login=:login");
         $requete->bindValue(':login', $login, \PDO::PARAM_STR);
@@ -16,9 +16,9 @@ class UserManagerPDO extends UserManager
         $resultat = $requete->fetch();
 
 
-        $LogHour = $this->getLastConnexionTime($resultat['LastLogID']);
-        $_SESSION['LastConnexion'] = date('Y-m-d', strtotime($LogHour['DateLog'])) . ' ' .  $LogHour['LogH'];
-        $last = strtotime($LogHour['LogH'] . "+3 minutes");
+        // $LogHour = $this->getLastConnexionTime($resultat['LastLogID']);
+        // $_SESSION['LastConnexion'] = date('Y-m-d', strtotime($LogHour['DateLog'])) . ' ' .  $LogHour['LogH'];
+        /// $last = strtotime($LogHour['LogH'] . "+3 minutes");
         //echo date('H:i:s', $last);
         // echo gmdate("H:i:s");
         if (password_verify($_POST['password'], $resultat['password'])) {
@@ -32,8 +32,8 @@ class UserManagerPDO extends UserManager
             //     $this->UpdateLog($resultat['RefUsers'], 2, $LastLog);
             //    remove log checking
             // }
-            $LastLog = $this->LogConnexion($resultat['RefUsers'], $IP);
-            $this->UpdateLog($resultat['RefUsers'], 2, $LastLog);
+            //   $LastLog = $this->LogConnexion($resultat['RefUsers'], $IP);
+            //  $this->UpdateLog($resultat['RefUsers'], 2, $LastLog);
             return $resultat;
         }
     }

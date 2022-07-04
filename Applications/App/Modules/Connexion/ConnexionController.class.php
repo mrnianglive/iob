@@ -12,7 +12,7 @@ class ConnexionController extends \Library\BackController
         if ($request->method() == 'POST') {
             $User = $this->managers->getManagerOf('User')->login($request->postData('login'), $request->postData('password'));
             if (!empty($User)) {
-                $this->app()->user()->setAuthenticated();
+                $this->app()->user()->setAuthenticated(true);
                 $_SESSION['login'] = $User['login'];
                 $_SESSION['NomUsers'] = $User['NomUsers'];
                 $_SESSION['PrenomUsers'] = $User['PrenomUsers'];

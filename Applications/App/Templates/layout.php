@@ -12,7 +12,6 @@
         content="Ample Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
     <meta name="robots" content="noindex,nofollow">
     <title>App - <?= $titles; ?></title>
-    <link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/" />
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/mlc.png">
     <link href="/css/wizard.css" rel="stylesheet" type="text/css" />
@@ -306,7 +305,7 @@
     </script>
     <?php $_SESSION['message']['number']--;
     } ?>
-    <!--<script type="text/javascript" src="/js/idle-timer/idle-timer.min.js"></script>
+    <script type="text/javascript" src="/js/idle-timer/idle-timer.min.js"></script>
     <script>
     $(document).ready(function() {
         $(document).idleTimer(960000);
@@ -314,7 +313,7 @@
     $(document).on("idle.idleTimer", function(event, elem, obj) {
         window.location = "/logout";
     });
-    </script>-->
+    </script>
 </body>
 
 </html>

@@ -11,6 +11,9 @@ class AppApplication extends \Library\Application
 	}
 	public function run()
 	{
+		echo '<pre>';
+		print_r($_SESSION);
+		echo '</pre>';
 		if ($this->user()->isAuthenticated()) {
 			$controller = $this->getController();
 		} else {

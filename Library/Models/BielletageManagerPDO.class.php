@@ -145,6 +145,10 @@ class BielletageManagerPDO extends BielletageManager
             $requetteBilletage->bindValue(':m1', $_POST['m1'], \PDO::PARAM_STR);
             $requetteBilletage->bindValue(':m2', $_POST['m2'], \PDO::PARAM_STR);
             $requetteBilletage->execute();
+
+            //Alerte sortie de fond de caisse
+            $this->AlerteSortie($_POST['RefCaisse'], $_POST['MontantVersement']);
+
             header("location: /");
             $_SESSION['message']['type'] = 'success';
             $_SESSION['message']['text'] = 'Opération réussie !';
@@ -307,5 +311,20 @@ class BielletageManagerPDO extends BielletageManager
         } else {
             return true;
         }
+    }
+
+
+
+    public function AlerteSortie($caisse, $montant)
+    {
+        $query = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleCaisse.RefCaisse=:RefCaisse');
+        $query->bindValue(':RefCaisse', $caisse, \PDO::PARAM_INT);
+        $query->execute();
+        $result = $query->fetch();
+        $subject = "ALERTE SORTIE DE FONDS | CAISSE MLC";
+        $message = "Alerte de sortie de fonds de la caisse  : " . $result['NameCaisse'] . " " . $result['NameAgency'] . " d'un  montant de : " . $montant . " FCFA";
+        $headers = 'From: no-reply@app.malicreances-sa.com' . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+        mail("control@malicreances-sa.com", $subject, $message, $headers);
     }
 }

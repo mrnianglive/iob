@@ -324,6 +324,11 @@ class BielletageManagerPDO extends BielletageManager
         $result = $query->fetch();
 
         $from = "no-reply@malicreances-sa.com";
+        $subject = "ALERTE SORTIE DE FONDS | CAISSE MLC";
+
+        $atitle = $subject;
+        $alert = "Alerte de sortie de fonds de la caisse  : " . $result['NameCaisse'] . " " . $result['NameAgency'] . " d'un  montant de : " . $montant . " FCFA";
+
         require_once __DIR__ . '/../../Applications/App/Templates/templatemail.php';
         $headers  = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -333,9 +338,6 @@ class BielletageManagerPDO extends BielletageManager
             'Reply-To: ' . $from . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
 
-        $subject = "ALERTE SORTIE DE FONDS | CAISSE MLC";
-        $atitle = $subject;
-        $alert = "Alerte de sortie de fonds de la caisse  : " . $result['NameCaisse'] . " " . $result['NameAgency'] . " d'un  montant de : " . $montant . " FCFA";
         mail($to, $subject, $content, $headers);
     }
 }

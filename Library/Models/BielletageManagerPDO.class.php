@@ -147,7 +147,9 @@ class BielletageManagerPDO extends BielletageManager
             $requetteBilletage->execute();
 
             //Alerte sortie de fond de caisse
-            $this->AlerteSortie($_POST['RefCaisse'], $_POST['MontantVersement']);
+            if ($_POST['RefType']  == 4) {
+                $this->AlerteSortie($_POST['RefCaisse'], $_POST['MontantVersement']);
+            }
 
             header("location: /");
             $_SESSION['message']['type'] = 'success';

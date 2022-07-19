@@ -327,7 +327,7 @@ class BielletageManagerPDO extends BielletageManager
         $subject = "SORTIE DE FONDS ";
 
         $atitle = $subject;
-        $alert = "Sortie de fonds de la " . $result['NameCaisse'] . " " . $result['NameAgency'] . " d'un  montant de : " . $montant . " FCFA";
+        $alert = "Sortie de fonds de la " . $result['NameCaisse'] . " " . $result['NameAgency'] . " d'un  montant de : " . number_format($montant, 0, '.', '.') . " FCFA";
 
         require_once __DIR__ . '/../../Applications/App/Templates/templatemail.php';
         $headers  = 'MIME-Version: 1.0' . "\r\n";

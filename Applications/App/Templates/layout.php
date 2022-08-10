@@ -14,7 +14,7 @@
     <title>App - <?= $titles; ?></title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/" />
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/mlc.png">
+    <link rel="icon" href="/images/mlc.ico">
     <link href="/css/wizard.css" rel="stylesheet" type="text/css" />
     <!-- Custom CSS -->
     <link href="/css/style.min.css" rel="stylesheet">

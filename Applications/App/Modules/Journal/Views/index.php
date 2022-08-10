@@ -102,8 +102,8 @@
                               <?php } ?>
                           </tr>
                           <!--modalStatut-->
-                          <?php $result = $match->NewMatch($value['RefOperations']);
-                                $montant = round($result['Payments'] + $result['Deposits']);
+                          <?php //$result = $match->NewMatch($value['RefOperations']);
+                                //$montant = round($result['Payments'] + $result['Deposits']);
                                 ?>
                           <div class="modal fade" id="modal-<?= $value['RefOperations']; ?>" tabindex="-1" role="dialog"
                               aria-labelledby="modalStatut" aria-hidden="true">
@@ -142,18 +142,23 @@
                                                       value="<?= $value['RefAgency']; ?>" class="form-control ">
                                               </div>
                                           </div>
-                                          <?php if (isset($value['Match'])) { ?>
-                                          <input type="hidden" value="<?= $value['Match']['RefTraited']; ?>"
-                                              name="RefTraited">
-                                          <?php } ?>
+                                          <?php //if (isset($value['Match'])) { 
+                                                ?>
+                                          <input type="hidden" value="<? //= $value['Match']['RefTraited']; 
+                                                                            ?>" name="RefTraited">
+                                          <?php // } 
+                                                ?>
                                           <div class="modal-footer">
-                                              <hr>
+                                              <!--  <hr>
                                               <span
-                                                  class="alert alert-<?= ($value['MontantVersement'] == $montant) ? 'success' : 'warning'; ?>"><?= ($value['MontantVersement'] == $montant) ? 'Correspondance Montant Trouvée' : 'Correspondance Montant non Trouvée'; ?>
+                                                  class="alert alert-<? //= ($value['MontantVersement'] == $montant) ? 'success' : 'warning'; 
+                                                                        ?>"><? //= ($value['MontantVersement'] == $montant) ? 'Correspondance Montant Trouvée' : 'Correspondance Montant non Trouvée'; 
+                                                                                                                                                    ?>
                                               </span>
                                               <textarea class="form-control">
-                                                    <?= $result['DateControl'] . '&#13;&#10;' . $result['Description'] . '&#13;&#10;' . round($result['Payments']) . '&#13;&#10;' . round($result['Deposits']); ?>
-                                                </textarea>
+                                                    <? //= $result['DateControl'] . '&#13;&#10;' . $result['Description'] . '&#13;&#10;' . round($result['Payments']) . '&#13;&#10;' . round($result['Deposits']); 
+                                                    ?>
+                                                </textarea>-->
                                               <hr>
                                               <button type="button" class="btn btn-secondary"
                                                   data-dismiss="modal">Fermer</button>

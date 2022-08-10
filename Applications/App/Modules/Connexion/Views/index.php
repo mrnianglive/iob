@@ -26,5 +26,5 @@
     <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
     </br>
     <button class="btn btn-lg btn-primary btn-block" type="submit" id="register">Connexion</button>
-    <p class="mt-5 mb-3 text-muted">&copy; MALI CREANCES 2021 Develop by NIANGALY</p>
+    <p class="mt-5 mb-3 text-muted">&copy; MALI CREANCES 2021 Developed by NIANGALY</p>
 </form>

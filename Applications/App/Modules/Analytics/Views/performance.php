@@ -1,74 +1,18 @@
 <div class="row">
-    <div class="col-md-6">
-        <div class="white-box">
-            <h3 class="box-title">Performance Validation</h3>
-            <div class="table-responsive">
-                <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th class="border-top-0">OP VALIDATEE | <?= date('d/m/Y'); ?> </th>
-                            <th class="border-top-0">Semaine(D-7)</th>
-                            <th class="border-top-0"><?= date('M/Y'); ?></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><?= $DailyValidate; ?></td>
-                            <td><?= $CountWeekValidate; ?>/<?= $CountWeekOperations; ?></td>
-                            <td><?= $MonthValidate; ?>/<?= $MonthOperations; ?> </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="white-box">
-            <canvas id="myChart" width="50" height="1"></canvas>
-            <script>
-            var ctx = document.getElementById('myChart');
-            var myChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Nbre Validate | Semaine', 'Nbre OP  Week | Semaine'],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: [<?= $CountWeekValidate; ?>, <?= $CountWeekOperations; ?>],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)'
-                        ],
-                        borderWidth: 1,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-            </script>
-        </div>
-    </div>
-
-</div>
-
-<div class="row">
     <div class="col-md-12">
 
         <div class="white-box">
             <form method="POST" id="formulaire">
                 <div class="input-group">
-                    <div class="col-md-3">
-                        <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control"
-                            onchange="document.getElementById('formulaire').submit();">
+
+                    <div class="col-md-3">Du
+                        <input type="date" id="Debut" name="Debut" value="<?= $debut; ?>" class="form-control ">
+                    </div>
+                    <div class="col-md-3">Au
+                        <input type="date" id="Fin" name="Fin" value="<?= $fin; ?>" class="form-control">
+                    </div>
+                    <div class=""></br>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
             </form><br />
@@ -135,3 +79,66 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="white-box">
+            <h3 class="box-title">Performance Validation</h3>
+            <div class="table-responsive">
+                <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="border-top-0">OP VALIDATEE | <?= date('d/m/Y'); ?> </th>
+                            <th class="border-top-0">Semaine(D-7)</th>
+                            <th class="border-top-0"><?= date('M/Y'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><?= $DailyValidate; ?></td>
+                            <td><?= $CountWeekValidate; ?>/<?= $CountWeekOperations; ?></td>
+                            <td><?= $MonthValidate; ?>/<?= $MonthOperations; ?> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="white-box">
+            <canvas id="myChart" width="50" height="1"></canvas>
+            <script>
+            var ctx = document.getElementById('myChart');
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Nbre Validate | Semaine', 'Nbre OP  Week | Semaine'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [<?= $CountWeekValidate; ?>, <?= $CountWeekOperations; ?>],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            </script>
+        </div>
+    </div>
+
+</div>

@@ -74,15 +74,20 @@ class AnalyticsController extends \Library\BackController
 
         foreach ($Agence as $key => $value) {
 
-            if (!empty($request->postData('jour'))) {
-                $date = $request->postData('jour');
-                $this->page->addVar('day', $request->postData('jour'));
+            if (!empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {
+                $debut = $request->postData('Debut');
+                $fin = $request->postData('Fin');
+
+                $this->page->addVar('debut', $request->postData('Debut'));
+                $this->page->addVar('fin', $request->postData('Fin'));
             } else {
-                $date = date('Y-m-d');
-                $this->page->addVar('day', $date);
+                $debut = date('Y-m-d');
+                $fin = date('Y-m-d');
+                $this->page->addVar('debut', $debut);
+                $this->page->addVar('fin', $fin);
             }
-            $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], $date);
-            $Agence[$key]['NbreOP'] = $this->managers->getManagerOf("Journal")->NbreOperationAgence($value['RefAgency'], $date);
+            $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgencePerformance($value['RefAgency'], $debut, $fin);
+            $Agence[$key]['NbreOP'] = $this->managers->getManagerOf("Journal")->NbreOperationAgencePerformance($value['RefAgency'], $debut, $fin);
         }
         $this->page->addVar('Agence', $Agence);
 

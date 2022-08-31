@@ -10,28 +10,26 @@
                               <th class="border-top-0">Solde Fermeture</th>
                               <th class="border-top-0">Caissier</th>
                               <?php if ($_SESSION['statut'] == 'admin') { ?>
-                              <th class="border-top-0">Action</th>
+                                  <th class="border-top-0">Action</th>
                               <?php } ?>
                           </tr>
                       </thead>
                       <tbody>
                           <?php foreach ($ListeSolde as $key => $value) { ?>
-                          <tr>
-                              <td><?= date('d/m/Y', strtotime($value['DateSolde'])); ?></td>
-                              <td><?= $value['Solde']; ?></td>
-                              <td><?= $value['login']; ?></td>
-                              <?php if ($_SESSION['statut'] == 'admin') { ?>
-                              <td>
-                                  <a href="/Arreter/delete/<?= $value['RefSolde']; ?>" class="btn btn-xs btn-danger"
-                                      onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i
-                                          class="fa fa-trash"></i></a>
-                              </td>
-                              <?php } ?>
-                          </tr>
+                              <tr>
+                                  <td><?= date('d/m/Y', strtotime($value['DateSolde'])); ?></td>
+                                  <td><?= $value['Solde']; ?></td>
+                                  <td><?= $value['login']; ?></td>
+                                  <?php if ($_SESSION['statut'] == 'admin') { ?>
+                                      <td>
+                                          <a href="/Arreter/delete/<?= $value['RefSolde']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i class="fa fa-trash"></i></a>
+                                      </td>
+                                  <?php } ?>
+                              </tr>
               </div>
-              <?php } ?>
-              </tbody>
-              </table>
+          <?php } ?>
+          </tbody>
+          </table>
           </div>
       </div>
   </div>

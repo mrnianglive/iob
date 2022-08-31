@@ -156,4 +156,10 @@ class JournalController extends \Library\BackController
         $this->page->addVar('tab', $tab);
         $this->page->addVar('Agence', $Agence);
     }
+
+    public function executeCancelFermeture(\Library\HTTPRequest $request)
+    {
+        $this->managers->getManagerOf("Journal")->CancelFermeture($request->getData('id'));
+        $this->app()->httpResponse()->redirect("/Journal/petite_caisse"); //Retour en arriere
+    }
 }

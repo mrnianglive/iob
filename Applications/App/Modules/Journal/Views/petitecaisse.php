@@ -119,8 +119,10 @@
                               <td><?= number_format($value['SommeSortie'], 0, '.', '.'); ?></td>
                               <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
                               <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
-                              <td> <?php if (!empty($value['validate'])) { ?><a class="btn btn-success"><i
-                                          class="fa  fa-lock"></i></a> <?php } else { ?>
+                              <td> <?php if (!empty($value['validate'])) { ?><a
+                                      <?php if ($_SESSION['statut'] == 'admin') { ?>
+                                      href="/Arreter/cancel/<?= $value['validate']['RefCompte']; ?>" <?php } ?>
+                                      class="btn btn-success"><i class="fa  fa-lock"></i></a> <?php } else { ?>
                                   <form method="POST" action="/Arreter/reserve">
                                       <input type="hidden" value="<?= $value['ReserveActuelle']; ?>"
                                           name="ReserveActuelle">

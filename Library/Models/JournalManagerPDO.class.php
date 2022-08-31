@@ -689,4 +689,11 @@ class JournalManagerPDO extends JournalManager
         $result = $requete->fetch();
         return $result['Nbre'];
     }
+
+    public function CancelFermeture($id)
+    {
+        $requete = $this->dao->prepare("DELETE FROM TbleCompte WHERE RefCompte=:RefCompte ");
+        $requete->bindValue(':RefCompte', $id, \PDO::PARAM_STR);
+        $requete->execute();
+    }
 }

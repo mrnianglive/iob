@@ -47,4 +47,6 @@
 	<route url="/remittances/index/([0-9]{4}-[0-9]{2}-[0-9]{2})/([0-9]{4}-[0-9]{2}-[0-9]{2})/([0-9]+)" vars="debut,fin,value" module="Remittance" action="index"/>
 
 	<route url="/Arreter/reserve/uv" module="Arreter" action="reserveuv"/>
+	<route url="/Arreter/cancel/([0-9]+)" module="Journal" vars="id" action="cancelFermeture"/>
+
 </routes>

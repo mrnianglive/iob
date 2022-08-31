@@ -17,8 +17,10 @@
                               <td><?= $value['NameCaisse']; ?></td>
                               <td><?= $value['NameAgency']; ?></td>
                               <td>
-                                  <?php if (!empty($value['Valide'])) { ?><button class="btn btn-success"><i
-                                          class="fa  fa-lock"></i></button> <?php } else { ?><a
+                                  <?php if (!empty($value['Valide'])) { ?><a
+                                      <?php if ($_SESSION['statut'] == 'admin') { ?>
+                                      href="/Arreter/delete/<?= $value['Valide']['RefSolde']; ?>" <?php } ?>
+                                      class="btn btn-success"><i class="fa  fa-lock"></i></a> <?php } else { ?><a
                                       <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse') { ?>
                                       href="/Arreter/close/<?= $value['RefCaisse']; ?>" <?php } ?>
                                       class="btn btn-danger"><i class="fa fa-unlock"></i></a> <?php } ?>

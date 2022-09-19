@@ -28,6 +28,7 @@
                             <th class="border-top-0">VL|RETRAIT</th>
                             <th class="border-top-0">NB|OP</th>
                             <th class="border-top-0">NB|OP</th>
+                            <th class="border-top-0">NB|OP</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,6 +64,14 @@
                                     <li><?= number_format($afficher['TotalRetrait'], 0, '.', ','); ?></li>
                                     <?php } ?>
                                     <li> Total :<?= number_format($sommeRetrait, 0, '.', ','); ?></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                    <li>DEPOT :<?= $afficher['NbreDepot']; ?></li>
+                                    <li>RETRAIT :<?= $afficher['NbreRetrait']; ?></li>
+                                    <?php } ?>
                                 </ul>
                             </td>
                             <td>

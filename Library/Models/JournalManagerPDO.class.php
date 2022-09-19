@@ -647,6 +647,8 @@ class JournalManagerPDO extends JournalManager
         $ListeCaisse = $requeteAgence->fetchAll();
         foreach ($ListeCaisse as $key => $value) {
             $ListeCaisse[$key]['NbreOperation'] =  $this->NbreOperationCaissierPerformance($debut, $fin, $value['RefCaisse']);
+            $ListeCaisse[$key]['NbreDepot'] =  $this->NbreDepotCaissierPerformance($debut, $fin, $value['RefCaisse']);
+            $ListeCaisse[$key]['NbreRetrait'] =  $this->NbreRetraitCaissierPerformance($debut, $fin, $value['RefCaisse']);
 
             $ListeCaisse[$key]['TotalVersement'] =  $this->SomnmeVersementCaissePerfomance($debut, $fin, $value['RefCaisse']);
             $ListeCaisse[$key]['TotalRetrait'] =  $this->SommeRetraitCaissePerformance($debut, $fin, $value['RefCaisse']);
@@ -684,6 +686,27 @@ class JournalManagerPDO extends JournalManager
     public function NbreOperationCaissierPerformance($debut, $fin, $Caisse)
     {
         $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse   WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleOperations.RefCaisse=:RefCaisse ");
+        $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result['Nbre'];
+    }
+
+
+
+    public function NbreDepotCaissierPerformance($debut, $fin, $Caisse)
+    {
+        $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.RefType=1 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleOperations.RefCaisse=:RefCaisse ");
+        $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result['Nbre'];
+    }
+
+
+    public function NbreRetraitCaissierPerformance($debut, $fin, $Caisse)
+    {
+        $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse  WHERE TbleOperations.RefType=2 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleOperations.RefCaisse=:RefCaisse ");
         $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();

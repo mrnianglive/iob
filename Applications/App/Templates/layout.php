@@ -177,7 +177,7 @@
                                     aria-hidden="true"></i><span class="hide-menu">Liste Agence</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Pannel/Banque" aria-expanded="false"><i class="fa fa-table"
-                                    aria-hidden="true"></i><span class="hide-menu">Liste Banque</span></a></li>
+                                    aria-hidden="true"></i><span class="hide-menu">Liste Partenaire</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Users/index" aria-expanded="false"><i class="fa fa-users"
                                     aria-hidden="true"></i><span class="hide-menu">Liste Users</span></a></li>

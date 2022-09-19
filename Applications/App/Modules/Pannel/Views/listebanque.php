@@ -2,7 +2,7 @@
     <div class="col-md-12">
 
         <div class="white-box">
-            <h3 class="box-title">Liste des Banques</h3>
+            <h3 class="box-title">Liste des Partenaires</h3>
             <button type="button" class="btn btn-primary" id="button" data-toggle="modal" data-target="#AddBanque"
                 data-whatever="@mdo"><i class="fa fa-plus"> Ajouter</i></button> <br /> <br />
             <div class="table-responsive">
@@ -44,7 +44,7 @@
             <form role="form" method="post" action="">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">Nom de la Banque</label>
+                        <label for="recipient-name" class="control-label">Nom du Partenaire</label>
                         <input type="text" class="form-control" name="NameBanque" id="recipient-name1">
                     </div>
                 </div>

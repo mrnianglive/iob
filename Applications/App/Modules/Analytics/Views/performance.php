@@ -89,6 +89,7 @@
         </div>
     </div>
 </div>
+<?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Niveau1' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'Control') { ?>
 
 <div class="row">
     <div class="col-md-6">
@@ -151,3 +152,5 @@
     </div>
 
 </div>
+
+<?php } ?>

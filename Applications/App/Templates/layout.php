@@ -148,6 +148,9 @@
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Caisse/ApproCaisse" aria-expanded="false"><i class="fa fa-columns"
                                     aria-hidden="true"></i><span class="hide-menu">Appro Caisse</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Analytics/performance" aria-expanded="false"><i class="fa fa-columns"
+                                    aria-hidden="true"></i><span class="hide-menu">Performance</span></a></li>
                         <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Niveau1' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'Control') { ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Analytics/uv" aria-expanded="false"><i class="fa fa-columns"
@@ -155,9 +158,7 @@
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Analytics/chart" aria-expanded="false"><i class="fa fa-columns"
                                     aria-hidden="true"></i><span class="hide-menu">Chart</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/Analytics/performance" aria-expanded="false"><i class="fa fa-columns"
-                                    aria-hidden="true"></i><span class="hide-menu">Performance</span></a></li>
+
                         <?php } ?>
                         <?php if ($_SESSION['statut'] == 'admin') { ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"

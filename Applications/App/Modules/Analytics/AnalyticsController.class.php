@@ -71,7 +71,8 @@ class AnalyticsController extends \Library\BackController
         $ListeBanque  = $this->managers->getManagerOf("Pannel")->ListeBanque();
         $this->page->addVar("ListeBanque", $ListeBanque);
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
-
+        $Chmod  = $this->managers->getManagerOf("Bielletage")->CheckOuverture(); //Recuperation de la liste
+        $this->page->addVar("CheckOuverture", $Chmod); // Creation de la variable, ajout d'une variable a la vue
         foreach ($Agence as $key => $value) {
 
             if (!empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {

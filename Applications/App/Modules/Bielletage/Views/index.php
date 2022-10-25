@@ -61,9 +61,11 @@
   <?php foreach ($links as $key => $name) { ?>
   <a href="<?= $name['url']; ?>" target="_blank" class="btn btn-<?= $name['btn']; ?>"><i class="fa-solid fa-link"></i>
       <?= $name['url_name']; ?></a>
-  </br>
   <?php } ?>
-  <?php } ?> <div class="row">
+  </br> </br>
+  <?php } ?>
+
+  <div class="row">
       <div class="col-md-12 col-lg-12 col-sm-12">
           <div class="white-box">
 

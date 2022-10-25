@@ -61,6 +61,12 @@
                         <label for="recipient-name" class="control-label">BTN </label>
                         <input type="text" class="form-control" name="btn" id="recipient-name1">
                     </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">TARGET </label>
+                            <input type="text" class="form-control" name="target" id="recipient-name1">
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>

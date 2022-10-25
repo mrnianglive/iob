@@ -57,10 +57,12 @@
           </div>
       </div>
   </div>
+  <?php if ($_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier' or $_SESSION['statut'] == 'admin') { ?>
   <?php foreach ($links as $key => $name) { ?>
   <a href="<?= $name['url']; ?>" target="_blank" class="btn btn-<?= $name['btn']; ?>"><?= $name['url_name']; ?></a>
   <?php } ?>
   </br> </br>
+  <?php } ?>
 
   <div class="row">
       <div class="col-md-12 col-lg-12 col-sm-12">

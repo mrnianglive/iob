@@ -48,5 +48,6 @@
 
 	<route url="/Arreter/reserve/uv" module="Arreter" action="reserveuv"/>
 	<route url="/Arreter/cancel/([0-9]+)" module="Journal" vars="id" action="cancelFermeture"/>
+	<route url="/Pannel/links" module="Pannel" action="links"/>
 
 </routes>

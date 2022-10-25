@@ -57,6 +57,11 @@
           </div>
       </div>
   </div>
+  <?php foreach ($links as $key => $name) { ?>
+  <a href="<?= $name['url']; ?>" target="_blank" class="btn btn-<?= $name['btn']; ?>"><?= $name['url_name']; ?></a>
+  <?php } ?>
+  </br> </br>
+
   <div class="row">
       <div class="col-md-12 col-lg-12 col-sm-12">
           <div class="white-box">

@@ -186,4 +186,22 @@ class PannelManagerPDO extends PannelManager
         $result = $requete->fetchAll();
         return $result;
     }
+
+
+    public function GetLinks()
+    {
+        $requete = $this->dao->prepare('SELECT * FROM tbllinks');
+        $requete->execute();
+        $data = $requete->fetchAll();
+        return $data;
+    }
+
+    public function addLinks()
+    {
+        $requeteAddService = $this->dao->prepare("INSERT INTO tbllinks(url,url_name,btn) VALUES(:url,:url_name,:btn)");
+        $requeteAddService->bindValue(':url', $_POST['url'], \PDO::PARAM_STR);
+        $requeteAddService->bindValue(':url_name', $_POST['url_name'], \PDO::PARAM_STR);
+        $requeteAddService->bindValue(':btn', $_POST['btn'], \PDO::PARAM_STR);
+        $requeteAddService->execute();
+    }
 }

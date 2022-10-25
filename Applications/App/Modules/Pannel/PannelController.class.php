@@ -124,4 +124,20 @@ class PannelController extends \Library\BackController
         $_SESSION['message']['number'] = 2;
         $this->app()->httpResponse()->redirect('/Pannel/Produit'); //Retour en arriere
     }
+
+    public function executeLinks(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Liste des liens"); // Titre de la page
+        $links = $this->managers->getManagerOf('Pannel')->GetLinks();
+        $this->page->addVar('links', $links);
+
+        if ($request->method() == 'POST') {
+            $this->managers->getManagerOf("Pannel")->addLinks($request);
+            $_SESSION['message']['type'] = 'success';
+            $_SESSION['message']['text'] = 'Ajout réussie !';
+            $_SESSION['message']['number'] = 2;
+            $this->app()->httpResponse()->redirect('/Pannel/links'); //Retour en arriere
+
+        }
+    }
 }

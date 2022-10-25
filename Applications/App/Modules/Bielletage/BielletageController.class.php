@@ -48,6 +48,10 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('SommeRemittanceDepot', $SommeRemittanceDepot);
         $this->page->addVar('SommeRemittanceRetrait', $SommeRemittanceRetrait);
         $this->page->addVar('SoldeRemittance', $SoldeRemittance);
+
+
+        $links = $this->managers->getManagerOf('Pannel')->GetLinks();
+        $this->page->addVar('links', $links);
     }
     public function executeStopcaisse(\Library\HTTPRequest $request)
     {

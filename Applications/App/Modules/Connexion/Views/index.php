@@ -20,7 +20,7 @@
 <form method="post">
     <img src="/images/mlc.png" alt="mlc" width="200" height="100%">
     <label for="inputEmail" class="sr-only">Login</label>
-    <input type="text" id="login" class="form-control" name="login" placeholder="Login" required autofocus>
+    <input type="text" id="login" class="form-control mb-1" name="login" placeholder="Login" required autofocus>
     <span id="statut"></span>
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>

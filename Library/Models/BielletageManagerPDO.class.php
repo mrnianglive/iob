@@ -88,65 +88,76 @@ class BielletageManagerPDO extends BielletageManager
     }
     public function Add()
     {
+
+
         if (!empty($_POST['Antidate'])) {
             $date = $_POST['Antidate'];
         } else {
             $date = date('Y-m-d');
         }
         $result = uniqid();
-        if (intval($_POST['MontantVersement']) > 0 && !empty($_POST['NumCompte']) && !empty($_POST['MontantVersement']) && !empty($_POST['NameClient']) && !empty($_POST['RefCaisse']) && !empty($_POST['TelDeposant'])) {
+        if (intval($_POST['MontantVersement']) > 0  && !empty($_POST['MontantVersement'])  && !empty($_POST['RefCaisse']) && !empty($_POST['TelDeposant'])) {
 
-            $requeteAddversement = $this->dao->prepare('INSERT INTO TbleOperations(RefCaisse,NumCompte,NameClient,MontantVersement,Remarque,Insert_Id,Insert_Time,Approve1_Id,Approve1_Time,Approve2_Id,Approve2_Time,Bordereau,NameDeposant,TelDeposant,RefType,TypeAppro,RefProduit,TypeRetrait,uniqid) VALUES(:RefCaisse,:NumCompte,:NameClient,:MontantVersement,:Remarque,:Insert_Id,:Insert_Time,:Approve1_Id,:Approve1_Time,:Approve2_Id,:Approve2_Time,:Bordereau,:NameDeposant,:TelDeposant,:RefType,:TypeAppro,:RefProduit,:TypeRetrait,:uniqid)');
-            $requeteAddversement->bindValue(':RefCaisse', $_POST['RefCaisse'], \PDO::PARAM_INT);
-            $requeteAddversement->bindValue(':NumCompte', $_POST['NumCompte'], \PDO::PARAM_STR);
-            $requeteAddversement->bindValue(':NameClient', $_POST['NameClient'], \PDO::PARAM_STR);
-            $requeteAddversement->bindValue(':MontantVersement', $_POST['MontantVersement'], \PDO::PARAM_STR);
-            $requeteAddversement->bindValue(':Remarque', $_POST['Remarque'], \PDO::PARAM_STR);
-            $requeteAddversement->bindValue(':Insert_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
-            $requeteAddversement->bindValue(':Insert_Time', $date, \PDO::PARAM_STR);
-            $requeteAddversement->bindValue(':Approve1_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
-            $requeteAddversement->bindValue(':Approve1_Time', $date, \PDO::PARAM_STR);
-            $requeteAddversement->bindValue(':Approve2_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
-            $requeteAddversement->bindValue(':Approve2_Time', $date, \PDO::PARAM_STR);
-            $requeteAddversement->bindValue(':Bordereau', 'NULL', \PDO::PARAM_STR);
-            $requeteAddversement->bindValue(':NameDeposant', $_POST['NameDeposant'], \PDO::PARAM_STR);
-            $requeteAddversement->bindValue(':TelDeposant', $_POST['TelDeposant'], \PDO::PARAM_STR);
-            $requeteAddversement->bindValue(':RefType', $_POST['RefType'], \PDO::PARAM_INT);
-            $requeteAddversement->bindValue(':TypeAppro', $_POST['TypeAppro'], \PDO::PARAM_INT);
-            $requeteAddversement->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
-            $requeteAddversement->bindValue(':TypeRetrait', $_POST['TypeRetrait'], \PDO::PARAM_INT);
-            $requeteAddversement->bindValue(':uniqid', $result, \PDO::PARAM_STR);
-            $requeteAddversement->execute();
-            $Refoperations = $this->dao->lastInsertId();
-            $requetteBilletage = $this->dao->prepare('INSERT INTO TbleBilletage(RefOperations,a1,a2,b1,b2,c1,c2,d1,d2,e1,e2,f1,f2,g1,g2,h1,h2,i1,i2,j1,j2,k1,k2,l1,l2,m1,m2) VALUES(:RefOperations,:a1,:a2,:b1,:b2,:c1,:c2,:d1,:d2,:e1,:e2,:f1,:f2,:g1,:g2,:h1,:h2,:i1,:i2,:j1,:j2,:k1,:k2,:l1,:l2,:m1,:m2)');
-            $requetteBilletage->bindValue(':RefOperations', $Refoperations, \PDO::PARAM_INT);
-            $requetteBilletage->bindValue(':a1', $_POST['a1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':a2', $_POST['a2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':b1', $_POST['b1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':b2', $_POST['b2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':c1', $_POST['c1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':c2', $_POST['c2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':d1', $_POST['d1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':d2', $_POST['d2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':e1', $_POST['e1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':e2', $_POST['e2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':f1', $_POST['f1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':f2', $_POST['f2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':g1', $_POST['g1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':g2', $_POST['g2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':h1', $_POST['h1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':h2', $_POST['h2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':i1', $_POST['i1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':i2', $_POST['i2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':j1', $_POST['j1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':j2', $_POST['j2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':k1', $_POST['k1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':k2', $_POST['k2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':l1', $_POST['l1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':l2', $_POST['l2'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':m1', $_POST['m1'], \PDO::PARAM_STR);
-            $requetteBilletage->bindValue(':m2', $_POST['m2'], \PDO::PARAM_STR);
-            $requetteBilletage->execute();
+            if ($_POST['RefType'] == 5) {
+                $this->SortieCaisse2Caisse();
+                $this->ApproCaisse2Caisse();
+            } else {
+
+                $requeteAddversement = $this->dao->prepare('INSERT INTO TbleOperations(RefCaisse,NumCompte,NameClient,MontantVersement,Remarque,Insert_Id,Insert_Time,Approve1_Id,Approve1_Time,Approve2_Id,Approve2_Time,Bordereau,NameDeposant,TelDeposant,RefType,TypeAppro,RefProduit,TypeRetrait,uniqid) VALUES(:RefCaisse,:NumCompte,:NameClient,:MontantVersement,:Remarque,:Insert_Id,:Insert_Time,:Approve1_Id,:Approve1_Time,:Approve2_Id,:Approve2_Time,:Bordereau,:NameDeposant,:TelDeposant,:RefType,:TypeAppro,:RefProduit,:TypeRetrait,:uniqid)');
+                $requeteAddversement->bindValue(':RefCaisse', $_POST['RefCaisse'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':NumCompte', $_POST['NumCompte'], \PDO::PARAM_STR);
+                $requeteAddversement->bindValue(':NameClient', $_POST['NameClient'], \PDO::PARAM_STR);
+                $requeteAddversement->bindValue(':MontantVersement', $_POST['MontantVersement'], \PDO::PARAM_STR);
+                $requeteAddversement->bindValue(':Remarque', $_POST['Remarque'], \PDO::PARAM_STR);
+                $requeteAddversement->bindValue(':Insert_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':Insert_Time', $date, \PDO::PARAM_STR);
+                $requeteAddversement->bindValue(':Approve1_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':Approve1_Time', $date, \PDO::PARAM_STR);
+                $requeteAddversement->bindValue(':Approve2_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':Approve2_Time', $date, \PDO::PARAM_STR);
+                $requeteAddversement->bindValue(':Bordereau', 'NULL', \PDO::PARAM_STR);
+                $requeteAddversement->bindValue(':NameDeposant', $_POST['NameDeposant'], \PDO::PARAM_STR);
+                $requeteAddversement->bindValue(':TelDeposant', $_POST['TelDeposant'], \PDO::PARAM_STR);
+                $requeteAddversement->bindValue(':RefType', $_POST['RefType'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':TypeAppro', $_POST['TypeAppro'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':TypeRetrait', $_POST['TypeRetrait'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':uniqid', $result, \PDO::PARAM_STR);
+                $requeteAddversement->execute();
+                $Refoperations = $this->dao->lastInsertId();
+                $requetteBilletage = $this->dao->prepare('INSERT INTO TbleBilletage(RefOperations,a1,a2,b1,b2,c1,c2,d1,d2,e1,e2,f1,f2,g1,g2,h1,h2,i1,i2,j1,j2,k1,k2,l1,l2,m1,m2) VALUES(:RefOperations,:a1,:a2,:b1,:b2,:c1,:c2,:d1,:d2,:e1,:e2,:f1,:f2,:g1,:g2,:h1,:h2,:i1,:i2,:j1,:j2,:k1,:k2,:l1,:l2,:m1,:m2)');
+                $requetteBilletage->bindValue(':RefOperations', $Refoperations, \PDO::PARAM_INT);
+                $requetteBilletage->bindValue(':a1', $_POST['a1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':a2', $_POST['a2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':b1', $_POST['b1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':b2', $_POST['b2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':c1', $_POST['c1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':c2', $_POST['c2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':d1', $_POST['d1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':d2', $_POST['d2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':e1', $_POST['e1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':e2', $_POST['e2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':f1', $_POST['f1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':f2', $_POST['f2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':g1', $_POST['g1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':g2', $_POST['g2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':h1', $_POST['h1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':h2', $_POST['h2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':i1', $_POST['i1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':i2', $_POST['i2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':j1', $_POST['j1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':j2', $_POST['j2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':k1', $_POST['k1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':k2', $_POST['k2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':l1', $_POST['l1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':l2', $_POST['l2'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':m1', $_POST['m1'], \PDO::PARAM_STR);
+                $requetteBilletage->bindValue(':m2', $_POST['m2'], \PDO::PARAM_STR);
+                $requetteBilletage->execute();
+            }
+
+
+
 
             //Alerte sortie de fond de caisse
             if ($_POST['RefType']  == 4) {
@@ -341,5 +352,129 @@ class BielletageManagerPDO extends BielletageManager
             'X-Mailer: PHP/' . phpversion();
 
         mail($to, $subject, $content, $headers);
+    }
+
+    public function SortieCaisse2Caisse()
+    {
+        if (!empty($_POST['Antidate'])) {
+            $date = $_POST['Antidate'];
+        } else {
+            $date = date('Y-m-d');
+        }
+        $result = uniqid();
+
+        $requeteAddversement = $this->dao->prepare('INSERT INTO TbleOperations(RefCaisse,NumCompte,NameClient,MontantVersement,Remarque,Insert_Id,Insert_Time,Approve1_Id,Approve1_Time,Approve2_Id,Approve2_Time,Bordereau,NameDeposant,TelDeposant,RefType,TypeAppro,RefProduit,TypeRetrait,uniqid) VALUES(:RefCaisse,:NumCompte,:NameClient,:MontantVersement,:Remarque,:Insert_Id,:Insert_Time,:Approve1_Id,:Approve1_Time,:Approve2_Id,:Approve2_Time,:Bordereau,:NameDeposant,:TelDeposant,:RefType,:TypeAppro,:RefProduit,:TypeRetrait,:uniqid)');
+        $requeteAddversement->bindValue(':RefCaisse', $_POST['RefCaisse'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':NumCompte', 'Intern', \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':NameClient', 'Intern', \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':MontantVersement', $_POST['MontantVersement'], \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':Remarque', $_POST['Remarque'], \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':Insert_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':Insert_Time', $date, \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':Approve1_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':Approve1_Time', $date, \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':Approve2_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':Approve2_Time', $date, \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':Bordereau', 'NULL', \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':NameDeposant', $_POST['NameDeposant'], \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':TelDeposant', $_POST['TelDeposant'], \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':RefType', 4, \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':TypeAppro', $_POST['TypeAppro'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':TypeRetrait', $_POST['TypeRetrait'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':uniqid', $result, \PDO::PARAM_STR);
+        $requeteAddversement->execute();
+        $Refoperations = $this->dao->lastInsertId();
+        $requetteBilletage = $this->dao->prepare('INSERT INTO TbleBilletage(RefOperations,a1,a2,b1,b2,c1,c2,d1,d2,e1,e2,f1,f2,g1,g2,h1,h2,i1,i2,j1,j2,k1,k2,l1,l2,m1,m2) VALUES(:RefOperations,:a1,:a2,:b1,:b2,:c1,:c2,:d1,:d2,:e1,:e2,:f1,:f2,:g1,:g2,:h1,:h2,:i1,:i2,:j1,:j2,:k1,:k2,:l1,:l2,:m1,:m2)');
+        $requetteBilletage->bindValue(':RefOperations', $Refoperations, \PDO::PARAM_INT);
+        $requetteBilletage->bindValue(':a1', $_POST['a1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':a2', $_POST['a2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':b1', $_POST['b1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':b2', $_POST['b2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':c1', $_POST['c1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':c2', $_POST['c2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':d1', $_POST['d1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':d2', $_POST['d2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':e1', $_POST['e1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':e2', $_POST['e2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':f1', $_POST['f1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':f2', $_POST['f2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':g1', $_POST['g1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':g2', $_POST['g2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':h1', $_POST['h1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':h2', $_POST['h2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':i1', $_POST['i1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':i2', $_POST['i2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':j1', $_POST['j1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':j2', $_POST['j2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':k1', $_POST['k1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':k2', $_POST['k2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':l1', $_POST['l1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':l2', $_POST['l2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':m1', $_POST['m1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':m2', $_POST['m2'], \PDO::PARAM_STR);
+        $requetteBilletage->execute();
+    }
+
+
+    public function ApproCaisse2Caisse()
+    {
+        if (!empty($_POST['Antidate'])) {
+            $date = $_POST['Antidate'];
+        } else {
+            $date = date('Y-m-d');
+        }
+        $result = uniqid();
+        $requeteAddversement = $this->dao->prepare('INSERT INTO TbleOperations(RefCaisse,NumCompte,NameClient,MontantVersement,Remarque,Insert_Id,Insert_Time,Approve1_Id,Approve1_Time,Approve2_Id,Approve2_Time,Bordereau,NameDeposant,TelDeposant,RefType,TypeAppro,RefProduit,TypeRetrait,uniqid) VALUES(:RefCaisse,:NumCompte,:NameClient,:MontantVersement,:Remarque,:Insert_Id,:Insert_Time,:Approve1_Id,:Approve1_Time,:Approve2_Id,:Approve2_Time,:Bordereau,:NameDeposant,:TelDeposant,:RefType,:TypeAppro,:RefProduit,:TypeRetrait,:uniqid)');
+        $requeteAddversement->bindValue(':RefCaisse', $_POST['Destination'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':NumCompte', 'Intern', \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':NameClient', 'Intern', \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':MontantVersement', $_POST['MontantVersement'], \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':Remarque', $_POST['Remarque'], \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':Insert_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':Insert_Time', $date, \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':Approve1_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':Approve1_Time', $date, \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':Approve2_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':Approve2_Time', $date, \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':Bordereau', 'NULL', \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':NameDeposant', $_POST['NameDeposant'], \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':TelDeposant', $_POST['TelDeposant'], \PDO::PARAM_STR);
+        $requeteAddversement->bindValue(':RefType', 3, \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':TypeAppro', 1, \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':TypeRetrait', $_POST['TypeRetrait'], \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':uniqid', $result, \PDO::PARAM_STR);
+        $requeteAddversement->execute();
+        $Refoperations = $this->dao->lastInsertId();
+        $requetteBilletage = $this->dao->prepare('INSERT INTO TbleBilletage(RefOperations,a1,a2,b1,b2,c1,c2,d1,d2,e1,e2,f1,f2,g1,g2,h1,h2,i1,i2,j1,j2,k1,k2,l1,l2,m1,m2) VALUES(:RefOperations,:a1,:a2,:b1,:b2,:c1,:c2,:d1,:d2,:e1,:e2,:f1,:f2,:g1,:g2,:h1,:h2,:i1,:i2,:j1,:j2,:k1,:k2,:l1,:l2,:m1,:m2)');
+        $requetteBilletage->bindValue(':RefOperations', $Refoperations, \PDO::PARAM_INT);
+        $requetteBilletage->bindValue(':a1', $_POST['a1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':a2', $_POST['a2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':b1', $_POST['b1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':b2', $_POST['b2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':c1', $_POST['c1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':c2', $_POST['c2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':d1', $_POST['d1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':d2', $_POST['d2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':e1', $_POST['e1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':e2', $_POST['e2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':f1', $_POST['f1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':f2', $_POST['f2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':g1', $_POST['g1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':g2', $_POST['g2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':h1', $_POST['h1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':h2', $_POST['h2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':i1', $_POST['i1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':i2', $_POST['i2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':j1', $_POST['j1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':j2', $_POST['j2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':k1', $_POST['k1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':k2', $_POST['k2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':l1', $_POST['l1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':l2', $_POST['l2'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':m1', $_POST['m1'], \PDO::PARAM_STR);
+        $requetteBilletage->bindValue(':m2', $_POST['m2'], \PDO::PARAM_STR);
+        $requetteBilletage->execute();
     }
 }

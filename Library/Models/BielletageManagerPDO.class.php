@@ -441,7 +441,7 @@ class BielletageManagerPDO extends BielletageManager
         $requeteAddversement->bindValue(':NameDeposant', $_POST['NameDeposant'], \PDO::PARAM_STR);
         $requeteAddversement->bindValue(':TelDeposant', $_POST['TelDeposant'], \PDO::PARAM_STR);
         $requeteAddversement->bindValue(':RefType', 3, \PDO::PARAM_INT);
-        $requeteAddversement->bindValue(':TypeAppro', 1, \PDO::PARAM_INT);
+        $requeteAddversement->bindValue(':TypeAppro', 2, \PDO::PARAM_INT);
         $requeteAddversement->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
         $requeteAddversement->bindValue(':TypeRetrait', $_POST['TypeRetrait'], \PDO::PARAM_INT);
         $requeteAddversement->bindValue(':uniqid', $result, \PDO::PARAM_STR);

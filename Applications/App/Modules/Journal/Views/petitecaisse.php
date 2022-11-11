@@ -19,7 +19,7 @@
                               <th class="border-top-0">Agence</th>
                               <th class="border-top-0">Caisse</th>
                               <th class="border-top-0">Appro Caisse</th>
-                              <th class="border-top-0">Ajout de Fond</th>
+                              <th class="border-top-0">Appro C2C</th>
                               <th class="border-top-0">Sortie de Fond</th>
                               <th class="border-top-0">Depot</th>
                               <th class="border-top-0">Retrait</th>

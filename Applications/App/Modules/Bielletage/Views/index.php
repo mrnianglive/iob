@@ -81,7 +81,7 @@
                               <th class="border-top-0">RECU</th>
                               <th class="border-top-0">ID</th>
                               <th class="border-top-0">AGENCE</th>
-                              <th class="border-top-0">PRODUIT</th>
+                              <!-- <th class="border-top-0">PRODUIT</th>-->
                               <th class="border-top-0">CAISSE</th>
                               <th class="border-top-0">OPERATION</th>
                               <th class="border-top-0">CLIENT</th>
@@ -95,9 +95,10 @@
                           <?php foreach ($Operation as $key => $value) { ?>
                           <tr class="advance-table-row">
                               <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
-                                      class="btn btn-secondary"><i class="fa fa-print"></i> </td>
+                                      class="btn btn-primary"><i class="fa fa-print"></i> </td>
                               <td> <?= $value['RefOperations']; ?></td>
-                              <td> <?= $value['NameAgency']; ?></td>
+                              <!-- <td> <? //= $value['NameAgency']; 
+                                            ?></td>-->
                               <td> <?= $value['NameProduit']; ?></td>
                               <td> <?= $value['NameCaisse']; ?></td>
                               <td><?= $value['NameType']; ?></td>

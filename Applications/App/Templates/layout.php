@@ -128,12 +128,12 @@
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/bielletage/2" aria-expanded="false"><i class="fa fa-minus"
                                     aria-hidden="true"></i><span class="hide-menu">Retrait</span></a></li>
-
+                        <?php } ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/remittances/index" aria-expanded="false"><i class="fas fa-exchange"
                                     aria-hidden="true"></i><span class="hide-menu">Remittance</span> <span
                                     class="badge badge-danger"> Nouveau ! </span></a></li>
-                        <?php } ?>
+
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Journal/petite_caisse" aria-expanded="false"><i class="fa fa-columns"
                                     aria-hidden="true"></i><span class="hide-menu">Petite Caisse</span></a></li>

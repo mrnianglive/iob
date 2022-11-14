@@ -79,6 +79,7 @@
                       <thead>
                           <tr>
                               <th class="border-top-0">RECU</th>
+                              <th class="border-top-0">ID</th>
                               <th class="border-top-0">AGENCE</th>
                               <th class="border-top-0">PRODUIT</th>
                               <th class="border-top-0">CAISSE</th>
@@ -95,6 +96,7 @@
                           <tr class="advance-table-row">
                               <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
                                       class="btn btn-secondary"><i class="fa fa-print"></i> </td>
+                              <td> <?= $value['RefOperations']; ?></td>
                               <td> <?= $value['NameAgency']; ?></td>
                               <td> <?= $value['NameProduit']; ?></td>
                               <td> <?= $value['NameCaisse']; ?></td>

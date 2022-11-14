@@ -79,7 +79,7 @@
                       <thead>
                           <tr>
                               <th class="border-top-0">RECU</th>
-                              <th class="border-top-0">ID</th>
+                              <th class="border-top-0">REF</th>
                               <th class="border-top-0">AGENCE</th>
                               <th class="border-top-0">PRODUIT</th>
                               <th class="border-top-0">CAISSE</th>

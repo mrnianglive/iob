@@ -25,7 +25,7 @@
         </form><br />
         <div class="white-box">
             <h3 class="box-title">Opérations</h3>
-            <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
+            <?php if (($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') && (!empty($CheckOuverture))) { ?>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg"><i
                     class="fa fa-plus"> Ajouter</i></button> <br /> <br />
             <?php } ?>

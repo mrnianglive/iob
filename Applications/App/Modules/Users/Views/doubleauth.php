@@ -1,6 +1,11 @@
   <?php
     require __DIR__ . '/../../../../../Web/vendor/autoload.php';
 
+    use RobThree\Auth\TwoFactorAuth;
+
+    $tfa = new TwoFactorAuth('CAISSE MALI CREANCES');
+
+
 
     ?>
 
@@ -20,6 +25,8 @@
               </div>
               <br /></br / <div class="text-center">
               <p>QR Code :</p>
+              <img src="<?= $tfa->getQRCodeImageAsDataUri('CAISSE MALI CREANCES', $secret) ?>" alt="test">
+
           </div>
       </div>
       <div class="col-lg-8 col-xlg-9 col-md-12">

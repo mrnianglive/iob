@@ -46,7 +46,6 @@ class ConnexionController extends \Library\BackController
         $this->page->setTemplate('login');
         if ($request->method() == 'POST' && !empty($request->postData('tfa_code'))) {
             $this->managers->getManagerOf("User")->VerifDoubleAuth($request);
-            $this->app()->httpResponse()->redirect('/'); //Retour en arriere
         }
     }
 }

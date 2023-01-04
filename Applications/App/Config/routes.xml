@@ -51,5 +51,6 @@
 	<route url="/Pannel/links" module="Pannel" action="links"/>
 
 	<route url="/Users/doubleauth/([0-9]+)" module="Users" vars="id" action="doubleauth"/>
+	<route url="/connexion/doubleauth" module="Connexion" action="doubleauth"/>
 
 </routes>

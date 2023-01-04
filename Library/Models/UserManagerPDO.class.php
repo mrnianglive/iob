@@ -4,6 +4,10 @@ namespace Library\Models;
 
 use \Library\Entities\User;
 
+require __DIR__ . '/../../Web/vendor/autoload.php';
+
+use RobThree\Auth\TwoFactorAuth;
+
 
 class UserManagerPDO extends UserManager
 {
@@ -260,5 +264,20 @@ class UserManagerPDO extends UserManager
         $requete->bindValue(':secret', $_POST['secret'], \PDO::PARAM_STR);
         $requete->bindValue(':RefUsers', $_POST['RefUsers'], \PDO::PARAM_INT);
         $requete->execute();
+    }
+
+    public function VerifDoubleAuth()
+    {
+        $tfa = new TwoFactorAuth();
+        $user = $this->GetUserInfo($_SESSION['RefUsers']);
+        if ($tfa->verifyCode($user['secret'], $_POST['tfa_code'])) {
+            $_SESSION['DoubleAuth'] = true;
+            header('Location: /');
+        } else {
+            $_SESSION['message']['type'] = 'warning';
+            $_SESSION['message']['text'] = 'Le code est incorrect déjà connecté !';
+            $_SESSION['message']['number'] = 2;
+            header('Location: /connexion/doubleauth');
+        }
     }
 }

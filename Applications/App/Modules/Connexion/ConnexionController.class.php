@@ -12,13 +12,19 @@ class ConnexionController extends \Library\BackController
         if ($request->method() == 'POST') {
             $User = $this->managers->getManagerOf('User')->login($request->postData('login'), $request->postData('password'));
             if (!empty($User)) {
-                $this->app()->user()->setAuthenticated();
-                $_SESSION['login'] = $User['login'];
-                $_SESSION['NomUsers'] = $User['NomUsers'];
-                $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
-                $_SESSION['RefUsers'] = $User['RefUsers'];
-                $_SESSION['statut'] = $User['Name'];
-                $this->app()->httpResponse()->redirect('/');
+                if (!empty($User['secret'])) {
+                    $this->app()->httpResponse()->redirect('/connexion/doubleauth');
+                    $_SESSION['RefUsers'] = $User['RefUsers'];
+                } else {
+                    $this->app()->user()->setAuthenticated();
+                    $_SESSION['login'] = $User['login'];
+                    $_SESSION['NomUsers'] = $User['NomUsers'];
+                    $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
+                    $_SESSION['statut'] = $User['Name'];
+                    $_SESSION['RefUsers'] = $User['RefUsers'];
+
+                    $this->app()->httpResponse()->redirect('/');
+                }
             }
         }
     }
@@ -32,5 +38,14 @@ class ConnexionController extends \Library\BackController
         $_SESSION['message']['text'] = 'Déconnexion réussie !';
         $_SESSION['message']['number'] = 2;
         $this->app()->httpResponse()->redirect('/');
+    }
+
+    public function executeDoubleauth(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar('titles', '2FA');
+        if ($request->method() == 'POST' && !empty($request->postData('tfa_code'))) {
+            $this->managers->getManagerOf("User")->VerifDoubleAuth($request);
+            $this->app()->httpResponse()->redirect('/'); //Retour en arriere
+        }
     }
 }

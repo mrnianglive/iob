@@ -35,8 +35,7 @@
                                     data-toggle="modal" data-target="#ChmodAppro-<?= $users['RefUsers']; ?>"
                                     data-whatever="@mdo"><i class="ticon ti-lock"></i></button>
 
-                                <a href="/Users/doubleauth/<?= $users['RefUsers']; ?>"
-                                    class="btn btn-info btn-outline btn-circle btn-lg m-r-5"><i
+                                <a href="/Users/doubleauth/<?= $users['RefUsers']; ?>" class="btn btn-info"><i
                                         class="fas fa-lock"></i>2FA</a>
                             </td>
                         </tr>

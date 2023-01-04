@@ -5,10 +5,8 @@
 
     $tfa = new TwoFactorAuth();
 
-    if (empty($_SESSION['tfa_secret'])) {
-        $_SESSION['tfa_secret'] = $tfa->createSecret();
-    }
-    $secret = $_SESSION['tfa_secret'];
+    $secret = $tfa->createSecret();
+
     ?>
 
   <div class="row">
@@ -27,7 +25,6 @@
               </div>
               <br /></br / <div class="text-center">
               <?php if (!$Info['secret']) : ?>
-              <p>Code secret : <?= $secret ?></p>
               <p>QR Code :</p>
               <img src="<?= $tfa->getQRCodeImageAsDataUri('CAISSE MLC', $secret) ?>">
               <?php else : ?>
@@ -41,12 +38,12 @@
               <div class="card-body">
                   <form class="form-horizontal form-material" method="POST">
                       <div class="form-group mb-4">
-                          <label class="col-md-12 p-0">Vérification Code</label>
+                          <label class="col-md-12 p-0">Secret CODE</label>
                           <div class="col-md-12 border-bottom p-0">
-                              <input type="text" name="tfa_code" class="form-control p-0 border-0">
+                              <input type="text" name="secret" value="<?= $secret ?>" class="form-control p-0 border-0">
                           </div>
                       </div>
-                      <button class="btn btn-primary" type="submit">Valider</button>
+                      <button class="btn btn-primary" type="submit">Valide 2FA </button>
                   </form>
               </div>
           </div>

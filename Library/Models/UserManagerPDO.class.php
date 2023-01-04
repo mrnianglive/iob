@@ -280,4 +280,10 @@ class UserManagerPDO extends UserManager
             header('Location: /connexion/doubleauth');
         }
     }
+    public function ResetAuth($id)
+    {
+        $requete = $this->dao->prepare("UPDATE TbleUsers SET secret = NULL WHERE RefUsers=:RefUsers");
+        $requete->bindValue(':RefUsers', $_POST['RefUsers'], \PDO::PARAM_INT);
+        $requete->execute();
+    }
 }

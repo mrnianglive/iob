@@ -2,12 +2,6 @@
 
 namespace Applications\App\Modules\Users;
 
-require(__DIR__ . '/../../../../../vendor/autoload.php');
-
-
-use RobThreeAuthTwoFactorAuth;
-
-
 class UsersController extends \Library\BackController
 {
     public function executeIndex(\Library\HTTPRequest $request)

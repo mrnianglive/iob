@@ -3,10 +3,12 @@
 
     use RobThree\Auth\TwoFactorAuth;
 
-    $tfa = new TwoFactorAuth('CAISSE MALI CREANCES');
+    $tfa = new TwoFactorAuth();
 
-
-
+    if (empty($_SESSION['tfa_secret'])) {
+        $_SESSION['tfa_secret'] = $tfa->createSecret();
+    }
+    $secret = $_SESSION['tfa_secret'];
     ?>
 
   <div class="row">
@@ -24,9 +26,17 @@
                   </div>
               </div>
               <br /></br / <div class="text-center">
+              <?php if (!$Info['secret']) : ?>
+              <p>Code secret : <?= $secret ?></p>
               <p>QR Code :</p>
-              <img src="<?= $tfa->getQRCodeImageAsDataUri('CAISSE MALI CREANCES', $secret) ?>" alt="test">
-
+              <img src="<?= $tfa->getQRCodeImageAsDataUri('Tuto', $secret) ?>">
+              <form method="POST">
+                  <input type="text" placeholder="Vérification Code" name="tfa_code">
+                  <button type="submit">Valider</button>
+              </form>
+              <?php else : ?>
+              <p>2FA activée</p>
+              <?php endif ?>
           </div>
       </div>
       <div class="col-lg-8 col-xlg-9 col-md-12">

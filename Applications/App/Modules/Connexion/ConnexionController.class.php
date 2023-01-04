@@ -43,6 +43,7 @@ class ConnexionController extends \Library\BackController
     public function executeDoubleauth(\Library\HTTPRequest $request)
     {
         $this->page->addVar('titles', '2FA');
+        $this->page->setTemplate('login');
         if ($request->method() == 'POST' && !empty($request->postData('tfa_code'))) {
             $this->managers->getManagerOf("User")->VerifDoubleAuth($request);
             $this->app()->httpResponse()->redirect('/'); //Retour en arriere

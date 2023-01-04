@@ -3,7 +3,6 @@
 namespace Library\Models;
 
 use \Library\Entities\User;
-use RobThreeAuthTwoFactorAuth;
 
 
 class UserManagerPDO extends UserManager

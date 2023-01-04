@@ -115,6 +115,6 @@ class UsersController extends \Library\BackController
         $this->page->addVar("titles", "Double authentification"); // Titre de la page
         $Info = $this->managers->getManagerOf('User')->GetUserInfo($request->getData('id'));
         $this->managers->getManagerOf("User")->ResetAuth($Info['RefUsers']);
-        $this->app()->httpResponse()->redirect('/Users/doubleauth/ ' . $Info['RefUsers']); //Retour en arriere   
+        $this->app()->httpResponse()->redirect('/Users/doubleauth/' . $Info['RefUsers']); //Retour en arriere   
     }
 }

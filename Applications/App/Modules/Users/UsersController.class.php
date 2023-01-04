@@ -80,9 +80,6 @@ class UsersController extends \Library\BackController
 
     }
 
-
-
-
     public function executeUpdateusers(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Mettre à jour les informations "); // Titre de la page
@@ -92,6 +89,21 @@ class UsersController extends \Library\BackController
         $this->page->addVar("ListeStatut", $ListeStatut);
         if ($request->method() == 'POST') {
             $this->managers->getManagerOf("User")->UpdateUsers($request);
+            $_SESSION['message']['type'] = 'success';
+            $_SESSION['message']['text'] = 'Modification réussie !';
+            $_SESSION['message']['number'] = 2;
+            $this->app()->httpResponse()->redirect('/Users/index'); //Retour en arriere
+
+        }
+    }
+
+    public function executeDoubleauth(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Double authentification"); // Titre de la page
+        $Info = $this->managers->getManagerOf('User')->GetUserInfo($request->getData('id'));
+        $this->page->addVar('Info', $Info);
+        if ($request->method() == 'POST') {
+            $this->managers->getManagerOf("User")->DoubleAuth($request);
             $_SESSION['message']['type'] = 'success';
             $_SESSION['message']['text'] = 'Modification réussie !';
             $_SESSION['message']['number'] = 2;

@@ -3,6 +3,8 @@
 namespace Library\Models;
 
 use \Library\Entities\User;
+use RobThreeAuthTwoFactorAuth;
+
 
 class UserManagerPDO extends UserManager
 {
@@ -251,5 +253,15 @@ class UserManagerPDO extends UserManager
         } else {
             return $_SERVER["REMOTE_ADDR"];
         }
+    }
+
+    public function DoubleAuth($id)
+    {
+        $requete = $this->dao->prepare("UPDATE TbleUsers SET secret=:secret WHERE RefUsers=:RefUsers");
+        $requete->bindValue(':secret', $_POST['secret'], \PDO::PARAM_STR);
+        $requete->bindValue(':RefUsers', $id, \PDO::PARAM_INT);
+        $requete->execute();
+        $display = $requete->fetch();
+        return $display;
     }
 }

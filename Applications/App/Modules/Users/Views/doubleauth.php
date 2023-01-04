@@ -1,9 +1,5 @@
   <?php
-
-    spl_autoload_register(function ($className) {
-        include_once str_replace(array('RobThree\\Auth', '\\'), array(__DIR__ . '/../../../Library/lib', '/'), $className) . '.php';
-    });
-    $tfa = new RobThree\Auth\TwoFactorAuth('RobThree TwoFactorAuth');
+    require __DIR__ . '/../../vendor/autoload.php';
 
 
     ?>

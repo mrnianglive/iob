@@ -275,7 +275,7 @@ class UserManagerPDO extends UserManager
             header('Location: /');
         } else {
             $_SESSION['message']['type'] = 'warning';
-            $_SESSION['message']['text'] = 'Le code est incorrect déjà connecté !';
+            $_SESSION['message']['text'] = 'Le code est incorrect,Try again  !';
             $_SESSION['message']['number'] = 2;
             header('Location: /connexion/doubleauth');
         }

@@ -13,8 +13,9 @@ class ConnexionController extends \Library\BackController
             $User = $this->managers->getManagerOf('User')->login($request->postData('login'), $request->postData('password'));
             if (!empty($User)) {
                 if (!empty($User['secret'])) {
-                    $this->app()->httpResponse()->redirect('/connexion/doubleauth');
+                    $this->app()->user()->setAuthenticated();
                     $_SESSION['RefUsers'] = $User['RefUsers'];
+                    $this->app()->httpResponse()->redirect('/connexion/doubleauth');
                 } else {
                     $this->app()->user()->setAuthenticated();
                     $_SESSION['login'] = $User['login'];
@@ -22,7 +23,6 @@ class ConnexionController extends \Library\BackController
                     $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
                     $_SESSION['statut'] = $User['Name'];
                     $_SESSION['RefUsers'] = $User['RefUsers'];
-
                     $this->app()->httpResponse()->redirect('/');
                 }
             }

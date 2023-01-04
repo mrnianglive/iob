@@ -254,13 +254,11 @@ class UserManagerPDO extends UserManager
         }
     }
 
-    public function DoubleAuth($id)
+    public function DoubleAuth()
     {
         $requete = $this->dao->prepare("UPDATE TbleUsers SET secret=:secret WHERE RefUsers=:RefUsers");
         $requete->bindValue(':secret', $_POST['secret'], \PDO::PARAM_STR);
-        $requete->bindValue(':RefUsers', $id, \PDO::PARAM_INT);
+        $requete->bindValue(':RefUsers', $_POST['RefUsers'], \PDO::PARAM_INT);
         $requete->execute();
-        $display = $requete->fetch();
-        return $display;
     }
 }

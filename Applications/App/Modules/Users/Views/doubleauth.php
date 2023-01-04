@@ -43,7 +43,10 @@
                               <input type="text" name="secret" value="<?= $secret ?>" class="form-control p-0 border-0">
                           </div>
                       </div>
-                      <button class="btn btn-primary" type="submit">Valide 2FA </button>
+                      <input type="hidden" name="RefUsers" value="<?= $Info['RefUsers']; ?>">
+                      <button class="btn btn-primary" type="submit"
+                          onclick=" return confirm('Assurez vous de faire une capture du QRcode Avant de cliquer sur valider ?');">Valide
+                          2FA </button>
                   </form>
               </div>
           </div>

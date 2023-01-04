@@ -29,45 +29,29 @@
               <?php if (!$Info['secret']) : ?>
               <p>Code secret : <?= $secret ?></p>
               <p>QR Code :</p>
-              <img src="<?= $tfa->getQRCodeImageAsDataUri('Tuto', $secret) ?>">
-              <form method="POST">
-                  <input type="text" placeholder="Vérification Code" name="tfa_code">
-                  <button type="submit">Valider</button>
-              </form>
+              <img src="<?= $tfa->getQRCodeImageAsDataUri('CAISSE MLC', $secret) ?>">
               <?php else : ?>
               <p>2FA activée</p>
               <?php endif ?>
           </div>
       </div>
+      <?php if (!$Info['secret']) { ?>
       <div class="col-lg-8 col-xlg-9 col-md-12">
           <div class="card">
               <div class="card-body">
-                  <form class="form-horizontal form-material" method="POST" action="">
+                  <form class="form-horizontal form-material" method="POST">
                       <div class="form-group mb-4">
-                          <label for="example-email" class="col-md-12 p-0">Email</label>
+                          <label class="col-md-12 p-0">Vérification Code</label>
                           <div class="col-md-12 border-bottom p-0">
-                              <input type="email" value="<?= $Info['email']; ?>" name="email"
-                                  class="form-control p-0 border-0" name="example-email" id="example-email">
+                              <input type="text" name="tfa_code" class="form-control p-0 border-0">
                           </div>
                       </div>
-                      <div class="form-group mb-4">
-                          <label class="col-md-12 p-0">Statut</label>
-                          <div class="col-md-12 border-bottom p-0">
-                              <input type="text" value="<?= $Info['Name']; ?>" class="form-control p-0 border-0">
-                          </div>
-                      </div>
-                      <div class="form-group mb-4">
-                          <label class="col-md-12 p-0">Agence</label>
-                          <div class="col-md-12 border-bottom p-0">
-                              <input type="text" value="<?= $Info['AgenceUsers']; ?>" name="AgenceUsers"
-                                  class="form-control p-0 border-0">
-                          </div>
-                      </div>
-                      <button class="btn btn-primary" type="submit">Enregistrer</button>
+                      <button class="btn btn-primary" type="submit">Valider</button>
                   </form>
               </div>
           </div>
       </div>
+      <?php } ?>
   </div>
 
   <div class="modal fade" id="Password" tabindex="-1" role="dialog" aria-labelledby="password">

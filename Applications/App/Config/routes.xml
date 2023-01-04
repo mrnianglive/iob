@@ -50,6 +50,6 @@
 	<route url="/Arreter/cancel/([0-9]+)" module="Journal" vars="id" action="cancelFermeture"/>
 	<route url="/Pannel/links" module="Pannel" action="links"/>
 
-	<route url="Users/doubleauth/([0-9]+)" module="Users" vars="id" action="doubleauth"/>
+	<route url="/Users/doubleauth/([0-9]+)" module="Users" vars="id" action="doubleauth"/>
 
 </routes>

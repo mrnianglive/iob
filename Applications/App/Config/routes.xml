@@ -52,6 +52,6 @@
 
 	<route url="/Users/doubleauth/([0-9]+)" module="Users" vars="id" action="doubleauth"/>
 	<route url="/connexion/doubleauth" module="Connexion" action="doubleauth"/>
-	<route url="/Users/doubleauth/reset" module="Connexion" action="resetauth"/>
+	<route url="/Users/doubleauth/reset" module="Users" action="resetauth"/>
 
 </routes>

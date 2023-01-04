@@ -29,7 +29,7 @@
               <img src="<?= $tfa->getQRCodeImageAsDataUri('CAISSE MLC', $secret) ?>">
               <?php else : ?>
               <p>2FA activée</p>
-              <a href="/Users/doubleauth/reset" class="btn btn-primary"><i class="fa fa-lock">Reset 2FA</i></a>
+              <a href="/Users/doubleauth/reset" class="btn btn-danger"><i class="fa fa-lock"></i> Reset 2FA CODE </a>
               <?php endif ?>
           </div>
       </div>

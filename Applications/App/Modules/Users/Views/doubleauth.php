@@ -20,7 +20,6 @@
               </div>
               <br /></br / <div class="text-center">
               <p>QR Code :</p>
-              <img src="<?= $tfa->getQRCodeImageAsDataUri('CAISSE MALI CREANCES', $secret) ?>" alt="test">
           </div>
       </div>
       <div class="col-lg-8 col-xlg-9 col-md-12">

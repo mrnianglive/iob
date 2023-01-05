@@ -1,3 +1,9 @@
+<?php
+if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
+    header('Location: /connexion/doubleauth');
+}
+?>
+
 <!DOCTYPE html>
 <html dir="ltr" lang="fr">
 

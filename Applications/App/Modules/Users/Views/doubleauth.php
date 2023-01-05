@@ -43,7 +43,8 @@
                       <div class="form-group mb-4">
                           <label class="col-md-12 p-0">Secret CODE</label>
                           <div class="col-md-12 border-bottom p-0">
-                              <input type="text" name="secret" value="<?= $secret ?>" class="form-control p-0 border-0">
+                              <input type="text" name="secret" value="<?= $secret ?>" class="form-control p-0 border-0"
+                                  readonly>
                           </div>
                       </div>
                       <input type="hidden" name="RefUsers" value="<?= $Info['RefUsers']; ?>">

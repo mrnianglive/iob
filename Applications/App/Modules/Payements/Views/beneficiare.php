@@ -22,7 +22,7 @@
                             <td><?= $value['RefBenefi']; ?></td>
                             <td><?= $value['NomBeneficiare']; ?></td>
                             <td><?= $value['TelBeneficiare']; ?></td>
-                            <td><?= $value['AdresseBeneficiaire']; ?></td>
+                            <td><?= $value['NameZone']; ?></td>
                             <td>
                                 <a href="/payements/beneificiare/delete/<?= $value['RefBenefi']; ?>"
                                     class="btn btn-xs btn-danger"

@@ -57,7 +57,7 @@
 
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Prenom</label>
-                        <input type="text" class="form-control" name="PrenomBeneficiare" id="recipient-name1">
+                        <input type="text" class="form-control" name="PrenomDistributeur" id="recipient-name1">
                     </div>
 
                     <div class="form-group">

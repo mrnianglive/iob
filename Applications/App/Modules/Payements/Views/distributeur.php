@@ -12,6 +12,7 @@
                             <th class="border-top-0">ID</th>
                             <th class="border-top-0">Nom</th>
                             <th class="border-top-0">Prenom</th>
+                            <th class="border-top-0">Type</th>
                             <th class="border-top-0">Telephone</th>
                             <th class="border-top-0">Adresse</th>
                             <th class="border-top-0">Actions</th>

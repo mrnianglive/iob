@@ -27,7 +27,7 @@
                             <td><?= $value['TelBeneficiare']; ?></td>
                             <td><?= $value['NameZone']; ?></td>
                             <td>
-                                <a href="/payements/benficiaire/delete/<?= $value['RefBenefi']; ?>"
+                                <a href="/payements/beneficiaire/delete/<?= $value['RefBenefi']; ?>"
                                     class="btn btn-xs btn-danger"
                                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i
                                         class="fa fa-trash"></i></a>

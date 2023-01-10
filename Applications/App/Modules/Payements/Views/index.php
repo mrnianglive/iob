@@ -39,8 +39,43 @@
               </div>
           </div>
       </div>
-      <a href="/payements/beneficiaire" class="btn btn-primary">Gestion des Beneficiaires</a>
+      <a href="/payements/beneficiaire" class="btn btn-success">Gestion des Beneficiaires</a>
       <a href="/payements/distributeur" class="btn btn-primary">Gestion des Distributeurs</a>
-      <a href="/payements/campagne" class="btn btn-primary">Gestion des Campagnes</a>
+      <a href="/payements/campagne" class="btn btn-info">Gestion des Campagnes</a>
       <a href="/payements/zone" class="btn btn-primary">Gestion des Zones</a>
       </br> </br>
+      <div class="row">
+          <div class="col-md-12 col-lg-12 col-sm-12">
+              <div class="white-box">
+
+                  <div class="d-md-flex mb-3">
+                      <h3 class="box-title mb-0">CAMPAGNES EN COURS </h3>
+                  </div>
+                  <div class="table-responsive">
+                      <table class="table no-wrap">
+                          <thead>
+                              <tr>
+                                  <th class="border-top-0">REF</th>
+                                  <th class="border-top-0">NOM </th>
+                                  <th class="border-top-0">ORGANISATION</th>
+                                  <th class="border-top-0">DEBUT</th>
+                                  <th class="border-top-0">FIN</th>
+                                  <th class="border-top-0">SITUATION</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr class="advance-table-row">
+                                  <td>1</td>
+                                  <td>campagne 1</td>
+                                  <td>organisation 1</td>
+                                  <td>01/01/2023</td>
+                                  <td>31/06/2023</td>
+                                  <td><span class="label label-success font-weight-100">EN COURS</span>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>

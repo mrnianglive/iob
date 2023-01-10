@@ -55,7 +55,7 @@ class PayementsController extends \Library\BackController
         }
     }
 
-    public function executeDeleteBeneficiaire(\Library\HTTPRequest $request)
+    public function executeDeleteBeneficiare(\Library\HTTPRequest $request)
     {
         $this->managers->getManagerOf("Payements")->DeleteBeneficiare($request->getData('id'));
         $_SESSION['message']['type'] = 'success';

@@ -42,4 +42,18 @@ class PayementsManagerPDO extends PayementsManager
         $ListeZone = $requeteAgence->fetchAll();
         return $ListeZone;
     }
+
+    public function AddZone()
+    {
+        $requeteAdd = $this->dao->prepare("INSERT INTO tblezone(NameZone) VALUES(:NameZone)");
+        $requeteAdd->bindValue(':NameZone', $_POST['NameZone'], \PDO::PARAM_STR);
+        $requeteAdd->execute();
+    }
+
+    public function DeleteZone($id)
+    {
+        $requete = $this->dao->prepare('DELETE FROM tblezone WHERE RefZone=:RefZone');
+        $requete->bindValue(':RefZone', $id, \PDO::PARAM_INT);
+        $requete->execute();
+    }
 }

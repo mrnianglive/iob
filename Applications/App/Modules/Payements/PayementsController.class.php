@@ -13,17 +13,26 @@ class PayementsController extends \Library\BackController
     public function executeZone(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Liste des Zones"); // Titre de la page
-
         $ListeZone  = $this->managers->getManagerOf("Payements")->ListeZone();
         $this->page->addVar("ListeZone", $ListeZone);
+
+        if ($request->method() == 'POST' && !empty($request->postData('NameZone'))) {
+            $this->managers->getManagerOf("Payements")->AddZone($request); //Recuperation de la liste
+            $_SESSION['message']['type'] = 'success';
+            $_SESSION['message']['text'] = 'Ajout réussie !';
+            $_SESSION['message']['number'] = 2;
+            $this->app()->httpResponse()->redirect('/payements/zone'); //Retour en arriere
+        }
     }
 
 
     public function executeBeneficiaire(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Liste des Beneficiaires"); // Titre de la page
-
         $ListeBenefi  = $this->managers->getManagerOf("Payements")->ListeBeneficiare();
         $this->page->addVar("ListeBenefi", $ListeBenefi);
+
+        $ListeZone  = $this->managers->getManagerOf("Payements")->ListeZone();
+        $this->page->addVar("ListeZone", $ListeZone);
     }
 }

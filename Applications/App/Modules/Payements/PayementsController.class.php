@@ -49,11 +49,11 @@ class PayementsController extends \Library\BackController
         if ($request->method() == 'POST') {
 
             var_dump($_POST);
-            //$this->managers->getManagerOf("Payements")->AddBeneficiare($request); //Recuperation de la liste
-            //  $_SESSION['message']['type'] = 'success';
-            //  $_SESSION['message']['text'] = 'Ajout réussie !';
-            // $_SESSION['message']['number'] = 2;
-            // $this->app()->httpResponse()->redirect('/payements/benficiaire'); //Retour en arriere
+            $this->managers->getManagerOf("Payements")->AddBeneficiare($request); //Recuperation de la liste
+            $_SESSION['message']['type'] = 'success';
+            $_SESSION['message']['text'] = 'Ajout réussie !';
+            $_SESSION['message']['number'] = 2;
+            $this->app()->httpResponse()->redirect('/payements/benficiaire'); //Retour en arriere
         }
     }
 

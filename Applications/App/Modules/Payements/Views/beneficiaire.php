@@ -59,7 +59,7 @@
 
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Telephone</label>
-                        <input type="text" class="form-control" name="TelBeneficiaire" id="recipient-name1">
+                        <input type="text" class="form-control" name="TelBeneficiare" id="recipient-name1">
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Zone</label>

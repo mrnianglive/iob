@@ -54,4 +54,7 @@
 	<route url="/connexion/doubleauth" module="Connexion" action="doubleauth"/>
 	<route url="/Users/doubleauth/reset/([0-9]+)" module="Users" vars="id" action="resetauth"/>
 
+	<route url="/payements/zone" module="Payements" action="zone"/>
+	<route url="/payements/benficiaire" module="Payements" action="beneficiaire"/>
+
 </routes>

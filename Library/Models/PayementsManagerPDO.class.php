@@ -19,7 +19,7 @@ class PayementsManagerPDO extends PayementsManager
 
     public function ListeBeneficiare()
     {
-        $requeteAgence = $this->dao->prepare('SELECT * FROM tbleBeneficiare');
+        $requeteAgence = $this->dao->prepare('SELECT * FROM tbleBeneficiare INNER JOIN tblezone ON tbleBeneficiare.RefZone = tblezone.RefZone');
         $requeteAgence->execute();
         $ListeZone = $requeteAgence->fetchAll();
         return $ListeZone;

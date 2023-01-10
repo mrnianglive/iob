@@ -56,5 +56,6 @@
 
 	<route url="/payements/zone" module="Payements" action="zone"/>
 	<route url="/payements/benficiaire" module="Payements" action="beneficiaire"/>
+	<route url="/payements/zone/delete/([0-9]+)" module="Payements" vars="id" action="deleteZone"/>
 
 </routes>

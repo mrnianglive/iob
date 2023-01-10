@@ -25,9 +25,20 @@ class PayementsController extends \Library\BackController
         }
     }
 
+    public function executeDeleteZone(\Library\HTTPRequest $request)
+    {
+        $this->managers->getManagerOf("Payements")->DeleteZone($request->getData('id'));
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = 'Suppression réussie !';
+        $_SESSION['message']['number'] = 2;
+        $this->app()->httpResponse()->redirect('/payements/zone'); //Retour en arriere
+
+    }
+
 
     public function executeBeneficiaire(\Library\HTTPRequest $request)
     {
+
         $this->page->addVar("titles", "Liste des Beneficiaires"); // Titre de la page
         $ListeBenefi  = $this->managers->getManagerOf("Payements")->ListeBeneficiare();
         $this->page->addVar("ListeBenefi", $ListeBenefi);

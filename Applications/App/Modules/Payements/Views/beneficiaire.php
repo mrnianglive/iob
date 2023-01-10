@@ -72,7 +72,7 @@
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Montant</label>
-                        <input type="text" class="form-control" name="MontantBenificaire" id="recipient-name1">
+                        <input type="text" class="form-control" name="MontantBeneficaire" id="recipient-name1">
                     </div>
                 </div>
                 <div class="modal-footer">

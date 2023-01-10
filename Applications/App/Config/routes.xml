@@ -54,7 +54,7 @@
 	<route url="/connexion/doubleauth" module="Connexion" action="doubleauth"/>
 	<route url="/Users/doubleauth/reset/([0-9]+)" module="Users" vars="id" action="resetauth"/>
 
-	<route url="/payements/index" module="Payements" action="zone"/>
+	<route url="/payements/index" module="Payements" action="index"/>
 
 	<route url="/payements/zone" module="Payements" action="zone"/>
 	<route url="/payements/zone/delete/([0-9]+)" module="Payements" vars="id" action="deleteZone"/>

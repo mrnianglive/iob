@@ -55,23 +55,26 @@
                       <table class="table no-wrap">
                           <thead>
                               <tr>
-                                  <th class="border-top-0">REF</th>
+                                  <th class="border-top-0">View</th>
                                   <th class="border-top-0">NOM </th>
                                   <th class="border-top-0">ORGANISATION</th>
                                   <th class="border-top-0">DEBUT</th>
                                   <th class="border-top-0">FIN</th>
                                   <th class="border-top-0">SITUATION</th>
+                                  <th class="border-top-0"> Payements</th>
                               </tr>
                           </thead>
                           <tbody>
                               <tr class="advance-table-row">
-                                  <td>1</td>
+                                  <td><a href="/payements/campagne/organisation/" target="_blank"
+                                          class="btn btn-primary"><i class="fa fa-eye"></i> </td>
                                   <td>campagne 1</td>
                                   <td>organisation 1</td>
                                   <td>01/01/2023</td>
                                   <td>31/06/2023</td>
                                   <td><span class="label label-success font-weight-100">EN COURS</span>
                                   </td>
+                                  <td>13/2000</td>
                               </tr>
                           </tbody>
                       </table>

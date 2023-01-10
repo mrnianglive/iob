@@ -69,8 +69,8 @@ class PayementsManagerPDO extends PayementsManager
     }
     public function DeleteBeneficiare($id)
     {
-        $requete = $this->dao->prepare('DELETE FROM tbleBeneficiare WHERE RefBeneficiare=:RefBeneficiare');
-        $requete->bindValue(':RefBeneficiare', $id, \PDO::PARAM_INT);
+        $requete = $this->dao->prepare('DELETE FROM tbleBeneficiare WHERE RefBenefi=:RefBenefi');
+        $requete->bindValue(':RefBenefi', $id, \PDO::PARAM_INT);
         $requete->execute();
     }
 

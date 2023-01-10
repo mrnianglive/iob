@@ -46,12 +46,14 @@ class PayementsController extends \Library\BackController
         $ListeZone  = $this->managers->getManagerOf("Payements")->ListeZone();
         $this->page->addVar("ListeZone", $ListeZone);
 
-        if ($request->method() == 'POST' && !empty($request->postData('NomBeneficiaire'))) {
-            $this->managers->getManagerOf("Payements")->AddBeneficiare($request); //Recuperation de la liste
-            $_SESSION['message']['type'] = 'success';
-            $_SESSION['message']['text'] = 'Ajout réussie !';
-            $_SESSION['message']['number'] = 2;
-            $this->app()->httpResponse()->redirect('/payements/benficiaire'); //Retour en arriere
+        if ($request->method() == 'POST') {
+
+            var_dump($request);
+            //$this->managers->getManagerOf("Payements")->AddBeneficiare($request); //Recuperation de la liste
+            //  $_SESSION['message']['type'] = 'success';
+            //  $_SESSION['message']['text'] = 'Ajout réussie !';
+            // $_SESSION['message']['number'] = 2;
+            // $this->app()->httpResponse()->redirect('/payements/benficiaire'); //Retour en arriere
         }
     }
 

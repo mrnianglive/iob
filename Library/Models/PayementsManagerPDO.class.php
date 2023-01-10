@@ -63,7 +63,7 @@ class PayementsManagerPDO extends PayementsManager
         $requeteAdd->bindValue(':NameBeneficiare', $_POST['NameBeneficiare'], \PDO::PARAM_STR);
         $requeteAdd->bindValue(':PrenomBeneficiare', $_POST['PrenomBeneficiare'], \PDO::PARAM_STR);
         $requeteAdd->bindValue(':TelBeneficiare', $_POST['TelBeneficiare'], \PDO::PARAM_STR);
-        $requeteAdd->bindValue(':RefZone', $_POST['RefZone'], \PDO::PARAM_STR);
+        $requeteAdd->bindValue(':RefZone', $_POST['RefZone'], \PDO::PARAM_INT);
         $requeteAdd->bindValue(':MontantBeneficaire', $_POST['MontantBeneficaire'], \PDO::PARAM_STR);
         $requeteAdd->execute();
     }

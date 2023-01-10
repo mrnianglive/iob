@@ -6,7 +6,7 @@ class PayementsController extends \Library\BackController
 {
     public function executeIndex(\Library\HTTPRequest $request)
     {
-        $this->page->addVar("titles", "Accueil"); // Titre de la page
+        $this->page->addVar("titles", "Module Payements"); // Titre de la page
     }
 
 

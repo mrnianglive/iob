@@ -59,13 +59,17 @@
 
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Telephone</label>
-                        <input type="text" class="form-control" name="TelBeneificiaire" id="recipient-name1">
+                        <input type="text" class="form-control" name="TelBeneficiaire" id="recipient-name1">
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Zone</label>
-                        <input type="text" class="form-control" name="NameZone" id="recipient-name1">
+                        <select name="RefZone" class="form-control">
+                            <option value="">Veuillez Choisir la Zone</option>
+                            <?php foreach ($ListeZone as $key => $value) { ?>
+                            <option value="<?= $value['RefZone']; ?>"><?= $value['NameZone']; ?></option>
+                            <?php   } ?>
+                        </select>
                     </div>
-
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Montant</label>
                         <input type="text" class="form-control" name="MontantBenificaire" id="recipient-name1">

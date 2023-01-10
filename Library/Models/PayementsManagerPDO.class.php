@@ -59,7 +59,7 @@ class PayementsManagerPDO extends PayementsManager
 
     public function AddBeneficiare()
     {
-        $requete = $this->dao->prepare(" INSERT INTO tbleBeneficiare(NomBeneficiare, PrenomBeneficiare, TelBeneficiare,RefZone,MontantBeneficaire) VALUES(:NomBeneficiare,:PrenomBeneficiare,:TelBeneficiare,:RefZone,:MontantBeneficaire");
+        $requete = $this->dao->prepare("INSERT INTO tbleBeneficiare(NomBeneficiare, PrenomBeneficiare, TelBeneficiare,RefZone,MontantBeneficaire) VALUES(:NomBeneficiare,:PrenomBeneficiare,:TelBeneficiare,:RefZone,:MontantBeneficaire)");
         $requete->bindValue(':NomBeneficiare', $_POST['NomBeneficiare'], \PDO::PARAM_STR);
         $requete->bindValue(':PrenomBeneficiare', $_POST['PrenomBeneficiare'], \PDO::PARAM_STR);
         $requete->bindValue(':TelBeneficiare', $_POST['TelBeneficiare'], \PDO::PARAM_STR);

@@ -65,7 +65,7 @@ class PayementsController extends \Library\BackController
 
     }
 
-    public function executeDistributeurs(\Library\HTTPRequest $request)
+    public function executeDistributeur(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Liste des Distributeurs"); // Titre de la page
         $ListeDist  = $this->managers->getManagerOf("Payements")->ListeDistributeur();

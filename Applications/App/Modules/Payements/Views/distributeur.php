@@ -65,10 +65,6 @@
                         <input type="text" class="form-control" name="TelDistributeur" id="recipient-name1">
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">Telephone</label>
-                        <input type="text" class="form-control" name="TelDistributeur" id="recipient-name1">
-                    </div>
-                    <div class="form-group">
                         <label for="recipient-name" class="control-label">Adresse</label>
                         <input type="text" class="form-control" name="AdresseDistributeur" id="recipient-name1">
                     </div>

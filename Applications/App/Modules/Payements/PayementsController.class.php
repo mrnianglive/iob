@@ -47,8 +47,6 @@ class PayementsController extends \Library\BackController
         $this->page->addVar("ListeZone", $ListeZone);
 
         if ($request->method() == 'POST') {
-
-            var_dump($_POST);
             $this->managers->getManagerOf("Payements")->AddBeneficiare($request); //Recuperation de la liste
             $_SESSION['message']['type'] = 'success';
             $_SESSION['message']['text'] = 'Ajout réussie !';

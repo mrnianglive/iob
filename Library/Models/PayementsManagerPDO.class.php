@@ -56,4 +56,21 @@ class PayementsManagerPDO extends PayementsManager
         $requete->bindValue(':RefZone', $id, \PDO::PARAM_INT);
         $requete->execute();
     }
+
+    public function AddBeneficiare()
+    {
+        $requeteAdd = $this->dao->prepare("INSERT INTO tbleBeneficiare(NomBeneficiare,PrenomBeneficiare,TelBeneficiare,RefZone,:MontantBeneficaire) VALUES(:NomBeneficiare,:PrenomBeneficiare,:TelBeneficiare,:RefZone,:MontantBeneficaire)");
+        $requeteAdd->bindValue(':NameBeneficiare', $_POST['NameBeneficiare'], \PDO::PARAM_STR);
+        $requeteAdd->bindValue(':PrenomBeneficiare', $_POST['PrenomBeneficiare'], \PDO::PARAM_STR);
+        $requeteAdd->bindValue(':TelBeneficiare', $_POST['TelBeneficiare'], \PDO::PARAM_STR);
+        $requeteAdd->bindValue(':RefZone', $_POST['RefZone'], \PDO::PARAM_STR);
+        $requeteAdd->bindValue(':MontantBeneficaire', $_POST['MontantBeneficaire'], \PDO::PARAM_STR);
+        $requeteAdd->execute();
+    }
+    public function DeleteBeneficiare($id)
+    {
+        $requete = $this->dao->prepare('DELETE FROM tbleBeneficiare WHERE RefBeneficiare=:RefBeneficiare');
+        $requete->bindValue(':RefBeneficiare', $id, \PDO::PARAM_INT);
+        $requete->execute();
+    }
 }

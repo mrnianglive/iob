@@ -11,6 +11,8 @@
                         <tr>
                             <th class="border-top-0">ID</th>
                             <th class="border-top-0">Nom</th>
+                            <th class="border-top-0">Prenom</th>
+
                             <th class="border-top-0">Telephone</th>
                             <th class="border-top-0">Adresse</th>
                             <th class="border-top-0">Actions</th>
@@ -21,6 +23,7 @@
                         <tr>
                             <td><?= $value['RefBenefi']; ?></td>
                             <td><?= $value['NomBeneficiare']; ?></td>
+                            <td><?= $value['PrenomBeneficiare']; ?></td>
                             <td><?= $value['TelBeneficiare']; ?></td>
                             <td><?= $value['NameZone']; ?></td>
                             <td>

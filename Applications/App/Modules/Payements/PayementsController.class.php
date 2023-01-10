@@ -64,4 +64,31 @@ class PayementsController extends \Library\BackController
         $this->app()->httpResponse()->redirect('/payements/benficiaire'); //Retour en arriere
 
     }
+
+    public function executeDistributeurs(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Liste des Distributeurs"); // Titre de la page
+        $ListeDist  = $this->managers->getManagerOf("Payements")->ListeDistributeur();
+        $this->page->addVar("ListeDist", $ListeDist);
+
+        $ListeZone  = $this->managers->getManagerOf("Payements")->ListeZone();
+        $this->page->addVar("ListeZone", $ListeZone);
+
+        if ($request->method() == 'POST') {
+            $this->managers->getManagerOf("Payements")->addDistributeur($request); //Recuperation de la liste
+            $_SESSION['message']['type'] = 'success';
+            $_SESSION['message']['text'] = 'Ajout réussie !';
+            $_SESSION['message']['number'] = 2;
+            $this->app()->httpResponse()->redirect('/payements/distributeur'); //Retour en arriere
+        }
+    }
+
+    public function executeDeleteDistributeur(\Library\HTTPRequest $request)
+    {
+        $this->managers->getManagerOf("Payements")->deleteDistributeur($request->getData('id'));
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = 'Suppression réussie !';
+        $_SESSION['message']['number'] = 2;
+        $this->app()->httpResponse()->redirect('/payements/distributeur'); //Retour en arriere
+    }
 }

@@ -55,8 +55,12 @@
 	<route url="/Users/doubleauth/reset/([0-9]+)" module="Users" vars="id" action="resetauth"/>
 
 	<route url="/payements/zone" module="Payements" action="zone"/>
-	<route url="/payements/benficiaire" module="Payements" action="beneficiaire"/>
 	<route url="/payements/zone/delete/([0-9]+)" module="Payements" vars="id" action="deleteZone"/>
+
+	<route url="/payements/benficiaire" module="Payements" action="beneficiaire"/>
 	<route url="/payements/benficiaire/delete/([0-9]+)" module="Payements" vars="id" action="deleteBeneficiare"/>
+
+	<route url="/payements/distributeur" module="Payements" action="distributeur"/>
+	<route url="/payements/distributeur/delete/([0-9]+)" module="Payements" vars="id" action="deleteDistributeur"/>
 
 </routes>

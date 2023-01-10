@@ -73,4 +73,22 @@ class PayementsManagerPDO extends PayementsManager
         $requete->bindValue(':RefBeneficiare', $id, \PDO::PARAM_INT);
         $requete->execute();
     }
+
+    public function addDistributeur()
+    {
+        $requete = $this->dao->prepare("INSERT INTO tbleDistributeur(NomDistributeur, PrenomDistributeur, TelDistributeur,AdresseDistributeur,TypeDistributeur) VALUES(:NomDistributeur,:PrenomDistributeur,:TelDistributeur,:AdresseDistributeur,:TypeDistributeur)");
+        $requete->bindValue(':NomDistributeur', $_POST['NomDistributeur'], \PDO::PARAM_STR);
+        $requete->bindValue(':PrenomDistributeur', $_POST['PrenomDistributeur'], \PDO::PARAM_STR);
+        $requete->bindValue(':TelDistributeur', $_POST['TelDistributeur'], \PDO::PARAM_STR);
+        $requete->bindValue(':AdresseDistributeur', $_POST['AdresseDistributeur'], \PDO::PARAM_STR);
+        $requete->bindValue(':TypeDistributeur', $_POST['TypeDistributeur'], \PDO::PARAM_STR);
+        $requete->execute();
+    }
+
+    public function deleteDistributeur($id)
+    {
+        $requete = $this->dao->prepare('DELETE FROM tbleDistributeur WHERE RefDistributeur=:RefDistributeur');
+        $requete->bindValue(':RefDistributeur', $id, \PDO::PARAM_INT);
+        $requete->execute();
+    }
 }

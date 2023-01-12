@@ -8,7 +8,7 @@
                  </div>
                  <div style="text-align: center;width:88%;display: inline-block;">
                      <p>MALI CREANCES SA - PARTENAIRE ECOBANK MALI <img style="float: right; margin-right: -15px;"
-                             src="<?= QRcode::png($GetInvoice['uniqid'], false, QR_ECLEVEL_L, $size, 2) ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
+                             src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
                              alt="Logo">
                      </p>
                      <h2><?php if ($GetInvoice['RefType'] == 1) { ?>VERSEMENT

@@ -1,3 +1,9 @@
+<?php
+
+require __DIR__ . '/../../Web/phpqrcode/qrlib.php';
+
+?>
+
 <!DOCTYPE html>
 <html>
 

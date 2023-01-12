@@ -2,6 +2,8 @@
 if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     header('Location: /connexion/doubleauth');
 }
+require_once '/phpqrcode/qrlib.php';
+
 ?>
 
 <!DOCTYPE html>

@@ -10,4 +10,4 @@ $text = $_GET['text'];
 $size = 400;
 
 // Génération de l'image QR code
-QRcode::png($text, false, QR_ECLEVEL_L, $size, 2);
+QRcode::png($text, false, QR_ECLEVEL_L, 80, 2);

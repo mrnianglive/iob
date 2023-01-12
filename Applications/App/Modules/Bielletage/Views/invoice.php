@@ -9,7 +9,7 @@
                  <div style="text-align: center;width:88%;display: inline-block;">
                      <p>MALI CREANCES SA - PARTENAIRE ECOBANK MALI <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
-                             alt="Logo">
+                             width="80" height="80" alt="Logo">
                      </p>
                      <h2><?php if ($GetInvoice['RefType'] == 1) { ?>VERSEMENT
                          <?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETRAIT

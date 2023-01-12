@@ -75,7 +75,7 @@
                   <h3 class="box-title mb-0">OPERATIONS DU <?= date('d-m-Y'); ?> </h3>
               </div>
               <div class="table-responsive">
-                  <table class="table no-wrap">
+                  <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                       <thead>
                           <tr>
                               <th class="border-top-0">RECU</th>

@@ -29,7 +29,7 @@
                      <p>REFERENCE :
                          <?= $GetInvoice['RefOperations'] . "" . $GetInvoice['NameAgency'] . "" . date('d-m-Y', strtotime($GetInvoice['Insert_Time'])); ?>
                      </p>
-                     <p>DATE : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
+                     <p>DATE : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?> <?= gmdate("H:i:s"); ?></p>
                      <p>MOTIF : <?= $GetInvoice['Remarque']; ?></p>
                      <p>N° DU COMPTE <?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
@@ -114,9 +114,6 @@
                  </div>
              </div>
          </div>
-         <p style="text-align: right;"><?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?>
-             <?= gmdate("H:i:s") . "\n"; // date("H:i:s", strtotime("-1 hour")); 
-                ?> </p>
          <hr>
          <div style="padding: 0px !important;">
              <div class="row"
@@ -147,7 +144,7 @@
                      <p>REFERENCE :
                          <?= $GetInvoice['RefOperations'] . "" . $GetInvoice['NameAgency'] . "" . date('d-m-Y', strtotime($GetInvoice['Insert_Time'])); ?>
                      </p>
-                     <p>DATE : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
+                     <p>DATE : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?> <?= gmdate("H:i:s"); ?></p>
                      <p>MOTIF : <?= $GetInvoice['Remarque']; ?></p>
                      <p>N° DU COMPTE <?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
@@ -230,12 +227,6 @@
                  </div>
              </div>
          </div>
-         <p style="text-align: right;"><?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?>
-             <?= gmdate("H:i:s") . "\n"; // date("H:i:s", strtotime("-1 hour")); 
-                ?> </p>
-
          <h5 style="text-align:left;">MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement |
              www.malicreances-sa.com</h5>
-
-
      </div>

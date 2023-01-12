@@ -4,7 +4,7 @@ namespace Applications\App\Modules\Bielletage;
 
 class BielletageController extends \Library\BackController
 {
-    public function executeIndex(\Library\HTTPRequest $request)
+    public function executeIndexOLD(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Accueil"); // Titre de la page
         $Chmod  = $this->managers->getManagerOf("Bielletage")->CheckOuverture(); //Recuperation de la liste
@@ -185,5 +185,82 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('SommeRemittanceDepot', $SommeRemittanceDepot);
         $this->page->addVar('SommeRemittanceRetrait', $SommeRemittanceRetrait);
         $this->page->addVar('SoldeRemittance', $SoldeRemittance);
+    }
+
+
+    public function executeIndex(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Accueil"); // Titre de la page
+
+        // Récupération des données pour l'affichage de l'accueil
+        $data = $this->getHomeData();
+
+        // Ajout des données à la vue
+        $this->page->addVar("CheckOuverture", $data['checkOuverture']);
+        $this->page->addVar('Operation', $data['operations']);
+        $this->page->addVar('Agence', $data['agence']);
+        $this->page->addVar('Solde', $data['solde']);
+        $this->page->addVar('SoldeGlobal', $data['soldeGlobal']);
+        $this->page->addVar('SommeVersement', $data['sommeVersement']);
+        $this->page->addVar('SommeRetrait', $data['sommeRetrait']);
+        $this->page->addVar('SommeVersementGlobal', $data['sommeVersementGlobal']);
+        $this->page->addVar('SommeRetraitGlobal', $data['sommeRetraitGlobal']);
+        $this->page->addVar('SommeRemittanceDepot', $data['sommeRemittanceDepot']);
+        $this->page->addVar('SommeRemittanceRetrait', $data['sommeRemittanceRetrait']);
+        $this->page->addVar('SoldeRemittance', $data['soldeRemittance']);
+        $this->page->addVar('links', $data['links']);
+    }
+
+    private function getHomeData()
+    {
+        // Récupération des données pour l'affichage de l'accueil
+        $checkOuverture = $this->managers->getManagerOf("Bielletage")->CheckOuverture();
+        $operations = $this->managers->getManagerOf('Bielletage')->GetCaisse();
+        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'));
+
+        // Calcul des totaux
+        $solde = 0;
+        $soldeGlobal = 0;
+        $sommeVersement = 0;
+        $sommeRetrait = 0;
+        $sommeRemittanceDepot = 0;
+        $sommeRemittanceRetrait = 0;
+        $soldeRemittance = 0;
+        foreach ($usersCaisse as $user) {
+            $solde += $user['SoldeDisponible'];
+            $soldeGlobal += $user['SoldeDisponibleGlobal'];
+            $sommeVersement += $user['TotalVersement'];
+            $sommeRetrait += $user['TotalRetrait'];
+            $sommeRemittanceDepot += $user['SommeVersementRemittance'];
+            $sommeRemittanceRetrait += $user['SommeRetraitRemittance'];
+            $soldeRemittance += $user['SoldeRemittance'];
+        }
+        $sommeVersementGlobal = $sommeVersement + $sommeRemittanceDepot;
+        $sommeRetraitGlobal = $sommeRetrait + $sommeRemittanceRetrait;
+        // Récupération des données pour les agences
+        $agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
+        foreach ($agence as $key => $value) {
+            $agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialCaisse(date('Y-m-d'), $value['RefAgency']);
+            $agence[$key]['YesterdayReserve'] = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
+        }
+
+        // Récupération des liens pour le menu
+        $links = $this->managers->getManagerOf('Pannel')->GetLinks();
+
+        return array(
+            'checkOuverture' => $checkOuverture,
+            'operations' => $operations,
+            'agence' => $agence,
+            'solde' => $solde,
+            'soldeGlobal' => $soldeGlobal,
+            'sommeVersement' => $sommeVersement,
+            'sommeRetrait' => $sommeRetrait,
+            'sommeVersementGlobal' => $sommeVersementGlobal,
+            'sommeRetraitGlobal' => $sommeRetraitGlobal,
+            'sommeRemittanceDepot' => $sommeRemittanceDepot,
+            'sommeRemittanceRetrait' => $sommeRemittanceRetrait,
+            'soldeRemittance' => $soldeRemittance,
+            'links' => $links
+        );
     }
 }

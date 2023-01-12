@@ -19,8 +19,10 @@
           <div class="white-box analytics-info">
               <h3 class="box-title">DEPOT</h3>
               <ul class="list-inline two-part d-flex align-items-center mb-0">
-                  <li class="ml-auto"><span
-                          class="counter text-danger"><?= number_format($SommeVersementGlobal, 0, '.', '.'); ?></span>
+                  <li class="ml-auto"><span class="counter text-danger">
+                          <? //= number_format($SommeVersementGlobal, 0, '.', '.'); 
+                            ?>
+                      </span>
                   </li>
               </ul>
               <span>CAISSE</span>
@@ -30,8 +32,10 @@
           <div class="white-box analytics-info">
               <h3 class="box-title">RETRAIT</h3>
               <ul class="list-inline two-part d-flex align-items-center mb-0">
-                  <li class="ml-auto"><span
-                          class="counter text-purple"><?= number_format($SommeRetraitGlobal, 0, '.', '.'); ?></span>
+                  <li class="ml-auto"><span class="counter text-purple">
+                          <? //= number_format($SommeRetraitGlobal, 0, '.', '.'); 
+                            ?>
+                      </span>
                   </li>
               </ul>
               <span>CAISSE</span>
@@ -42,7 +46,8 @@
               <h5 class="box-title">SOLDE ESPECES</h5>
               <ul class="list-inline two-part d-flex align-items-center mb-0">
                   <li class="ml-auto"><span class="counter text-info">
-                          <?= number_format($SoldeGlobal, 0, '.', '.'); ?>
+                          <? //= number_format($SoldeGlobal, 0, '.', '.'); 
+                            ?>
                       </span>
                   </li>
               </ul>

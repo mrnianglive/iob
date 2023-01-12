@@ -127,8 +127,8 @@
                  </div>
                  <div style="text-align: center;width:88%;display: inline-block;">
                      <p>MALI CREANCES SA - PARTENAIRE ECOBANK MALI <img style="float: right; margin-right: -15px;"
-                             src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
-                             alt="Logo">
+                             src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
+                             width="80" height="80" alt="Logo">
                      </p>
                      <h2><?php if ($GetInvoice['RefType'] == 1) { ?>VERSEMENT
                          <?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETRAIT

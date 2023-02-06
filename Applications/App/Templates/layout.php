@@ -236,7 +236,9 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <footer class="footer text-center"> Dernière Connexion :<?= $_SESSION['LastConnexion']; ?> |
+            <footer class="footer text-center"> Dernière Connexion :
+                <? //= $_SESSION['LastConnexion']; 
+                ?> |
                 <?= date('Y'); ?>
                 © <a href="https://malicreances-sa.com" target="_blank">MALI
                     CREANCES SA</a> CONNCEPTION BY <a href="https://niangaly.ml" target="_blank">NIANGALY</a>

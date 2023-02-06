@@ -86,7 +86,12 @@ class UserManagerPDO extends UserManager
     }
     public function ListeUsers()
     {
-        $requeteUsers = $this->dao->prepare('SELECT * FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut INNER JOIN tblpays ON tblpays.RefPays=TbleUsers.RefPays');
+        if ($_SESSION['statut'] == 'superadmin') {
+            $requeteUsers = $this->dao->prepare('SELECT * FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut LEFT JOIN tblpays ON tblpays.RefPays=TbleUsers.RefPays');
+        } else {
+            $requeteUsers = $this->dao->prepare('SELECT * FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut INNER JOIN tblpays ON tblpays.RefPays=TbleUsers.RefPays WHERE TbleUsers.RefPays=:RefPays');
+            $requeteUsers->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+        }
         $requeteUsers->execute();
         $ListeUsers = $requeteUsers->fetchAll();
         foreach ($ListeUsers as $key => $value) {

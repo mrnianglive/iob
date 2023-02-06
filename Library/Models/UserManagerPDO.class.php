@@ -109,7 +109,10 @@ class UserManagerPDO extends UserManager
         $requeteCaisse->bindValue(':users', $Users, \PDO::PARAM_INT);
         $requeteCaisse->execute();
         $Verfiy = $requeteCaisse->fetch();
-        return $Verfiy['RefCaisse'];
+        if (!empty($Verfiy['RefCaisse'] && isset($Verfiy['RefCaisse']))) {
+            return $Verfiy['RefCaisse'];
+        }
+        return null;
     }
 
     public function VerifCaisseAppro($Caisse, $Users)

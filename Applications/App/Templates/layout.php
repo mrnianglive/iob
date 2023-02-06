@@ -108,10 +108,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
                         <li>
-                            <a class="profile-pic" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <span class="text-white font-medium">MALI </span></a>
+                            <a data-toggle="modal" href="#modalPays">PAYS</a>
                         </li>
-
                         <li>
                             <a class="profile-pic" href="#">
                                 <span class="text-white font-medium"><?= $_SESSION['login']; ?></span></a>
@@ -345,7 +343,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
 
 
     <!--modalPays-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalPays" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

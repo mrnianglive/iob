@@ -20,10 +20,12 @@ while ($table = $result->fetch_array()) {
     $table_name = $table[0];
     //Get first column of each table
     // $query = "ALTER TABLE $table_name AUTO_INCREMENT";
-    $query = "SELECT * FROM $table_name";
-    $result2 = $conn->query($query);
+    $column_query = "DESCRIBE $table_name";
+    $column_result = $conn->query($column_query);
+    $column = $column_result->fetch_array();
+    $first_column_name = $column[0];
 
-    print_r($result2[0]);
+    print_r($first_column_name);
 }
 
 

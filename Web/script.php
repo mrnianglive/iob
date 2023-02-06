@@ -26,9 +26,10 @@ while ($table = $result->fetch_array()) {
     $row = $result2->fetch_array();
     $first_column = $row[0];
     // set the first column of each table to primary key
-    $query = "ALTER TABLE $table_name ADD PRIMARY KEY ($first_column)";
-    //when done echo success
-    echo "Success";
+    // $query = "ALTER TABLE $table_name ADD PRIMARY KEY ($first_column)";
+    // //when done echo success
+    // echo "Success";
+    echo $first_column;
 }
 
 

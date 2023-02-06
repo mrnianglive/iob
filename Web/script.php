@@ -34,11 +34,6 @@ while ($table = $result->fetch_array()) {
     }
 
     $primary_key_query = "ALTER TABLE $table_name AUTO_INCREMENT";
-    if ($conn->query($primary_key_query) === TRUE) {
-        echo "Update for auto increment for table $table_name was successful\n";
-    } else {
-        echo "Error updating record: " . $conn->error;
-    }
 }
 
 

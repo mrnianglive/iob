@@ -405,7 +405,11 @@ class JournalManagerPDO extends JournalManager
         $requeteSoldeInittial->bindValue(':today', $date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
-        return $result['SoldeCompte'];
+        if (!empty($result['SoldeCompte'])) {
+            return $result['SoldeCompte'];
+        } else {
+            return 0;
+        }
     }
     public function SommeDepotAgence($Date, $Agence)
     {

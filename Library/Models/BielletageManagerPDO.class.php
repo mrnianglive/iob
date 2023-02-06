@@ -35,7 +35,10 @@ class BielletageManagerPDO extends BielletageManager
             foreach ($display as $key => $value) {
                 $display[$key]['caisse'] = $this->CheckDailyClose($value['RefCaisse']);
             }
-            return $display;
+            if (!empty($display) && isset($display)) {
+                return $display;
+            }
+            return null;
         }
     }
     public function CheckDailyClose($Caisse)
@@ -73,7 +76,10 @@ class BielletageManagerPDO extends BielletageManager
         $requeteCaisse->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requeteCaisse->execute();
         $GetCaisse = $requeteCaisse->fetchAll();
-        return $GetCaisse;
+        if (!empty($GetCaisse) && isset($GetCaisse)) {
+            return $GetCaisse;
+        }
+        return null;
     }
     public function GetInvoice($id)
     {

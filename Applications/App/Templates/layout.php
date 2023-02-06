@@ -135,7 +135,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/"
                                 aria-expanded="false"><i class="fas fa-home fa-fw" aria-hidden="true"></i><span
                                     class="hide-menu">Accueil</span></a></li>
-                        <?php if ($_SESSION['statut'] == 'admin' or (!empty($CheckOuverture) && $_SESSION['statut'] != 'Niveau1') && $_SESSION['statut'] != 'Control' && $_SESSION['statut'] != 'Head') { ?>
+                        <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or (!empty($CheckOuverture) && $_SESSION['statut'] != 'Niveau1') && $_SESSION['statut'] != 'Control' && $_SESSION['statut'] != 'Head') { ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/bielletage/1" aria-expanded="false"><i class="fa fa-plus"
                                     aria-hidden="true"></i><span class="hide-menu">Versement</span></a></li>
@@ -167,7 +167,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                                 href="/Analytics/performance" aria-expanded="false"><i class="fa fa-columns"
                                     aria-hidden="true"></i><span class="hide-menu">Performance</span> <span
                                     class="badge badge-danger"> Nouveau ! </span></a></li></a></li>
-                        <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Niveau1' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'Control') { ?>
+                        <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Niveau1' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'Control') { ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Analytics/uv" aria-expanded="false"><i class="fa fa-columns"
                                     aria-hidden="true"></i><span class="hide-menu">UV</span></a></li>
@@ -176,7 +176,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                                     aria-hidden="true"></i><span class="hide-menu">Chart</span></a></li>
 
                         <?php } ?>
-                        <?php if ($_SESSION['statut'] == 'admin') { ?>
+                        <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'superadmin') { ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Analytics/index" aria-expanded="false"><i class="fa fa-columns"
                                     aria-hidden="true"></i><span class="hide-menu">Analytics</span></a></li>
@@ -202,9 +202,11 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                                 href="/Pannel/links" aria-expanded="false"><i class="fa fa-users"
                                     aria-hidden="true"></i><span class="hide-menu">Links</span></a></li>
 
+                        <?php if ($_SESSION['statut'] == 'superadmin') { ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Pannel/Pays" aria-expanded="false"><i class="fa fa-users"
                                     aria-hidden="true"></i><span class="hide-menu">Liste Pays</span></a></li>
+                        <?php } ?>
                         <?php } ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Users/myprofile" aria-expanded="false"><i class="fa fa-user"

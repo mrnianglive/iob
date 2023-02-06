@@ -195,6 +195,10 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Pannel/links" aria-expanded="false"><i class="fa fa-users"
                                     aria-hidden="true"></i><span class="hide-menu">Links</span></a></li>
+
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Pannel/Pays" aria-expanded="false"><i class="fa fa-users"
+                                    aria-hidden="true"></i><span class="hide-menu">Liste Pays</span></a></li>
                         <?php } ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Users/myprofile" aria-expanded="false"><i class="fa fa-user"

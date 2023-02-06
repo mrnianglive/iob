@@ -208,4 +208,19 @@ class PannelManagerPDO extends PannelManager
         $requeteAddService->bindValue(':target', $_POST['target'], \PDO::PARAM_STR);
         $requeteAddService->execute();
     }
+
+    public function ListePays()
+    {
+        $requete = $this->dao->prepare('SELECT * FROM tblpays');
+        $requete->execute();
+        $data = $requete->fetchAll();
+        return $data;
+    }
+
+    public function AddPays()
+    {
+        $requeteAddService = $this->dao->prepare("INSERT INTO tblpays(nomPays) VALUES(:nomPays)");
+        $requeteAddService->bindValue(':nomPays', $_POST['nomPays'], \PDO::PARAM_STR);
+        $requeteAddService->execute();
+    }
 }

@@ -140,4 +140,20 @@ class PannelController extends \Library\BackController
 
         }
     }
+
+    public function executeListePays(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Liste des Pays"); // Titre de la page
+        $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("ListePays", $ListePays);
+
+        if ($request->method() == 'POST') {
+            $this->managers->getManagerOf("Pannel")->AddPays($request);
+            $_SESSION['message']['type'] = 'success';
+            $_SESSION['message']['text'] = 'Ajout réussie !';
+            $_SESSION['message']['number'] = 2;
+            $this->app()->httpResponse()->redirect('/Pannel/Pays'); //Retour en arriere
+
+        }
+    }
 }

@@ -54,4 +54,6 @@
 	<route url="/connexion/doubleauth" module="Connexion" action="doubleauth"/>
 	<route url="/Users/doubleauth/reset/([0-9]+)" module="Users" vars="id" action="resetauth"/>
 
+	<route url="/Pannel/Pays" module="Pannel" action="listepays"/>
+
 </routes>

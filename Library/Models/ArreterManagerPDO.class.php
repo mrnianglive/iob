@@ -8,8 +8,9 @@ class ArreterManagerPDO extends ArreterManager
 {
     public function GetListeCaisse()
     {
-        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE TbleChmod.RefUsers=:RefUsers');
+        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE TbleChmod.RefUsers=:RefUsers AND TblAgency.RefPays=:RefPays');
         $requeteAgence->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requeteAgence->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         $requeteAgence->execute();
         $ListeCaisse = $requeteAgence->fetchAll();
         foreach ($ListeCaisse as $key => $value) {
@@ -48,18 +49,20 @@ class ArreterManagerPDO extends ArreterManager
 
     public  function SommeVersementCaisse($Caisse)
     {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations WHERE TbleOperations.RefType=1 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND  TbleOperations.RefCaisse=:RefCaisse');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations WHERE TbleOperations.RefType=1 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND  TbleOperations.RefCaisse=:RefCaisse AND TbleOperations.RefPays=:RefPays');
         $requeteSUm->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requeteSUm->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         return $data['TotalVersment'];
     }
     public function SommeRetraitCaisse($Caisse)
     {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalRetrait FROM TbleOperations  WHERE TbleOperations.RefType=2 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND  TbleOperations.RefCaisse=:RefCaisse');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalRetrait FROM TbleOperations  WHERE TbleOperations.RefType=2 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND  TbleOperations.RefCaisse=:RefCaisse AND TbleOperations.RefPays=:RefPays');
         $requeteSUm->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requeteSUm->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         return $data['TotalRetrait'];
@@ -140,8 +143,9 @@ class ArreterManagerPDO extends ArreterManager
         $cinq = 0;
         $un = 0;
 
-        $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleBilletage ON TbleBilletage.RefOperations=TbleOperations.RefOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE TbleChmod.RefUsers=:RefUsers AND  TbleOperations.Approve2_Time=:day  AND  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL  AND (TbleOperations.RefType=1 OR TbleOperations.RefType=3)");
+        $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleBilletage ON TbleBilletage.RefOperations=TbleOperations.RefOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE TbleChmod.RefUsers=:RefUsers AND  TbleOperations.Approve2_Time=:day  AND  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL  AND (TbleOperations.RefType=1 OR TbleOperations.RefType=3) AND TbleOperations.RefPays=:RefPays");
         $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         $requete->bindValue(':day', $Date, \PDO::PARAM_STR);
         $requete->execute();
         $Versement = $requete->fetchAll();
@@ -203,8 +207,9 @@ class ArreterManagerPDO extends ArreterManager
         $cinq = 0;
         $un = 0;
 
-        $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleBilletage ON TbleBilletage.RefOperations=TbleOperations.RefOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE TbleChmod.RefUsers=:RefUsers AND TbleOperations.Approve2_Time=:day  AND  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL  AND (TbleOperations.RefType=2 OR TbleOperations.RefType=4) ");
+        $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleBilletage ON TbleBilletage.RefOperations=TbleOperations.RefOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE TbleChmod.RefUsers=:RefUsers AND TbleOperations.Approve2_Time=:day  AND  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL  AND (TbleOperations.RefType=2 OR TbleOperations.RefType=4) AND TbleOperations.RefPays=:RefPays");
         $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         $requete->bindValue(':day', $Date, \PDO::PARAM_STR);
         $requete->execute();
         $retrait = $requete->fetchAll();

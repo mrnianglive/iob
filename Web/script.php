@@ -23,7 +23,7 @@ while ($table = $result->fetch_array()) {
     $query = "SELECT * FROM $table_name";
     $result2 = $conn->query($query);
 
-    print_r($result2->fetch_array());
+    print_r($result2->fetch_array([0][1]));
 }
 
 

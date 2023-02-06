@@ -27,22 +27,7 @@ while ($table = $result->fetch_array()) {
     //fist colunn last id
     $last_id = $column[5];
 
-
-    // Query to update the auto increment for the table
-    $update_query = "ALTER TABLE $table_name AUTO_INCREMENT= $last_id";
-    if ($conn->query($update_query) === TRUE) {
-        echo "Auto increment for table $table_name updated successfully\n";
-    } else {
-        echo "Error updating auto increment for table $table_name: " . $conn->error . "\n";
-    }
-
-    // // Query to define the primary key for the table
-    // $pk_query = "ALTER TABLE $table_name ADD PRIMARY KEY ($first_column_name)";
-    // if ($conn->query($pk_query) === TRUE) {
-    //     echo "Primary key for table $table_name defined successfully\n";
-    // } else {
-    //     echo "Error defining primary key for table $table_name: " . $conn->error . "\n";
-    // }
+    print_r($last_id);
 }
 
 $conn->close();

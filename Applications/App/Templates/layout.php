@@ -108,7 +108,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
                         <li>
-                            <a data-toggle="modal" href="#modalPays">PAYS</a>
+                            <a data-toggle="modal" href="#modalPays"><span
+                                    class="text-white font-medium">MALI</span></a>
                         </li>
                         <li>
                             <a class="profile-pic" href="#">

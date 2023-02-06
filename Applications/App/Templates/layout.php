@@ -2,7 +2,7 @@
 if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     header('Location: /connexion/doubleauth');
 }
-require __DIR__ . '/../../../Libray/Models/PannelManagerPDO.class.php';
+require_once __DIR__ . '../../../Library/Models/PannelManagerPDO.class.php';
 
 ?>
 

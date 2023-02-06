@@ -25,9 +25,11 @@ while ($table = $result->fetch_array()) {
     $column = $column_result->fetch_array();
     $first_column_name = $column[0];
     //fist colunn last id
-    $last_id = $column[5];
 
-    print_r($last_id);
+
+    echo json_encode(
+        $table_name
+    );
 }
 
 $conn->close();

@@ -18,9 +18,10 @@ $table_names = array();
 // Loop through each table
 while ($table = $result->fetch_array()) {
     $table_name = $table[0];
+    echo json_encode(
+        $table_name
+    );
 }
-echo json_encode(
-    $table_name
-);
+
 
 $conn->close();

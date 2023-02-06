@@ -25,8 +25,9 @@ while ($table = $result->fetch_array()) {
     $column = $column_result->fetch_array();
     $first_column_name = $column[0];
 
+
     // Query to update the auto increment for the table
-    $update_query = "ALTER TABLE $table_name AUTO_INCREMENT = (SELECT MAX($first_column_name) FROM $table_name)";
+    $update_query = "ALTER TABLE $table_name AUTO_INCREMENT = $first_column_name";
     if ($conn->query($update_query) === TRUE) {
         echo "Auto increment for table $table_name updated successfully\n";
     } else {

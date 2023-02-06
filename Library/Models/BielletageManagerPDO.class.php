@@ -60,7 +60,7 @@ class BielletageManagerPDO extends BielletageManager
         if (!empty($data) && isset($data)) {
             return $data;
         }
-        return $data;
+        return null;
     }
 
     public  function GetCaisse()

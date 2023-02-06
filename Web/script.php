@@ -3,7 +3,6 @@ $servername = "localhost";
 $username = "root";
 $password = "2023Loly@@";
 $dbname = "iob";
-
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
@@ -26,12 +25,20 @@ while ($table = $result->fetch_array()) {
     $column = $column_result->fetch_array();
     $first_column_name = $column[0];
 
-    // Query to update the auto increment and define primary key for the table
-    $update_query = "ALTER TABLE $table_name AUTO_INCREMENT = (SELECT MAX($first_column_name) FROM $table_name); ALTER TABLE $table_name ADD PRIMARY KEY ($first_column_name)";
+    // Query to update the auto increment for the table
+    $update_query = "ALTER TABLE $table_name AUTO_INCREMENT = (SELECT MAX($first_column_name) FROM $table_name)";
     if ($conn->query($update_query) === TRUE) {
-        echo "Table $table_name updated successfully\n";
+        echo "Auto increment for table $table_name updated successfully\n";
     } else {
-        echo "Error updating table $table_name: " . $conn->error . "\n";
+        echo "Error updating auto increment for table $table_name: " . $conn->error . "\n";
+    }
+
+    // Query to define the primary key for the table
+    $pk_query = "ALTER TABLE $table_name ADD PRIMARY KEY ($first_column_name)";
+    if ($conn->query($pk_query) === TRUE) {
+        echo "Primary key for table $table_name defined successfully\n";
+    } else {
+        echo "Error defining primary key for table $table_name: " . $conn->error . "\n";
     }
 }
 

@@ -2,6 +2,7 @@
 if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     header('Location: /connexion/doubleauth');
 }
+require __DIR__ . '/../../../Libray/Models/PannelManagerPDO.class.php';
 
 ?>
 
@@ -107,20 +108,19 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
-                        <li>
-                            <a data-toggle="modal" href="#UserAddPays"><span
-                                    class="text-white font-medium">MALI</span></a>
-                        </li>
+
                         <li>
                             <a class="profile-pic" href="#">
                                 <span class="text-white font-medium"><?= $_SESSION['login']; ?></span></a>
+                        </li>
+                        <li>
+                            <a data-toggle="modal" href="#UserAddPays"><span
+                                    class="text-white font-medium">MALI</span></a>
                         </li>
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
                         <!--create new li with select, where  you can shoose language-->
-
-
 
                     </ul>
                 </div>

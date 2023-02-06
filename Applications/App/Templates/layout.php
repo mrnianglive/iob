@@ -108,7 +108,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
                         <li>
-                            <a data-toggle="modal" href="#modalPays"><span
+                            <a data-toggle="modal" href="#UserAddPays"><span
                                     class="text-white font-medium">MALI</span></a>
                         </li>
                         <li>
@@ -264,23 +264,29 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     </div>
 
     <!--modalPays-->
-    <div class="modal fade" id="modalPays" tabindex="-5" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="UserAddPays" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                 </div>
-                <div class="modal-body">
-                    <select class="form-control">
-                        <option>MALI </option>
-                        <option>TOGO </option>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                <form role="form" method="post" action="">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label class="control-label">Pays</label>
+                            <select name="RefPays" class="form-control">
+                                <option value="">MALI</option>
+                                <option value="">TOGO</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-primary">Valider</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

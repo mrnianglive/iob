@@ -18,9 +18,8 @@ $table_names = array();
 // Loop through each table
 while ($table = $result->fetch_array()) {
     $table_name = $table[0];
-    echo json_encode(
-        $table_name
-    );
+    //Get first column of each table
+    $query = "ALTER TABLE $table_name AUTO_INCREMENT";
 }
 
 

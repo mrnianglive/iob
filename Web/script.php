@@ -22,9 +22,8 @@ while ($table = $result->fetch_array()) {
     // $query = "ALTER TABLE $table_name AUTO_INCREMENT";
     $query = "SELECT * FROM $table_name";
     $result2 = $conn->query($query);
-    $first_column = $result2->fetch_array()[0];
 
-    echo $first_column;
+    print_r($result2->fetch_array());
 }
 
 

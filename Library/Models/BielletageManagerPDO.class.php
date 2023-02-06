@@ -16,7 +16,10 @@ class BielletageManagerPDO extends BielletageManager
         $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requete->execute();
         $display = $requete->fetchAll();
-        return $display;
+        if (!empty($display) && isset($display)) {
+            return $display;
+        }
+        return null;
     }
     public function CheckOuverture($data = NULL)
     {
@@ -100,16 +103,27 @@ class BielletageManagerPDO extends BielletageManager
     }
     public function Add()
     {
-
-
         if (!empty($_POST['Antidate'])) {
             $date = $_POST['Antidate'];
         } else {
             $date = date('Y-m-d');
         }
+
+        if (!empty($_POST['TypeRetrait'])) {
+            $TypeRetrait = $_POST['TypeRetrait'];
+        } else {
+            $TypeRetrait = null;
+        }
+
+
         $result = uniqid();
         if (intval($_POST['MontantVersement']) > 0  && !empty($_POST['MontantVersement'])  && !empty($_POST['RefCaisse']) && !empty($_POST['TelDeposant'])) {
 
+            if (!empty($_POST['TypeAppro'])) {
+                $TypeAppro = $_POST['TypeAppro'];
+            } else {
+                $TypeAppro = null;
+            }
             if ($_POST['RefType'] == 5) {
                 $this->SortieCaisse2Caisse();
                 $this->ApproCaisse2Caisse();
@@ -131,9 +145,9 @@ class BielletageManagerPDO extends BielletageManager
                 $requeteAddversement->bindValue(':NameDeposant', $_POST['NameDeposant'], \PDO::PARAM_STR);
                 $requeteAddversement->bindValue(':TelDeposant', $_POST['TelDeposant'], \PDO::PARAM_STR);
                 $requeteAddversement->bindValue(':RefType', $_POST['RefType'], \PDO::PARAM_INT);
-                $requeteAddversement->bindValue(':TypeAppro', $_POST['TypeAppro'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':TypeAppro', $TypeAppro, \PDO::PARAM_INT);
                 $requeteAddversement->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
-                $requeteAddversement->bindValue(':TypeRetrait', $_POST['TypeRetrait'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':TypeRetrait', $TypeRetrait, \PDO::PARAM_INT);
                 $requeteAddversement->bindValue(':uniqid', $result, \PDO::PARAM_STR);
                 $requeteAddversement->execute();
                 $Refoperations = $this->dao->lastInsertId();

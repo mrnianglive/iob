@@ -45,11 +45,10 @@ class BielletageManagerPDO extends BielletageManager
         $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
         $requete->execute();
         $Result = $requete->fetch();
-        return $Result['RefCaisse'];
-        //Warning: Trying to access array offset on value of type bool in /var/www/html/iob/Library/Models/BielletageManagerPDO.class.php on line 48
-        //fix this error
-
-        return $Result['RefCaisse'] ?? false;
+        if (!empty($Result) && isset($Result['RefCaisse'])) {
+            return $Result['RefCaisse'];
+        }
+        return null;
     }
     public function CheckAfterRapport($Caisse)
     {
@@ -58,6 +57,9 @@ class BielletageManagerPDO extends BielletageManager
         $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
         $requete->execute();
         $data = $requete->fetch();
+        if (!empty($data) && isset($data)) {
+            return $data;
+        }
         return $data;
     }
 

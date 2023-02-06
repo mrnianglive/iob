@@ -46,6 +46,10 @@ class BielletageManagerPDO extends BielletageManager
         $requete->execute();
         $Result = $requete->fetch();
         return $Result['RefCaisse'];
+        //Warning: Trying to access array offset on value of type bool in /var/www/html/iob/Library/Models/BielletageManagerPDO.class.php on line 48
+        //fix this error
+
+        return $Result['RefCaisse'] ?? false;
     }
     public function CheckAfterRapport($Caisse)
     {

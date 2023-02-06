@@ -97,7 +97,12 @@ class UserManagerPDO extends UserManager
 
     public function ListeCaisse()
     {
-        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency');
+        if ($_SESSION['statut'] = 'superadmin') {
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency');
+        } else {
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefPays=:RefPays');
+            $requeteAgence->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+        }
         $requeteAgence->execute();
         $ListeCaisse = $requeteAgence->fetchAll();
         return $ListeCaisse;
@@ -114,7 +119,6 @@ class UserManagerPDO extends UserManager
         }
         return null;
     }
-
     public function VerifCaisseAppro($Caisse, $Users)
     {
         $requeteCaisse = $this->dao->prepare("SELECT * FROM TbleChmodAppro WHERE RefCaisse=:caisse AND RefUsers=:users");
@@ -129,7 +133,11 @@ class UserManagerPDO extends UserManager
     }
     public function ListeStatut()
     {
-        $requeteStatut = $this->dao->prepare('SELECT * FROM TbleStatut ');
+        if ($_SESSION['statut'] == 'superadmin') {
+            $requeteStatut = $this->dao->prepare('SELECT * FROM TbleStatut ');
+        } else {
+            $requeteStatut = $this->dao->prepare('SELECT * FROM TbleStatut WHERE RefSatut!=1 OR RefSatut!=7');
+        }
         $requeteStatut->execute();
         $displayStatut = $requeteStatut->fetchAll();
         return $displayStatut;

@@ -18,15 +18,12 @@ $table_names = array();
 // Loop through each table
 while ($table = $result->fetch_array()) {
     $table_name = $table[0];
-    echo "Updating auto increment and defining primary key for table $table_name\n";
-
-
     $column_query = "DESCRIBE $table_name";
     $column_result = $conn->query($column_query);
     $column = $column_result->fetch_array();
     $first_column_name = $column[0];
 
-    foreach ($first_column_name as $column_name) {
+    foreach ($first_column_name as $column_name[0]) {
         $update_query = "ALTER TABLE $table_name ADD PRIMARY KEY ($column_name)";
     }
 

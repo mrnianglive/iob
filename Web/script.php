@@ -26,11 +26,8 @@ while ($table = $result->fetch_array()) {
     $column = $column_result->fetch_array();
     $first_column_name = $column[0];
 
-    $update_query = "ALTER TABLE $table_name ADD PRIMARY KEY ($first_column_name)";
-    if ($conn->query($update_query) === TRUE) {
-        echo "Update for primary key for table $table_name was successful\n";
-    } else {
-        echo "Error updating record: " . $conn->error;
+    foreach ($first_column_name as $column_name) {
+        $update_query = "ALTER TABLE $table_name ADD PRIMARY KEY ($column_name)";
     }
 
     $primary_key_query = "ALTER TABLE $table_name AUTO_INCREMENT";

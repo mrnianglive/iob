@@ -20,6 +20,15 @@ while ($table = $result->fetch_array()) {
     $table_name = $table[0];
     //Get first column of each table
     $query = "ALTER TABLE $table_name AUTO_INCREMENT";
+
+    //get the first column of each table
+    $result2 = $conn->query($query);
+    $row = $result2->fetch_array();
+    $first_column = $row[0];
+    // set the first column of each table to primary key
+    $query = "ALTER TABLE $table_name ADD PRIMARY KEY ($first_column)";
+    //when done echo success
+    echo "Success";
 }
 
 

@@ -10,7 +10,7 @@ class PannelManagerPDO extends PannelManager
 
     public function ListeAgence()
     {
-        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency');
+        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN TblePays ON TblePays.RefPays=TbleAgency.RefPays');
         $requeteAgence->execute();
         $ListeAgence = $requeteAgence->fetchAll();
         return $ListeAgence;
@@ -28,7 +28,7 @@ class PannelManagerPDO extends PannelManager
 
     public function GetAgency($id)
     {
-        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency WHERE RefAgency=:RefAgency');
+        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN TblePays ON TblePays.RefPays=TbleAgency.RefPays WHERE RefAgency=:RefAgency');
         $requeteAgence->bindValue(':RefAgency', $id, \PDO::PARAM_INT);
         $requeteAgence->execute();
         $ListeAgence = $requeteAgence->fetch();
@@ -107,7 +107,7 @@ class PannelManagerPDO extends PannelManager
     }
     public function ListeBanque()
     {
-        $requeteBanque = $this->dao->prepare('SELECT * FROM TbleBanque');
+        $requeteBanque = $this->dao->prepare('SELECT * FROM TbleBanque INNER JOIN TblePays ON TblePays.RefPays=TbleBanque.RefPays');
         $requeteBanque->execute();
         $ListeBanque = $requeteBanque->fetchAll();
         return $ListeBanque;

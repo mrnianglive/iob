@@ -12,6 +12,7 @@
                             <th class="border-top-0">ID</th>
                             <th class="border-top-0">Nom</th>
                             <th class="border-top-0">Phone</th>
+                            <th class="border-top-0">Pays</th>
                             <th class="border-top-0">Actions</th>
                         </tr>
                     </thead>
@@ -21,6 +22,7 @@
                             <td><?= $value['RefAgency']; ?></td>
                             <td><?= $value['NameAgency']; ?></td>
                             <td><?= $value['TelAgence']; ?></td>
+                            <td><?= $value['NomPays']; ?></td>
                             <td>
                                 <a href="/Pannel/Agence/delete/<?= $value['RefAgency']; ?>"
                                     class="btn btn-xs btn-danger"

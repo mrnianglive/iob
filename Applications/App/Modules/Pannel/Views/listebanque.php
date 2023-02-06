@@ -11,13 +11,15 @@
                         <tr>
                             <th class="border-top-0">ID</th>
                             <th class="border-top-0">Nom</th>
-                            <th class="border-top-0">Action<s /th>
+                            <th class="border-top-0">Pays</th>
+                            <th class="border-top-0">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($ListeBanque as $key => $value) { ?>
                         <tr>
                             <td><?= $value['RefBanque']; ?></td>
+                            <td><?= $value['nomPays']; ?></td>
                             <td><?= $value['NameBanque']; ?></td>
                             <td>
                                 <a href="/Pannel/Banque/delete/<?= $value['RefBanque']; ?>"

@@ -39,6 +39,8 @@ class PannelController extends \Library\BackController
         $this->page->addVar("ListeAgence", $ListeAgence);
         $ListeBanque  = $this->managers->getManagerOf("Pannel")->ListeBanque();
         $this->page->addVar("ListeBanque", $ListeBanque);
+        $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("ListePays", $ListePays);
         if ($request->method() == 'POST') {
             $this->managers->getManagerOf("Pannel")->AddAgency($request);
             $_SESSION['message']['type'] = 'success';
@@ -63,6 +65,9 @@ class PannelController extends \Library\BackController
         $this->page->addVar("titles", "Liste des Banque"); // Titre de la page
         $ListeBanque  = $this->managers->getManagerOf("Pannel")->ListeBanque();
         $this->page->addVar("ListeBanque", $ListeBanque);
+
+        $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("ListePays", $ListePays);
 
         if ($request->method() == 'POST') {
             $this->managers->getManagerOf("Pannel")->AddBanque($request);

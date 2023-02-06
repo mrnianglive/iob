@@ -114,16 +114,18 @@ class PannelManagerPDO extends PannelManager
     }
     public function AddAgency()
     {
-        $requeteAddService = $this->dao->prepare("INSERT INTO TbleAgency(NameAgency,TelAgence) VALUES(:NameAgency,:TelAgence)");
+        $requeteAddService = $this->dao->prepare("INSERT INTO TbleAgency(NameAgency,TelAgence,RefPays) VALUES(:NameAgency,:TelAgence,:RefPays)");
         $requeteAddService->bindValue(':NameAgency', $_POST['NameAgency'], \PDO::PARAM_STR);
         $requeteAddService->bindValue(':TelAgence', $_POST['TelAgence'], \PDO::PARAM_STR);
+        $requeteAddService->bindValue(':RefPays', $_POST['RefPays'], \PDO::PARAM_INT);
         $requeteAddService->execute();
     }
 
     public function AddBanque()
     {
-        $requete = $this->dao->prepare("INSERT INTO TbleBanque(NameBanque) VALUES(:NameBanque)");
+        $requete = $this->dao->prepare("INSERT INTO TbleBanque(NameBanque,RefPays) VALUES(:NameBanque,:RefPays)");
         $requete->bindValue(':NameBanque', $_POST['NameBanque'], \PDO::PARAM_STR);
+        $requete->bindValue(':RefPays', $_POST['RefPays'], \PDO::PARAM_INT);
         $requete->execute();
     }
     public function DeleteBanque($Banque)

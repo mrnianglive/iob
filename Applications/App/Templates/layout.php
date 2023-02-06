@@ -262,6 +262,28 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
         <!-- End Page wrapper  -->
         <!-- ============================================================== -->
     </div>
+
+    <!--modalPays-->
+    <div class="modal fade" id="modalPays" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <select class="form-control">
+                        <option>MALI </option>
+                        <option>TOGO </option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
     <script src="/js/wizard.js" type="text/javascript"></script>
@@ -343,27 +365,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     </script>
 
 
-    <!--modalPays-->
-    <div class="modal fade" id="modalPays" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <select class="form-control">
-                        <option>MALI </option>
-                        <option>TOGO </option>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </body>
 
 </html>

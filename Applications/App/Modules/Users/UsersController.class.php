@@ -9,6 +9,9 @@ class UsersController extends \Library\BackController
         $this->page->addVar("titles", "Accueil"); // Titre de la page
         $Users  = $this->managers->getManagerOf("User")->ListeUsers();
         $ListeCaisse  = $this->managers->getManagerOf("User")->ListeCaisse();
+
+        $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("ListePays", $ListePays);
         foreach ($Users as $key => $value) {
             foreach ($ListeCaisse as $key1 => $value1) {
                 $caisse[$value['RefUsers']][$value1['RefCaisse']] =
@@ -87,6 +90,8 @@ class UsersController extends \Library\BackController
         $this->page->addVar('Info', $Info);
         $ListeStatut  = $this->managers->getManagerOf("User")->ListeStatut();
         $this->page->addVar("ListeStatut", $ListeStatut);
+        $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("ListePays", $ListePays);
         if ($request->method() == 'POST') {
             $this->managers->getManagerOf("User")->UpdateUsers($request);
             $_SESSION['message']['type'] = 'success';

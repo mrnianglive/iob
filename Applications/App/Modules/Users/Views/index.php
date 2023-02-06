@@ -12,6 +12,7 @@
                             <th class="border-top-0">ID</th>
                             <th class="border-top-0">Nom</th>
                             <th class="border-top-0">Statut</th>
+                            <th class="border-top-0">Pays</th>
                             <th class="border-top-0">Actions</th>
                         </tr>
                     </thead>
@@ -21,6 +22,7 @@
                             <th><?= $users['RefUsers']; ?></th>
                             <td><?= $users['NomUsers'] . " " . $users['PrenomUsers']; ?></td>
                             <td><?= $users['Name']; ?></td>
+                            <td><?= $users['nomPays']; ?></td>
                             <td>
                                 <button type="button" class="btn btn-info btn-outline btn-circle btn-lg m-r-5"
                                     data-toggle="modal" data-target="#Chmod-<?= $users['RefUsers']; ?>"
@@ -155,6 +157,18 @@
                             <?php } ?>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="prenom" class="control-label">Pays</label>
+                        <select class="form-control" name="RefPays" required>
+                            <option>Veuillez Choisir</option>
+                            <?php foreach ($ListePays as $key => $pays) { ?>
+                            <option value="<?= $pays['RefPays']; ?>"><?= $pays['nomPays']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>

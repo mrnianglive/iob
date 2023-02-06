@@ -35,6 +35,18 @@
                     <label for="nom" class="control-label">Password</label>
                     <input class="form-control" name="password" type="password" />
                 </div>
+
+                <div class="form-group">
+                    <label for="stataut" class="control-label">Pays</label>
+                    <select class="form-control" name="RefPays" required>
+                        <option>Veuillez Choisir</option>
+                        <?php foreach ($ListePays as $key => $pays) { ?>
+                        <option value="<?= $pays['RefPays']; ?>" <?php if ($pays['RefPays'] == $Info['RefPays']) { ?>
+                            selected="" <?php } ?>>
+                            <?= $pays['nomPays']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
                 <button class="btn btn-primary"><i class="fa fa-edit"> Modifier</i></button>
             </form>
         </div>

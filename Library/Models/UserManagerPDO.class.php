@@ -86,7 +86,7 @@ class UserManagerPDO extends UserManager
     }
     public function ListeUsers()
     {
-        $requeteUsers = $this->dao->prepare('SELECT * FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut');
+        $requeteUsers = $this->dao->prepare('SELECT * FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut INNER JOIN tblpays ON tblpays.RefPays=TbleUsers.RefPays');
         $requeteUsers->execute();
         $ListeUsers = $requeteUsers->fetchAll();
         foreach ($ListeUsers as $key => $value) {
@@ -137,13 +137,14 @@ class UserManagerPDO extends UserManager
     public function AddUser()
     {
         $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-        $query = $this->dao->prepare('INSERT INTO TbleUsers (login,password,NomUsers,PrenomUsers,email,RefStatut) VALUES(:login,:password,:NomUsers,:PrenomUsers,:email,:RefStatut)');
+        $query = $this->dao->prepare('INSERT INTO TbleUsers (login,password,NomUsers,PrenomUsers,email,RefStatut,RefPays) VALUES(:login,:password,:NomUsers,:PrenomUsers,:email,:RefStatut,:RefPays)');
         $query->bindValue(':login', $_POST['login'],  \PDO::PARAM_STR);
         $query->bindValue(':password', $password, \PDO::PARAM_STR);
         $query->bindValue(':NomUsers', $_POST['NomUsers'], \PDO::PARAM_STR);
         $query->bindValue(':PrenomUsers', $_POST['PrenomUsers'], \PDO::PARAM_STR);
         $query->bindValue(':email', $_POST['email'], \PDO::PARAM_STR);
         $query->bindValue(':RefStatut', $_POST['RefStatut'], \PDO::PARAM_STR);
+        $query->bindValue(':RefPays', $_POST['RefPays'], \PDO::PARAM_STR);
         $query->execute();
         $this->SendUserinfo($_POST['email'], $_POST['login'], $_POST['password']);
     }
@@ -165,21 +166,24 @@ class UserManagerPDO extends UserManager
     {
         if (!empty($_POST['password'])) {
             $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-            $requete = $this->dao->prepare("UPDATE TbleUsers SET password=:password,NomUsers=:NomUsers,PrenomUsers=:PrenomUsers,email=:email,RefStatut=:RefStatut WHERE RefUsers=:RefUsers");
+            $requete = $this->dao->prepare("UPDATE TbleUsers SET password=:password,NomUsers=:NomUsers,PrenomUsers=:PrenomUsers,email=:email,RefStatut=:RefStatut,RefPays=:RefPays WHERE RefUsers=:RefUsers");
             $requete->bindValue(':password', $password, \PDO::PARAM_STR);
             $requete->bindValue(':NomUsers', $_POST['NomUsers'], \PDO::PARAM_STR);
             $requete->bindValue(':PrenomUsers', $_POST['PrenomUsers'], \PDO::PARAM_STR);
             $requete->bindValue(':email', $_POST['email'], \PDO::PARAM_STR);
             $requete->bindValue(':RefStatut', $_POST['RefStatut'], \PDO::PARAM_INT);
             $requete->bindValue(':RefUsers', $_POST['RefUsers'], \PDO::PARAM_INT);
+            $requete->bindValue(':RefPays', $_POST['RefPays'], \PDO::PARAM_INT);
             $requete->execute();
         } else {
-            $requete = $this->dao->prepare("UPDATE TbleUsers SET NomUsers=:NomUsers,PrenomUsers=:PrenomUsers,email=:email,RefStatut=:RefStatut WHERE RefUsers=:RefUsers");
+            $requete = $this->dao->prepare("UPDATE TbleUsers SET NomUsers=:NomUsers,PrenomUsers=:PrenomUsers,email=:email,RefStatut=:RefStatut,RefPays=:RefPays WHERE RefUsers=:RefUsers");
             $requete->bindValue(':NomUsers', $_POST['NomUsers'], \PDO::PARAM_STR);
             $requete->bindValue(':PrenomUsers', $_POST['PrenomUsers'], \PDO::PARAM_STR);
             $requete->bindValue(':email', $_POST['email'], \PDO::PARAM_STR);
             $requete->bindValue(':RefStatut', $_POST['RefStatut'], \PDO::PARAM_INT);
+            $requete->bindValue(':RefPays', $_POST['RefPays'], \PDO::PARAM_INT);
             $requete->bindValue(':RefUsers', $_POST['RefUsers'], \PDO::PARAM_INT);
+
             $requete->execute();
         }
     }

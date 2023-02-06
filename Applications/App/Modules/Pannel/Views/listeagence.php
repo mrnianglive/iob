@@ -22,7 +22,7 @@
                             <td><?= $value['RefAgency']; ?></td>
                             <td><?= $value['NameAgency']; ?></td>
                             <td><?= $value['TelAgence']; ?></td>
-                            <td><?= $value['NomPays']; ?></td>
+                            <td><?= $value['nomPays']; ?></td>
                             <td>
                                 <a href="/Pannel/Agence/delete/<?= $value['RefAgency']; ?>"
                                     class="btn btn-xs btn-danger"

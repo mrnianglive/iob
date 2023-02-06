@@ -10,8 +10,8 @@
                     <thead>
                         <tr>
                             <th class="border-top-0">ID</th>
-                            <th class="border-top-0">Nom</th>
                             <th class="border-top-0">Pays</th>
+                            <th class="border-top-0">Nom</th>
                             <th class="border-top-0">Action</th>
                         </tr>
                     </thead>

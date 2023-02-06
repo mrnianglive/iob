@@ -36,8 +36,8 @@ class ConnexionController extends \Library\BackController
     public function executeLogout(\Library\HTTPRequest $request)
     {
         $this->page->addVar('titles', 'Logout');
-        $this->managers->getManagerOf('User')->UpdateLog($_SESSION['RefUsers'], 1, $_SESSION['LogID']);
-        $this->managers->getManagerOf('User')->LastConnexionUpdate($_SESSION['LogID']);
+        // $this->managers->getManagerOf('User')->UpdateLog($_SESSION['RefUsers'], 1, $_SESSION['LogID']);
+        // $this->managers->getManagerOf('User')->LastConnexionUpdate($_SESSION['LogID']);
         $this->app()->user()->setAuthenticated(false); //deconnexion de user
         $_SESSION['message']['type'] = 'success';
         $_SESSION['message']['text'] = 'Déconnexion réussie !';

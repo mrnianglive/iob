@@ -6,8 +6,6 @@ use \Library\Entities\Pannel;
 
 class RemittanceManagerPDO extends RemittanceManager
 {
-
-
     public function ListeType()
     {
         $requete = $this->dao->prepare('SELECT * FROM TbleType');
@@ -25,7 +23,7 @@ class RemittanceManagerPDO extends RemittanceManager
 
     public function Add()
     {
-        $requete = $this->dao->prepare("INSERT INTO TbleRemittance(RefCaisse,RefProduit,RefType,NumPhone,NomComplet,MontantTransaction,Insert_id) VALUES(:RefCaisse,:RefProduit,:RefType,:NumPhone,:NomComplet,:MontantTransaction,:Insert_id)");
+        $requete = $this->dao->prepare("INSERT INTO TbleRemittance(RefCaisse,RefProduit,RefType,NumPhone,NomComplet,MontantTransaction,Insert_id,RefPays) VALUES(:RefCaisse,:RefProduit,:RefType,:NumPhone,:NomComplet,:MontantTransaction,:Insert_id,:RefPays)");
         $requete->bindValue(':RefCaisse', $_POST['RefCaisse'], \PDO::PARAM_INT);
         $requete->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
         $requete->bindValue(':RefType', $_POST['RefType'], \PDO::PARAM_INT);
@@ -33,6 +31,7 @@ class RemittanceManagerPDO extends RemittanceManager
         $requete->bindValue(':NomComplet', $_POST['NomComplet'], \PDO::PARAM_STR);
         $requete->bindValue(':MontantTransaction', $_POST['MontantTransaction'], \PDO::PARAM_STR);
         $requete->bindValue(':Insert_id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         $requete->execute();
         $id = $this->dao->lastInsertId();
         if (!empty($_POST['Antidate'])) {
@@ -61,9 +60,6 @@ class RemittanceManagerPDO extends RemittanceManager
         $requete->execute();
     }
 
-
-
-
     public function GetOperations($debut, $fin, $Agence)
     {
         $requete = $this->dao->prepare("SELECT * FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleProduit ON TbleProduit.RefProduit=TbleRemittance.RefProduit INNER JOIN TbleType ON TbleType.RefType=TbleRemittance.RefType  WHERE  date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin'  AND TbleAgency.RefAgency=:Agence AND TbleRemittance.Reset_Id IS NULL ORDER BY TbleRemittance.RefRemittance DESC");
@@ -76,8 +72,6 @@ class RemittanceManagerPDO extends RemittanceManager
         }
         return $data;
     }
-
-
 
     public function ValidateOperations()
     {

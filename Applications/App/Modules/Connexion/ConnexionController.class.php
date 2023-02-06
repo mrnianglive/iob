@@ -4,7 +4,6 @@ namespace Applications\App\Modules\Connexion;
 
 class ConnexionController extends \Library\BackController
 {
-
     public function executeIndex(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Page de Connexion"); // Titre de la page
@@ -19,6 +18,7 @@ class ConnexionController extends \Library\BackController
                     $_SESSION['NomUsers'] = $User['NomUsers'];
                     $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
                     $_SESSION['statut'] = $User['Name'];
+                    $_SESSION['RefPays'] = $User['RefPays'];
                     $_SESSION['secret'] = true;
                     $this->app()->httpResponse()->redirect('/connexion/doubleauth');
                 } else {
@@ -28,6 +28,7 @@ class ConnexionController extends \Library\BackController
                     $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
                     $_SESSION['statut'] = $User['Name'];
                     $_SESSION['RefUsers'] = $User['RefUsers'];
+                    $_SESSION['RefPays'] = $User['RefPays'];
                     $this->app()->httpResponse()->redirect('/');
                 }
             }

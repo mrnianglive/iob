@@ -91,9 +91,6 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                     <!-- Right side toggle and nav items -->
                     <!-- ============================================================== -->
                     <ul class="navbar-nav ml-auto d-flex align-items-center">
-                        <li>
-                            <button class="btn btn-info"><span>Pays</span></button>
-                        </li>
 
                         <!-- ============================================================== -->
                         <!-- Search -->
@@ -112,12 +109,20 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- ============================================================== -->
                         <li>
                             <a class="profile-pic" href="#">
-                                <img src="/images/mlc.png" alt="user-img" width="36" class="img-circle"><span
-                                    class="text-white font-medium"><?= $_SESSION['login']; ?></span></a>
+                                <span class="text-white font-medium">MALI </span></a>
+                        </li>
+
+                        <li>
+                            <a class="profile-pic" href="#">
+                                <span class="text-white font-medium"><?= $_SESSION['login']; ?></span></a>
                         </li>
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
+                        <!--create new li with select, where  you can shoose language-->
+
+
+
                     </ul>
                 </div>
             </nav>

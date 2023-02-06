@@ -27,12 +27,16 @@ class ConnexionController extends \Library\BackController
                     $this->app()->httpResponse()->redirect('/connexion/doubleauth');
                 } else {
                     $this->app()->user()->setAuthenticated();
+                    if (!empty($User['RefPays'])) {
+                        $getPaysName = $this->managers->getManagerOf('Pannel')->getPaysName($User['RefPays']);
+                    }
                     $_SESSION['login'] = $User['login'];
                     $_SESSION['NomUsers'] = $User['NomUsers'];
                     $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
                     $_SESSION['statut'] = $User['Name'];
                     $_SESSION['RefUsers'] = $User['RefUsers'];
                     $_SESSION['RefPays'] = $User['RefPays'];
+                    $_SESSION['nomPays'] = $getPaysName;
                     $this->app()->httpResponse()->redirect('/');
                 }
             }

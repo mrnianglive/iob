@@ -213,7 +213,12 @@ class PannelManagerPDO extends PannelManager
 
     public function ListePays()
     {
-        $requete = $this->dao->prepare('SELECT * FROM tblpays');
+        if ($_SESSION['statut'] == 'superadmin') {
+            $requete = $this->dao->prepare('SELECT * FROM tblpays');
+        } else {
+            $requete = $this->dao->prepare('SELECT * FROM tblpays WHERE RefPays=:RefPays');
+            $requete->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+        }
         $requete->execute();
         $data = $requete->fetchAll();
         return $data;

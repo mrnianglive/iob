@@ -109,7 +109,7 @@ class UserManagerPDO extends UserManager
         $requeteCaisse->bindValue(':users', $Users, \PDO::PARAM_INT);
         $requeteCaisse->execute();
         $Verfiy = $requeteCaisse->fetch();
-        if (!empty($Verfiy['RefCaisse'] && isset($Verfiy['RefCaisse']))) {
+        if (!empty($Verfiy && isset($Verfiy))) {
             return $Verfiy['RefCaisse'];
         }
         return null;
@@ -122,7 +122,7 @@ class UserManagerPDO extends UserManager
         $requeteCaisse->bindValue(':users', $Users, \PDO::PARAM_INT);
         $requeteCaisse->execute();
         $Verfiy = $requeteCaisse->fetch();
-        if (!empty($Verfiy['RefCaisse'] && isset($Verfiy['RefCaisse']))) {
+        if (!empty($Verfiy && isset($Verfiy))) {
             return $Verfiy['RefCaisse'];
         }
         return null;

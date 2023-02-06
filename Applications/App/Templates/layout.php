@@ -2,7 +2,6 @@
 if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     header('Location: /connexion/doubleauth');
 }
-require_once __DIR__ . '../../../Library/Models/PannelManagerPDO.class.php';
 
 ?>
 
@@ -115,7 +114,7 @@ require_once __DIR__ . '../../../Library/Models/PannelManagerPDO.class.php';
                         </li>
                         <li>
                             <a data-toggle="modal" href="#UserAddPays"><span
-                                    class="text-white font-medium">MALI</span></a>
+                                    class="text-white font-medium"><?= $_SESSION['nomPays']; ?> </span></a>
                         </li>
                         <!-- ============================================================== -->
                         <!-- User profile and search -->

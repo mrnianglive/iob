@@ -13,6 +13,9 @@ class ConnexionController extends \Library\BackController
             if (!empty($User)) {
                 if (!empty($User['secret'])) {
                     $this->app()->user()->setAuthenticated();
+                    if (!empty($User['RefPays'])) {
+                        $getPaysName = $this->managers->getManagerOf('Pannel')->getPaysName($User['RefPays']);
+                    }
                     $_SESSION['RefUsers'] = $User['RefUsers'];
                     $_SESSION['login'] = $User['login'];
                     $_SESSION['NomUsers'] = $User['NomUsers'];
@@ -20,6 +23,7 @@ class ConnexionController extends \Library\BackController
                     $_SESSION['statut'] = $User['Name'];
                     $_SESSION['RefPays'] = $User['RefPays'];
                     $_SESSION['secret'] = true;
+                    $_SESSION['nomPays'] = $getPaysName['nomPays'];
                     $this->app()->httpResponse()->redirect('/connexion/doubleauth');
                 } else {
                     $this->app()->user()->setAuthenticated();

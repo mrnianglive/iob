@@ -225,4 +225,12 @@ class PannelManagerPDO extends PannelManager
         $requeteAddService->bindValue(':nomPays', $_POST['nomPays'], \PDO::PARAM_STR);
         $requeteAddService->execute();
     }
+    public function getPaysName($id)
+    {
+        $requete = $this->dao->prepare('SELECT * FROM tblpays WHERE RefPays=:RefPays');
+        $requete->bindValue(':RefPays', $id, \PDO::PARAM_INT);
+        $requete->execute();
+        $data = $requete->fetch();
+        return $data['nomPays'];
+    }
 }

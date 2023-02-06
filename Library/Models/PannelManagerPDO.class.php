@@ -148,7 +148,10 @@ class PannelManagerPDO extends PannelManager
         $requete->bindValue(':RefProduit', $Produit, \PDO::PARAM_INT);
         $requete->execute();
         $data = $requete->fetch();
-        return $data['RefCaisse'];
+        if (!empty($data) && isset($data)) {
+            return $data['RefCaisse'];
+        }
+        return null;
     }
 
     public function AddChmodProduit()

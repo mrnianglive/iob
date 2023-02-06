@@ -141,12 +141,6 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                                 href="/remittances/index" aria-expanded="false"><i class="fas fa-exchange"
                                     aria-hidden="true"></i><span class="hide-menu">Remittance</span> <span
                                     class="badge badge-danger"> Nouveau ! </span></a></li>
-                        <?php if ($_SESSION['statut'] == 'admin') { ?>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/payements/index" aria-expanded="false"><i class="fas fa-exchange"
-                                    aria-hidden="true"></i><span class="hide-menu">Mass Payment</span> <span
-                                    class="badge badge-danger"> Nouveau ! </span></a></li>
-                        <?php } ?>
 
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Journal/petite_caisse" aria-expanded="false"><i class="fa fa-columns"

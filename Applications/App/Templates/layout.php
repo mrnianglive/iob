@@ -246,8 +246,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
             <footer class="footer text-center">
                 <?= $_SESSION['nomPays'] ?? 'AFC'; ?> |
                 <?= date('Y'); ?>
-                © <a href="https://malicreances-sa.com" target="_blank">AFRIK CREANCES HOLDING</a> CONNCEPTION BY <a
-                    href="https://niangaly.ml" target="_blank">NIANGALY</a>
+                © <a href="https://afrikcreances.com" target="_blank">AFRIK CREANCES HOLDING</a> CONNCEPTION BY <a
+                    href="https://niangaly.com" target="_blank">NIANGALY</a>
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->

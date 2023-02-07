@@ -64,7 +64,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                             <?php if (isset($_SESSION['logoPays'])) : ?>
                             <img src="/images/<?= $_SESSION['logoPays']; ?>" alt="homepage" width="50%" />
                             <?php else : ?>
-                            <img src="/images/afc.png" alt="homepage" width="50%" />
+                            <img src="/images/afc.png" alt="homepage" width="50%" height="50%" />
                             <?php endif; ?>
                         </span>
                     </a>

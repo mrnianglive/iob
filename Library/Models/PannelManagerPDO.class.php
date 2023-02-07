@@ -217,8 +217,7 @@ class PannelManagerPDO extends PannelManager
         if ($_SESSION['statut'] == 'superamdin') {
             $requete = $this->dao->prepare('SELECT * FROM tbllinks INNER JOIN tblpays ON tblpays.RefPays=tbllinks.RefPays');
         } else {
-            $requete = $this->dao->prepare('SELECT * FROM tbllinks INNER JOIN tblpays ON tblpays.RefPays=tbllinks.RefPays WHERE tbllinks.RefPays=:RefPays');
-            $requete->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+            $requete = $this->dao->prepare('SELECT * FROM tbllinks ');
         }
         $requete->execute();
         $data = $requete->fetchAll();

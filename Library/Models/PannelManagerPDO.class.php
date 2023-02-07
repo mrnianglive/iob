@@ -275,9 +275,10 @@ class PannelManagerPDO extends PannelManager
             }
         }
 
-        $requeteAddService = $this->dao->prepare("INSERT INTO tblpays(nomPays,logo) VALUES(:nomPays,:logo)");
+        $requeteAddService = $this->dao->prepare("INSERT INTO tblpays(nomPays,logo,EmailAlert) VALUES(:nomPays,:logo,:EmailAlert)");
         $requeteAddService->bindValue(':nomPays', $_POST['nomPays'], \PDO::PARAM_STR);
         $requeteAddService->bindValue(':logo', $new_file_name, \PDO::PARAM_STR);
+        $requeteAddService->bindValue(':EmailAlert', $_POST['EmailAlert'], \PDO::PARAM_STR);
         $requeteAddService->execute();
     }
     public function getPaysName($id)

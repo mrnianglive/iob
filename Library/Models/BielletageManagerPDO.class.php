@@ -204,37 +204,48 @@ class BielletageManagerPDO extends BielletageManager
     public function SommeVersementCaisse($Date)
     {
 
-        if ($_SESSION['statut'] != 'admin') {
+        if ($_SESSION['statut'] != 'admin' && $_SESSION['statut'] != 'superadmin') {
 
             $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleOperations.Insert_Id=:RefUsers AND (TbleOperations.RefType=1 OR TbleOperations.RefType=3) ');
             $requeteSUm->bindValue(':jour', $Date, \PDO::PARAM_STR);
             $requeteSUm->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $requeteSUm->execute();
             $data = $requeteSUm->fetch();
+            if ($data['TotalVersment'] == NULL) {
+                return 0;
+            }
             return $data['TotalVersment'];
         } else {
             $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND (TbleOperations.RefType=1 OR TbleOperations.RefType=3)   ');
             $requeteSUm->bindValue(':jour', $Date, \PDO::PARAM_STR);
-
             $requeteSUm->execute();
             $data = $requeteSUm->fetch();
+            if ($data['TotalVersment'] == NULL) {
+                return 0;
+            }
             return $data['TotalVersment'];
         }
     }
     public function SommeRetraitCaisse($Date)
     {
-        if ($_SESSION['statut'] != 'admin') {
+        if ($_SESSION['statut'] != 'admin' && $_SESSION['statut'] != 'superadmin') {
             $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleOperations.Insert_Id=:RefUsers AND (TbleOperations.RefType=2 OR TbleOperations.RefType=4)  ');
             $requeteSUm->bindValue(':jour', $Date, \PDO::PARAM_STR);
             $requeteSUm->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $requeteSUm->execute();
             $data = $requeteSUm->fetch();
+            if ($data['TotalVersment'] == NULL) {
+                return 0;
+            }
             return $data['TotalVersment'];
         } else {
             $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND (TbleOperations.RefType=2 OR TbleOperations.RefType=4)  ');
             $requeteSUm->bindValue(':jour', $Date, \PDO::PARAM_STR);
             $requeteSUm->execute();
             $data = $requeteSUm->fetch();
+            if ($data['TotalVersment'] == NULL) {
+                return 0;
+            }
             return $data['TotalVersment'];
         }
     }
@@ -265,6 +276,9 @@ class BielletageManagerPDO extends BielletageManager
         $requeteSUm->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == NULL) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
     public function SommeRetraitStatistique($Date)
@@ -274,6 +288,9 @@ class BielletageManagerPDO extends BielletageManager
         $requeteSUm->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == NULL) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
     public function DailyVersement()
@@ -301,6 +318,9 @@ class BielletageManagerPDO extends BielletageManager
             $requeteSUm->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
             $requeteSUm->execute();
             $data = $requeteSUm->fetch();
+            if ($data['TotalVersment'] == NULL) {
+                return 0;
+            }
             return $data['TotalVersment'];
         } else {
             $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleChmod.RefUsers=:RefUsers   AND (TbleOperations.RefType=1 OR TbleOperations.RefType=3)  ');
@@ -308,6 +328,9 @@ class BielletageManagerPDO extends BielletageManager
             $requeteSUm->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $requeteSUm->execute();
             $data = $requeteSUm->fetch();
+            if ($data['TotalVersment'] == NULL) {
+                return 0;
+            }
             return $data['TotalVersment'];
         }
     }
@@ -319,6 +342,9 @@ class BielletageManagerPDO extends BielletageManager
             $requeteSUm->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
             $requeteSUm->execute();
             $data = $requeteSUm->fetch();
+            if ($data['TotalVersment'] == NULL) {
+                return 0;
+            }
             return $data['TotalVersment'];
         } else {
             $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleChmod.RefUsers=:RefUsers AND (TbleOperations.RefType=2 OR TbleOperations.RefType=4)  ');
@@ -326,6 +352,9 @@ class BielletageManagerPDO extends BielletageManager
             $requeteSUm->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $requeteSUm->execute();
             $data = $requeteSUm->fetch();
+            if ($data['TotalVersment'] == NULL) {
+                return 0;
+            }
             return $data['TotalVersment'];
         }
     }
@@ -358,6 +387,10 @@ class BielletageManagerPDO extends BielletageManager
         $query->bindValue(':RefCaisse', $caisse, \PDO::PARAM_INT);
         $query->execute();
         $result = $query->fetch();
+        $pays = $this->dao->prepare('SELECT * FROM TblePays WHERE RefPays=:RefPays');
+        $pays->bindValue(':RefPays', $result['RefPays'], \PDO::PARAM_INT);
+        $pays->execute();
+        $pays = $pays->fetch();
 
         $from = "no-reply@malicreances-sa.com";
         $subject = "SORTIE DE FONDS ";
@@ -368,7 +401,9 @@ class BielletageManagerPDO extends BielletageManager
         require_once __DIR__ . '/../../Applications/App/Templates/templatemail.php';
         $headers  = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $to = "control_iob@malicreances-sa.com";
+        //Get Agency country
+
+        $to = $pays['EmailAlert'];
         // Create email headers
         $headers .= 'From: ' . $from . "\r\n" .
             'Reply-To: ' . $from . "\r\n" .

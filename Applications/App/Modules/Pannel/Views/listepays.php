@@ -40,12 +40,16 @@
 
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Nom</label>
-                        <input type="text" class="form-control" name="nomPays" id="recipient-name1">
+                        <input type="text" class="form-control" name="nomPays" id="recipient-name1" required>
                     </div>
 
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Logo</label>
-                        <input type="file" class="form-control" name="logo" id="recipient-name1">
+                        <input type="file" class="form-control" name="logo" id="recipient-name1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Email Alert</label>
+                        <input type="email" class="form-control" name="EmailAlert" id="recipient-name1" required>
                     </div>
                 </div>
                 <div class="modal-footer">

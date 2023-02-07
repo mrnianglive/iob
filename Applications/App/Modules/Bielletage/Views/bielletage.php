@@ -36,7 +36,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="a2" class="form-control" name="a2" autocomplete="OFF">
+                            <input type="int" id="a2" class="form-control number-input" name="a2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -55,7 +55,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="b2" class="form-control" name="b2" autocomplete="OFF">
+                            <input type="int" id="b2" class="form-control number-input" name="b2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -74,7 +74,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="c2" class="form-control" name="c2" autocomplete="OFF">
+                            <input type="int" id="c2" class="form-control number-input" name="c2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -93,7 +93,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="d2" name="d2" autocomplete="OFF">
+                            <input type="int" class="form-control number-input" id="d2" name="d2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -112,7 +112,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="e2" name="e2" autocomplete="OFF">
+                            <input type="int" class="form-control number-input" id="e2" name="e2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -131,7 +131,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="f2" name="f2" autocomplete="OFF">
+                            <input type="int" class="form-control number-input" id="f2" name="f2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -150,7 +150,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="g2" name="g2" autocomplete="OFF">
+                            <input type="int" class="form-control number-input" id="g2" name="g2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -168,7 +168,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="h2" name="h2" autocomplete="OFF">
+                            <input type="int" class="form-control number-input" id="h2" name="h2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -190,7 +190,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="i2" name="i2" autocomplete="OFF">
+                            <input type="int" class="form-control number-input" id="i2" name="i2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -209,7 +209,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="j2" name="j2" autocomplete="OFF">
+                            <input type="int" class="form-control number-input" id="j2" name="j2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -228,7 +228,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="k2" name="k2" autocomplete="OFF">
+                            <input type="int" class="form-control number-input" id="k2" name="k2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -247,7 +247,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="l2" name="l2" autocomplete="OFF">
+                            <input type="int" class="form-control number-input" id="l2" name="l2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -266,7 +266,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="m2" name="m2" autocomplete="OFF">
+                            <input type="int" class="form-control number-input" id="m2" name="m2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">

@@ -336,7 +336,26 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
         window.location = "/logout";
     });
     </script>
+    <script src="/js/accounting.js"></script>
 
+    <script>
+    // Configure la notation française
+    accounting.settings.number.decimal = ",";
+    accounting.settings.number.thousand = " ";
+
+    var inputElements = document.getElementsByClassName("number-input");
+    for (var i = 0; i < inputElements.length; i++) {
+        inputElements[i].addEventListener("blur", function() {
+            var val = accounting.unformat(this.value);
+            if (!isNaN(val)) {
+                this.value = val;
+            } else {
+                alert("Please enter a valid number");
+                this.focus();
+            }
+        });
+    }
+    </script>
 
 
 </body>

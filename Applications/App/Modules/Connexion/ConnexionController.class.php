@@ -50,6 +50,8 @@ class ConnexionController extends \Library\BackController
         // $this->managers->getManagerOf('User')->UpdateLog($_SESSION['RefUsers'], 1, $_SESSION['LogID']);
         // $this->managers->getManagerOf('User')->LastConnexionUpdate($_SESSION['LogID']);
         $this->app()->user()->setAuthenticated(false); //deconnexion de user
+        session_destroy(); //on détruit la session
+        $_SESSION = array(); //on vide le tableau de session
         $_SESSION['message']['type'] = 'success';
         $_SESSION['message']['text'] = 'Déconnexion réussie !';
         $_SESSION['message']['number'] = 2;

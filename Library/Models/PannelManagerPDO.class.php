@@ -250,13 +250,28 @@ class PannelManagerPDO extends PannelManager
 
     public function AddPays()
     {
-        //upload image
-        $image = $_FILES['logo']['name'];
-        $target = "/images/" . basename($image);
-        move_uploaded_file($_FILES['logo']['tmp_name'], $target);
+
+
+        if (isset($_FILES['logo']) && $_FILES['logo']['error'] == 0) {
+            if ($_FILES['logo']['size'] <= 10000000) {
+                $type =  array('png', 'jpeg', 'jpg');
+                $infofichier = pathinfo($_FILES['logo']['name']);
+                $extension_upload = $infofichier['extension'];
+                $tmp = explode('.', $_FILES['logo']['name']);
+                $new_file_name = round(microtime(true)) . '.' . end($tmp);
+
+                if (in_array($extension_upload, $type)) {
+                    move_uploaded_file($_FILES['logo']['tmp_name'], '../Web/images/' . $new_file_name);
+                } else {
+                    header("location : /Pannel/Pays");
+                    $_SESSION['flash']['danger'] = "La taille du fichier ou le format du fichier n'est pas prise en compte ! ";
+                }
+            }
+        }
+
         $requeteAddService = $this->dao->prepare("INSERT INTO tblpays(nomPays,logo) VALUES(:nomPays,:logo)");
         $requeteAddService->bindValue(':nomPays', $_POST['nomPays'], \PDO::PARAM_STR);
-        $requeteAddService->bindValue(':logo', $image, \PDO::PARAM_STR);
+        $requeteAddService->bindValue(':logo', $new_file_name, \PDO::PARAM_STR);
         $requeteAddService->execute();
     }
     public function getPaysName($id)

@@ -125,7 +125,7 @@ class PannelManagerPDO extends PannelManager
         if ($_SESSION['statut'] == 'superadmin') {
             $requeteBanque = $this->dao->prepare('SELECT * FROM TbleBanque INNER JOIN tblpays ON tblpays.RefPays=TbleBanque.RefPays');
         } else {
-            $requeteBanque = $this->dao->prepare('SELECT * FROM TbleBanque INNER JOIN tblpays ON tblpays.RefPays=TbleBanque.RefPays WHERE tblpays.RefPays=:RefPays');
+            $requeteBanque = $this->dao->prepare('SELECT * FROM TbleBanque INNER JOIN tblpays ON tblpays.RefPays=TbleBanque.RefPays WHERE TbleBanque.RefPays=:RefPays');
             $requeteBanque->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         }
         $requeteBanque->execute();

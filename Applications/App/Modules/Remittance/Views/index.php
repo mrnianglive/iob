@@ -198,8 +198,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="recipient-name" class="control-label">Montant </label>
-                                <input type="text" class="form-control" name="MontantTransaction" id="recipient-name1"
-                                    autocomplete="off" required>
+                                <input type="text" class="form-control number-input" name="MontantTransaction"
+                                    id="recipient-name1" autocomplete="off" required>
                             </div>
                         </div>
                         <div class="col-md-6">

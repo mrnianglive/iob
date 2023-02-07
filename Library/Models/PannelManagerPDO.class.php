@@ -214,7 +214,7 @@ class PannelManagerPDO extends PannelManager
 
     public function GetLinks()
     {
-        if ($_SESSION['statut'] == 'superamdin') {
+        if ($_SESSION['statut'] == 'superadmin') {
             $requete = $this->dao->prepare('SELECT * FROM tbllinks INNER JOIN tblpays ON tblpays.RefPays=tbllinks.RefPays');
         } else {
             $requete = $this->dao->prepare('SELECT * FROM tbllinks INNER JOIN tblpays ON tblpays.RefPays=tbllinks.RefPays WHERE tbllinks.RefPays=:RefPays');

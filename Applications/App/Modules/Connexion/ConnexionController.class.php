@@ -13,32 +13,32 @@ class ConnexionController extends \Library\BackController
             if (!empty($User)) {
                 if (!empty($User['secret'])) {
                     $this->app()->user()->setAuthenticated();
-                    if (!empty($User['RefPays'])) {
+                    if (!empty($User['RefPays']) && $User['RefPays'] != 0) {
                         $getPaysName = $this->managers->getManagerOf('Pannel')->getPaysName($User['RefPays']);
+                        $_SESSION['RefPays'] = $User['RefPays'];
+                        $_SESSION['nomPays'] = $getPaysName['nomPays'];
+                        $_SESSION['logoPays'] = $getPaysName['logo'];
                     }
                     $_SESSION['RefUsers'] = $User['RefUsers'];
                     $_SESSION['login'] = $User['login'];
                     $_SESSION['NomUsers'] = $User['NomUsers'];
                     $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
                     $_SESSION['statut'] = $User['Name'];
-                    $_SESSION['RefPays'] = $User['RefPays'];
                     $_SESSION['secret'] = true;
-                    $_SESSION['nomPays'] = $getPaysName['nomPays'];
-                    $_SESSION['logoPays'] = $getPaysName['logo'];
                     $this->app()->httpResponse()->redirect('/connexion/doubleauth');
                 } else {
                     $this->app()->user()->setAuthenticated();
-                    if (!empty($User['RefPays'])) {
+                    if (!empty($User['RefPays']) && $User['RefPays'] != 0) {
                         $getPaysName = $this->managers->getManagerOf('Pannel')->getPaysName($User['RefPays']);
+                        $_SESSION['RefPays'] = $User['RefPays'];
+                        $_SESSION['nomPays'] = $getPaysName['nomPays'];
+                        $_SESSION['logoPays'] = $getPaysName['logo'];
                     }
                     $_SESSION['login'] = $User['login'];
                     $_SESSION['NomUsers'] = $User['NomUsers'];
                     $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
                     $_SESSION['statut'] = $User['Name'];
                     $_SESSION['RefUsers'] = $User['RefUsers'];
-                    $_SESSION['RefPays'] = $User['RefPays'];
-                    $_SESSION['nomPays'] = $getPaysName['nomPays'];
-                    $_SESSION['logoPays'] = $getPaysName['logo'];
                     $this->app()->httpResponse()->redirect('/');
                 }
             }

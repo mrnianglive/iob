@@ -104,10 +104,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
-                        <li>
-                            <a class="profile-pic" href="#"><span
-                                    class="text-white font-medium"><?= $_SESSION['nomPays'] ?? 'AFC'; ?> </span></a>
-                        </li>
+
                         <li>
                             <a class=" profile-pic" href="#">
                                 <span class="text-white font-medium"><?= $_SESSION['login']; ?></span>
@@ -247,12 +244,10 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
             <!-- footer -->
             <!-- ============================================================== -->
             <footer class="footer text-center">
-                <!--Dernière Connexion :-->
-                <? //= $_SESSION['LastConnexion']; 
-                ?> |
+                <?= $_SESSION['nomPays'] ?? 'AFC'; ?> |
                 <?= date('Y'); ?>
-                © <a href="https://malicreances-sa.com" target="_blank">MALI
-                    CREANCES SA</a> CONNCEPTION BY <a href="https://niangaly.ml" target="_blank">NIANGALY</a>
+                © <a href="https://malicreances-sa.com" target="_blank">AFRIK CREANCES HOLDING</a> CONNCEPTION BY <a
+                    href="https://niangaly.ml" target="_blank">NIANGALY</a>
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->

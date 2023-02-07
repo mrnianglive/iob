@@ -250,8 +250,13 @@ class PannelManagerPDO extends PannelManager
 
     public function AddPays()
     {
-        $requeteAddService = $this->dao->prepare("INSERT INTO tblpays(nomPays) VALUES(:nomPays)");
+        //upload image
+        $image = $_FILES['logo']['name'];
+        $target = "/images/" . basename($image);
+        move_uploaded_file($_FILES['logo']['tmp_name'], $target);
+        $requeteAddService = $this->dao->prepare("INSERT INTO tblpays(nomPays,logo) VALUES(:nomPays,:logo)");
         $requeteAddService->bindValue(':nomPays', $_POST['nomPays'], \PDO::PARAM_STR);
+        $requeteAddService->bindValue(':logo', $image, \PDO::PARAM_STR);
         $requeteAddService->execute();
     }
     public function getPaysName($id)

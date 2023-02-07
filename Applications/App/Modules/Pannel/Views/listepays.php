@@ -35,12 +35,17 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
             </div>
-            <form role="form" method="post" action="">
+            <form role="form" method="post" action="" enctype="multipart/form-data">
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">Nom </label>
+                        <label for="recipient-name" class="control-label">Nom</label>
                         <input type="text" class="form-control" name="nomPays" id="recipient-name1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Logo</label>
+                        <input type="file" class="form-control" name="logo" id="recipient-name1">
                     </div>
                 </div>
                 <div class="modal-footer">

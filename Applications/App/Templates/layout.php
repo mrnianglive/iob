@@ -2,6 +2,8 @@
 if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     header('Location: /connexion/doubleauth');
 }
+//Images par pays 
+$country = $_SESSION['RefPays'];
 
 ?>
 
@@ -13,14 +15,11 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords"
-        content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 4 admin, bootstrap 4, css3 dashboard, bootstrap 4 dashboard, Ample lite admin bootstrap 4 dashboard, frontend, responsive bootstrap 4 admin template, Ample admin lite dashboard bootstrap 4 dashboard template">
-    <meta name="description"
-        content="Ample Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
+    <meta name="description" content="App">
     <meta name="robots" content="noindex,nofollow">
     <title>App - <?= $titles; ?></title>
     <!-- Favicon icon -->
-    <link rel="icon" href="/images/mlc.ico">
+    <link rel="icon" href="/images/favicon.ico">
     <link href="/css/wizard.css" rel="stylesheet" type="text/css" />
     <!-- Custom CSS -->
     <link href="/css/style.min.css" rel="stylesheet">
@@ -65,6 +64,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- Logo text -->
                         <span class="logo-text">
                             <!-- dark Logo text -->
+
                             <img src="/images/mlc.png" alt="homepage" width="50%" />
                         </span>
                     </a>

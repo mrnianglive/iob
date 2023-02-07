@@ -30,6 +30,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSUm->bindValue(':agency', $agence, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == null) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
 
@@ -41,6 +44,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSUm->bindValue(':agency', $agence, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == null) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
     public function ChartCaisseVersement($caisse)
@@ -51,6 +57,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSUm->bindValue(':caisse', $caisse, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == null) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
 
@@ -62,6 +71,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSUm->bindValue(':caisse', $caisse, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == null) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
     public function ChartVersment($mois)
@@ -71,6 +83,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == null) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
 
@@ -81,6 +96,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == null) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
     public function Chart()
@@ -118,6 +136,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
         $requete->execute();
         $result = $requete->fetch();
+        if ($result['Nbre'] == null) {
+            return 0;
+        }
         return $result['Nbre'];
     }
 
@@ -138,6 +159,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requete->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requete->execute();
         $result = $requete->fetch();
+        if ($result['Nbre'] == null) {
+            return 0;
+        }
         return $result['Nbre'];
     }
 
@@ -146,6 +170,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_time > NOW() - INTERVAL 7 DAY');
         $requete->execute();
         $result = $requete->fetch();
+        if ($result['Nbre'] == null) {
+            return 0;
+        }
         return $result['Nbre'];
     }
 
@@ -154,6 +181,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND ValidateDate > NOW() - INTERVAL 7 DAY');
         $requete->execute();
         $result = $requete->fetch();
+        if ($result['Nbre'] == null) {
+            return 0;
+        }
         return $result['Nbre'];
     }
 
@@ -183,6 +213,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSUm->bindValue(':jour', $date, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['MontantDepot'] == null) {
+            return 0;
+        }
         return $data['MontantDepot'];
     }
 
@@ -194,7 +227,11 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSUm->bindValue(':jour', $date, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
-        return $data['Montant'];
+        if ($data['Montant'] == null) {
+            return 0;
+        } else {
+            return $data['Montant'];
+        }
     }
 
     public function YesterdayReserveProduit($Agence, $date, $produit)
@@ -205,7 +242,11 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSoldeInittial->bindValue(':today', $date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
-        return $result['SoldeUV'];
+        if ($result['SoldeUV'] == null) {
+            return 0;
+        } else {
+            return $result['SoldeUV'];
+        }
     }
 
     public function SoldeRemittanceVersementAgenceProduit($Date, $Agence, $produit)
@@ -247,6 +288,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == null) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
     public function SommeRetraitAgence($Date, $Agence)
@@ -256,6 +300,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == null) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
 }

@@ -61,7 +61,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- Logo text -->
                         <span class="logo-text">
                             <!-- dark Logo text -->
-                            <img src="/images/<?= $_SESSION['logoPays'] ?? 'afch.jpgeg'; ?>" alt="homepage"
+                            <img src="/images/<?= $_SESSION['logoPays'] ?? 'afch.jpeg'; ?>" alt="homepage"
                                 width="50%" />
                         </span>
                     </a>

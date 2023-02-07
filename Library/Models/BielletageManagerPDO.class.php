@@ -82,7 +82,7 @@ class BielletageManagerPDO extends BielletageManager
         if (!empty($GetCaisse) && isset($GetCaisse)) {
             return $GetCaisse;
         }
-        return 0;
+        return [];
     }
     public function GetInvoice($id)
     {

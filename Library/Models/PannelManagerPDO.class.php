@@ -173,7 +173,7 @@ class PannelManagerPDO extends PannelManager
         if (!empty($data) && isset($data)) {
             return $data['RefCaisse'];
         }
-        return null;
+        return [];
     }
 
     public function AddChmodProduit()

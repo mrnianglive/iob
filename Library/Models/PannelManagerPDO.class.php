@@ -23,8 +23,14 @@ class PannelManagerPDO extends PannelManager
 
     public function UserAgence()
     {
-        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN TbleCaisse ON TbleCaisse.RefAgency=TbleAgency.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE TbleChmod.RefUsers=:RefUsers GROUP BY(TbleAgency.RefAgency)');
-        $requeteAgence->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        if ($_SESSION['statut'] == 'superadmin') {
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN TbleCaisse ON TbleCaisse.RefAgency=TbleAgency.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE TbleChmod.RefUsers=:RefUsers GROUP BY(TbleAgency.RefAgency)');
+            $requeteAgence->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        } else {
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN TbleCaisse ON TbleCaisse.RefAgency=TbleAgency.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE TbleChmod.RefUsers=:RefUsers AND TbleAgency.RefPays=:RefPays GROUP BY(TbleAgency.RefAgency)');
+            $requeteAgence->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+            $requeteAgence->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+        }
         $requeteAgence->execute();
         $ListeAgence = $requeteAgence->fetchAll();
         return $ListeAgence;

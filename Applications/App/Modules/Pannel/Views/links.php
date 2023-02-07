@@ -45,6 +45,17 @@
             <form role="form" method="post" action="">
                 <div class="modal-body">
                     <div class="form-group">
+                        <label class="control-label">Pays</label>
+                        <select name="RefPays" class="form-control">
+                            <option value="">Veuillez Choisir le Pays</option>
+                            <?php foreach ($ListePays as $key => $value) { ?>
+                            <option value="<?= $value['RefPays']; ?>"><?= $value['nomPays']; ?></option>
+                            <?php   } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
                         <label for="recipient-name" class="control-label">Nom </label>
                         <input type="text" class="form-control" name="url_name" id="recipient-name1">
                     </div>

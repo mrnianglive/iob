@@ -10,7 +10,12 @@ class PannelManagerPDO extends PannelManager
 
     public function ListeAgence()
     {
-        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays');
+        if ($_SESSION['statut'] == 'superadmin') {
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays');
+        } else {
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:RefPays');
+            $requeteAgence->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+        }
         $requeteAgence->execute();
         $ListeAgence = $requeteAgence->fetchAll();
         return $ListeAgence;
@@ -38,7 +43,12 @@ class PannelManagerPDO extends PannelManager
 
     public function ListeProduit()
     {
-        $requeteProduuit = $this->dao->prepare('SELECT * FROM TbleProduit INNER JOIN TbleBanque ON TbleBanque.RefBanque=TbleProduit.RefBanque');
+        if ($_SESSION['statut'] == 'superadmin') {
+            $requeteProduuit = $this->dao->prepare('SELECT * FROM TbleProduit INNER JOIN TbleBanque ON TbleBanque.RefBanque=TbleProduit.RefBanque');
+        } else {
+            $requeteProduuit = $this->dao->prepare('SELECT * FROM TbleProduit INNER JOIN TbleBanque ON TbleBanque.RefBanque=TbleProduit.RefBanque WHERE TbleBanque.RefPays=:RefPays');
+            $requeteProduuit->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+        }
         $requeteProduuit->execute();
         $ListeProduit = $requeteProduuit->fetchAll();
         return $ListeProduit;
@@ -69,7 +79,12 @@ class PannelManagerPDO extends PannelManager
     }
     public function ListeCaisse()
     {
-        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency');
+        if ($_SESSION['statut'] == 'superadmin') {
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency');
+        } else {
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefPays=:RefPays');
+            $requeteAgence->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+        }
         $requeteAgence->execute();
         $ListeCaisse = $requeteAgence->fetchAll();
         return $ListeCaisse;
@@ -107,7 +122,12 @@ class PannelManagerPDO extends PannelManager
     }
     public function ListeBanque()
     {
-        $requeteBanque = $this->dao->prepare('SELECT * FROM TbleBanque INNER JOIN tblpays ON tblpays.RefPays=TbleBanque.RefPays');
+        if ($_SESSION['statut'] == 'superadmin') {
+            $requeteBanque = $this->dao->prepare('SELECT * FROM TbleBanque INNER JOIN tblpays ON tblpays.RefPays=TbleBanque.RefPays');
+        } else {
+            $requeteBanque = $this->dao->prepare('SELECT * FROM TbleBanque INNER JOIN tblpays ON tblpays.RefPays=TbleBanque.RefPays WHERE tblpays.RefPays=:RefPays');
+            $requeteBanque->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+        }
         $requeteBanque->execute();
         $ListeBanque = $requeteBanque->fetchAll();
         return $ListeBanque;
@@ -192,10 +212,14 @@ class PannelManagerPDO extends PannelManager
         return $result;
     }
 
-
     public function GetLinks()
     {
-        $requete = $this->dao->prepare('SELECT * FROM tbllinks');
+        if ($_SESSION['statut'] == 'superamdin') {
+            $requete = $this->dao->prepare('SELECT * FROM tbllinks');
+        } else {
+            $requete = $this->dao->prepare('SELECT * FROM tbllinks WHERE RefPays=:RefPays');
+            $requete->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+        }
         $requete->execute();
         $data = $requete->fetchAll();
         return $data;
@@ -203,11 +227,12 @@ class PannelManagerPDO extends PannelManager
 
     public function addLinks()
     {
-        $requeteAddService = $this->dao->prepare("INSERT INTO tbllinks(url,url_name,btn,target) VALUES(:url,:url_name,:btn,:target)");
+        $requeteAddService = $this->dao->prepare("INSERT INTO tbllinks(url,url_name,btn,target,RefPays) VALUES(:url,:url_name,:btn,:target,:RefPays)");
         $requeteAddService->bindValue(':url', $_POST['url'], \PDO::PARAM_STR);
         $requeteAddService->bindValue(':url_name', $_POST['url_name'], \PDO::PARAM_STR);
         $requeteAddService->bindValue(':btn', $_POST['btn'], \PDO::PARAM_STR);
         $requeteAddService->bindValue(':target', $_POST['target'], \PDO::PARAM_STR);
+        $requeteAddService->bindValue(':RefPays', $_POST['RefPays'], \PDO::PARAM_INT);
         $requeteAddService->execute();
     }
 

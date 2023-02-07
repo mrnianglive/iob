@@ -136,6 +136,9 @@ class PannelController extends \Library\BackController
         $links = $this->managers->getManagerOf('Pannel')->GetLinks();
         $this->page->addVar('links', $links);
 
+        $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("ListePays", $ListePays);
+
         if ($request->method() == 'POST') {
             $this->managers->getManagerOf("Pannel")->addLinks($request);
             $_SESSION['message']['type'] = 'success';

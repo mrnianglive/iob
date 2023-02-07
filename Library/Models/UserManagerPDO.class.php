@@ -102,7 +102,7 @@ class UserManagerPDO extends UserManager
 
     public function ListeCaisse()
     {
-        if ($_SESSION['statut'] = 'superadmin') {
+        if ($_SESSION['statut'] == 'superadmin') {
             $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency');
         } else {
             $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefPays=:RefPays');

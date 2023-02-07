@@ -69,6 +69,9 @@ class JournalManagerPDO extends JournalManager
             $SommeRetraitPeriode->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
             $SommeRetraitPeriode->execute();
             $DataSomnmeRetrait = $SommeRetraitPeriode->fetch();
+            if ($DataSomnmeRetrait['TotalPeriodeRetrait'] == NULL) {
+                return 0;
+            }
             return $DataSomnmeRetrait['TotalPeriodeRetrait'];
         } else {
             $SommeRetraitPeriode = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalPeriodeRetrait FROM TbleOperations  INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse  WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleChmod.RefUsers=:RefUsers AND  (TbleOperations.RefType=2)');
@@ -76,6 +79,9 @@ class JournalManagerPDO extends JournalManager
             $SommeRetraitPeriode->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $SommeRetraitPeriode->execute();
             $DataSomnmeRetrait = $SommeRetraitPeriode->fetch();
+            if ($DataSomnmeRetrait['TotalPeriodeRetrait'] == NULL) {
+                return 0;
+            }
             return $DataSomnmeRetrait['TotalPeriodeRetrait'];
         }
     }
@@ -86,6 +92,9 @@ class JournalManagerPDO extends JournalManager
             $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
             $requete->execute();
             $data = $requete->fetch();
+            if ($data['TotalPeriodeVersement'] == NULL) {
+                return 0;
+            }
             return $data['TotalPeriodeVersement'];
         } else {
             $requete = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalPeriodeVersement FROM TbleOperations  INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleChmod.RefUsers=:RefUsers  AND (TbleOperations.RefType=1) ');
@@ -93,6 +102,9 @@ class JournalManagerPDO extends JournalManager
             $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $requete->execute();
             $data = $requete->fetch();
+            if ($data['TotalPeriodeVersement'] == NULL) {
+                return 0;
+            }
             return $data['TotalPeriodeVersement'];
         }
     }
@@ -104,6 +116,9 @@ class JournalManagerPDO extends JournalManager
             $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
             $requete->execute();
             $data = $requete->fetch();
+            if ($data['TotalPeriodeVersement'] == NULL) {
+                return 0;
+            }
             return $data['TotalPeriodeVersement'];
         } else {
             $requete = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalPeriodeVersement FROM TbleOperations  INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleChmod.RefUsers=:RefUsers  AND (TbleOperations.RefType=1) ');
@@ -111,6 +126,9 @@ class JournalManagerPDO extends JournalManager
             $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $requete->execute();
             $data = $requete->fetch();
+            if ($data['TotalPeriodeVersement'] == NULL) {
+                return 0;
+            }
             return $data['TotalPeriodeVersement'];
         }
     }
@@ -121,6 +139,9 @@ class JournalManagerPDO extends JournalManager
             $SommeRetraitPeriode->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
             $SommeRetraitPeriode->execute();
             $DataSomnmeRetrait = $SommeRetraitPeriode->fetch();
+            if ($DataSomnmeRetrait['TotalPeriodeRetrait'] == NULL) {
+                return 0;
+            }
             return $DataSomnmeRetrait['TotalPeriodeRetrait'];
         } else {
             $SommeRetraitPeriode = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalPeriodeRetrait FROM TbleOperations  INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse  WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleChmod.RefUsers=:RefUsers AND  (TbleOperations.RefType=2 OR TbleOperations.RefType=4)');
@@ -128,6 +149,9 @@ class JournalManagerPDO extends JournalManager
             $SommeRetraitPeriode->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $SommeRetraitPeriode->execute();
             $DataSomnmeRetrait = $SommeRetraitPeriode->fetch();
+            if ($DataSomnmeRetrait['TotalPeriodeRetrait'] == NULL) {
+                return 0;
+            }
             return $DataSomnmeRetrait['TotalPeriodeRetrait'];
         }
     }
@@ -139,6 +163,9 @@ class JournalManagerPDO extends JournalManager
         $Solde->bindValue(':today', $fin, \PDO::PARAM_STR);
         $Solde->execute();
         $data = $Solde->fetch();
+        if ($data['SoldeCompte'] == NULL) {
+            return 0;
+        }
         return  $data['SoldeCompte'];
     }
     public function  Versement($debut = NULL, $fin = NULL, $Agence = NULL)
@@ -323,6 +350,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requete->execute();
         $result = $requete->fetch();
+        if ($result['Nbre'] == 0) {
+            return 0;
+        }
         return $result['Nbre'];
     }
 
@@ -333,6 +363,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requete->execute();
         $result = $requete->fetch();
+        if ($result['Nbre'] == 0) {
+            return 0;
+        }
         return $result['Nbre'];
     }
     public function CaisseAgence($Agence, $Date)
@@ -365,6 +398,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requete->execute();
         $result = $requete->fetch();
+        if ($result['SoldeRemittance'] == 0) {
+            return 0;
+        }
         return $result['SoldeRemittance'];
     }
 
@@ -376,6 +412,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
+        if ($result['SoldeRemittance'] == 0) {
+            return 0;
+        }
         return $result['SoldeRemittance'];
     }
 
@@ -386,6 +425,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requete->execute();
         $result = $requete->fetch();
+        if ($result['SoldeRemittance'] == 0) {
+            return 0;
+        }
         return $result['SoldeRemittance'];
     }
     public function SoldeRemittanceRetraitAgence($Date, $Agence)
@@ -395,6 +437,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
+        if ($result['SoldeRemittance'] == 0) {
+            return 0;
+        }
         return $result['SoldeRemittance'];
     }
 
@@ -418,6 +463,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == 0) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
     public function SommeRetraitAgence($Date, $Agence)
@@ -427,6 +475,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == 0) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
     public function SoldeInitialCaisse($Date, $Caisse)
@@ -436,6 +487,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
+        if ($result['SoldeInitial'] == 0) {
+            return 0;
+        }
         return $result['SoldeInitial'];
     }
     public function SoldeInitialCaisseGlobal($Date, $Caisse)
@@ -445,6 +499,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
+        if ($result['SoldeInitial'] == 0) {
+            return 0;
+        }
         return $result['SoldeInitial'];
     }
 
@@ -455,6 +512,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
+        if ($result['TotalAppro'] == 0) {
+            return 0;
+        }
         return $result['TotalAppro'];
     }
 
@@ -465,6 +525,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
+        if ($result['TotalAppro'] == 0) {
+            return 0;
+        }
         return $result['TotalAppro'];
     }
     public function TotalApproAgenceAvecApproInitial($Date, $Agence)
@@ -474,6 +537,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
+        if ($result['TotalAppro'] == 0) {
+            return 0;
+        }
         return $result['TotalAppro'];
     }
 
@@ -484,6 +550,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
+        if ($result['TotalAppro'] == 0) {
+            return 0;
+        }
         return $result['TotalAppro'];
     }
     public function TotalSortieCaisse($Date, $Caisse)
@@ -493,6 +562,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
+        if ($result['TotalAppro'] == 0) {
+            return 0;
+        }
         return $result['TotalAppro'];
     }
 
@@ -503,6 +575,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
+        if ($result['TotalAppro'] == 0) {
+            return 0;
+        }
         return $result['TotalAppro'];
     }
 
@@ -530,6 +605,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSUm->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == 0) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
     public function SommeRetraitCaisse($Date, $Caisse)
@@ -539,6 +617,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSUm->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if ($data['TotalRetrait'] == 0) {
+            return 0;
+        }
         return $data['TotalRetrait'];
     }
     public function CheckDailyClose($Agence, $date)
@@ -565,6 +646,9 @@ class JournalManagerPDO extends JournalManager
             $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
             $requete->execute();
             $result = $requete->fetch();
+            if ($result['SoldeRemittance'] == 0) {
+                return 0;
+            }
             return $result['SoldeRemittance'];
         } else {
 
@@ -573,6 +657,9 @@ class JournalManagerPDO extends JournalManager
             $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $requete->execute();
             $result = $requete->fetch();
+            if ($result['SoldeRemittance'] == 0) {
+                return 0;
+            }
             return $result['SoldeRemittance'];
         }
     }
@@ -585,6 +672,9 @@ class JournalManagerPDO extends JournalManager
             $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
             $requete->execute();
             $result = $requete->fetch();
+            if ($result['SoldeRemittance'] == 0) {
+                return 0;
+            }
             return $result['SoldeRemittance'];
         } else {
             $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleRemittance.RefCaisse  WHERE DATE(TbleRemittance.Insert_time)=:jour AND TbleChmod.RefUsers=:RefUsers AND TbleRemittance.RefType=2  AND TbleRemittance.Reset_Id IS NULL');  //AND RefCaisse=:RefCaisse  
@@ -592,6 +682,9 @@ class JournalManagerPDO extends JournalManager
             $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $requete->execute();
             $result = $requete->fetch();
+            if ($result['SoldeRemittance'] == 0) {
+                return 0;
+            }
             return $result['SoldeRemittance'];
         }
     }
@@ -657,6 +750,9 @@ class JournalManagerPDO extends JournalManager
             $ListeCaisse[$key]['TotalVersement'] =  $this->SomnmeVersementCaissePerfomance($debut, $fin, $value['RefCaisse']);
             $ListeCaisse[$key]['TotalRetrait'] =  $this->SommeRetraitCaissePerformance($debut, $fin, $value['RefCaisse']);
         }
+        if (empty($ListeCaisse)) {
+            return 0;
+        }
         return $ListeCaisse;
     }
 
@@ -667,6 +763,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSUm->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if (empty($data['TotalVersment'])) {
+            return 0;
+        }
         return $data['TotalVersment'];
     }
     public function SommeRetraitCaissePerformance($debut, $fin, $Caisse)
@@ -675,6 +774,9 @@ class JournalManagerPDO extends JournalManager
         $requeteSUm->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
+        if (empty($data['TotalRetrait'])) {
+            return 0;
+        }
         return $data['TotalRetrait'];
     }
 
@@ -684,6 +786,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':agence', $Agence, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
+        if (empty($result['Nbre'])) {
+            return 0;
+        }
         return $result['Nbre'];
     }
 
@@ -693,6 +798,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
+        if (empty($result['Nbre'])) {
+            return 0;
+        }
         return $result['Nbre'];
     }
 
@@ -704,6 +812,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
+        if (empty($result['Nbre'])) {
+            return 0;
+        }
         return $result['Nbre'];
     }
 
@@ -714,6 +825,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
+        if (empty($result['Nbre'])) {
+            return 0;
+        }
         return $result['Nbre'];
     }
 

@@ -141,7 +141,7 @@ class UserManagerPDO extends UserManager
         if ($_SESSION['statut'] == 'superadmin') {
             $requeteStatut = $this->dao->prepare('SELECT * FROM TbleStatut ');
         } else {
-            $requeteStatut = $this->dao->prepare('SELECT * FROM TbleStatut WHERE name!=:name');
+            $requeteStatut = $this->dao->prepare('SELECT * FROM TbleStatut WHERE Name!=:name');
             $requeteStatut->bindValue(':name', 'superadmin', \PDO::PARAM_STR);
         }
         $requeteStatut->execute();

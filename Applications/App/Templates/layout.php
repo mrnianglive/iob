@@ -61,7 +61,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- Logo text -->
                         <span class="logo-text">
                             <!-- dark Logo text -->
-                            <img src="/images/<?= $_SESSION['logoPays']; ?>" alt="homepage" width="50%" />
+                            <img src="/images/<?= $_SESSION['logoPays'] ?? 'afc.png'; ?>" alt="homepage" width="50%" />
                         </span>
                     </a>
                     <!-- ============================================================== -->
@@ -105,7 +105,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- ============================================================== -->
                         <li>
                             <a class="profile-pic" href="#"><span
-                                    class="text-white font-medium"><?= $_SESSION['nomPays']; ?> </span></a>
+                                    class="text-white font-medium"><?= $_SESSION['nomPays'] ?? 'AFC'; ?> </span></a>
                         </li>
                         <li>
                             <a class=" profile-pic" href="#">

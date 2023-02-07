@@ -1,5 +1,5 @@
 <form method="post">
-    <img src="/images/<?= $_SESSION['logoPays']; ?>" alt="mlc" width="200" height="100%">
+    <img src="/images/afc.png" alt="mlc" width="200" height="100%">
     <label for="inputEmail" class="sr-only">Code</label>
     <input type="text" id="tfa_code" class="form-control mb-1" name="tfa_code"
         placeholder="Veuillez saisir le code généré par l'authentificateur" required autofocus>

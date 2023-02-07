@@ -215,16 +215,15 @@ class PannelManagerPDO extends PannelManager
     public function GetLinks()
     {
         if ($_SESSION['statut'] == 'superamdin') {
-            $requete = $this->dao->prepare('SELECT * FROM tbllinks');
+            $requete = $this->dao->prepare('SELECT * FROM tbllinks INNER JOIN tblpays ON tblpays.RefPays=tbllinks.RefPays');
         } else {
-            $requete = $this->dao->prepare('SELECT * FROM tbllinks WHERE RefPays=:RefPays');
+            $requete = $this->dao->prepare('SELECT * FROM tbllinks INNER JOIN tblpays ON tblpays.RefPays=tbllinks.RefPays WHERE RefPays=:RefPays');
             $requete->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         }
         $requete->execute();
         $data = $requete->fetchAll();
         return $data;
     }
-
     public function addLinks()
     {
         $requeteAddService = $this->dao->prepare("INSERT INTO tbllinks(url,url_name,btn,target,RefPays) VALUES(:url,:url_name,:btn,:target,:RefPays)");

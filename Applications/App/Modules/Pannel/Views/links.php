@@ -9,9 +9,11 @@
                 <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                     <thead>
                         <tr>
+
                             <th class="border-top-0">ID</th>
                             <th class="border-top-0">URL </th>
                             <th class="border-top-0">BTN</th>
+                            <th class="border-top-0">ID</th>
                             <th class="border-top-0">Actions</th>
                         </tr>
                     </thead>
@@ -21,6 +23,7 @@
                             <td><?= $value['url']; ?></td>
                             <td><?= $value['url_name']; ?></td>
                             <td><?= $value['btn']; ?></td>
+                            <td><?= $value['nomPays']; ?></td>
                             <td>
                                 <a href="/Pannel/links/delete/<?= $value['RefLinks']; ?>" class="btn btn-xs btn-danger"
                                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i
@@ -66,17 +69,17 @@
                         <input type="text" class="form-control" name="url" id="recipient-name1">
                     </div>
                 </div>
-
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">BTN </label>
                         <input type="text" class="form-control" name="btn" id="recipient-name1">
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="recipient-name" class="control-label">TARGET </label>
-                            <input type="text" class="form-control" name="target" id="recipient-name1">
-                        </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">TARGET</label>
+                        <input type="text" class="form-control" name="target" id="recipient-name1"
+                            placeholder="1=>_blank,NULL=>_self">
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -23,7 +23,8 @@ class ConnexionController extends \Library\BackController
                     $_SESSION['statut'] = $User['Name'];
                     $_SESSION['RefPays'] = $User['RefPays'];
                     $_SESSION['secret'] = true;
-                    $_SESSION['nomPays'] = $getPaysName;
+                    $_SESSION['nomPays'] = $getPaysName['nomPays'];
+                    $_SESSION['logoPays'] = $getPaysName['logo'];
                     $this->app()->httpResponse()->redirect('/connexion/doubleauth');
                 } else {
                     $this->app()->user()->setAuthenticated();
@@ -36,7 +37,8 @@ class ConnexionController extends \Library\BackController
                     $_SESSION['statut'] = $User['Name'];
                     $_SESSION['RefUsers'] = $User['RefUsers'];
                     $_SESSION['RefPays'] = $User['RefPays'];
-                    $_SESSION['nomPays'] = $getPaysName;
+                    $_SESSION['nomPays'] = $getPaysName['nomPays'];
+                    $_SESSION['logoPays'] = $getPaysName['logo'];
                     $this->app()->httpResponse()->redirect('/');
                 }
             }

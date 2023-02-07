@@ -280,6 +280,6 @@ class PannelManagerPDO extends PannelManager
         $requete->bindValue(':RefPays', $id, \PDO::PARAM_INT);
         $requete->execute();
         $data = $requete->fetch();
-        return $data['nomPays'];
+        return $data;
     }
 }

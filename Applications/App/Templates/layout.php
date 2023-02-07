@@ -2,9 +2,6 @@
 if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     header('Location: /connexion/doubleauth');
 }
-//Images par pays 
-$country = $_SESSION['RefPays'];
-
 ?>
 
 <!DOCTYPE html>
@@ -64,8 +61,7 @@ $country = $_SESSION['RefPays'];
                         <!-- Logo text -->
                         <span class="logo-text">
                             <!-- dark Logo text -->
-
-                            <img src="/images/mlc.png" alt="homepage" width="50%" />
+                            <img src="/images/<?= $_SESSION['logoPays']; ?>" alt="homepage" width="50%" />
                         </span>
                     </a>
                     <!-- ============================================================== -->
@@ -112,8 +108,9 @@ $country = $_SESSION['RefPays'];
                                     class="text-white font-medium"><?= $_SESSION['nomPays']; ?> </span></a>
                         </li>
                         <li>
-                            <a class="profile-pic" href="#">
-                                <span class="text-white font-medium"><?= $_SESSION['login']; ?></span></a>
+                            <a class=" profile-pic" href="#">
+                                <span class="text-white font-medium"><?= $_SESSION['login']; ?></span>
+                            </a>
                         </li>
 
                         <!-- ============================================================== -->

@@ -2,7 +2,7 @@
 <p><?= $user->getFlash(); ?></p>
 <?php }  ?>
 <form method="post">
-    <img src="/images/mlc.png" alt="mlc" width="200" height="100%">
+    <img src="/images/afc.jpeg" alt="afc" width="200" height="100%">
     <label for="inputEmail" class="sr-only">Login</label>
     <input type="text" id="login" class="form-control mb-1" name="login" placeholder="Login" required autofocus>
     <span id="statut"></span>

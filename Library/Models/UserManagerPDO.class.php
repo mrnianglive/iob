@@ -87,34 +87,18 @@ class UserManagerPDO extends UserManager
     public function ListeUsers()
     {
         if ($_SESSION['statut'] == 'superadmin') {
-            $sql = 'SELECT * FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut LEFT JOIN tblpays ON tblpays.RefPays=TbleUsers.RefPays';
+            $requeteUsers = $this->dao->prepare('SELECT * FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut LEFT JOIN tblpays ON tblpays.RefPays=TbleUsers.RefPays');
         } else {
-            $sql = 'SELECT * FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut INNER JOIN tblpays ON tblpays.RefPays=TbleUsers.RefPays WHERE TbleUsers.RefPays=:RefPays';
-        }
-
-        $requeteUsers = $this->dao->prepare($sql);
-
-        if ($_SESSION['statut'] != 'superadmin') {
+            $requeteUsers = $this->dao->prepare('SELECT * FROM TbleUsers  INNER JOIN tblpays ON tblpays.RefPays=TbleUsers.RefPays INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE TbleUsers.RefPays=:RefPays');
             $requeteUsers->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         }
-
         $requeteUsers->execute();
         $ListeUsers = $requeteUsers->fetchAll();
-
-        $ListeUsers = $this->addVerificationToUsers($ListeUsers);
-
+        foreach ($ListeUsers as $key => $value) {
+            $ListeUsers[$key]['Verify'] = $this->VerifCaisse(NULL, $value['RefUsers']);
+        }
         return $ListeUsers;
     }
-
-    private function addVerificationToUsers(array $users)
-    {
-        foreach ($users as $key => $value) {
-            $users[$key]['Verify'] = $this->VerifCaisse(NULL, $value['RefUsers']);
-        }
-
-        return $users;
-    }
-
 
     public function ListeCaisse()
     {

@@ -108,7 +108,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
                         <li>
-                            <a data-toggle="modal" href="#UserAddPays"><span
+                            <a class="profile-pic" href="#"><span
                                     class="text-white font-medium"><?= $_SESSION['nomPays']; ?> </span></a>
                         </li>
                         <li>
@@ -248,7 +248,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <footer class="footer text-center"> Dernière Connexion :
+            <footer class="footer text-center">
+                <!--Dernière Connexion :-->
                 <? //= $_SESSION['LastConnexion']; 
                 ?> |
                 <?= date('Y'); ?>
@@ -262,34 +263,6 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
         <!-- ============================================================== -->
         <!-- End Page wrapper  -->
         <!-- ============================================================== -->
-    </div>
-
-    <!--modalPays-->
-    <div class="modal fade" id="UserAddPays" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                </div>
-                <form role="form" method="post" action="">
-                    <div class="modal-body">
-
-                        <div class="form-group">
-                            <label class="control-label">Pays</label>
-                            <select name="RefPays" class="form-control">
-                                <option value="">MALI</option>
-                                <option value="">TOGO</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-primary">Valider</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 

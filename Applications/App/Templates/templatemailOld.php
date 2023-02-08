@@ -1,11 +1,10 @@
 <?php
 ob_start();
 ?>
-
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"
-    style="width:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
+    style="width:100%;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
 
 <head>
     <meta charset="UTF-8">
@@ -14,9 +13,20 @@ ob_start();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="telephone=no" name="format-detection">
     <title>model mail</title>
-    <!--[if (mso 16)]><style type="text/css"> a {text-decoration: none;} </style><![endif]-->
+    <!--[if (mso 16)]>
+<style type="text/css">
+a {text-decoration: none;}
+</style>
+<![endif]-->
     <!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]-->
-    <!--[if gte mso 9]><xml> <o:OfficeDocumentSettings> <o:AllowPNG></o:AllowPNG> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings> </xml><![endif]-->
+    <!--[if gte mso 9]>
+<xml>
+<o:OfficeDocumentSettings>
+<o:AllowPNG></o:AllowPNG>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
     <!--[if !mso]><!-- -->
     <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i" rel="stylesheet">
     <!--<![endif]-->
@@ -292,23 +302,20 @@ ob_start();
         table.es-social td {
             display: inline-block !important
         }
-
-        .es-desk-hidden {
-            display: table-row !important;
-            width: auto !important;
-            overflow: visible !important;
-            max-height: inherit !important
-        }
     }
     </style>
 </head>
 
 <body
-    style="width:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;padding:0;Margin:0">
+    style="width:100%;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
     <div class="es-wrapper-color" style="background-color:#F4F4F4">
-        <!--[if gte mso 9]><v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t"> <v:fill type="tile" color="#f4f4f4"></v:fill> </v:background><![endif]-->
+        <!--[if gte mso 9]>
+<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
+<v:fill type="tile" color="#f4f4f4"></v:fill>
+</v:background>
+<![endif]-->
         <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0"
-            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;background-position:center top;background-color:#F4F4F4">
+            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;background-position:center top">
             <tr class="gmail-fix" height="0" style="border-collapse:collapse">
                 <td style="padding:0;Margin:0">
                     <table cellspacing="0" cellpadding="0" border="0" align="center"
@@ -346,10 +353,11 @@ ob_start();
                                                             <tr style="border-collapse:collapse">
                                                                 <td align="center"
                                                                     style="padding:0;Margin:0;font-size:0px"><a
-                                                                        target="_blank" href="https://afrikcreances.com"
+                                                                        target="_blank"
+                                                                        href="https://malicreances-sa.com"
                                                                         style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#FFA73B;font-size:18px"><img
                                                                             class="adapt-img"
-                                                                            src="https://vhqcho.stripocdn.email/content/guids/CABINET_3094e919bd1bfbc20dc27483a939060c/images/afch.jpeg"
+                                                                            src="https://vhqcho.stripocdn.email/content/guids/CABINET_3094e919bd1bfbc20dc27483a939060c/images/mali_creances.jpeg"
                                                                             alt
                                                                             style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
                                                                             width="140"></a></td>
@@ -399,20 +407,11 @@ ob_start();
                                                                     style="Margin:0;padding-top:20px;padding-left:30px;padding-right:30px;padding-bottom:40px">
                                                                     <p
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;color:#666666;font-size:18px">
-                                                                        <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp;<br>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                                                            &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;L'EQUIPE
-                                                                            AFRIKCREANCES<br></strong>
+                                                                        <strong>L'EQUIPE MALI CREANCES</strong>
+                                                                    </p>
+                                                                    <p
+                                                                        style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;color:#666666;font-size:18px;text-align:right">
+                                                                        <strong>contact@malicreances-sa.com<br>malicreances-sa.com&nbsp;</strong>
                                                                     </p>
                                                                 </td>
                                                             </tr>
@@ -474,7 +473,6 @@ ob_start();
 </body>
 
 </html>
-
 <?php
 $content = ob_get_clean();
 

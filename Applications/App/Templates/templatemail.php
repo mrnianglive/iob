@@ -349,7 +349,7 @@ ob_start();
                                                                         target="_blank" href="https://afrikcreances.com"
                                                                         style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#FFA73B;font-size:18px"><img
                                                                             class="adapt-img"
-                                                                            src="https://vhqcho.stripocdn.email/content/guids/CABINET_3094e919bd1bfbc20dc27483a939060c/images/afch.jpeg"
+                                                                            src="https://vhqcho.stripocdn.email/content/guids/CABINET_3094e919bd1bfbc20dc27483a939060c/images/afc.jpeg"
                                                                             alt
                                                                             style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
                                                                             width="140"></a></td>

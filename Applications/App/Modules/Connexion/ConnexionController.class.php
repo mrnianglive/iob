@@ -42,9 +42,6 @@ class ConnexionController extends \Library\BackController
                     $this->app()->httpResponse()->redirect('/');
                 }
             }
-        } else {
-            session_destroy();
-            $this->app()->httpResponse()->redirect('/');
         }
     }
     public function executeLogout(\Library\HTTPRequest $request)

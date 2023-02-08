@@ -13,13 +13,19 @@ class UserManagerPDO extends UserManager
 {
     public function login($login, $Password)
     {
+        //before login, check if the post data is not empty
+
         $IP = $this->getIPAddress();
-        $requete = $this->dao->prepare("SELECT *  FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE login=:login");
-        $requete->bindValue(':login', $login, \PDO::PARAM_STR);
-        $requete->execute();
-        $resultat = $requete->fetch();
-        if (password_verify($_POST['password'], $resultat['password'])) {
-            return $resultat;
+        if (!empty($login) && !empty($Password)) {
+            $requete = $this->dao->prepare("SELECT *  FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE login=:login");
+            $requete->bindValue(':login', $login, \PDO::PARAM_STR);
+            $requete->execute();
+            $resultat = $requete->fetch();
+            if (password_verify($_POST['password'], $resultat['password'])) {
+                return $resultat;
+            }
+        } else {
+            return false;
         }
     }
     public function SendUserinfo($to, $login, $Password)

@@ -8,7 +8,7 @@ class ConnexionController extends \Library\BackController
     {
         $this->page->addVar("titles", "Page de Connexion"); // Titre de la page
         $this->page->setTemplate('login');
-        if ($request->method() == 'POST') {
+        if ($request->method() == 'POST' && !empty($request->postData('login')) && !empty($request->postData('password'))) {
             $User = $this->managers->getManagerOf('User')->login($request->postData('login'), $request->postData('password'));
             if (!empty($User)) {
                 if (!empty($User['secret'])) {
@@ -42,6 +42,9 @@ class ConnexionController extends \Library\BackController
                     $this->app()->httpResponse()->redirect('/');
                 }
             }
+        } else {
+            session_destroy();
+            $this->app()->httpResponse()->redirect('/');
         }
     }
     public function executeLogout(\Library\HTTPRequest $request)

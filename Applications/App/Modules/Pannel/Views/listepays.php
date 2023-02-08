@@ -10,6 +10,7 @@
                         <tr>
                             <th class="border-top-0">ID</th>
                             <th class="border-top-0">Nom</th>
+                            <th class="border-top-0">Email</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -18,6 +19,7 @@
                         <tr>
                             <td><?= $value['RefPays']; ?></td>
                             <td><?= $value['nomPays']; ?></td>
+                            <td><?= $value['EmailAlert']; ?></td>
                         </tr>
                         <?php } ?>
                     </tbody>
@@ -26,7 +28,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="addPays" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
     <div class="modal-dialog" role="document">

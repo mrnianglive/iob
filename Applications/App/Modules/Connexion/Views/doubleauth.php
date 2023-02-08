@@ -5,5 +5,5 @@
         placeholder="Veuillez saisir le code généré par l'authentificateur" required autofocus>
     <button class="btn btn-lg btn-success btn-block" type="submit">Valider</button>
     <a href="/logout" class="btn btn-lg btn-danger btn-block">Annuler</a>
-    <p class="mt-5 mb-3 text-muted">&copy; MALI CREANCES 2021 Developed by NIANGALY</p>
+    <p class="mt-5 mb-3 text-muted">&copy; AFRIK CREANCES 2021 Developed by NIANGALY</p>
 </form>

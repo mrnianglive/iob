@@ -4,7 +4,7 @@
         <div class="white-box">
 
             <h3 class="box-title">Appro Caisse</h3>
-            <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Head') { ?>
+            <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'superadmin') { ?>
             <a href="/bielletage/3" class="btn btn-primary"><i class="fa fa-plus"> Initier</i></a> <br /> <br />
             <?php } ?>
             <div class="table-responsive">

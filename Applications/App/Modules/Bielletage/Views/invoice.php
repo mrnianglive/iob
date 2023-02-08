@@ -2,12 +2,24 @@
          <div style="padding: 0px !important;">
              <div class="row"
                  style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
+                 <?php if ($GetInvoice['RefPays'] == 1) { ?>
                  <div style="width: 10%;display: inline-block;vertical-align: top;">
                      <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px;" width="100%">
                      <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px;" width="100%">
                  </div>
+                 <?php } else { ?>
+                 <div style="width: 10%;display: inline-block;vertical-align: top;">
+                     <img src="/images/afch.jpeg" alt="Logo" style="height: 40px;" width="100%">
+                 </div>
+                 <?php } ?>
                  <div style="text-align: center;width:88%;display: inline-block;">
-                     <p>MALI CREANCES SA - PARTENAIRE ECOBANK MALI <img style="float: right; margin-right: -15px;"
+                     <p>
+                         <?php if ($GetInvoice['RefPays'] == 1) { ?>
+                         MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement
+                         <?php } else { ?>
+                         AFRIK CREANCES
+                         <?php } ?>
+                         <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
                              width="80" height="80" alt="Logo">
                      </p>
@@ -118,12 +130,24 @@
          <div style="padding: 0px !important;">
              <div class="row"
                  style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
+                 <?php if ($GetInvoice['RefPays'] == 1) { ?>
                  <div style="width: 10%;display: inline-block;vertical-align: top;">
                      <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px;" width="100%">
                      <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px;" width="100%">
                  </div>
+                 <?php } else { ?>
+                 <div style="width: 10%;display: inline-block;vertical-align: top;">
+                     <img src="/images/afch.jpeg" alt="Logo" style="height: 40px;" width="100%">
+                 </div>
+                 <?php } ?>
                  <div style="text-align: center;width:88%;display: inline-block;">
-                     <p>MALI CREANCES SA - PARTENAIRE ECOBANK MALI <img style="float: right; margin-right: -15px;"
+                     <p>
+                         <?php if ($GetInvoice['RefPays'] == 1) { ?>
+                         MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement
+                         <?php } else { ?>
+                         AFRIK CREANCES
+                         <?php } ?>
+                         <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
                              width="80" height="80" alt="Logo">
                      </p>
@@ -227,6 +251,9 @@
                  </div>
              </div>
          </div>
-         <h5 style="text-align:left;">MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement |
-             www.malicreances-sa.com</h5>
+         <h5 style="text-align:left;">
+             <?php if ($GetInvoice['RefPays'] == 1) { ?>MALI CREANCES SA - Intermediare en Opérations de Banque et
+             Recouvrement |www.malicreances-sa.com<?php } else { ?>AFRIK CREANCES - Intermédiation en opérations
+             bancaires et non bancaires |www.afrikcreances.com<?php } ?>
+         </h5>
      </div>

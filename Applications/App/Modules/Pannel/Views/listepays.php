@@ -28,7 +28,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="addPays" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

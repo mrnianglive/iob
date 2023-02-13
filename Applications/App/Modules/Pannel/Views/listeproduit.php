@@ -11,6 +11,7 @@
                             <th class="border-top-0">ID</th>
                             <th class="border-top-0">Nom</th>
                             <th class="border-top-0">Banque</th>
+                            <th class="border-top-0">Status</th>
                             <th class="border-top-0">Actions</th>
                         </tr>
                     </thead>
@@ -20,6 +21,7 @@
                                 <td><?= $value['RefProduit']; ?></td>
                                 <td><?= $value['NameProduit']; ?></td>
                                 <td><?= $value['NameBanque']; ?></td>
+                                <td><?= $value['StatutProduit']; ?></td>
                                 <td>
                                     <a href="/Pannel/Produit/delete/<?= $value['RefProduit']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i class="fa fa-trash"></i></a>
                                     <a class="btn btn-xs  btn-warning" data-toggle="modal" data-target="#ChmodProduit-<?= $value['RefProduit']; ?>" data-whatever="@mdo"><i class="fa fa-check"></i></a>
@@ -44,7 +46,6 @@
                                                 <?php } ?>
 
                                             </div>
-
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
                                                 <button type="submit" class="btn btn-primary">Valider</button>
@@ -79,6 +80,13 @@
                         <?php foreach ($ListeBanque as $key => $value) { ?>
                             <option value="<?= $value['RefBanque']; ?>"><?= $value['NameBanque']; ?></option>
                         <?php   } ?>
+                    </select>
+
+                    <label class="control-label">Statut</label>
+                    <select name="StatutProduit" class="form-control">
+                        <option value="">Choisir</option>
+                        <option value="banque">Banque</option>
+                        <option value="remittance">Remittance</option>
                     </select>
                 </div>
                 <div class="modal-footer">

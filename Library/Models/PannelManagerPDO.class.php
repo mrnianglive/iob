@@ -66,7 +66,7 @@ class PannelManagerPDO extends PannelManager
         $requeteAdd = $this->dao->prepare("INSERT INTO TbleProduit(NameProduit,RefBanque,StatutProduit) VALUES(:NameProduit,:RefBanque,:StatutProduit)");
         $requeteAdd->bindValue(':NameProduit', $_POST['NameProduit'], \PDO::PARAM_STR);
         $requeteAdd->bindValue(':RefBanque', $_POST['RefBanque'], \PDO::PARAM_INT);
-        $requeteAdd->bindValue(':StatutProduit', $_POST['StatutProduit'], \PDO::PARAM_INT);
+        $requeteAdd->bindValue(':StatutProduit', $_POST['StatutProduit'], \PDO::PARAM_STR);
         $requeteAdd->execute();
     }
     public function DeleteProduit($Produit)

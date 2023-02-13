@@ -170,7 +170,10 @@ class PannelManagerPDO extends PannelManager
         $requete->bindValue(':RefDays', $Days, \PDO::PARAM_INT);
         $requete->execute();
         $data = $requete->fetch();
-        return $data;
+        if (!empty($data) && isset($data)) {
+            return $data;
+        }
+        return [];
     }
     public function VerifProduit($caisse, $Produit)
     {

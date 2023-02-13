@@ -114,6 +114,11 @@ class BielletageManagerPDO extends BielletageManager
         } else {
             $TypeRetrait = null;
         }
+        if (!empty($_POST['RefProduit'])) {
+            $RefProduit = $_POST['RefProduit'];
+        } else {
+            $RefProduit = null;
+        }
 
 
         $result = uniqid();
@@ -146,7 +151,7 @@ class BielletageManagerPDO extends BielletageManager
                 $requeteAddversement->bindValue(':TelDeposant', $_POST['TelDeposant'], \PDO::PARAM_STR);
                 $requeteAddversement->bindValue(':RefType', $_POST['RefType'], \PDO::PARAM_INT);
                 $requeteAddversement->bindValue(':TypeAppro', $TypeAppro, \PDO::PARAM_INT);
-                $requeteAddversement->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':RefProduit', $RefProduit, \PDO::PARAM_INT);
                 $requeteAddversement->bindValue(':TypeRetrait', $TypeRetrait, \PDO::PARAM_INT);
                 $requeteAddversement->bindValue(':uniqid', $result, \PDO::PARAM_STR);
                 $requeteAddversement->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
@@ -186,15 +191,17 @@ class BielletageManagerPDO extends BielletageManager
             if ($_POST['RefType']  == 4) {
                 $this->AlerteSortie($_POST['RefCaisse'], $_POST['MontantVersement']);
             }
-            header("location: /");
+
             $_SESSION['message']['type'] = 'success';
             $_SESSION['message']['text'] = 'Opération réussie !';
             $_SESSION['message']['number'] = 2;
-        } else {
             header("location: /");
+        } else {
+
             $_SESSION['message']['type'] = 'error';
             $_SESSION['message']['text'] = "Veuillez  reprendre l'operation. le Formulaire n'est pas remplit correctement,!";
             $_SESSION['message']['number'] = 2;
+            header("location: /");
         }
     }
     public function YesterdaySolde($Agence = NULL)

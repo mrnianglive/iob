@@ -37,10 +37,10 @@
                                                     <?php foreach ($ListeDays as $key => $jours) { ?>
 
                                                         <div class="checkbox checkbox-success checkbox-circle">
-                                                            <input id="checkbox-10" type="checkbox" name="RefDays[<?= $jours['RefDays']; ?>]" multiple="" value="<?= $jours['RefDays']; ?>" <?php if ($Opening[$value['RefCaisse']][$jours['RefDays']]['RefDays'] == $jours['RefDays']) { ?> checked="" <?php } ?>>
+                                                            <input id="checkbox-10" type="checkbox" name="RefDays[<?= $jours['RefDays']; ?>]" multiple="" value="<?= $jours['RefDays']; ?>" <?php if (isset($Opening[$value['RefCaisse']][$jours['RefDays']]['RefDays']) && $Opening[$value['RefCaisse']][$jours['RefDays']]['RefDays'] == $jours['RefDays']) { ?> checked="" <?php } ?>>
                                                             <label for="checkbox-10"><?= $jours['NameDays']; ?> </label>
-                                                            <input type="time" name="HeureDebut[<?= $jours['RefDays']; ?>]" multiple="" value="<?= $Opening[$value['RefCaisse']][$jours['RefDays']]['HeureDebut']; ?>">
-                                                            <input type="time" name="HeureFin[<?= $jours['RefDays']; ?>]" multiple="" value="<?= $Opening[$value['RefCaisse']][$jours['RefDays']]['HeureFin']; ?>">
+                                                            <input type="time" name="HeureDebut[<?= $jours['RefDays']; ?>]" multiple="" value="<?php if (isset($Opening[$value['RefCaisse']][$jours['RefDays']]['HeureDebut'])) { ?> <?= $Opening[$value['RefCaisse']][$jours['RefDays']]['HeureDebut']; ?> <?php } ?>">
+                                                            <input type="time" name="HeureFin[<?= $jours['RefDays']; ?>]" multiple="" value="<?php if (isset($Opening[$value['RefCaisse']][$jours['RefDays']]['HeureFin'])) { ?> <?= $Opening[$value['RefCaisse']][$jours['RefDays']]['HeureFin']; ?> <?php } ?>">
                                                         </div>
                                                         <input type="hidden" name="RefCaisse" value="<?= $value['RefCaisse']; ?>">
                                                     <?php } ?>

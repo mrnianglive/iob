@@ -100,7 +100,10 @@ class PannelManagerPDO extends PannelManager
         $requeteDays = $this->dao->prepare('SELECT * FROM TbleDays');
         $requeteDays->execute();
         $ListeDays = $requeteDays->fetchAll();
-        return $ListeDays;
+        if (!empty($ListeDays)) {
+            return $ListeDays;
+        }
+        return [];
     }
     public function AddOuverture()
     {

@@ -21,7 +21,7 @@ class UserManagerPDO extends UserManager
             $requete->bindValue(':login', $login, \PDO::PARAM_STR);
             $requete->execute();
             $resultat = $requete->fetch();
-            if (password_verify($Password, $resultat['password'])) {
+            if (!empty($resultat['password']) && password_verify($Password, $resultat['password'])) {
                 return $resultat;
             }
         } else {

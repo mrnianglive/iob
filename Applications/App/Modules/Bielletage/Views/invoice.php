@@ -19,7 +19,7 @@
                          <?php } else { ?>
                          AFRIK CREANCES
                          <?php } ?>
-                         <img style="float: right; margin-right: -31px;"
+                         <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
                              width="80" height="80" alt="Logo">
                      </p>
@@ -147,7 +147,7 @@
                          <?php } else { ?>
                          AFRIK CREANCES
                          <?php } ?>
-                         <img style="float: right; margin-right: -31px;"
+                         <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
                              width="80" height="80" alt="Logo">
                      </p>

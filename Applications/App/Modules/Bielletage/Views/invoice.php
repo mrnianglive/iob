@@ -2,17 +2,15 @@
          <div style="padding: 0px !important;">
              <div class="row"
                  style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
-                 <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                 <div style="width: 10%;display: inline-block;vertical-align: top;">
-                     <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px;" width="100%">
-                     <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px;" width="100%">
+                 <div style="width: 10%; display: inline-block; vertical-align: top;">
+                     <?php if ($GetInvoice['RefPays'] == 1) { ?>
+                     <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px; width: 100%;">
+                     <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px; width: 100%;">
+                     <?php } else { ?>
+                     <img src="/images/afc.png" alt="Logo" style="height: 40px; width: 100%;">
+                     <?php } ?>
                  </div>
-                 <?php } else { ?>
-                 <div style="width: 10%;display: inline-block;vertical-align: top;">
-                     <img src="/images/afc.png" alt="Logo" style="height: 200;" width="200">
-                 </div>
-                 <?php } ?>
-                 <div style="text-align: center;width:88%;display: inline-block;">
+                 <div style="text-align: center; width: 88%; display: inline-block;">
                      <p>
                          <?php if ($GetInvoice['RefPays'] == 1) { ?>
                          MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement
@@ -23,16 +21,33 @@
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
                              width="80" height="80" alt="Logo">
                      </p>
-                     <h2><?php if ($GetInvoice['RefType'] == 1) { ?>VERSEMENT
-                         <?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETRAIT
-                         <?php } elseif ($GetInvoice['RefType'] == 4) { ?> SORTIE DE FOND
-                         <?php } elseif ($GetInvoice['RefType'] == 3) { ?> APPRO CAISSE
-                         <?php } ?>ESPECES </h2>
-                     <h3>BANQUE</h3> <?php if ($getResetStatus == true) { ?> <h3 style="color:#c62828;">Opération
-                         Annulée
-                     </h3> <?php } ?>
+                     <h2>
+                         <?php
+                            $type = '';
+                            switch ($GetInvoice['RefType']) {
+                                case 1:
+                                    $type = 'VERSEMENT';
+                                    break;
+                                case 2:
+                                    $type = 'RETRAIT';
+                                    break;
+                                case 3:
+                                    $type = 'APPRO CAISSE';
+                                    break;
+                                case 4:
+                                    $type = 'SORTIE DE FOND';
+                                    break;
+                            }
+                            echo $type . ' ESPECES';
+                            ?>
+                     </h2>
+                     <h3>BANQUE</h3>
+                     <?php if ($getResetStatus == true) { ?>
+                     <h3 style="color:#c62828;">Opération Annulée</h3>
+                     <?php } ?>
                  </div>
              </div>
+
              <br>
              <div class="row">
                  <div style="width: 48%;display: inline-block;vertical-align: top;">
@@ -130,17 +145,15 @@
          <div style="padding: 0px !important;">
              <div class="row"
                  style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
-                 <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                 <div style="width: 10%;display: inline-block;vertical-align: top;">
-                     <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px;" width="100%">
-                     <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px;" width="100%">
+                 <div style="width: 10%; display: inline-block; vertical-align: top;">
+                     <?php if ($GetInvoice['RefPays'] == 1) { ?>
+                     <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px; width: 100%;">
+                     <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px; width: 100%;">
+                     <?php } else { ?>
+                     <img src="/images/afc.png" alt="Logo" style="height: 40px; width: 100%;">
+                     <?php } ?>
                  </div>
-                 <?php } else { ?>
-                 <div style="width: 10%;display: inline-block;vertical-align: top;">
-                     <img src="/images/afc.png" alt="Logo" style="height: 200;" width="200">
-                 </div>
-                 <?php } ?>
-                 <div style="text-align: center;width:88%;display: inline-block;">
+                 <div style="text-align: center; width: 88%; display: inline-block;">
                      <p>
                          <?php if ($GetInvoice['RefPays'] == 1) { ?>
                          MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement
@@ -151,15 +164,33 @@
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
                              width="80" height="80" alt="Logo">
                      </p>
-                     <h2><?php if ($GetInvoice['RefType'] == 1) { ?>VERSEMENT
-                         <?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETRAIT
-                         <?php } elseif ($GetInvoice['RefType'] == 4) { ?> SORTIE DE FOND
-                         <?php } elseif ($GetInvoice['RefType'] == 3) { ?> APPRO CAISSE <?php } ?>ESPECES </h2>
-                     <h3>CLIENT</h3> <?php if ($getResetStatus == true) { ?> <h3 style="color:#c62828;">Opération
-                         Annulée
-                     </h3> <?php } ?>
+                     <h2>
+                         <?php
+                            $type = '';
+                            switch ($GetInvoice['RefType']) {
+                                case 1:
+                                    $type = 'VERSEMENT';
+                                    break;
+                                case 2:
+                                    $type = 'RETRAIT';
+                                    break;
+                                case 3:
+                                    $type = 'APPRO CAISSE';
+                                    break;
+                                case 4:
+                                    $type = 'SORTIE DE FOND';
+                                    break;
+                            }
+                            echo $type . ' ESPECES';
+                            ?>
+                     </h2>
+                     <h3>CLIENT</h3>
+                     <?php if ($getResetStatus == true) { ?>
+                     <h3 style="color:#c62828;">Opération Annulée</h3>
+                     <?php } ?>
                  </div>
              </div>
+
              <br>
              <div class="row">
                  <div style="width: 48%;display: inline-block;vertical-align: top;">

@@ -640,7 +640,7 @@ class JournalManagerPDO extends JournalManager
         if (!empty($ListeAgence['NameAgency'])) {
             return $ListeAgence['NameAgency'];
         }
-        return 'XXXXX';
+        return '';
     }
     public function SoldeRemittanceVersementAgencePeriode($debut = NULL, $fin = NULL, $Agence = NULL)
     {

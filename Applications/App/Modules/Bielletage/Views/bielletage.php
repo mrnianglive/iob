@@ -440,8 +440,8 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3" style="display: none;" id="hidden">
-                        <div class="form-group has-error"><label class="control-label" id="label">Numéro de
+                    <div class="col-md-3">
+                        <div class="form-group"><label class="control-label" id="label">Numéro de
                                 compte</label><input type="int" id="NumCompte" class="form-control" name="NumCompte"
                                 required="" autocomplete="OFF"></div>
                     </div>

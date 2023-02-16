@@ -8,7 +8,7 @@
                      </div>
                  <?php } else { ?>
                      <div style="width: 10%;display: inline-block;vertical-align: top;">
-                         <img src="/images/afch.jpeg" alt="Logo" style="height: 100px;" width="100%">
+                         <img src="/images/afc.png" alt="Logo" style="height: 100;" width="200">
                      </div>
                  <?php } ?>
                  <div style="text-align: center;width:88%;display: inline-block;">
@@ -18,7 +18,7 @@
                          <?php } else { ?>
                              AFRIK CREANCES
                          <?php } ?>
-                         <img style="float: right; margin-right: -15px;" src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>" width="80" height="80" alt="Logo">
+                         <img style="float: right; margin-right: -31px;" src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>" width="90" height="90" alt="Logo">
                      </p>
                      <h2><?php if ($GetInvoice['RefType'] == 1) { ?>VERSEMENT
                      <?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETRAIT
@@ -133,7 +133,7 @@
                      </div>
                  <?php } else { ?>
                      <div style="width: 10%;display: inline-block;vertical-align: top;">
-                         <img src="/images/afch.jpeg" alt="Logo" style="height: 100px;" width="100%">
+                         <img src="/images/afc.png" alt="Logo" style="height: 100;" width="200">
                      </div>
                  <?php } ?>
                  <div style="text-align: center;width:88%;display: inline-block;">
@@ -143,7 +143,7 @@
                          <?php } else { ?>
                              AFRIK CREANCES
                          <?php } ?>
-                         <img style="float: right; margin-right: -15px;" src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>" width="80" height="80" alt="Logo">
+                         <img style="float: right; margin-right: -31px;" src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>" width="90" height="90" alt="Logo">
                      </p>
                      <h2><?php if ($GetInvoice['RefType'] == 1) { ?>VERSEMENT
                      <?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETRAIT

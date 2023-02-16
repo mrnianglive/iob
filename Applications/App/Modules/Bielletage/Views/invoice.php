@@ -6,7 +6,7 @@
                          <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px; width: 100%;">
                          <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px; width: 100%;">
                      <?php } else { ?>
-                         <img src="/images/afc.png" alt="Logo" style="height: 80px; width: 150%;">
+                         <img src="/images/afc.png" alt="Logo" style="height: 80px; width: 200%;">
                      <?php } ?>
                  </div>
                  <div style="text-align: center; width: 88%; display: inline-block;">
@@ -146,7 +146,7 @@
                          <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px; width: 100%;">
                          <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px; width: 100%;">
                      <?php } else { ?>
-                         <img src="/images/afc.png" alt="Logo" style="height: 80px; width: 150%;">
+                         <img src="/images/afc.png" alt="Logo" style="height: 80px; width: 200%;">
                      <?php } ?>
                  </div>
                  <div style="text-align: center; width: 88%; display: inline-block;">

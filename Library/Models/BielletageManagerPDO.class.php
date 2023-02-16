@@ -378,7 +378,6 @@ class BielletageManagerPDO extends BielletageManager
     {
         $requete = $this->dao->prepare('SELECT * FROM TbleOperations WHERE RefOperations=:RefOperations ');
         $requete->bindValue(':RefOperations', $Refoperations, \PDO::PARAM_INT);
-        $requete->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
         if ($result['Reset_Id'] == null && $result['Reset_At'] == null) {

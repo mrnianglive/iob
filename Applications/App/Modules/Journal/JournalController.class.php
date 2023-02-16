@@ -14,8 +14,6 @@ class JournalController extends \Library\BackController
         $this->page->addVar('Debut', $request->postData('Debut'));
         $this->page->addVar('Fin', $request->postData('Fin'));
         $this->page->addVar('Value', $request->postData('RefAgency'));
-        // $Biellet = $this->managers->getManagerOf('Journal')->GetBielletageJournal(NULL, NULL, NULL);
-        // $this->page->addVar('Biellet', $Biellet);
         $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
         $this->page->addVar("ListeAgence", $ListeAgence);
         if (!empty($request->postData('RefAgency')) or isset($_GET['value'])) {

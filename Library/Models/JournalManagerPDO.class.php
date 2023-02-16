@@ -637,7 +637,10 @@ class JournalManagerPDO extends JournalManager
         $requeteAgence->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteAgence->execute();
         $ListeAgence = $requeteAgence->fetch();
-        return $ListeAgence['NameAgency'];
+        if (!empty($ListeAgence['NameAgency'])) {
+            return $ListeAgence['NameAgency'];
+        }
+        return 'XXXXX';
     }
     public function SoldeRemittanceVersementAgencePeriode($debut = NULL, $fin = NULL, $Agence = NULL)
     {

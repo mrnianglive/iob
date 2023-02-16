@@ -44,7 +44,7 @@
                       <thead>
                           <tr>
                               <th class="border-top-0">ID</th>
-                              <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
+                              <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
                               <th class="border-top-0">Statut</th>
                               <?php } ?>
                               <th class="border-top-0">Agence</th>
@@ -70,7 +70,7 @@
                               <td
                                   style="<?php if ($value['Validate'] == 2 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color:#7ace4c;  <?php } elseif ($value['Validate'] == 1 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color: #f33155; <?php   } ?>">
                                   <?= $value['RefOperations']; ?></td>
-                              <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
+                              <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
                               <td> <?php if ($value['Validate'] == 1) { ?> <button class="btn btn-danger"
                                       data-toggle="modal" data-target="#modal-<?= $value['RefOperations']; ?>">Non
                                       Vérifiée </button> <?php } else { ?> <a
@@ -153,7 +153,7 @@
                                               <span
                                                   class="alert alert-<? //= ($value['MontantVersement'] == $montant) ? 'success' : 'warning'; 
                                                                         ?>"><? //= ($value['MontantVersement'] == $montant) ? 'Correspondance Montant Trouvée' : 'Correspondance Montant non Trouvée'; 
-                                                                                                                                                    ?>
+                                                                            ?>
                                               </span>
                                               <textarea class="form-control">
                                                     <? //= $result['DateControl'] . '&#13;&#10;' . $result['Description'] . '&#13;&#10;' . round($result['Payments']) . '&#13;&#10;' . round($result['Deposits']); 

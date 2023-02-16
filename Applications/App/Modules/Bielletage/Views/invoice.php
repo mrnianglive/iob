@@ -9,7 +9,7 @@
                  </div>
                  <?php } else { ?>
                  <div style="width: 10%;display: inline-block;vertical-align: top;">
-                     <img src="/images/afc.png" alt="Logo" style="height: 40px;" width="100%">
+                     <img src="/images/jpeg.jpeg" alt="Logo" style="height: 40px;" width="100%">
                  </div>
                  <?php } ?>
                  <div style="text-align: center;width:88%;display: inline-block;">
@@ -137,7 +137,7 @@
                  </div>
                  <?php } else { ?>
                  <div style="width: 10%;display: inline-block;vertical-align: top;">
-                     <img src="/images/afc.png" alt="Logo" style="height: 40px;" width="100%">
+                     <img src="/images/afch.jpeg" alt="Logo" style="height: 40px;" width="100%">
                  </div>
                  <?php } ?>
                  <div style="text-align: center;width:88%;display: inline-block;">

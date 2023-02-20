@@ -92,7 +92,8 @@ class BielletageController extends \Library\BackController
         $Solde = $this->managers->getManagerOf('Journal')->ArreterSingleCaisse($id = $request->getData('id'), date('Y-m-d'));
 
         // StopCaisse
-        $managerArreter->StopCaisse($id, $Solde, ('Y-m-d H:i:s'));
+        $Date = date('Y-m-d H:i:s');
+        $managerArreter->StopCaisse($id, $Solde, $Date);
 
         // Redirect
         $this->app()->httpResponse()->redirect('/Arreter/index');

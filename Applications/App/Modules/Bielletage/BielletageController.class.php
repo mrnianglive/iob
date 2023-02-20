@@ -86,25 +86,10 @@ class BielletageController extends \Library\BackController
     public function executeStopcaisse(\Library\HTTPRequest $request)
     {
         // Get manager objects
-        $managerBielletage = $this->managers->getManagerOf('Bielletage');
         $managerArreter = $this->managers->getManagerOf('Arreter');
 
-        // Get ID from request
-        $id = $request->getData('id');
-
-        // Get SommeVersement and SommeRetrait
-        $SommeVersement = $managerBielletage->SommeVersementAgence($id, date('Y-m-d'));
-        $SommeRetrait = $managerBielletage->SommeRetraitAgence($id, date('Y-m-d'));
-
-        // Add variables to page
-        $this->page->addVar('SommeVersement', $SommeVersement);
-        $this->page->addVar('SommeRetrait', $SommeRetrait);
-
-        // Get YesterdaySolde
-        $Yesterday = $managerBielletage->YesterdaySolde($id);
-
         // Calculate Solde
-        $Solde = $SommeVersement - $SommeRetrait;
+        $Solde = $this->managers->getManagerOf('Journal')->ArreterSingleCaisse($id = $request->getData('id'), date('Y-m-d'));
 
         // StopCaisse
         $managerArreter->StopCaisse($id, $Solde, ('Y-m-d H:i:s'));

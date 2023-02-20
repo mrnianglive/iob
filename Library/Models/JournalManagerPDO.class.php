@@ -890,4 +890,23 @@ class JournalManagerPDO extends JournalManager
             }
         }
     }
+
+
+
+
+    public function ArreterSingleCaisse($Caisse, $Date)
+    {
+        $SoldeRemittanceVersement = $this->SoldeRemittanceVersement($Date, $Caisse);
+        $SoldeRemittanceRetrait = $this->SoldeRemittanceRetrait($Date, $Caisse);
+        $NbreOperation =  $this->NbreOperationCaissier($Date, $Caisse);
+        $SoldeInitial =  $this->SoldeInitialCaisse($Date, $Caisse);
+        $SoldeInitialGlobal =  $this->SoldeInitialCaisseGlobal($Date, $Caisse);
+        $TotalAppro =  $this->TotalApproCaisse($Date, $Caisse);
+        $TotalVersement =  $this->SomnmeVersementCaisse($Date, $Caisse);
+        $TotalRetrait =  $this->SommeRetraitCaisse($Date, $Caisse);
+        $TotalSortieCaisse = $this->TotalSortieCaisse($Date, $Caisse);
+        $SoldeRemittance = $SoldeRemittanceVersement - $SoldeRemittanceRetrait;
+        $SoldeDisponible =   $SoldeInitialGlobal + $TotalVersement - $TotalRetrait - $TotalSortieCaisse + $SoldeRemittance;
+        return $SoldeDisponible;
+    }
 }

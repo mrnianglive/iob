@@ -336,7 +336,7 @@
                         <div class="col-md-3">
                             <div class="form-group has-error">
                                 <label class="control-label">Téléphone *</label>
-                                <input type="text" class="form-control" name="TelDeposant" value="Intern" readonly="" placeholder="Téléphone" autocomplete="OFF">
+                                <input type="text" class="form-control" name="TelDeposant" value="Opération Interne" readonly="" placeholder="Téléphone" autocomplete="OFF">
                             </div>
                         </div>
                         <?php if (in_array(3, $permission)) { ?>
@@ -415,7 +415,7 @@
                                 <?php } else { ?>
                                     <div class="form-group has-error">
                                         <label class="control-label">Numéro de compte *</label>
-                                        <input type="text" id="NumCompte" class="form-control" name="NumCompte" value="Intern" required="" readonly>
+                                        <input type="text" id="NumCompte" class="form-control" name="NumCompte" value="Opération Interne" required="" readonly>
                                     </div>
                                 <?php } ?>
 
@@ -455,7 +455,7 @@
                                 <div class="form-group has-error">
                                     <label class="control-label">Numéro de compte *</label>
 
-                                    <input type="text" class="form-control" name="NumCompte" value="Intern" required="" readonly>
+                                    <input type="text" class="form-control" name="NumCompte" value="Opération Interne" required="" readonly>
                                 </div>
 
                             <?php   } ?>
@@ -471,7 +471,7 @@
                                 <?php } else { ?>
                                     <div class="form-group has-error">
                                         <label class="control-label">Client *</label>
-                                        <input type="text" class="form-control" name="NameClient" value="Intern" required="" readonly>
+                                        <input type="text" class="form-control" name="NameClient" value="Opération Interne" required="" readonly>
                                     </div>
                                 <?php   } ?>
                             </div>
@@ -509,7 +509,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group has-error">
                                         <label class="control-label">Remarque *</label>
-                                        <input type="text" class="form-control" name="Remarque" value="Intern" readonly="" placeholder="Remarque" autocomplete="OFF">
+                                        <input type="text" class="form-control" name="Remarque" value="Opération Interne" readonly="" placeholder="Remarque" autocomplete="OFF">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -521,7 +521,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group has-error">
                                         <label class="control-label">Téléphone *</label>
-                                        <input type="text" class="form-control" name="TelDeposant" value="Intern" readonly="" placeholder="Téléphone" autocomplete="OFF">
+                                        <input type="text" class="form-control" name="TelDeposant" value="Opération Interne" readonly="" placeholder="Téléphone" autocomplete="OFF">
                                     </div>
                                 </div>
                             </div>

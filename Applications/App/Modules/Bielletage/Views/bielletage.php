@@ -413,8 +413,10 @@
                                         <input type="int" id="NumCompte" class="form-control" name="NumCompte" required="" autocomplete="OFF">
                                     </div>
                                 <?php } else { ?>
-
-                                    <input type="hidden" id="NumCompte" class="form-control" name="NumCompte" value="NULL" required="" autocomplete="OFF">
+                                    <div class="form-group has-error">
+                                        <label class="control-label">Numéro de compte *</label>
+                                        <input type="text" id="NumCompte" class="form-control" name="NumCompte" value="NULL" required="" readonly>
+                                    </div>
                                 <?php } ?>
 
                             </div>
@@ -450,8 +452,12 @@
                                     </div>
                                 </div>
                             <?php } else { ?>
+                                <div class="form-group has-error">
+                                    <label class="control-label">Numéro de compte *</label>
 
-                                <input type="hidden" class="form-control" name="NumCompte" value="NULL" required="">
+                                    <input type="text" class="form-control" name="NumCompte" value="NULL" required="" readonly>
+                                </div>
+
                             <?php   } ?>
                         <?php   } ?>
                         </div>
@@ -463,8 +469,10 @@
                                         <input type="text" id="NameClient" class="form-control" name="NameClient" required="" placeholder="Nom complet du client" autocomplete="OFF">
                                     </div>
                                 <?php } else { ?>
-
-                                    <input type="hidden" class="form-control" name="NameClient" value="NULL" required="">
+                                    <div class="form-group has-error">
+                                        <label class="control-label">Client *</label>
+                                        <input type="text" class="form-control" name="NameClient" value="NULL" required="" readonly>
+                                    </div>
                                 <?php   } ?>
                             </div>
                             <?php if ($_GET['id'] == 2) { ?>

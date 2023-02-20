@@ -95,7 +95,8 @@
                           <?php foreach ($Operation as $key => $value) { ?>
                           <tr class="advance-table-row">
                               <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
-                                      class="btn btn-primary"><i class="fa fa-print"></i> </td>
+                                      class="btn btn-primary" data-toggle="tooltip"
+                                      title="Cliquez ici pour imprimer le bordereau"><i class="fa fa-print"></i> </td>
                               <td> <?= $value['RefOperations']; ?></td>
                               <td> <?= $value['NameAgency']; ?></td>
                               <td> <?= $value['NameProduit']; ?></td>
@@ -114,4 +115,5 @@
           </div>
       </div>
   </div>
-  <a href="/dashboard" target="_blank" class="btn btn-secondary">Dashboard</a>
+  <a href="/dashboard" target="_blank" class="btn btn-secondary" data-toggle="tooltip"
+      title="Cliquez ici pour voir les stats">Dashboard</a>

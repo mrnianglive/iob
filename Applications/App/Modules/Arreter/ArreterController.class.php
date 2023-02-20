@@ -36,8 +36,8 @@ class ArreterController extends \Library\BackController
     {
         $this->managers->getManagerOf("Journal")->Reserve($request); //Arreter Reserve
         $Agence  = $this->managers->getManagerOf("Pannel")->GetAgency($request->postData('RefAgency')); //Recuperation de la liste
-        $Agence = $this->managers->getManagerOf('Journal')->CaisseAgence($Agence['RefAgency'], $request->postData('daycloture'));
-        foreach ($Agence as $clef => $data) {
+        $Caisse = $this->managers->getManagerOf('Journal')->CaisseAgence($Agence['RefAgency'], $request->postData('daycloture'));
+        foreach ($Caisse as $clef => $data) {
 
             $CheckClose = $this->managers->getManagerOf('Bielletage')->CheckDailyClose($data['RefCaisse']);
             if (empty($CheckClose)) {

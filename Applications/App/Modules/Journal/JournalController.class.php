@@ -164,9 +164,9 @@ class JournalController extends \Library\BackController
 
     public function executeCancelFermeture(\Library\HTTPRequest $request)
     {
-        $this->managers->getManagerOf("Journal")->CancelFermeture($request->getData('id'));
+        $this->managers->getManagerOf("Journal")->CancelFermeture($request->getData('id'), $request->getData('RefAgency'), $request->getData('day'));
         $_SESSION['message']['type'] = 'success';
-        $_SESSION['message']['text'] = 'Fermeture annulée avec succès, veuillez annuler la fermeture de la caisse au niveau du menu Arrêt de caisse';
+        $_SESSION['message']['text'] = 'Fermeture annulée avec succès';
         $_SESSION['message']['number'] = 3;
         $this->app()->httpResponse()->redirect("/Journal/petite_caisse"); //Retour en arriere
     }

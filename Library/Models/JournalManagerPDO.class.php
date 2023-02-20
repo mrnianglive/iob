@@ -834,10 +834,35 @@ class JournalManagerPDO extends JournalManager
         return $result['Nbre'];
     }
 
-    public function CancelFermeture($id)
+    public function DeleteSolde($RefSolde)
+    {
+        $requete = $this->dao->prepare('DELETE FROM TbleSolde WHERE RefSolde=:RefSolde');
+        $requete->bindValue(':RefSolde', $RefSolde, \PDO::PARAM_INT);
+        $requete->execute();
+    }
+
+    public function CancelFermeture($id, $agency, $day)
     {
         $requete = $this->dao->prepare("DELETE FROM TbleCompte WHERE RefCompte=:RefCompte ");
         $requete->bindValue(':RefCompte', $id, \PDO::PARAM_STR);
         $requete->execute();
+
+        $query = $this->dao->prepare("SELECT * FROM TbleCaisse WHERE RefAgency=:RefAgency");
+        $query->bindValue(':RefAgency', $agency, \PDO::PARAM_INT);
+        $query->execute();
+        $result = $query->fetchAll();
+
+        //for each caisse get the  solde fron TbleSolde  for the day
+
+        foreach ($result as $caisse) {
+            $query = $this->dao->prepare("SELECT * FROM TbleSolde WHERE RefCaisse=:RefCaisse AND date(DateSolde)=:DateSolde");
+            $query->bindValue(':RefCaisse', $caisse['RefCaisse'], \PDO::PARAM_INT);
+            $query->bindValue(':DateSolde', $day, \PDO::PARAM_STR);
+            $query->execute();
+            $result = $query->fetch();
+            if (!empty($result)) {
+                $this->DeleteSolde($result['RefSolde']);
+            }
+        }
     }
 }

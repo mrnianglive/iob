@@ -411,11 +411,19 @@
                     </div>
                     <?php } ?>
                     <div class="col-md-6">
+                        <?php if (($_GET['id'] != 3 or $_GET['id'] != 4)) { ?>
+
                         <div class="form-group has-error">
                             <label class="control-label">Numéro de compte *</label>
                             <input type="int" id="NumCompte" class="form-control" name="NumCompte" required=""
                                 autocomplete="OFF">
                         </div>
+                        <?php } else { ?>
+
+                        <input type="hidden" id="NumCompte" class="form-control" name="NumCompte" value="NULL"
+                            required="" autocomplete="OFF">
+                        <?php } ?>
+
                     </div>
                     <?php } else { ?>
                     <div class="col-md-6">

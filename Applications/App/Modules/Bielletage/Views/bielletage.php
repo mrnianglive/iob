@@ -342,7 +342,7 @@
                         <?php if (in_array(3, $permission)) { ?>
                             <div class="col-md-6">
                                 <div class="form-group has-error">
-                                    <label class="control-label">Date</label>
+                                    <label class="control-label">Antidaté l'opération</label>
                                     <input type="date" class="form-control" name="Antidate">
                                 </div>
                             </div>

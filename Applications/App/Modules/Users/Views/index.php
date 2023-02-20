@@ -34,7 +34,7 @@
                                 <a href="/Users/UpdateUsers/<?= $users['RefUsers']; ?>" class="btn btn-info"
                                     data-toggle="tooltip" title="Modifier les informations de l'utilisateur"><i
                                         class="ti-pencil-alt"></i></a>
-                                <?php if ($users['Name'] == 'superadmin') { ?>
+                                <?php if ($_SESSION['Statut'] == 'superadmin') { ?>
                                 <a href="/Users/deleteUsers/<?= $users['RefUsers']; ?>">
                                     <button type="button" class="btn btn-danger" data-toggle="tooltip"
                                         title="Cliquer pour supprimer l'utilisateur"><i

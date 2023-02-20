@@ -441,7 +441,7 @@
                             </select>
                         </div>
                     </div>
-                    <?php if (isset($_GET['id']) && ($_GET['id'] != 3 or $_GET['id'] != 4)) { ?>
+                    <?php if (($_GET['id'] != 3 or $_GET['id'] != 4)) { ?>
                     <div class="col-md-3">
                         <div class="form-group"><label class="control-label" id="label">Numéro de
                                 compte *</label><input type="int" id="NumCompte" class="form-control" name="NumCompte"
@@ -457,7 +457,7 @@
                 </div>
                 <div class=" row">
                     <div class="col-md-6">
-                        <?php if (isset($_GET['id']) && ($_GET['id'] != 3 or $_GET['id'] != 4)) { ?>
+                        <?php if (($_GET['id'] != 3 or $_GET['id'] != 4)) { ?>
                         <div class="form-group has-error">
                             <label class="control-label">Client *</label>
                             <input type="text" id="NameClient" class="form-control" name="NameClient" required=""

@@ -284,6 +284,14 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
             window.location = "/logout";
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+
     <script src="/js/accounting.js"></script>
 
     <script>

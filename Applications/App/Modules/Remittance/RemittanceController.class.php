@@ -15,14 +15,11 @@ class RemittanceController extends \Library\BackController
         $this->page->addVar("ListeType", $ListeType);
         $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
         $this->page->addVar("ListeAgence", $ListeAgence);
-
-
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
         $this->page->addVar('UserAgence', $Agence);
         $this->page->addVar('Debut', $request->postData('Debut'));
         $this->page->addVar('Fin', $request->postData('Fin'));
         $this->page->addVar('Value', $request->postData('RefAgency'));
-
         if ($request->method() == 'POST' && $request->postData('RefCaisse')) {
             $this->managers->getManagerOf("Remittance")->Add($request);
             $_SESSION['message']['type'] = 'success';
@@ -63,13 +60,18 @@ class RemittanceController extends \Library\BackController
     {
         $this->page->addVar("titles", "Suppresion "); // Titre de la page
         $this->managers->getManagerOf("Remittance")->DeleteOperations($request->getData('id'));
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = 'Suppression réussie !';
+        $_SESSION['message']['number'] = 2;
         $this->app()->httpResponse()->redirect('/remittances/index'); //Retour en arriere
     }
-
 
     public function executeValidate(\Library\HTTPRequest $request)
     {
         $this->managers->getManagerOf("Remittance")->ValidateOperations($request);
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = 'Validation réussie !';
+        $_SESSION['message']['number'] = 2;
         if (!empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {
             $this->app()->httpResponse()->redirect("/remittances/index/" . $request->postData('Debut') . "/" . $request->postData('Fin') . "/" . $request->postData('RefAgency')); //Retour en arriere
         } else {
@@ -79,6 +81,9 @@ class RemittanceController extends \Library\BackController
     public function executeCancelvalidate(\Library\HTTPRequest $request)
     {
         $this->managers->getManagerOf("Remittance")->CancelValidate($request->getData('id'));
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = 'Annulation réussie !';
+        $_SESSION['message']['number'] = 2;
         $this->app()->httpResponse()->redirect("/remittances/index"); //Retour en arriere
     }
 }

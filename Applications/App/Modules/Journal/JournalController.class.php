@@ -46,8 +46,6 @@ class JournalController extends \Library\BackController
             $Yesterday = $this->managers->getManagerOf('Journal')->YesterdaySoldeAgence($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
             $Solde = ($sommeVersementPeriodeAvecAppro - $sommeRetraitPeriodeAvecSortie) + $Yesterday + $SoldeRemittanceAgence;
             $this->page->addVar('Solde', $Solde);
-            // $Biellet = $this->managers->getManagerOf('Journal')->GetBielletageJournal($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
-            // $this->page->addVar('Biellet', $Biellet);
         } else {
             $Operations = $this->managers->getManagerOf('Journal')->Operations();
             $this->page->addVar('Operations', $Operations);
@@ -79,6 +77,9 @@ class JournalController extends \Library\BackController
     public function executeValidate(\Library\HTTPRequest $request)
     {
         $this->managers->getManagerOf("Journal")->ValidateOperations($request);
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = 'Opération validée avec succès';
+        $_SESSION['message']['number'] = 2;
         if (!empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {
             $this->app()->httpResponse()->redirect("/Journal/index/" . $request->postData('Debut') . "/" . $request->postData('Fin') . "/" . $request->postData('RefAgency')); //Retour en arriere
         } else {
@@ -88,6 +89,9 @@ class JournalController extends \Library\BackController
     public function executeCancelvalidate(\Library\HTTPRequest $request)
     {
         $this->managers->getManagerOf("Journal")->CancelValidate($request->getData('id'));
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = 'Validation annulée avec succès';
+        $_SESSION['message']['number'] = 2;
         $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
     }
 
@@ -95,6 +99,9 @@ class JournalController extends \Library\BackController
     {
         $this->page->addVar("titles", "Suppresion "); // Titre de la page
         $this->managers->getManagerOf("Journal")->DeleteOperations($request->getData('id'));
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = 'Opération supprimée avec succès';
+        $_SESSION['message']['number'] = 2;
         $this->app()->httpResponse()->redirect('/Journal/index'); //Retour en arriere
     }
 
@@ -158,6 +165,9 @@ class JournalController extends \Library\BackController
     public function executeCancelFermeture(\Library\HTTPRequest $request)
     {
         $this->managers->getManagerOf("Journal")->CancelFermeture($request->getData('id'));
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = 'Fermeture annulée avec succès, veuillez annuler la fermeture de la caisse au niveau du menu Arrêt de caisse';
+        $_SESSION['message']['number'] = 3;
         $this->app()->httpResponse()->redirect("/Journal/petite_caisse"); //Retour en arriere
     }
 }

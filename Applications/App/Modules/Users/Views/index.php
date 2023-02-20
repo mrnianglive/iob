@@ -28,16 +28,18 @@
                             <td><?= $users['Name']; ?></td>
                             <td><?= $users['nomPays']; ?></td>
                             <td>
-                                <a href="/Users/doubleauth/<?= $users['RefUsers']; ?>" class="btn btn-info"><i
-                                        class="fas fa-lock" data-toggle="tooltip"
-                                        title="Activer l'authentification à deux Facteurs"></i>2FA</a>
+                                <a href="/Users/doubleauth/<?= $users['RefUsers']; ?>" class="btn btn-info"
+                                    data-toggle="tooltip" title="Activer l'authentification à deux facteurs"><i
+                                        class="fas fa-lock"></i>2FA</a>
                                 <a href="/Users/UpdateUsers/<?= $users['RefUsers']; ?>" class="btn btn-info"
                                     data-toggle="tooltip" title="Modifier les informations de l'utilisateur"><i
                                         class="ti-pencil-alt"></i></a>
-
+                                <?php if ($users['Name'] == 'superadmin') { ?>
                                 <a href="/Users/deleteUsers/<?= $users['RefUsers']; ?>">
-                                    <button type="button" class="btn btn-danger "><i
+                                    <button type="button" class="btn btn-danger" data-toggle="tooltip"
+                                        title="Cliquer pour supprimer l'utilisateur"><i
                                             class="fa fa-trash"></i></button></a>
+                                <?php } ?>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-info " data-toggle="modal"

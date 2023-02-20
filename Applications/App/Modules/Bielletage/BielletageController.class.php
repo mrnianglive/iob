@@ -57,7 +57,7 @@ class BielletageController extends \Library\BackController
         // Récupération des données pour les agences
         $agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
         foreach ($agence as $key => $value) {
-            $agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialCaisse(date('Y-m-d'), $value['RefAgency']);
+            $agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialAgence(date('Y-m-d'), $value['RefAgency']);
             $agence[$key]['YesterdayReserve'] = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
         }
 

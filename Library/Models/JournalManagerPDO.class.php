@@ -480,6 +480,25 @@ class JournalManagerPDO extends JournalManager
         }
         return $data['TotalVersment'];
     }
+
+
+    public function SoldeInitialAgence($Date, $Agence)
+    {
+        $requeteSoldeInittial = $this->dao->prepare('SELECT SUM(MontantVersement) AS SoldeInitial FROM TbleOperations  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleOperations.TypeAppro=1  AND TbleOperations.RefType=3 AND TbleOperations.RefAgency=:RefAgency ');
+        $requeteSoldeInittial->bindValue(':RefCaisse', $Agence, \PDO::PARAM_INT);
+        $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requeteSoldeInittial->execute();
+        $result = $requeteSoldeInittial->fetch();
+        if ($result['SoldeInitial'] == 0) {
+            return 0;
+        }
+        return $result['SoldeInitial'];
+    }
+
+
+
+
+
     public function SoldeInitialCaisse($Date, $Caisse)
     {
         $requeteSoldeInittial = $this->dao->prepare('SELECT SUM(MontantVersement) AS SoldeInitial FROM TbleOperations  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleOperations.TypeAppro=1  AND TbleOperations.RefType=3 AND TbleOperations.RefCaisse=:RefCaisse ');

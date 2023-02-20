@@ -73,7 +73,8 @@
                                   <?= $value['RefOperations']; ?></td>
                               <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
                               <td> <?php if ($value['Validate'] == 1) { ?> <button class="btn btn-danger"
-                                      data-toggle="modal" data-target="#modal-<?= $value['RefOperations']; ?>">Non
+                                      data-toggle="modal tooltip" data-target="#modal-<?= $value['RefOperations']; ?>"
+                                      title="Cliquez ici pour confirmer l'operation">Non
                                       Vérifiée </button> <?php } else { ?> <a
                                       href="/Journal/cancelvalidate/<?= $value['RefOperations']; ?>"
                                       class="btn btn-success"

@@ -3,8 +3,8 @@
 
         <div class="white-box">
             <h3 class="box-title">Liste des Partenaires</h3>
-            <button type="button" class="btn btn-primary" id="button" data-toggle="modal" data-target="#AddBanque"
-                data-whatever="@mdo"><i class="fa fa-plus"> Ajouter</i></button> <br /> <br />
+            <button type="button" class="btn btn-primary" id="button" data-toggle="modal" data-target="#AddBanque" data-whatever="@mdo" title="Cliquer pour ajouter un nouveau partenaire"><i class="fa fa-plus">
+                    Ajouter</i></button> <br /> <br />
             <div class="table-responsive">
                 <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                     <thead>
@@ -17,17 +17,14 @@
                     </thead>
                     <tbody>
                         <?php foreach ($ListeBanque as $key => $value) { ?>
-                        <tr>
-                            <td><?= $value['RefBanque']; ?></td>
-                            <td><?= $value['nomPays']; ?></td>
-                            <td><?= $value['NameBanque']; ?></td>
-                            <td>
-                                <a href="/Pannel/Banque/delete/<?= $value['RefBanque']; ?>"
-                                    class="btn btn-xs btn-danger"
-                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i
-                                        class="fa fa-trash"></i></a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td><?= $value['RefBanque']; ?></td>
+                                <td><?= $value['nomPays']; ?></td>
+                                <td><?= $value['NameBanque']; ?></td>
+                                <td>
+                                    <a href="/Pannel/Banque/delete/<?= $value['RefBanque']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
                         <?php } ?>
                     </tbody>
                 </table>
@@ -40,8 +37,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <form role="form" method="post" action="">
                 <div class="modal-body">
@@ -54,7 +50,7 @@
                         <select name="RefPays" class="form-control">
                             <option value="">Veuillez Choisir le Pays</option>
                             <?php foreach ($ListePays as $key => $value) { ?>
-                            <option value="<?= $value['RefPays']; ?>"><?= $value['nomPays']; ?></option>
+                                <option value="<?= $value['RefPays']; ?>"><?= $value['nomPays']; ?></option>
                             <?php   } ?>
                         </select>
                     </div>

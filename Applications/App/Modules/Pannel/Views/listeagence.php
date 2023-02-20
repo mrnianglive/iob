@@ -4,7 +4,8 @@
         <div class="white-box">
             <h3 class="box-title">Liste des Agences</h3>
             <button type="button" class="btn btn-primary" id="button" data-toggle="modal" data-target="#addAgence"
-                data-whatever="@mdo"><i class="fa fa-plus"> Ajouter</i></button> <br /> <br />
+                data-whatever="@mdo" title="Cliquer pour ajouter une nouvelle agence"><i class="fa fa-plus">
+                    Ajouter</i></button> <br /> <br />
             <div class="table-responsive">
                 <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                     <thead>

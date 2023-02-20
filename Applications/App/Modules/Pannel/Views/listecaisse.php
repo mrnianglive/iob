@@ -3,7 +3,8 @@
 
         <div class="white-box">
             <h3 class="box-title">Liste des Caisse</h3>
-            <button type="button" class="btn btn-primary" id="button" data-toggle="modal" data-target="#AddTransfert" data-whatever="@mdo"><i class="fa fa-plus"> Ajouter</i></button> <br /> <br />
+            <button type="button" class="btn btn-primary" id="button" data-toggle="modal" data-target="#AddTransfert" data-whatever="@mdo" title="Cliquer pour ajouter une nouvelle caisse"><i class="fa fa-plus">
+                    Ajouter</i></button> <br /> <br />
             <div class="table-responsive">
                 <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                     <thead>

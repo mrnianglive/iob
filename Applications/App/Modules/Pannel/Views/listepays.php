@@ -2,8 +2,8 @@
     <div class="col-md-12">
         <div class="white-box">
             <h3 class="box-title">Liste des Pays</h3>
-            <button type="button" class="btn btn-primary" id="button" data-toggle="modal" data-target="#addPays"
-                data-whatever="@mdo"><i class="fa fa-plus"> Ajouter</i></button> <br /> <br />
+            <button type="button" class="btn btn-primary" id="button" data-toggle="modal" data-target="#addPays" data-whatever="@mdo" title="Cliquer pour ajouter un nouveau pays"><i class="fa fa-plus">
+                    Ajouter</i></button> <br /> <br />
             <div class="table-responsive">
                 <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                     <thead>
@@ -16,11 +16,11 @@
                     <tbody>
                         <?php foreach ($ListePays as $value) {
                         ?>
-                        <tr>
-                            <td><?= $value['RefPays']; ?></td>
-                            <td><?= $value['nomPays']; ?></td>
-                            <td><?= $value['EmailAlert']; ?></td>
-                        </tr>
+                            <tr>
+                                <td><?= $value['RefPays']; ?></td>
+                                <td><?= $value['nomPays']; ?></td>
+                                <td><?= $value['EmailAlert']; ?></td>
+                            </tr>
                         <?php } ?>
                     </tbody>
                 </table>
@@ -32,8 +32,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <form role="form" method="post" action="" enctype="multipart/form-data">
                 <div class="modal-body">

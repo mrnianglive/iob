@@ -443,7 +443,9 @@
                     <div class="col-md-3">
                         <div class="form-group"><label class="control-label" id="label">Numéro de
                                 compte</label><input type="int" id="NumCompte" class="form-control" name="NumCompte"
-                                required="" autocomplete="OFF"></div>
+                                required="" placeholder="Numéro de compte" autocomplete="OFF">
+
+                        </div>
                     </div>
                     <?php } ?>
                 </div>

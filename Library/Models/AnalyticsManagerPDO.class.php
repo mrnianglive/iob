@@ -22,7 +22,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
         return $ListeAgence;
     }
 
-    public function ChartAgenceVersement($agence)
+    public function ChartAgenceVersement($pays = NULL, $agence = NULL, $caisse = NULL)
     {
         $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1) AND TbleAgency.RefAgency=:agency');
         $requeteSUm->bindValue(':mois', date('m'), \PDO::PARAM_STR);
@@ -76,11 +76,30 @@ class AnalyticsManagerPDO extends AnalyticsManager
         }
         return $data['TotalVersment'];
     }
-    public function ChartVersment($mois)
+    public function ChartVersment($mois, $pays = NULL, $agence = NULL, $caisse = NULL)
     {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations   WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1)  ');
-        $requeteSUm->bindValue(':mois', $mois, \PDO::PARAM_STR);
-        $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+
+        $query = "SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1)";
+        $param = array();
+        if ($pays != NULL) {
+            $query .= " AND TbleOperations.RefPays=:pays";
+            $param[':pays'] = $pays;
+        }
+        if ($agence != NULL) {
+            $query .= " AND TblCaisse.RefAgency=:agence";
+            $param[':agence'] = $agence;
+        }
+        if ($caisse != NULL) {
+            $query .= " AND TbleOperations.RefCaisse=:caisse";
+            $param[':caisse'] = $caisse;
+        }
+
+        if ($pays == NULL && $agence == NULL && $caisse == NULL) {
+            $param[':mois'] = $mois;
+            $param[':year'] = date('Y');
+        }
+        $requeteSUm = $this->dao->prepare($query);
+        $requeteSUm->execute($param);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         if ($data == null) {
@@ -89,11 +108,30 @@ class AnalyticsManagerPDO extends AnalyticsManager
         return $data['TotalVersment'];
     }
 
-    public function ChartRetrait($mois)
+    public function ChartRetrait($mois, $pays = NULL, $agence = NULL, $caisse = NULL)
     {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations   WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=2)  ');
-        $requeteSUm->bindValue(':mois', $mois, \PDO::PARAM_STR);
-        $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+
+        $query = "SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=2)";
+        $param = array();
+        if ($pays != NULL) {
+            $query .= " AND TbleOperations.RefPays=:pays";
+            $param[':pays'] = $pays;
+        }
+        if ($agence != NULL) {
+            $query .= " AND TblCaisse.RefAgency=:agence";
+            $param[':agence'] = $agence;
+        }
+        if ($caisse != NULL) {
+            $query .= " AND TbleOperations.RefCaisse=:caisse";
+            $param[':caisse'] = $caisse;
+        }
+
+        if ($pays == NULL && $agence == NULL && $caisse == NULL) {
+            $param[':mois'] = $mois;
+            $param[':year'] = date('Y');
+        }
+        $requeteSUm = $this->dao->prepare($query);
+        $requeteSUm->execute($param);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         if ($data == null) {
@@ -101,32 +139,31 @@ class AnalyticsManagerPDO extends AnalyticsManager
         }
         return $data['TotalVersment'];
     }
-    public function Chart()
+    public function Chart($Country = NULL, $Agence = NULL, $Caisse = NULL)
     {
-        $ChartList['Janvier'] = $this->ChartVersment(1);
-        $ChartList['RJanvier'] = $this->ChartRetrait(1);
-        $ChartList['Fevrier'] = $this->ChartVersment(2);
-        $ChartList['RFevrier'] = $this->ChartRetrait(2);
-        $ChartList['Mars'] = $this->ChartVersment(3);
-        $ChartList['RMars'] = $this->ChartRetrait(3);
-        $ChartList['Avril'] = $this->ChartVersment(4);
-        $ChartList['RAvril'] = $this->ChartRetrait(4);
-        $ChartList['Mai'] = $this->ChartVersment(5);
-        $ChartList['RMai'] = $this->ChartRetrait(5);
-        $ChartList['Juin'] = $this->ChartVersment(6);
-        $ChartList['RJuin'] = $this->ChartRetrait(6);
-        $ChartList['Juillet'] = $this->ChartVersment(7);
-        $ChartList['RJuillet'] = $this->ChartRetrait(7);
-        $ChartList['Aout'] = $this->ChartVersment(8);
-        $ChartList['RAout'] = $this->ChartRetrait(8);
-        $ChartList['Septembre'] = $this->ChartVersment(9);
-        $ChartList['RSeptembre'] = $this->ChartRetrait(9);
-        $ChartList['Octobre'] = $this->ChartVersment(10);
-        $ChartList['ROctobre'] = $this->ChartRetrait(10);
-        $ChartList['Novembre'] = $this->ChartVersment(11);
-        $ChartList['RNovembre'] = $this->ChartRetrait(11);
-        $ChartList['Decembre'] = $this->ChartVersment(12);
-        $ChartList['RDecembre'] = $this->ChartRetrait(12);
+        $ChartList['Janvier'] = $this->ChartVersment(1, $Country, $Agence, $Caisse);
+        $ChartList['RJanvier'] = $this->ChartRetrait(1, $Country, $Agence, $Caisse);
+        $ChartList['Fevrier'] = $this->ChartVersment(2, $Country, $Agence, $Caisse);
+        $ChartList['RFevrier'] = $this->ChartRetrait(2, $Country, $Agence, $Caisse);
+        $ChartList['RMars'] = $this->ChartRetrait(3, $Country, $Agence, $Caisse);
+        $ChartList['Avril'] = $this->ChartVersment(4, $Country, $Agence, $Caisse);
+        $ChartList['RAvril'] = $this->ChartRetrait(4, $Country, $Agence, $Caisse);
+        $ChartList['Mai'] = $this->ChartVersment(5, $Country, $Agence, $Caisse);
+        $ChartList['RMai'] = $this->ChartRetrait(5, $Country, $Agence, $Caisse);
+        $ChartList['Juin'] = $this->ChartVersment(6, $Country, $Agence, $Caisse);
+        $ChartList['RJuin'] = $this->ChartRetrait(6, $Country, $Agence, $Caisse);
+        $ChartList['Juillet'] = $this->ChartVersment(7, $Country, $Agence, $Caisse);
+        $ChartList['RJuillet'] = $this->ChartRetrait(7, $Country, $Agence, $Caisse);
+        $ChartList['Aout'] = $this->ChartVersment(8, $Country, $Agence, $Caisse);
+        $ChartList['RAout'] = $this->ChartRetrait(8, $Country, $Agence, $Caisse);
+        $ChartList['Septembre'] = $this->ChartVersment(9, $Country, $Agence, $Caisse);
+        $ChartList['RSeptembre'] = $this->ChartRetrait(9, $Country, $Agence, $Caisse);
+        $ChartList['Octobre'] = $this->ChartVersment(10, $Country, $Agence, $Caisse);
+        $ChartList['ROctobre'] = $this->ChartRetrait(10, $Country, $Agence, $Caisse);
+        $ChartList['Novembre'] = $this->ChartVersment(11, $Country, $Agence, $Caisse);
+        $ChartList['RNovembre'] = $this->ChartRetrait(11, $Country, $Agence, $Caisse);
+        $ChartList['Decembre'] = $this->ChartVersment(12, $Country, $Agence, $Caisse);
+        $ChartList['RDecembre'] = $this->ChartRetrait(12, $Country, $Agence, $Caisse);
         return $ChartList;
     }
 

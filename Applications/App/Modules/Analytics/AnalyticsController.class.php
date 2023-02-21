@@ -49,14 +49,17 @@ class AnalyticsController extends \Library\BackController
     public function executeChart(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Chart "); // Titre de la page
-        $Charts = $this->managers->getManagerOf('Analytics')->Chart();
-        $this->page->addVar('Chart', $Charts);
-        $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
-        $this->page->addVar("Pays", $Pays);
+
 
         $Country = isset($_POST['RefPays']) ? $_POST['RefPays'] : '';
         $Agence = isset($_POST['RefAgence']) ? $_POST['RefAgence'] : '';
         $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
+
+        $Charts = $this->managers->getManagerOf('Analytics')->Chart($Country, $Agence, $Caisse);
+        $this->page->addVar('Chart', $Charts);
+
+        $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("Pays", $Pays);
 
         $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
 

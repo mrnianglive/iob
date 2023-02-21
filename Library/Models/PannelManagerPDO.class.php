@@ -11,7 +11,7 @@ class PannelManagerPDO extends PannelManager
     public function ListeAgence($Country = NULL, $Agency = NULL)
     {
         if ($_SESSION['statut'] == 'superadmin') {
-            $query = 'SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays';
+            $query = 'SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE ';
             $params = array();
         } else {
             $query = 'SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE tblpays.RefPays=:RefPays';
@@ -19,7 +19,7 @@ class PannelManagerPDO extends PannelManager
         }
 
         if ($Country) {
-            $query .= ' AND tblpays.RefPays = :RefPays';
+            $query .= 'tblpays.RefPays = :RefPays';
             $params[':RefPays'] = $Country;
         }
         if ($Agency) {

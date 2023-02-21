@@ -16,28 +16,12 @@ class AnalyticsManagerPDO extends AnalyticsManager
     }
     public function ListeAgence($Country = NULL, $Agence = NULL)
     {
-        if ($Country == NULL && $Agence == NULL) {
-            // Si les deux paramètres sont NULL, on récupère toutes les données des agences
-            $query = "SELECT * FROM TbleAgency";
-            $requeteAgence = $this->dao->prepare($query);
-            $requeteAgence->execute();
-            $ListeAgence = $requeteAgence->fetchAll();
-            return $ListeAgence;
-        } else if ($Agence != NULL) {
-            // Si l'agence est précisée, on ne récupère que l'identifiant de cette agence
-            $query = "SELECT * FROM TbleAgency WHERE RefAgency = '$Agence'";
-            $requeteAgence = $this->dao->prepare($query);
-            $requeteAgence->execute();
-            $agence = $requeteAgence->fetch();
-            return $agence;
-        } else {
-            // Si l'agence n'est pas précisée, on récupère toutes les données des agences correspondant éventuellement au pays précisé
-            $query = "SELECT * FROM TbleAgency WHERE RefPays = '$Country'";
-            $requeteAgence = $this->dao->prepare($query);
-            $requeteAgence->execute();
-            $ListeAgence = $requeteAgence->fetchAll();
-            return $ListeAgence;
-        }
+        $requete = $this->dao->prepare("SELECT * FROM TbleAgency INNER JOIN TblePays ON TblePays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:Country AND TbleAgency.RefAgency=:Agence");
+        $requete->bindValue(':Country', $Country, \PDO::PARAM_STR);
+        $requete->bindValue(':Agence', $Agence, \PDO::PARAM_STR);
+        $requete->execute();
+        $data = $requete->fetchAll();
+        return $data;
     }
 
 

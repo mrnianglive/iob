@@ -70,11 +70,10 @@ class AnalyticsController extends \Library\BackController
         $ListeAgence = $analytics->ListeAgence($Country, $Agency);
         var_dump($Country, $Agency, $ListeAgence);
 
-        for ($i = 0; $i < count($ListeAgence); $i++) {
-            $ListeAgence[$i]['SommeVersement'] = $analytics->ChartAgenceVersement($ListeAgence[$i]['RefAgency']);
-            $ListeAgence[$i]['SommeRetrait'] = $analytics->ChartAgenceRetrait($ListeAgence[$i]['RefAgency']);
+        foreach ($ListeAgence as $key => $agence) {
+            $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);
+            $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency']);
         }
-
 
         $this->page->addVar("ListeAgence", $ListeAgence);
         $ListeCaisse  =  $this->managers->getManagerOf("Pannel")->ListeCaisse();

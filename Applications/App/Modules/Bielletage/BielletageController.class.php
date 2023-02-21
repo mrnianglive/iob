@@ -10,7 +10,11 @@ class BielletageController extends \Library\BackController
         $this->page->addVar("titles", "Accueil"); // Titre de la page
 
         // Récupération des données pour l'affichage de l'accueil
-        $data = $this->getHomeData();
+        $Country = $request->postData('RefPays');
+        $Agence  = $request->postData('RefAgency');
+        $Caisse  = $request->postData('RefCaisse');
+        $data = $this->getHomeData($Country, $Agence, $Caisse);
+
 
         // Ajout des données à la vue
         $this->page->addVar("CheckOuverture", $data['checkOuverture']);
@@ -31,7 +35,7 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('ListeCaisse', $data['ListeCaisse']);
     }
 
-    private function getHomeData()
+    private function getHomeData($Country = NULL, $Agence = NULL, $Caisse = NULL)
     {
 
         $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
@@ -41,8 +45,8 @@ class BielletageController extends \Library\BackController
 
         // Récupération des données pour l'affichage de l'accueil
         $checkOuverture = $this->managers->getManagerOf("Bielletage")->CheckOuverture();
-        $operations = $this->managers->getManagerOf('Bielletage')->GetCaisse();
-        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'));
+        $operations = $this->managers->getManagerOf('Bielletage')->GetCaisse(date('Y-m-d'), $Country, $Agence, $Caisse);
+        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'), $Country, $Agence, $Caisse);
 
         // Calcul des totaux
         $solde = 0;

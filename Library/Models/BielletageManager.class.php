@@ -8,7 +8,6 @@ abstract class BielletageManager extends \Library\Manager
 {
     abstract protected function CheckOuverture($data);
     abstract protected function ChomdUser();
-    abstract protected function GetCaisse();
     abstract protected function GetInvoice($id);
     abstract protected function GetAgency($Caisse);
     abstract protected function CheckAfterRapport($Caisse);

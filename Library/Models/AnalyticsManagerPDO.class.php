@@ -134,7 +134,8 @@ class AnalyticsManagerPDO extends AnalyticsManager
               AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND TbleOperations.RefType=1";
         $param = array();
 
-        $queryRemittance = "SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=1 AND Reset_Id IS NULL";
+        $queryRemittance = "SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=1 AND Reset_Id IS NULL";
 
 
         if ($pays != NULL) {
@@ -144,7 +145,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
         }
         if ($agence != NULL) {
             $query .= " AND TbleCaisse.RefAgency=:agence";
-            $queryRemittance .= " AND TbleRemittance.RefAgency=:agence";
+            $queryRemittance .= " AND TbleCaisse.RefAgency=:agence";
             $param[':agence'] = $agence;
         }
         if ($caisse != NULL) {
@@ -179,7 +180,8 @@ class AnalyticsManagerPDO extends AnalyticsManager
               WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL 
               AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND TbleOperations.RefType=2";
 
-        $queryRemittance = "SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance WHERE MONTH(Insert_time)=:mois AND YEAR(Insert_time)=:year  AND RefType=2 AND Reset_Id IS NULL";
+        $queryRemittance = "SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND YEAR(Insert_time)=:year  AND RefType=2 AND Reset_Id IS NULL";
 
         $param = array();
         if ($pays != NULL) {
@@ -189,7 +191,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
         }
         if ($agence != NULL) {
             $query .= " AND TbleCaisse.RefAgency=:agence";
-            $queryRemittance .= " AND TbleRemittance.RefAgency=:agence";
+            $queryRemittance .= " AND TbleCaisse.RefAgency=:agence";
             $param[':agence'] = $agence;
         }
         if ($caisse != NULL) {

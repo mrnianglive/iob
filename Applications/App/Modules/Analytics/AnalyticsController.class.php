@@ -50,6 +50,7 @@ class AnalyticsController extends \Library\BackController
     {
         $this->page->addVar("titles", "Chart "); // Titre de la page
 
+
         $Country = isset($_POST['RefPays']) ? $_POST['RefPays'] : '';
         $Agency = isset($_POST['RefAgency']) ? $_POST['RefAgency'] : '';
         $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
@@ -60,28 +61,20 @@ class AnalyticsController extends \Library\BackController
         $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
         $this->page->addVar("Pays", $Pays);
 
+        //$ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
+
+
+
         //The Agence List should be in function of the country Posted in the form, if the country is not posted, the list should take all the agence
         $analytics =  $this->managers->getManagerOf("Analytics");
         $ListeAgence = $analytics->ListeAgence($Country, $Agency);
 
-        if (count($Agency) == 1) {
-            $ListeAgence[0]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($ListeAgence[0]['RefAgency']);
-            $ListeAgence[0]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($ListeAgence[0]['RefAgency']);
-        } elseif (!empty($ListeAgence) && count($ListeAgence['RefAgency']) > 1) {
-            foreach ($ListeAgence as $key => $agence) {
-                $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);
-                $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency']);
-            }
-        } else {
-            $ListeAgence = array(); // initialize $ListeAgence to an empty array
-
+        foreach ($ListeAgence as $key => $agence) {
+            $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);
+            $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency']);
         }
 
-
-
-
         $this->page->addVar("ListeAgence", $ListeAgence);
-
         $ListeCaisse  =  $this->managers->getManagerOf("Pannel")->ListeCaisse();
         foreach ($ListeCaisse as $key => $caisse) {
             $ListeCaisse[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartCaisseVersement($caisse['RefCaisse']);

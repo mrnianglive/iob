@@ -3,8 +3,8 @@
           <div class="">
               <select class="form-control" name="RefPays" tabindex="1" id="RefPays">
                   <option value="0">Pays</option>
-                  <?php foreach ($Pays as $key => $Pays) {   ?>
-                      <option value="<?= $Pays['RefPays']; ?>">
+                  <?php foreach ($Pays as $key => $Pays) { ?>
+                      <option value="<?= $Pays['RefPays']; ?>" <?php if (isset($_POST['RefPays']) and $_POST['RefPays'] == $Pays['RefPays']) { ?> selected <?php } ?>>
                           <?= $Pays['nomPays']; ?></option>
                   <?php }   ?>
               </select>

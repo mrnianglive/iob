@@ -23,6 +23,9 @@ $(function () {
                 $.each(data, function (index, value) {
                     $agence.append(`<option value="${index}">${value}</option>`);
                 });
+                if ($agence) {
+                    $agence.val($agence.data('index'));
+                }
             },
             error: function () {
                 console.error('Failed to load agencies');
@@ -49,6 +52,9 @@ $(function () {
                 $.each(data, function (index, value) {
                     $caisse.append(`<option value="${index}">${value}</option>`);
                 });
+                if ($caisse) {
+                    $caisse.val($caisse.data('index'));
+                }
             },
             error: function () {
                 console.error('Failed to load caisses');

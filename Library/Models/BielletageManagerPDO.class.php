@@ -94,7 +94,10 @@ class BielletageManagerPDO extends BielletageManager
             $query .= ' AND TbleChmod.RefUsers=:RefUsers';
             $params[':RefUsers'] = $_SESSION['RefUsers'];
         }
+        //Group By RefOperations
+        $query .= ' GROUP BY operations.RefOperations ';
         $query .= ' ORDER BY operations.RefOperations DESC ';
+
         $requeteCaisse = $this->dao->prepare($query);
         $requeteCaisse->execute($params);
         $GetCaisse = $requeteCaisse->fetchAll();

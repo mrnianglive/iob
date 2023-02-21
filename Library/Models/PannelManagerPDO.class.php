@@ -8,32 +8,18 @@ class PannelManagerPDO extends PannelManager
 {
 
 
-    public function ListeAgence($Country = NULL, $Agency = NULL)
+    public function ListeAgence()
     {
         if ($_SESSION['statut'] == 'superadmin') {
-            $query = 'SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays';
-            $params = array();
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays');
         } else {
-            $query = 'SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE tblpays.RefPays=:RefPays';
-            $params = array(':RefPays' => $_SESSION['RefPays']);
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:RefPays');
+            $requeteAgence->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         }
-
-        if ($Country) {
-            $query .= ' AND tblpays.RefPays = :RefPays';
-            $params[':RefPays'] = $Country;
-        }
-
-        if ($Agency) {
-            $query .= ' AND TbleAgency.RefAgency = :RefAgency';
-            $params[':RefAgency'] = $Agency;
-        }
-
-        $requeteAgence = $this->dao->prepare($query);
-        $requeteAgence->execute($params);
+        $requeteAgence->execute();
         $ListeAgence = $requeteAgence->fetchAll();
         return $ListeAgence;
     }
-
 
     public function UserAgence()
     {
@@ -97,40 +83,18 @@ class PannelManagerPDO extends PannelManager
         $requeteAddService->bindValue(':RefAgency', $_POST['RefAgency'], \PDO::PARAM_INT);
         $requeteAddService->execute();
     }
-
-    public function ListeCaisse($Country = NULL, $Agency = NULL)
+    public function ListeCaisse()
     {
         if ($_SESSION['statut'] == 'superadmin') {
-            $query = 'SELECT * FROM TbleCaisse 
-                  INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency 
-                  INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays';
-            $params = array();
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency');
         } else {
-            $query = 'SELECT * FROM TbleCaisse 
-                  INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency 
-                  INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays 
-                  WHERE TbleAgency.RefPays=:RefPays';
-            $params = array(':RefPays' => $_SESSION['RefPays']);
+            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefPays=:RefPays');
+            $requeteAgence->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
         }
-        if ($Country) {
-            $query .= ' AND tblpays.RefPays = :RefPays';
-            $params[':RefPays'] = $Country;
-        }
-        if ($Agency) {
-            $query .= ' AND TbleAgency.RefAgency = :RefAgency';
-            $params[':RefAgency'] = $Agency;
-        }
-
-        $requeteCaisse = $this->dao->prepare($query);
-        foreach ($params as $key => $value) {
-            $requeteCaisse->bindValue($key, $value, is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
-        }
-        $requeteCaisse->execute();
-        $ListeCaisse = $requeteCaisse->fetchAll();
+        $requeteAgence->execute();
+        $ListeCaisse = $requeteAgence->fetchAll();
         return $ListeCaisse;
     }
-
-
     public function ListeDays()
     {
         $requeteDays = $this->dao->prepare('SELECT * FROM TbleDays');

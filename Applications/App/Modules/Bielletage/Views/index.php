@@ -1,3 +1,4 @@
+<?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin') { ?>
 <form method="POST" id="formulaire">
     <div class="input-group">
         <div class="">
@@ -36,8 +37,8 @@
         </div>
     </div>
 </form>
-
 &nbsp;
+<?php } ?>
 
 <?php if ($_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
 <div class="col-lg-12 col-sm-12 col-xs-12">

@@ -40,7 +40,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
     }
 
 
-    public function ListeCaisse($Country = NULL, $Agence, $Caisse = NULL)
+    public function ListeCaisse($Country = NULL, $Agence = NULL, $Caisse = NULL)
     {
         if ($Country == NULL && $Agence == NULL && $Caisse == NULL) {
             if ($_SESSION['statut'] == 'superadmin') {

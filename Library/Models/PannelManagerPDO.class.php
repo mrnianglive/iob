@@ -96,7 +96,7 @@ class PannelManagerPDO extends PannelManager
         $requeteAddService->execute();
     }
 
-    public function ListeCaisse($Country = NULL)
+    public function ListeCaisse($Country = NULL, $Agency = NULL)
     {
         if ($_SESSION['statut'] == 'superadmin') {
             $query = 'SELECT * FROM TbleCaisse 
@@ -113,6 +113,10 @@ class PannelManagerPDO extends PannelManager
         if ($Country) {
             $query .= ' AND tblpays.RefPays = :RefPays';
             $params[':RefPays'] = $Country;
+        }
+        if ($Agency) {
+            $query .= ' AND TbleAgency.RefAgency = :RefAgency';
+            $params[':RefAgency'] = $Agency;
         }
 
         $requeteCaisse = $this->dao->prepare($query);

@@ -8,7 +8,7 @@ class PannelManagerPDO extends PannelManager
 {
 
 
-    public function ListeAgence($Country = NULL)
+    public function ListeAgence($Country = NULL, $Agency = NULL)
     {
         if ($_SESSION['statut'] == 'superadmin') {
             $query = 'SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays';
@@ -21,6 +21,10 @@ class PannelManagerPDO extends PannelManager
         if ($Country) {
             $query .= ' AND tblpays.RefPays = :RefPays';
             $params[':RefPays'] = $Country;
+        }
+        if ($Agency) {
+            $query .= ' AND TbleAgency.RefAgency = :RefAgency';
+            $params[':RefAgency'] = $Agency;
         }
 
         $requeteAgence = $this->dao->prepare($query);

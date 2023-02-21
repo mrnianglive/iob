@@ -54,8 +54,10 @@ class JournalManagerPDO extends JournalManager
         if ($Caisse !== null) {
             $query .= " AND TbleCaisse.RefCaisse=:RefCaisse";
             $params[':RefCaisse'] = $Caisse;
-        } else {
-            $query .= " WHERE TbleChmod.RefUsers=:RefUsers";
+        }
+
+        if ($Pays == NULL && $Agence == NULL && $Caisse == NULL) {
+            $query .= ' AND TbleChmod.RefUsers=:RefUsers';
             $params[':RefUsers'] = $_SESSION['RefUsers'];
         }
 

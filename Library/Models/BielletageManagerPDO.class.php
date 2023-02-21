@@ -90,7 +90,8 @@ class BielletageManagerPDO extends BielletageManager
         if ($Caisse != NULL) {
             $query .= ' AND operations.RefCaisse=:RefCaisse';
             $params[':RefCaisse'] = $Caisse;
-        } else {
+        }
+        if ($Country == NULL && $Agence == NULL && $Caisse == NULL) {
             $query .= ' AND TbleChmod.RefUsers=:RefUsers';
             $params[':RefUsers'] = $_SESSION['RefUsers'];
         }

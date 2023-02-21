@@ -31,7 +31,7 @@
         &nbsp;
         <div class="">
             <select class="form-control" name="RefProduit" tabindex="1" id="RefProduit">
-                <option>Produit</option>
+                <option value="0">Produit</option>
                 <?php foreach ($ListeProduit as $key => $value) { ?>
                 <option value="<?= $value['RefProduit']; ?>"
                     <?= (isset($_POST['RefProduit']) and $_POST['RefProduit'] == $value['RefProduit']) ? 'selected' : '' ?>>

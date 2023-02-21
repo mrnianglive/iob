@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes>
 	<route url="/" module="Bielletage" action="index"/>
-	<route url="/home/([0-9]+)/([0-9]+)/([0-9]+)" vars="RefPays,RefAgency,RefCaisse" module="Bielletage" action="index"/>
+	<route url="/([0-9]+)/([0-9]+)/([0-9]+)" vars="RefPays,RefAgency,RefCaisse" module="Bielletage" action="index"/>
 
 	<route url="/dashboard" module="Bielletage" action="dashboard"/>
 	<route url="/logout" module="Connexion" action="Logout"/>

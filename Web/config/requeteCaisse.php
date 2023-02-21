@@ -4,8 +4,8 @@ require("db.php");
 
 if (isset($_GET['Agence'])) {
     $tableau = array();
-    $requete = $baseDeDonnee->prepare('SELECT * FROM TbleCaisse WHERE (TbleCaisse.RefAgency=:Agence)');
-    $requete->bindValue(':Agence', $_GET['RefAgency'], PDO::PARAM_INT);
+    $requete = $baseDeDonnee->prepare('SELECT * FROM TbleCaisse WHERE (TbleCaisse.RefAgency=:RefAgency)');
+    $requete->bindValue(':RefAgency', $_GET['Agence'], PDO::PARAM_INT);
     $requete->execute();
     $resultat = $requete->fetchAll();
     foreach ($resultat as $key => $value) {

@@ -61,16 +61,20 @@ class AnalyticsController extends \Library\BackController
         $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
         $this->page->addVar("Pays", $Pays);
 
-        //$ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
-
-
-
         //The Agence List should be in function of the country Posted in the form, if the country is not posted, the list should take all the agence
         $analytics =  $this->managers->getManagerOf("Analytics");
         $ListeAgence = $analytics->ListeAgence($Country, $Agency);
-        foreach ($ListeAgence as $key => $agence) {
-            $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);
-            $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency']);
+
+        //check if $ListeAgence is not empty and contains more than one element
+        if (!empty($ListeAgence) && count($ListeAgence) > 1) {
+            foreach ($ListeAgence as $key => $agence) {
+                $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);
+                $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency']);
+            }
+        } else {
+
+            $ListeAgence['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($ListeAgence['RefAgency']);
+            $ListeAgence['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($ListeAgence['RefAgency']);
         }
         $this->page->addVar("ListeAgence", $ListeAgence);
 

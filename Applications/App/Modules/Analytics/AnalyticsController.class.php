@@ -75,7 +75,7 @@ class AnalyticsController extends \Library\BackController
         }
 
         $this->page->addVar("ListeAgence", $ListeAgence);
-        $ListeCaisse  =  $analytics->ListeCaisse();
+        $ListeCaisse  =  $analytics->ListeCaisse($Country, $Agency, $Caisse);
         foreach ($ListeCaisse as $key => $caisse) {
             $ListeCaisse[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartCaisseVersement($caisse['RefCaisse']);
             $ListeCaisse[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartCaisseRetrait($caisse['RefCaisse']);

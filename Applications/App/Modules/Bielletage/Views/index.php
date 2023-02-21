@@ -4,7 +4,9 @@
               <select class="form-control" name="RefPays" tabindex="1" id="RefPays">
                   <option value="0">Pays</option>
                   <?php foreach ($Pays as $key => $Pays) {   ?>
-                  <option value="<?= $Pays['RefPays']; ?>">
+                  <option value="<?= $Pays['RefPays']; ?>"
+                      <?php if (isset($_POST['RefPays']) and $_POST['RefPays'] == $Pays['RefPays']) { ?>
+                      selected="selected" <?php } ?>>
                       <?= $Pays['nomPays']; ?></option>
                   <?php }   ?>
               </select>
@@ -13,12 +15,28 @@
           <div class="">
               <select class="form-control" name="RefAgency" tabindex="1" id="RefAgency">
                   <option>Agence</option>
+                  <?php if (isset($_POST['RefPays']) and $_POST['RefPays'] != 0) { ?>
+                  <?php foreach ($Agence as $key => $Agence) {   ?>
+                  <option value="<?= $Agence['RefAgency']; ?>"
+                      <?php if (isset($_POST['RefAgency']) and $_POST['RefAgency'] == $Agence['RefAgency']) { ?>
+                      selected="selected" <?php } ?>>
+                      <?= $Agence['NameAgency']; ?></option>
+                  <?php }   ?>
+                  <?php } ?>
               </select>
           </div>
           &nbsp;
           <div class="">
               <select class="form-control" name="RefCaisse" tabindex="1" id="RefCaisse">
                   <option>Caisse</option>
+                  <?php if (isset($_POST['RefAgency']) and $_POST['RefAgency'] != 0) { ?>
+                  <?php foreach ($Caisse as $key => $Caisse) {   ?>
+                  <option value="<?= $Caisse['RefCaisse']; ?>"
+                      <?php if (isset($_POST['RefCaisse']) and $_POST['RefCaisse'] == $Caisse['RefCaisse']) { ?>
+                      selected="selected" <?php } ?>>
+                      <?= $Caisse['NameCaisse']; ?></option>
+                  <?php }   ?>
+                  <?php } ?>
               </select>
           </div>
           &nbsp;

@@ -1,7 +1,7 @@
 $(function () {
     var $Pays = $('#RefPays');
     var $Agence = $('#RefAgency');
-    $Pays.on('click', function () {
+    $Pays.on('change', function () {
         var val = $(this).val();
         if (val != null) $Agence.empty();
         $.ajax({
@@ -9,7 +9,7 @@ $(function () {
             data: 'Pays=' + val,
             dataType: 'json',
             success: function (json) {
-                $Agence.append('<option value="">-- Choisir une agence --</option>');
+                $Agence.append('<option value="">Agence');
                 $.each(json, function (index, value) {
                     $Agence.append('<option value="' + index + '">' + value + '</option>');
                 });

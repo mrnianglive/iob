@@ -75,8 +75,11 @@ class BielletageManagerPDO extends BielletageManager
         $query = 'SELECT * FROM operations INNER JOIN TbleChmod ON TbleChmod.RefCaisse=operations.RefCaisse  WHERE operations.Reset_Id IS NULL ';
         $params = array();
 
-        $query .= 'AND operations.Insert_Time=:today';
-        $params[':today'] = $Date;
+        if ($Date != NULL) {
+            $query .= ' AND operations.Insert_Time=:today';
+            $params[':today'] = $Date;
+        }
+
 
         if ($Country != NULL) {
             $query .= " WHERE TbleAgency.RefPays=:RefPays";

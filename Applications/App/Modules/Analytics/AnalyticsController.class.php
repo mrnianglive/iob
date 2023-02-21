@@ -61,10 +61,10 @@ class AnalyticsController extends \Library\BackController
 
         $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
         $this->page->addVar("Pays", $Pays);
+        $ListeProduit = $this->managers->getManagerOf("Analytics")->ListeProduit();
+        $this->page->addVar("ListeProduit", $ListeProduit);
 
         //$ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
-
-
 
         //The Agence List should be in function of the country Posted in the form, if the country is not posted, the list should take all the agence
         $analytics =  $this->managers->getManagerOf("Analytics");

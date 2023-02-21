@@ -467,4 +467,13 @@ class AnalyticsManagerPDO extends AnalyticsManager
         }
         return $data['TotalVersment'];
     }
+
+    public function ListeProduit()
+    {
+        $requeteProduuit = $this->dao->prepare('SELECT * FROM TbleProduit INNER JOIN TbleBanque ON TbleBanque.RefBanque=TbleProduit.RefBanque');
+
+        $requeteProduuit->execute();
+        $ListeProduit = $requeteProduuit->fetchAll();
+        return $ListeProduit;
+    }
 }

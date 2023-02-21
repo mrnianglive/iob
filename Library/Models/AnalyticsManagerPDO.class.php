@@ -133,16 +133,23 @@ class AnalyticsManagerPDO extends AnalyticsManager
               WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL 
               AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND TbleOperations.RefType=1";
         $param = array();
+
+        $queryRemittance = "SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=1 AND Reset_Id IS NULL";
+
+
         if ($pays != NULL) {
             $query .= " AND TbleOperations.RefPays=:pays";
+            $queryRemittance .= " AND TbleRemittance.RefPays=:pays";
             $param[':pays'] = $pays;
         }
         if ($agence != NULL) {
             $query .= " AND TbleCaisse.RefAgency=:agence";
+            $queryRemittance .= " AND TbleRemittance.RefAgency=:agence";
             $param[':agence'] = $agence;
         }
         if ($caisse != NULL) {
             $query .= " AND TbleOperations.RefCaisse=:caisse";
+            $queryRemittance .= " AND TbleRemittance.RefCaisse=:caisse";
             $param[':caisse'] = $caisse;
         }
 
@@ -152,10 +159,15 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSum = $this->dao->prepare($query);
         $requeteSum->execute($param);
         $data = $requeteSum->fetch();
-        if ($data == null) {
+
+        $requeteSumRemittance = $this->dao->prepare($queryRemittance);
+        $requeteSumRemittance->execute($param);
+        $dataRemittance = $requeteSumRemittance->fetch();
+
+        if ($data == null && $dataRemittance == null) {
             return 0;
         }
-        return $data['TotalVersement'];
+        return $data['TotalVersement'] + $dataRemittance['SoldeRemittance'];
     }
 
 
@@ -166,17 +178,23 @@ class AnalyticsManagerPDO extends AnalyticsManager
               INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  
               WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL 
               AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND TbleOperations.RefType=2";
+
+        $queryRemittance = "SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance WHERE MONTH(Insert_time)=:mois AND YEAR(Insert_time)=:year  AND RefType=2 AND Reset_Id IS NULL";
+
         $param = array();
         if ($pays != NULL) {
             $query .= " AND TbleOperations.RefPays=:pays";
+            $queryRemittance .= " AND TbleRemittance.RefPays=:pays";
             $param[':pays'] = $pays;
         }
         if ($agence != NULL) {
             $query .= " AND TbleCaisse.RefAgency=:agence";
+            $queryRemittance .= " AND TbleRemittance.RefAgency=:agence";
             $param[':agence'] = $agence;
         }
         if ($caisse != NULL) {
             $query .= " AND TbleOperations.RefCaisse=:caisse";
+            $queryRemittance .= " AND TbleRemittance.RefCaisse=:caisse";
             $param[':caisse'] = $caisse;
         }
 
@@ -186,10 +204,16 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $requeteSum = $this->dao->prepare($query);
         $requeteSum->execute($param);
         $data = $requeteSum->fetch();
-        if ($data == null) {
+
+        $requeteSumRemittance = $this->dao->prepare($queryRemittance);
+        $requeteSumRemittance->execute($param);
+        $dataRemittance = $requeteSumRemittance->fetch();
+
+
+        if ($data == null && $dataRemittance == null) {
             return 0;
         }
-        return $data['TotalVersement'];
+        return $data['TotalVersement'] + $dataRemittance['SoldeRemittance'];
     }
     public function Chart($Country = NULL, $Agence = NULL, $Caisse = NULL)
     {

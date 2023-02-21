@@ -17,7 +17,12 @@ class AnalyticsManagerPDO extends AnalyticsManager
     public function ListeAgence($Country = NULL, $Agence = NULL)
     {
         if ($Country == NULL && $Agence == NULL) {
-            $requete = $this->dao->prepare("SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays");
+            if ($_SESSION['statut'] == 'superadmin') {
+                $requete = $this->dao->prepare("SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays");
+            } else {
+                $requete = $this->dao->prepare("SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:Country");
+                $requete->bindValue(':Country', $_SESSION['RefPays'], \PDO::PARAM_STR);
+            }
         }
         if ($Country != NULL && $Agence != NULL) {
             $requete = $this->dao->prepare("SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:Country AND TbleAgency.RefAgency=:Agence");

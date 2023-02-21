@@ -33,6 +33,9 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('Pays', $data['Pays']);
         $this->page->addVar('ListeAgence', $data['ListeAgence']);
         $this->page->addVar('ListeCaisse', $data['ListeCaisse']);
+        $this->page->addVar('Country', $data['Country']);
+        $this->page->addVar('Agence', $data['Agence']);
+        $this->page->addVar('Caisse', $data['Caisse']);
     }
 
     private function getHomeData($Country = NULL, $Agence = NULL, $Caisse = NULL)

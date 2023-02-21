@@ -1,12 +1,12 @@
-  <div class="col-lg-12 col-sm-12 col-xs-12">
-      <select class="form-control" id="selectAgence">
-          <option value="0">Toutes les agences</option>
-          <?php foreach ($Agence as $key => $value) { ?>
-              <option value="<?= $value['RefAgency']; ?>"><?= $value['NameAgency']; ?></option>
-          <?php } ?>
-      </select>
+  <div class="row">
+      <div class="col-md-12">
+          <select class="form-control" id="selectAgence">
+              <option value="0">Toutes les agences</option>
+              <?php foreach ($Agence as $key => $value) { ?>
+                  <option value="<?= $value['RefAgency']; ?>"><?= $value['NameAgency']; ?></option>
+              <?php } ?>
+      </div>
   </div>
-
 
 
 

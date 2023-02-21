@@ -68,6 +68,7 @@ class AnalyticsController extends \Library\BackController
         //The Agence List should be in function of the country Posted in the form, if the country is not posted, the list should take all the agence
         $analytics =  $this->managers->getManagerOf("Analytics");
         $ListeAgence = $analytics->ListeAgence($Country, $Agency);
+        var_dump($Country, $Agency, $ListeAgence);
 
         foreach ($ListeAgence as $key => $agence) {
             $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);

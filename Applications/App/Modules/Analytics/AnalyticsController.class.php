@@ -52,7 +52,7 @@ class AnalyticsController extends \Library\BackController
 
 
         $Country = isset($_POST['RefPays']) ? $_POST['RefPays'] : '';
-        $Agency = isset($_POST['RefAgence']) ? $_POST['RefAgence'] : '';
+        $Agency = isset($_POST['RefAgency']) ? $_POST['RefAgency'] : '';
         $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
 
         $Charts = $this->managers->getManagerOf('Analytics')->Chart($Country, $Agency, $Caisse);

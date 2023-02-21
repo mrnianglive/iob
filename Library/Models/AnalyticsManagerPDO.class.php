@@ -28,7 +28,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
             $query = "SELECT RefAgency FROM TbleAgency WHERE RefAgency = '$Agence'";
             $requeteAgence = $this->dao->prepare($query);
             $requeteAgence->execute();
-            $agence = $requeteAgence->fetchColumn();
+            $agence = $requeteAgence->fetch();
             return $agence;
         } else {
             // Si l'agence n'est pas précisée, on récupère toutes les données des agences correspondant éventuellement au pays précisé

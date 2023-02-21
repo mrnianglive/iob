@@ -5,7 +5,7 @@
                   <option value="0">Tous</option>
                   <?php foreach ($Pays as $key => $Pays) {   ?>
                   <option value="<?= $Pays['RefPays']; ?>">
-                      <?= $Pays['NamePays']; ?></option>
+                      <?= $Pays['nomPays']; ?></option>
                   <?php }   ?>
               </select>
           </div>

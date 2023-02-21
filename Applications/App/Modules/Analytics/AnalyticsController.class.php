@@ -50,7 +50,6 @@ class AnalyticsController extends \Library\BackController
     {
         $this->page->addVar("titles", "Chart "); // Titre de la page
 
-
         $Country = isset($_POST['RefPays']) ? $_POST['RefPays'] : '';
         $Agency = isset($_POST['RefAgency']) ? $_POST['RefAgency'] : '';
         $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
@@ -64,18 +63,18 @@ class AnalyticsController extends \Library\BackController
         //The Agence List should be in function of the country Posted in the form, if the country is not posted, the list should take all the agence
         $analytics =  $this->managers->getManagerOf("Analytics");
         $ListeAgence = $analytics->ListeAgence($Country, $Agency);
-
-        //check if $ListeAgence is not empty and contains more than one element
         if (!empty($ListeAgence) && count($ListeAgence) > 1) {
             foreach ($ListeAgence as $key => $agence) {
                 $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);
                 $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency']);
             }
+        } elseif (count($ListeAgence) == 1) {
+            $ListeAgence[0]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($ListeAgence[0]['RefAgency']);
+            $ListeAgence[0]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($ListeAgence[0]['RefAgency']);
         } else {
-
-            $ListeAgence['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($ListeAgence['RefAgency']);
-            $ListeAgence['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($ListeAgence['RefAgency']);
+            $ListeAgence = array(); // initialize $ListeAgence to an empty array
         }
+
         $this->page->addVar("ListeAgence", $ListeAgence);
 
         $ListeCaisse  =  $this->managers->getManagerOf("Pannel")->ListeCaisse();

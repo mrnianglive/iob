@@ -12,11 +12,7 @@
           &nbsp;
           <div class="">
               <select class="form-control" name="RefAgency" tabindex="1" id="RefAgency">
-                  <option value="0">Agence</option>
-                  <?php foreach ($ListeAgence as $key => $Agence) {   ?>
-                  <option value="<?= $Agence['RefAgency']; ?>">
-                      <?= $Agence['NameAgency']; ?></option>
-                  <?php }   ?>
+                  <option></option>
               </select>
           </div>
           &nbsp;

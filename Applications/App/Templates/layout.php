@@ -281,6 +281,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="/js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
     <script src="/js/custom.js"></script>
+    <script src="/scripts/getList.js"></script>
     <script>
     $(document).ready(function() {
         $('#dataTable').DataTable({

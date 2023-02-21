@@ -225,11 +225,11 @@ class AnalyticsManagerPDO extends AnalyticsManager
             $queryRemittance .= " AND TbleRemittance.RefCaisse=:caisse";
             $param[':caisse'] = $caisse;
         }
-        // if ($Produit != NULL) {
-        //     $query .= " AND TbleOperations.RefProduit=:produit";
-        //     $queryRemittance .= " AND TbleRemittance.RefProduit=:produit";
-        //     $param[':produit'] = $Produit;
-        // }
+        if ($Produit != NULL && $Produit != '0') {
+            $query .= " AND TbleOperations.RefProduit=:produit";
+            $queryRemittance .= " AND TbleRemittance.RefProduit=:produit";
+            $param[':produit'] = $Produit;
+        }
 
         $param[':mois'] = $mois;
         $param[':year'] = date('Y');
@@ -276,11 +276,11 @@ class AnalyticsManagerPDO extends AnalyticsManager
             $queryRemittance .= " AND TbleRemittance.RefCaisse=:caisse";
             $param[':caisse'] = $caisse;
         }
-        // if ($Produit != NULL) {
-        //     $query .= " AND TbleOperations.RefProduit=:produit";
-        //     $queryRemittance .= " AND TbleRemittance.RefProduit=:produit";
-        //     $param[':produit'] = $Produit;
-        // }
+        if ($Produit != NULL && $Produit != '0') {
+            $query .= " AND TbleOperations.RefProduit=:produit";
+            $queryRemittance .= " AND TbleRemittance.RefProduit=:produit";
+            $param[':produit'] = $Produit;
+        }
 
         $param[':mois'] = $mois;
         $param[':year'] = date('Y');

@@ -94,6 +94,9 @@ class BielletageController extends \Library\BackController
             'Pays' => $Pays,
             'ListeAgence' => $ListeAgence,
             'ListeCaisse' => $ListeCaisse,
+            'Country' => $Country,
+            'Agence' => $Agence,
+            'Caisse' => $Caisse
         );
     }
 

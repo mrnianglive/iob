@@ -26,10 +26,19 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('SommeRemittanceRetrait', $data['sommeRemittanceRetrait']);
         $this->page->addVar('SoldeRemittance', $data['soldeRemittance']);
         $this->page->addVar('links', $data['links']);
+        $this->page->addVar('Pays', $data['Pays']);
+        $this->page->addVar('ListeAgence', $data['ListeAgence']);
+        $this->page->addVar('ListeCaisse', $data['ListeCaisse']);
     }
 
     private function getHomeData()
     {
+
+        $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
+        $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
+        $ListeCaisse  = $this->managers->getManagerOf("Pannel")->ListeCaisse();
+
+
         // Récupération des données pour l'affichage de l'accueil
         $checkOuverture = $this->managers->getManagerOf("Bielletage")->CheckOuverture();
         $operations = $this->managers->getManagerOf('Bielletage')->GetCaisse();
@@ -77,7 +86,10 @@ class BielletageController extends \Library\BackController
             'sommeRemittanceDepot' => $sommeRemittanceDepot,
             'sommeRemittanceRetrait' => $sommeRemittanceRetrait,
             'soldeRemittance' => $soldeRemittance,
-            'links' => $links
+            'links' => $links,
+            'Pays' => $Pays,
+            'ListeAgence' => $ListeAgence,
+            'ListeCaisse' => $ListeCaisse,
         );
     }
 

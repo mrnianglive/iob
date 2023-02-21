@@ -94,10 +94,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
             $param[':caisse'] = $caisse;
         }
 
-        if ($pays == NULL && $agence == NULL && $caisse == NULL) {
-            $param[':mois'] = $mois;
-            $param[':year'] = date('Y');
-        }
+        $param[':mois'] = $mois;
+        $param[':year'] = date('Y');
+
         $requeteSUm = $this->dao->prepare($query);
         $requeteSUm->execute($param);
         $requeteSUm->execute();

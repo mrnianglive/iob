@@ -40,6 +40,37 @@ class AnalyticsManagerPDO extends AnalyticsManager
     }
 
 
+    public function ListeCaisse($Country = NULL, $Agence, $Caisse = NULL)
+    {
+        if ($Country == NULL && $Agence == NULL && $Caisse == NULL) {
+            if ($_SESSION['statut'] == 'superadmin') {
+                $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays");
+            } else {
+                $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:Country");
+                $requete->bindValue(':Country', $_SESSION['RefPays'], \PDO::PARAM_STR);
+            }
+        }
+        if ($Country != NULL && $Agence != NULL && $Caisse != NULL) {
+            $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:Country AND TbleAgency.RefAgency=:Agence AND TbleCaisse.RefCaisse=:Caisse");
+            $requete->bindValue(':Country', $Country, \PDO::PARAM_STR);
+            $requete->bindValue(':Agence', $Agence, \PDO::PARAM_STR);
+            $requete->bindValue(':Caisse', $Caisse, \PDO::PARAM_STR);
+        }
+        if ($Country != NULL && $Agence != NULL && $Caisse == NULL) {
+            $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:Country AND TbleAgency.RefAgency=:Agence");
+            $requete->bindValue(':Country', $Country, \PDO::PARAM_STR);
+            $requete->bindValue(':Agence', $Agence, \PDO::PARAM_STR);
+        }
+        if ($Country != NULL && $Agence == NULL && $Caisse == NULL) {
+            $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:Country");
+            $requete->bindValue(':Country', $Country, \PDO::PARAM_STR);
+        }
+        $requete->execute();
+        $data = $requete->fetchAll();
+        return $data;
+    }
+
+
     public function ChartAgenceVersement($agence)
     {
         $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1) AND TbleAgency.RefAgency=:agency');

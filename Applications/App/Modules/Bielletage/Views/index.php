@@ -8,27 +8,29 @@
                   <?php }   ?>
               </select>
           </div>
-          <div class="col-md-2">Du
-              <input type="date" id="Debut" name="Debut" class="form-control ">
+          <div class="">Agence
+              <select class="form-control" name="RefAgency" tabindex="1" required="">
+                  <?php foreach ($Agence as $key => $Agence) {   ?>
+                      <option value="<?= $Agence['RefAgency']; ?>">
+                          <?= $Agence['NameAgency']; ?></option>
+                  <?php }   ?>
+              </select>
           </div>
-          <div class="col-md-2">Au
-              <input type="date" id="Fin" name="Fin" class="form-control">
+          <div class="">Agence
+              <select class="form-control" name="RefAgency" tabindex="1" required="">
+                  <?php foreach ($Agence as $key => $Agence) {   ?>
+                      <option value="<?= $Agence['RefAgency']; ?>">
+                          <?= $Agence['NameAgency']; ?></option>
+                  <?php }   ?>
+              </select>
           </div>
-          <div class=""></br>
+          <div class="">
               <button type="submit" class="btn btn-primary" data-toggle="tooltip" title="Cliquez ici pour lancer la recherche"><i class="fas fa-search"></i></button>
-          </div>
-
-          <div class="col-md-2 ">Total Depot
-              <input type="text" class="form-control" readonly>
-          </div>
-          <div class="col-md-2">Total Retrait
-              <input type="text" class="form-control" readonly>
-          </div>
-          <div class="col-md-2">Solde Especes
-              <input type="text" class="form-control" readonly>
           </div>
       </div>
   </form>
+  </br>
+  </br>
 
 
 

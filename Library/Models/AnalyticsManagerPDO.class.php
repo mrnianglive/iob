@@ -73,57 +73,96 @@ class AnalyticsManagerPDO extends AnalyticsManager
 
     public function ChartAgenceVersement($agence)
     {
+
+        $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=1 AND Reset_Id IS NULL AND TbleAgency.RefAgency=:agency');
+        $requeteSumRemittance->bindValue(':mois', date('m'), \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':agency', $agence, \PDO::PARAM_STR);
+        $requeteSumRemittance->execute();
+        $dataRemittance = $requeteSumRemittance->fetch();
+
+
+
         $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1) AND TbleAgency.RefAgency=:agency');
         $requeteSUm->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':agency', $agence, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
-        if ($data == null) {
+        if ($data == null && $dataRemittance == null) {
             return 0;
         }
-        return $data['TotalVersment'];
+        return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
 
     public function ChartAgenceRetrait($agence)
     {
+        $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=2 AND Reset_Id IS NULL AND TbleAgency.RefAgency=:agency');
+        $requeteSumRemittance->bindValue(':mois', date('m'), \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':agency', $agence, \PDO::PARAM_STR);
+        $requeteSumRemittance->execute();
+        $dataRemittance = $requeteSumRemittance->fetch();
+
+
         $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=2) AND TbleAgency.RefAgency=:agency');
         $requeteSUm->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':agency', $agence, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
-        if ($data == null) {
+        if ($data == null && $dataRemittance == null) {
             return 0;
         }
-        return $data['TotalVersment'];
+        return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
     public function ChartCaisseVersement($caisse)
     {
+        $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=1 AND Reset_Id IS NULL AND TbleRemittance.RefCaisse=:RefCaisse');
+        $requeteSumRemittance->bindValue(':mois', date('m'), \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':RefCaisse', $caisse, \PDO::PARAM_STR);
+        $requeteSumRemittance->execute();
+        $dataRemittance = $requeteSumRemittance->fetch();
+
+
+
         $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1) AND TbleCaisse.RefCaisse=:caisse');
         $requeteSUm->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':caisse', $caisse, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
-        if ($data == null) {
+        if ($data == null && $dataRemittance == null) {
             return 0;
         }
-        return $data['TotalVersment'];
+        return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
 
     public function ChartCaisseRetrait($caisse)
     {
+        $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=2 AND Reset_Id IS NULL AND TbleRemittance.RefCaisse=:RefCaisse');
+        $requeteSumRemittance->bindValue(':mois', date('m'), \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':RefCaisse', $caisse, \PDO::PARAM_STR);
+        $requeteSumRemittance->execute();
+        $dataRemittance = $requeteSumRemittance->fetch();
+
+
         $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=2) AND TbleCaisse.RefCaisse=:caisse');
         $requeteSUm->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':caisse', $caisse, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
-        if ($data == null) {
+        if ($data == null && $dataRemittance == null) {
             return 0;
         }
-        return $data['TotalVersment'];
+        return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
     public function ChartVersment($mois, $pays = NULL, $agence = NULL, $caisse = NULL)
     {

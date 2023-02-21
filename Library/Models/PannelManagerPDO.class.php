@@ -95,18 +95,36 @@ class PannelManagerPDO extends PannelManager
         $requeteAddService->bindValue(':RefAgency', $_POST['RefAgency'], \PDO::PARAM_INT);
         $requeteAddService->execute();
     }
-    public function ListeCaisse()
+
+    public function ListeCaisse($Country = NULL)
     {
         if ($_SESSION['statut'] == 'superadmin') {
-            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency');
+            $query = 'SELECT * FROM TbleCaisse 
+                  INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency 
+                  INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays';
+            $params = array();
         } else {
-            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefPays=:RefPays');
-            $requeteAgence->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+            $query = 'SELECT * FROM TbleCaisse 
+                  INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency 
+                  INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays 
+                  WHERE TbleAgency.RefPays=:RefPays';
+            $params = array(':RefPays' => $_SESSION['RefPays']);
         }
-        $requeteAgence->execute();
-        $ListeCaisse = $requeteAgence->fetchAll();
+        if ($Country) {
+            $query .= ' AND tblpays.RefPays = :RefPays';
+            $params[':RefPays'] = $Country;
+        }
+
+        $requeteCaisse = $this->dao->prepare($query);
+        foreach ($params as $key => $value) {
+            $requeteCaisse->bindValue($key, $value, is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
+        }
+        $requeteCaisse->execute();
+        $ListeCaisse = $requeteCaisse->fetchAll();
         return $ListeCaisse;
     }
+
+
     public function ListeDays()
     {
         $requeteDays = $this->dao->prepare('SELECT * FROM TbleDays');

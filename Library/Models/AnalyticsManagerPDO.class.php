@@ -225,7 +225,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
             $queryRemittance .= " AND TbleRemittance.RefCaisse=:caisse";
             $param[':caisse'] = $caisse;
         }
-        if ($Produit != NULL && $Produit != '0') {
+        if ($Produit != NULL && $Produit != 0) {
             $query .= " AND TbleOperations.RefProduit=:produit";
             $queryRemittance .= " AND TbleRemittance.RefProduit=:produit";
             $param[':produit'] = $Produit;
@@ -276,7 +276,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
             $queryRemittance .= " AND TbleRemittance.RefCaisse=:caisse";
             $param[':caisse'] = $caisse;
         }
-        if ($Produit != NULL && $Produit != '0') {
+        if ($Produit != NULL && $Produit != 0) {
             $query .= " AND TbleOperations.RefProduit=:produit";
             $queryRemittance .= " AND TbleRemittance.RefProduit=:produit";
             $param[':produit'] = $Produit;

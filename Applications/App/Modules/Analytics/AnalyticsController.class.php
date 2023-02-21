@@ -51,9 +51,15 @@ class AnalyticsController extends \Library\BackController
         $this->page->addVar("titles", "Chart "); // Titre de la page
         $Charts = $this->managers->getManagerOf('Analytics')->Chart();
         $this->page->addVar('Chart', $Charts);
-        $ListePays = $this->managers->getManagerOf("Pannel")->ListePays();
-        $this->page->addVar("ListePays", $ListePays);
+        $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("Pays", $Pays);
+
+        $Country = isset($_POST['RefPays']) ? $_POST['RefPays'] : '';
+        $Agence = isset($_POST['RefAgence']) ? $_POST['RefAgence'] : '';
+        $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
+
         $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
+
         foreach ($ListeAgence as $key => $agence) {
             $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);
             $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency']);

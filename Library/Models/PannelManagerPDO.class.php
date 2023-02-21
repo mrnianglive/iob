@@ -29,10 +29,7 @@ class PannelManagerPDO extends PannelManager
         }
 
         $requeteAgence = $this->dao->prepare($query);
-        foreach ($params as $key => $value) {
-            $requeteAgence->bindValue($key, $value, is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
-        }
-        $requeteAgence->execute();
+        $requeteAgence->execute($params);
         $ListeAgence = $requeteAgence->fetchAll();
         return $ListeAgence;
     }

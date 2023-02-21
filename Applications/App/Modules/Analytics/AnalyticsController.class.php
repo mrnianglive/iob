@@ -54,8 +54,9 @@ class AnalyticsController extends \Library\BackController
         $Country = isset($_POST['RefPays']) ? $_POST['RefPays'] : '';
         $Agency = isset($_POST['RefAgency']) ? $_POST['RefAgency'] : '';
         $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
+        $Produit = isset($_POST['RefProduit']) ? $_POST['RefProduit'] : '';
 
-        $Charts = $this->managers->getManagerOf('Analytics')->Chart($Country, $Agency, $Caisse);
+        $Charts = $this->managers->getManagerOf('Analytics')->Chart($Country, $Agency, $Caisse, $Produit);
         $this->page->addVar('Chart', $Charts);
 
         $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
@@ -70,15 +71,15 @@ class AnalyticsController extends \Library\BackController
         $ListeAgence = $analytics->ListeAgence($Country, $Agency);
 
         foreach ($ListeAgence as $key => $agence) {
-            $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);
-            $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency']);
+            $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency'], $Produit);
+            $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency'], $Produit);
         }
 
         $this->page->addVar("ListeAgence", $ListeAgence);
         $ListeCaisse  =  $analytics->ListeCaisse($Country, $Agency, $Caisse);
         foreach ($ListeCaisse as $key => $caisse) {
-            $ListeCaisse[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartCaisseVersement($caisse['RefCaisse']);
-            $ListeCaisse[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartCaisseRetrait($caisse['RefCaisse']);
+            $ListeCaisse[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartCaisseVersement($caisse['RefCaisse'], $Produit);
+            $ListeCaisse[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartCaisseRetrait($caisse['RefCaisse'], $Produit);
         }
         $this->page->addVar("ListeCaisse", $ListeCaisse);
     }

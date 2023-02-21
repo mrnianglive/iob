@@ -71,23 +71,23 @@ class AnalyticsManagerPDO extends AnalyticsManager
     }
 
 
-    public function ChartAgenceVersement($agence)
+    public function ChartAgenceVersement($agence, $Produit)
     {
 
         $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
-              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=1 AND Reset_Id IS NULL AND TbleAgency.RefAgency=:agency');
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=1 AND Reset_Id IS NULL AND TbleAgency.RefAgency=:agency AND TbleRemittance.RefProduit=:produit');
         $requeteSumRemittance->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSumRemittance->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSumRemittance->bindValue(':agency', $agence, \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':produit', $Produit, \PDO::PARAM_STR);
         $requeteSumRemittance->execute();
         $dataRemittance = $requeteSumRemittance->fetch();
 
-
-
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1) AND TbleAgency.RefAgency=:agency');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1) AND TbleAgency.RefAgency=:agency AND TbleOperations.RefProduit=:produit');
         $requeteSUm->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':agency', $agence, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':produit', $Produit, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         if ($data == null && $dataRemittance == null) {
@@ -96,21 +96,21 @@ class AnalyticsManagerPDO extends AnalyticsManager
         return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
 
-    public function ChartAgenceRetrait($agence)
+    public function ChartAgenceRetrait($agence, $Produit)
     {
         $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
-              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=2 AND Reset_Id IS NULL AND TbleAgency.RefAgency=:agency');
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=2 AND Reset_Id IS NULL AND TbleAgency.RefAgency=:agency AND TbleRemittance.RefProduit=:produit');
         $requeteSumRemittance->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSumRemittance->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSumRemittance->bindValue(':agency', $agence, \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':produit', $Produit, \PDO::PARAM_STR);
         $requeteSumRemittance->execute();
         $dataRemittance = $requeteSumRemittance->fetch();
-
-
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=2) AND TbleAgency.RefAgency=:agency');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=2) AND TbleAgency.RefAgency=:agency AND TbleOperations.RefProduit=:produit');
         $requeteSUm->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':agency', $agence, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':produit', $Produit, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         if ($data == null && $dataRemittance == null) {
@@ -118,22 +118,21 @@ class AnalyticsManagerPDO extends AnalyticsManager
         }
         return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
-    public function ChartCaisseVersement($caisse)
+    public function ChartCaisseVersement($caisse, $Produit)
     {
         $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
-              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=1 AND Reset_Id IS NULL AND TbleRemittance.RefCaisse=:RefCaisse');
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=1 AND Reset_Id IS NULL AND TbleRemittance.RefCaisse=:RefCaisse AND TbleRemittance.RefProduit=:produit');
         $requeteSumRemittance->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSumRemittance->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSumRemittance->bindValue(':RefCaisse', $caisse, \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':produit', $Produit, \PDO::PARAM_STR);
         $requeteSumRemittance->execute();
         $dataRemittance = $requeteSumRemittance->fetch();
-
-
-
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1) AND TbleCaisse.RefCaisse=:caisse');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1) AND TbleCaisse.RefCaisse=:caisse AND TbleOperations.RefProduit=:produit');
         $requeteSUm->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':caisse', $caisse, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':produit', $Produit, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         if ($data == null && $dataRemittance == null) {
@@ -142,21 +141,21 @@ class AnalyticsManagerPDO extends AnalyticsManager
         return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
 
-    public function ChartCaisseRetrait($caisse)
+    public function ChartCaisseRetrait($caisse, $Produit)
     {
         $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
-              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=2 AND Reset_Id IS NULL AND TbleRemittance.RefCaisse=:RefCaisse');
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=2 AND Reset_Id IS NULL AND TbleRemittance.RefCaisse=:RefCaisse AND TbleRemittance.RefProduit=:produit');
         $requeteSumRemittance->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSumRemittance->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSumRemittance->bindValue(':RefCaisse', $caisse, \PDO::PARAM_STR);
+        $requeteSumRemittance->bindValue(':produit', $Produit, \PDO::PARAM_STR);
         $requeteSumRemittance->execute();
         $dataRemittance = $requeteSumRemittance->fetch();
-
-
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=2) AND TbleCaisse.RefCaisse=:caisse');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=2) AND TbleCaisse.RefCaisse=:caisse AND TbleOperations.RefProduit=:produit');
         $requeteSUm->bindValue(':mois', date('m'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
         $requeteSUm->bindValue(':caisse', $caisse, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':produit', $Produit, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         if ($data == null && $dataRemittance == null) {
@@ -164,7 +163,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
         }
         return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
-    public function ChartVersment($mois, $pays = NULL, $agence = NULL, $caisse = NULL)
+    public function ChartVersment($mois, $pays = NULL, $agence = NULL, $caisse = NULL, $Produit = NULL)
     {
         $query = "SELECT SUM(MontantVersement) AS TotalVersement FROM TbleOperations 
               INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse 
@@ -175,7 +174,6 @@ class AnalyticsManagerPDO extends AnalyticsManager
 
         $queryRemittance = "SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
               INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=1 AND Reset_Id IS NULL";
-
 
         if ($pays != NULL) {
             $query .= " AND TbleOperations.RefPays=:pays";
@@ -191,6 +189,11 @@ class AnalyticsManagerPDO extends AnalyticsManager
             $query .= " AND TbleOperations.RefCaisse=:caisse";
             $queryRemittance .= " AND TbleRemittance.RefCaisse=:caisse";
             $param[':caisse'] = $caisse;
+        }
+        if ($Produit != NULL) {
+            $query .= " AND TbleOperations.RefProduit=:produit";
+            $queryRemittance .= " AND TbleRemittance.RefProduit=:produit";
+            $param[':produit'] = $Produit;
         }
 
         $param[':mois'] = $mois;
@@ -211,7 +214,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
     }
 
 
-    public function ChartRetrait($mois, $pays = NULL, $agence = NULL, $caisse = NULL)
+    public function ChartRetrait($mois, $pays = NULL, $agence = NULL, $caisse = NULL, $Produit = NULL)
     {
         $query = "SELECT SUM(MontantVersement) AS TotalVersement FROM TbleOperations 
               INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse 
@@ -238,6 +241,11 @@ class AnalyticsManagerPDO extends AnalyticsManager
             $queryRemittance .= " AND TbleRemittance.RefCaisse=:caisse";
             $param[':caisse'] = $caisse;
         }
+        if ($Produit != NULL) {
+            $query .= " AND TbleOperations.RefProduit=:produit";
+            $queryRemittance .= " AND TbleRemittance.RefProduit=:produit";
+            $param[':produit'] = $Produit;
+        }
 
         $param[':mois'] = $mois;
         $param[':year'] = date('Y');
@@ -256,32 +264,32 @@ class AnalyticsManagerPDO extends AnalyticsManager
         }
         return $data['TotalVersement'] + $dataRemittance['SoldeRemittance'];
     }
-    public function Chart($Country = NULL, $Agence = NULL, $Caisse = NULL)
+    public function Chart($Country = NULL, $Agence = NULL, $Caisse = NULL, $Produit = NULL)
     {
-        $ChartList['Janvier'] = $this->ChartVersment(1, $Country, $Agence, $Caisse);
-        $ChartList['RJanvier'] = $this->ChartRetrait(1, $Country, $Agence, $Caisse);
-        $ChartList['Fevrier'] = $this->ChartVersment(2, $Country, $Agence, $Caisse);
-        $ChartList['RFevrier'] = $this->ChartRetrait(2, $Country, $Agence, $Caisse);
-        $ChartList['Mars'] = $this->ChartVersment(3, $Country, $Agence, $Caisse);
-        $ChartList['RMars'] = $this->ChartRetrait(3, $Country, $Agence, $Caisse);
-        $ChartList['Avril'] = $this->ChartVersment(4, $Country, $Agence, $Caisse);
-        $ChartList['RAvril'] = $this->ChartRetrait(4, $Country, $Agence, $Caisse);
-        $ChartList['Mai'] = $this->ChartVersment(5, $Country, $Agence, $Caisse);
-        $ChartList['RMai'] = $this->ChartRetrait(5, $Country, $Agence, $Caisse);
-        $ChartList['Juin'] = $this->ChartVersment(6, $Country, $Agence, $Caisse);
-        $ChartList['RJuin'] = $this->ChartRetrait(6, $Country, $Agence, $Caisse);
-        $ChartList['Juillet'] = $this->ChartVersment(7, $Country, $Agence, $Caisse);
-        $ChartList['RJuillet'] = $this->ChartRetrait(7, $Country, $Agence, $Caisse);
-        $ChartList['Aout'] = $this->ChartVersment(8, $Country, $Agence, $Caisse);
-        $ChartList['RAout'] = $this->ChartRetrait(8, $Country, $Agence, $Caisse);
-        $ChartList['Septembre'] = $this->ChartVersment(9, $Country, $Agence, $Caisse);
-        $ChartList['RSeptembre'] = $this->ChartRetrait(9, $Country, $Agence, $Caisse);
-        $ChartList['Octobre'] = $this->ChartVersment(10, $Country, $Agence, $Caisse);
-        $ChartList['ROctobre'] = $this->ChartRetrait(10, $Country, $Agence, $Caisse);
-        $ChartList['Novembre'] = $this->ChartVersment(11, $Country, $Agence, $Caisse);
-        $ChartList['RNovembre'] = $this->ChartRetrait(11, $Country, $Agence, $Caisse);
-        $ChartList['Decembre'] = $this->ChartVersment(12, $Country, $Agence, $Caisse);
-        $ChartList['RDecembre'] = $this->ChartRetrait(12, $Country, $Agence, $Caisse);
+        $ChartList['Janvier'] = $this->ChartVersment(1, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['RJanvier'] = $this->ChartRetrait(1, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['Fevrier'] = $this->ChartVersment(2, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['RFevrier'] = $this->ChartRetrait(2, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['Mars'] = $this->ChartVersment(3, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['RMars'] = $this->ChartRetrait(3, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['Avril'] = $this->ChartVersment(4, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['RAvril'] = $this->ChartRetrait(4, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['Mai'] = $this->ChartVersment(5, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['RMai'] = $this->ChartRetrait(5, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['Juin'] = $this->ChartVersment(6, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['RJuin'] = $this->ChartRetrait(6, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['Juillet'] = $this->ChartVersment(7, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['RJuillet'] = $this->ChartRetrait(7, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['Aout'] = $this->ChartVersment(8, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['RAout'] = $this->ChartRetrait(8, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['Septembre'] = $this->ChartVersment(9, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['RSeptembre'] = $this->ChartRetrait(9, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['Octobre'] = $this->ChartVersment(10, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['ROctobre'] = $this->ChartRetrait(10, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['Novembre'] = $this->ChartVersment(11, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['RNovembre'] = $this->ChartRetrait(11, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['Decembre'] = $this->ChartVersment(12, $Country, $Agence, $Caisse, $Produit);
+        $ChartList['RDecembre'] = $this->ChartRetrait(12, $Country, $Agence, $Caisse, $Produit);
         return $ChartList;
     }
 

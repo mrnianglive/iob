@@ -89,6 +89,13 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                     <!-- ============================================================== -->
                     <ul class="navbar-nav ml-auto d-flex align-items-center">
 
+                        <li>
+                            <select class="form-control">
+                                <option>Mali</option>
+                                <option>TOGO</option>
+                            </select>
+                        </li>
+
                         <!-- ============================================================== -->
                         <!-- Search -->
                         <!-- ============================================================== -->

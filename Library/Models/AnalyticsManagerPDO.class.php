@@ -14,9 +14,16 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $data = $requete->fetchAll();
         return $data;
     }
-    public function ListeAgence()
+    public function ListeAgence($Country = NULL, $Agence = NULL)
     {
-        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency');
+        $query = "SELECT * FROM TbleAgency";
+        if ($Country != NULL) {
+            $query .= " WHERE RefPays = '$Country'";
+        }
+        if ($Agence != NULL) {
+            $query .= " AND RefAgency = '$Agence'";
+        }
+        $requeteAgence = $this->dao->prepare($query);
         $requeteAgence->execute();
         $ListeAgence = $requeteAgence->fetchAll();
         return $ListeAgence;

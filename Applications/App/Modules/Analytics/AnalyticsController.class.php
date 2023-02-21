@@ -66,15 +66,15 @@ class AnalyticsController extends \Library\BackController
 
 
         //The Agence List should be in function of the country Posted in the form, if the country is not posted, the list should take all the agence
-        $pannel =  $this->managers->getManagerOf("Pannel");
-        $ListeAgence = $pannel->ListeAgence($Country, $Agency);
+        $analytics =  $this->managers->getManagerOf("Analytics");
+        $ListeAgence = $analytics->ListeAgence($Country, $Agency);
         foreach ($ListeAgence as $key => $agence) {
             $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);
             $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency']);
         }
         $this->page->addVar("ListeAgence", $ListeAgence);
 
-        $ListeCaisse  = $pannel->ListeCaisse($Country, $Agency);
+        $ListeCaisse  =  $this->managers->getManagerOf("Pannel")->ListeCaisse($Country, $Agency);
         foreach ($ListeCaisse as $key => $caisse) {
             $ListeCaisse[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartCaisseVersement($caisse['RefCaisse']);
             $ListeCaisse[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartCaisseRetrait($caisse['RefCaisse']);

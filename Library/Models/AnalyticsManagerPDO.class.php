@@ -22,7 +22,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
         return $ListeAgence;
     }
 
-    public function ChartAgenceVersement($pays = NULL, $agence = NULL, $caisse = NULL)
+    public function ChartAgenceVersement($agence)
     {
         $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1) AND TbleAgency.RefAgency=:agency');
         $requeteSUm->bindValue(':mois', date('m'), \PDO::PARAM_STR);

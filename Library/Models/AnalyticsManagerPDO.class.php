@@ -16,7 +16,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
     }
     public function ListeAgence($Country = NULL, $Agence = NULL)
     {
-        $requete = $this->dao->prepare("SELECT * FROM TbleAgency INNER JOIN TblePays ON TblePays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:Country AND TbleAgency.RefAgency=:Agence");
+        $requete = $this->dao->prepare("SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:Country AND TbleAgency.RefAgency=:Agence");
         $requete->bindValue(':Country', $Country, \PDO::PARAM_STR);
         $requete->bindValue(':Agence', $Agence, \PDO::PARAM_STR);
         $requete->execute();

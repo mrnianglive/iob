@@ -1,18 +1,39 @@
-  <div class="row">
-      <div class="col-md-12">
-          <select class="form-control" id="selectAgence">
-              <option value="0">Toutes les agences</option>
-              <?php foreach ($Agence as $key => $value) { ?>
-                  <option value="<?= $value['RefAgency']; ?>"><?= $value['NameAgency']; ?></option>
-              <?php } ?>
-      </div>
-  </div>
+  <form method="POST" action="/Journal/index" id="formulaire">
+      <div class="input-group">
+          <div class="">Agence
+              <select class="form-control" name="RefAgency" tabindex="1" required="">
+                  <?php foreach ($Agence as $key => $Agence) {   ?>
+                      <option value="<?= $Agence['RefAgency']; ?>">
+                          <?= $Agence['NameAgency']; ?></option>
+                  <?php }   ?>
+              </select>
+          </div>
+          <div class="col-md-2">Du
+              <input type="date" id="Debut" name="Debut" class="form-control ">
+          </div>
+          <div class="col-md-2">Au
+              <input type="date" id="Fin" name="Fin" class="form-control">
+          </div>
+          <div class=""></br>
+              <button type="submit" class="btn btn-primary" data-toggle="tooltip" title="Cliquez ici pour lancer la recherche"><i class="fas fa-search"></i></button>
+          </div>
 
+          <div class="col-md-2 ">Total Depot
+              <input type="text" class="form-control" readonly>
+          </div>
+          <div class="col-md-2">Total Retrait
+              <input type="text" class="form-control" readonly>
+          </div>
+          <div class="col-md-2">Solde Especes
+              <input type="text" class="form-control" readonly>
+          </div>
+      </div>
+  </form>
 
 
 
   <?php if ($_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
-      <div class=" col-lg-12 col-sm-12 col-xs-12">
+      <div class="col-lg-12 col-sm-12 col-xs-12">
           <?php foreach ($Agence as $key => $value) {
                 if ($value['SommeDepot'] ==  0) { ?>
                   <div class="alert alert-danger" role="alert">

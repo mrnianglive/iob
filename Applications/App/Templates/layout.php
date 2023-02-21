@@ -88,11 +88,29 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                     <!-- Right side toggle and nav items -->
                     <!-- ============================================================== -->
                     <ul class="navbar-nav ml-auto d-flex align-items-center">
+                        <li>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </li>
+                        <li>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </li>
 
                         <li>
-                            <select class="form-control">
-                                <option>Mali</option>
-                                <option>TOGO</option>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
                             </select>
                         </li>
 

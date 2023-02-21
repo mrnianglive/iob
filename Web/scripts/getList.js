@@ -32,7 +32,7 @@ $(function () {
                 $agence.empty().append(fragment);
 
                 // Check if the desired agency option is available and set it as selected
-                const desiredAgencyValue = 'desired_agency_value';
+                const desiredAgencyValue = 1;
                 const desiredAgencyOption = $agence.find(`option[value="${desiredAgencyValue}"]`);
                 if (desiredAgencyOption.length > 0) {
                     desiredAgencyOption.prop('selected', true);
@@ -73,7 +73,7 @@ $(function () {
                 $caisse.empty().append(fragment);
 
                 // Check if the desired caisse option is available and set it as selected
-                const desiredCaisseValue = 'desired_caisse_value';
+                const desiredCaisseValue = 1;
                 const desiredCaisseOption = $caisse.find(`option[value="${desiredCaisseValue}"]`);
                 if (desiredCaisseOption.length > 0) {
                     desiredCaisseOption.prop('selected', true);

@@ -11,9 +11,9 @@ class BielletageController extends \Library\BackController
 
         // Récupération des données pour l'affichage de l'accueil
         $Country = $request->postData('RefPays');
-        $Agence  = $request->postData('RefAgency');
+        $Agency  = $request->postData('RefAgency');
         $Caisse  = $request->postData('RefCaisse');
-        $data = $this->getHomeData($Country, $Agence, $Caisse);
+        $data = $this->getHomeData($Country, $Agency, $Caisse);
 
 
         // Ajout des données à la vue
@@ -34,11 +34,11 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('ListeAgence', $data['ListeAgence']);
         $this->page->addVar('ListeCaisse', $data['ListeCaisse']);
         $this->page->addVar('Country', $data['Country']);
-        $this->page->addVar('Agence', $data['Agence']);
+        $this->page->addVar('Agency', $data['Agency']);
         $this->page->addVar('Caisse', $data['Caisse']);
     }
 
-    private function getHomeData($Country = NULL, $Agence = NULL, $Caisse = NULL)
+    private function getHomeData($Country = NULL, $Agency = NULL, $Caisse = NULL)
     {
 
         $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
@@ -48,8 +48,8 @@ class BielletageController extends \Library\BackController
 
         // Récupération des données pour l'affichage de l'accueil
         $checkOuverture = $this->managers->getManagerOf("Bielletage")->CheckOuverture();
-        $operations = $this->managers->getManagerOf('Bielletage')->GetCaisse(date('Y-m-d'), $Country, $Agence, $Caisse);
-        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'), $Country, $Agence, $Caisse);
+        $operations = $this->managers->getManagerOf('Bielletage')->GetCaisse(date('Y-m-d'), $Country, $Agency, $Caisse);
+        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'), $Country, $Agency, $Caisse);
 
         // Calcul des totaux
         $solde = 0;
@@ -98,7 +98,7 @@ class BielletageController extends \Library\BackController
             'ListeAgence' => $ListeAgence,
             'ListeCaisse' => $ListeCaisse,
             'Country' => $Country,
-            'Agence' => $Agence,
+            'Agency' => $Agency,
             'Caisse' => $Caisse
         );
     }

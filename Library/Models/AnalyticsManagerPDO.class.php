@@ -78,15 +78,18 @@ class AnalyticsManagerPDO extends AnalyticsManager
     }
     public function ChartVersment($mois, $pays = NULL, $agence = NULL, $caisse = NULL)
     {
-
-        $query = "SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1)";
+        $query = "SELECT SUM(MontantVersement) AS TotalVersement FROM TbleOperations 
+              INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse 
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  
+              WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL 
+              AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND TbleOperations.RefType=1";
         $param = array();
         if ($pays != NULL) {
             $query .= " AND TbleOperations.RefPays=:pays";
             $param[':pays'] = $pays;
         }
         if ($agence != NULL) {
-            $query .= " AND TblCaisse.RefAgency=:agence";
+            $query .= " AND TbleCaisse.RefAgency=:agence";
             $param[':agence'] = $agence;
         }
         if ($caisse != NULL) {
@@ -97,27 +100,30 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $param[':mois'] = $mois;
         $param[':year'] = date('Y');
 
-        $requeteSUm = $this->dao->prepare($query);
-        $requeteSUm->execute($param);
-        $requeteSUm->execute();
-        $data = $requeteSUm->fetch();
+        $requeteSum = $this->dao->prepare($query);
+        $requeteSum->execute($param);
+        $data = $requeteSum->fetch();
         if ($data == null) {
             return 0;
         }
-        return $data['TotalVersment'];
+        return $data['TotalVersement'];
     }
+
 
     public function ChartRetrait($mois, $pays = NULL, $agence = NULL, $caisse = NULL)
     {
-
-        $query = "SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=2)";
+        $query = "SELECT SUM(MontantVersement) AS TotalVersement FROM TbleOperations 
+              INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse 
+              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  
+              WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL 
+              AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND TbleOperations.RefType=2";
         $param = array();
         if ($pays != NULL) {
             $query .= " AND TbleOperations.RefPays=:pays";
             $param[':pays'] = $pays;
         }
         if ($agence != NULL) {
-            $query .= " AND TblCaisse.RefAgency=:agence";
+            $query .= " AND TbleCaisse.RefAgency=:agence";
             $param[':agence'] = $agence;
         }
         if ($caisse != NULL) {
@@ -128,14 +134,13 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $param[':mois'] = $mois;
         $param[':year'] = date('Y');
 
-        $requeteSUm = $this->dao->prepare($query);
-        $requeteSUm->execute($param);
-        $requeteSUm->execute();
-        $data = $requeteSUm->fetch();
+        $requeteSum = $this->dao->prepare($query);
+        $requeteSum->execute($param);
+        $data = $requeteSum->fetch();
         if ($data == null) {
             return 0;
         }
-        return $data['TotalVersment'];
+        return $data['TotalVersement'];
     }
     public function Chart($Country = NULL, $Agence = NULL, $Caisse = NULL)
     {

@@ -1,4 +1,4 @@
-<form method="POST" id="formulaire" action="/home">
+<form method="POST" id="formulaire">
     <div class="input-group">
         <div class="">
             <select class="form-control" name="RefPays" tabindex="1" id="RefPays">

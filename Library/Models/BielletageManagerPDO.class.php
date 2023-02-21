@@ -74,10 +74,10 @@ class BielletageManagerPDO extends BielletageManager
         // Old Query befpre VIEW ON SQL $requeteCaisse = $this->dao->prepare('SELECT * FROM TbleOperations LEFT JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit  INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse  WHERE TbleOperations.Reset_Id IS NULL AND TbleOperations.Insert_Time=:today AND TbleChmod.RefUsers=:RefUsers ORDER BY TbleOperations.RefOperations DESC ');
         $query = 'SELECT * FROM operations INNER JOIN TbleChmod ON TbleChmod.RefCaisse=operations.RefCaisse  WHERE operations.Reset_Id IS NULL ';
         $params = array();
-        if ($Date != NULL) {
-            $query .= ' AND operations.Insert_Time=:today';
-            $params[':today'] = $Date;
-        }
+
+        $query .= 'AND operations.Insert_Time=:today';
+        $params[':today'] = $Date;
+
         if ($Country != NULL) {
             $query .= " WHERE TbleAgency.RefPays=:RefPays";
             $params[':RefPays'] = $Country;

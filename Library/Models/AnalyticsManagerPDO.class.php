@@ -16,18 +16,30 @@ class AnalyticsManagerPDO extends AnalyticsManager
     }
     public function ListeAgence($Country = NULL, $Agence = NULL)
     {
-        $query = "SELECT * FROM TbleAgency";
-        if ($Country != NULL) {
-            $query .= " WHERE RefPays = '$Country'";
+        if ($Country == NULL && $Agence == NULL) {
+            // Si les deux paramètres sont NULL, on récupère toutes les données des agences
+            $query = "SELECT * FROM TbleAgency";
+            $requeteAgence = $this->dao->prepare($query);
+            $requeteAgence->execute();
+            $ListeAgence = $requeteAgence->fetchAll();
+            return $ListeAgence;
+        } else if ($Agence != NULL) {
+            // Si l'agence est précisée, on ne récupère que l'identifiant de cette agence
+            $query = "SELECT RefAgency FROM TbleAgency WHERE RefAgency = '$Agence'";
+            $requeteAgence = $this->dao->prepare($query);
+            $requeteAgence->execute();
+            $agence = $requeteAgence->fetchColumn();
+            return $agence;
+        } else {
+            // Si l'agence n'est pas précisée, on récupère toutes les données des agences correspondant éventuellement au pays précisé
+            $query = "SELECT * FROM TbleAgency WHERE RefPays = '$Country'";
+            $requeteAgence = $this->dao->prepare($query);
+            $requeteAgence->execute();
+            $ListeAgence = $requeteAgence->fetchAll();
+            return $ListeAgence;
         }
-        if ($Agence != NULL) {
-            $query .= " AND RefAgency = '$Agence'";
-        }
-        $requeteAgence = $this->dao->prepare($query);
-        $requeteAgence->execute();
-        $ListeAgence = $requeteAgence->fetchAll();
-        return $ListeAgence;
     }
+
 
     public function ChartAgenceVersement($agence)
     {

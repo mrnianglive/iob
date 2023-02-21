@@ -1,8 +1,8 @@
   <form method="POST" id="formulaire">
       <div class="input-group">
-          <div class="">Pays
+          <div class="">
               <select class="form-control" name="RefPays" tabindex="1" required="">
-                  <option value="0">Tous</option>
+                  <option value="0">Pays</option>
                   <?php foreach ($Pays as $key => $Pays) {   ?>
                       <option value="<?= $Pays['RefPays']; ?>">
                           <?= $Pays['nomPays']; ?></option>
@@ -10,8 +10,10 @@
               </select>
           </div>
           &nbsp;
-          <div class="">Agence
+          <div class="">
               <select class="form-control" name="RefAgency" tabindex="1" required="">
+                  <option value="0">Agence</option>
+
                   <?php foreach ($ListeAgence as $key => $Agence) {   ?>
                       <option value="<?= $Agence['RefAgency']; ?>">
                           <?= $Agence['NameAgency']; ?></option>
@@ -19,9 +21,9 @@
               </select>
           </div>
           &nbsp;
-          <div class="">Caisse
+          <div class="">
               <select class="form-control" name="RefCaisse" tabindex="1" required="">
-                  <option value="0">Tous</option>
+                  <option value="0">Caisse</option>
                   <?php foreach ($ListeCaisse as $key => $Caisse) {   ?>
                       <option value="<?= $Caisse['RefCaisse']; ?>">
                           <?= $Caisse['NameCaisse']; ?></option>
@@ -29,7 +31,7 @@
               </select>
           </div>
           &nbsp;
-          <div class=""></br>
+          <div class="">
               <button type="submit" class="btn btn-primary" data-toggle="tooltip" title="Cliquez ici pour lancer la recherche"><i class="fas fa-search"></i></button>
           </div>
       </div>

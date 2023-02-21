@@ -13,13 +13,13 @@
         &nbsp;
         <div class="">
             <select class="form-control" name="RefAgency" tabindex="1" id="RefAgency">
-                <option value="" data-desired-agency="desired_agency_value">Agence</option>
+                <option value="" data-desired-agency="<?= (isset($Agence)) ? $Agence : '' ?>">Agence</option>
             </select>
         </div>
         &nbsp;
         <div class="">
             <select class="form-control" name="RefCaisse" tabindex="1" id="RefCaisse">
-                <option value="" data-desired-caisse="desired_caisse_value">Caisse</option>
+                <option value="" data-desired-caisse="<?= (isset($Caisse)) ? $Caisse : '' ?>">Caisse</option>
             </select>
         </div>
         &nbsp;

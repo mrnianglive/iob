@@ -148,6 +148,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
         $ChartList['RJanvier'] = $this->ChartRetrait(1, $Country, $Agence, $Caisse);
         $ChartList['Fevrier'] = $this->ChartVersment(2, $Country, $Agence, $Caisse);
         $ChartList['RFevrier'] = $this->ChartRetrait(2, $Country, $Agence, $Caisse);
+        $ChartList['Mars'] = $this->ChartVersment(3, $Country, $Agence, $Caisse);
         $ChartList['RMars'] = $this->ChartRetrait(3, $Country, $Agence, $Caisse);
         $ChartList['Avril'] = $this->ChartVersment(4, $Country, $Agence, $Caisse);
         $ChartList['RAvril'] = $this->ChartRetrait(4, $Country, $Agence, $Caisse);

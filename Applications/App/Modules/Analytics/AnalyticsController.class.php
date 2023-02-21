@@ -51,6 +51,8 @@ class AnalyticsController extends \Library\BackController
         $this->page->addVar("titles", "Chart "); // Titre de la page
         $Charts = $this->managers->getManagerOf('Analytics')->Chart();
         $this->page->addVar('Chart', $Charts);
+        $ListePays = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("ListePays", $ListePays);
         $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
         foreach ($ListeAgence as $key => $agence) {
             $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency']);
@@ -70,6 +72,8 @@ class AnalyticsController extends \Library\BackController
         $this->page->addVar("titles", "Analyse des performances"); // Titre de la page
         $ListeBanque  = $this->managers->getManagerOf("Pannel")->ListeBanque();
         $this->page->addVar("ListeBanque", $ListeBanque);
+        $ListePays = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("ListePays", $ListePays);
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
         $Chmod  = $this->managers->getManagerOf("Bielletage")->CheckOuverture(); //Recuperation de la liste
         $this->page->addVar("CheckOuverture", $Chmod); // Creation de la variable, ajout d'une variable a la vue

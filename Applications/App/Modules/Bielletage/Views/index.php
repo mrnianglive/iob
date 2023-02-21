@@ -9,6 +9,7 @@
                   <?php }   ?>
               </select>
           </div>
+          &nbsp;
           <div class="">Agence
               <select class="form-control" name="RefAgency" tabindex="1" required="">
                   <?php foreach ($ListeAgence as $key => $Agence) {   ?>
@@ -17,6 +18,7 @@
                   <?php }   ?>
               </select>
           </div>
+          &nbsp;
           <div class="">Caisse
               <select class="form-control" name="RefCaisse" tabindex="1" required="">
                   <option value="0">Tous</option>
@@ -26,6 +28,7 @@
                   <?php }   ?>
               </select>
           </div>
+          &nbsp;
           <div class="">
               <button type="submit" class="btn btn-primary" data-toggle="tooltip"
                   title="Cliquez ici pour lancer la recherche"><i class="fas fa-search"></i></button>

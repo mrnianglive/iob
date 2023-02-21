@@ -8,18 +8,30 @@ class PannelManagerPDO extends PannelManager
 {
 
 
-    public function ListeAgence()
+    public function ListeAgence($Country = NULL)
     {
         if ($_SESSION['statut'] == 'superadmin') {
-            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays');
+            $query = 'SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays';
+            $params = array();
         } else {
-            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE TbleAgency.RefPays=:RefPays');
-            $requeteAgence->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+            $query = 'SELECT * FROM TbleAgency INNER JOIN tblpays ON tblpays.RefPays=TbleAgency.RefPays WHERE tblpays.RefPays=:RefPays';
+            $params = array(':RefPays' => $_SESSION['RefPays']);
+        }
+
+        if ($Country) {
+            $query .= ' AND tblpays.RefPays = :RefPays';
+            $params[':RefPays'] = $Country;
+        }
+
+        $requeteAgence = $this->dao->prepare($query);
+        foreach ($params as $key => $value) {
+            $requeteAgence->bindValue($key, $value, is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
         }
         $requeteAgence->execute();
         $ListeAgence = $requeteAgence->fetchAll();
         return $ListeAgence;
     }
+
 
     public function UserAgence()
     {

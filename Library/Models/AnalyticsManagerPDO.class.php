@@ -71,7 +71,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
     }
 
 
-    public function ChartAgenceVersement($agence, $Produit)
+    public function ChartAgenceVersement($agence, $Produit = NULL)
     {
 
         $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
@@ -96,7 +96,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
         return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
 
-    public function ChartAgenceRetrait($agence, $Produit)
+    public function ChartAgenceRetrait($agence, $Produit = NULL)
     {
         $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
               INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=2 AND Reset_Id IS NULL AND TbleAgency.RefAgency=:agency AND TbleRemittance.RefProduit=:produit');
@@ -118,7 +118,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
         }
         return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
-    public function ChartCaisseVersement($caisse, $Produit)
+    public function ChartCaisseVersement($caisse, $Produit = NULL)
     {
         $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
               INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=1 AND Reset_Id IS NULL AND TbleRemittance.RefCaisse=:RefCaisse AND TbleRemittance.RefProduit=:produit');
@@ -141,7 +141,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
         return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
 
-    public function ChartCaisseRetrait($caisse, $Produit)
+    public function ChartCaisseRetrait($caisse, $Produit = NULL)
     {
         $requeteSumRemittance = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
               INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE MONTH(Insert_time)=:mois AND  YEAR(Insert_time)=:year AND RefType=2 AND Reset_Id IS NULL AND TbleRemittance.RefCaisse=:RefCaisse AND TbleRemittance.RefProduit=:produit');

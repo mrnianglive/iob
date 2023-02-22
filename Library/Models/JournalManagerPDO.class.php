@@ -35,12 +35,34 @@ class JournalManagerPDO extends JournalManager
     public function
     UserCaisse($Date, $Pays = NULL, $Agence = NULL, $Caisse = NULL)
     {
-        $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
+        if ($Pays != NULL && $Agence == NULL && $Caisse == NULL) {
+            $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
+                TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
+                TbleChmod.RefUsers=:RefUsers AND TbleAgency.RefPays=:RefPays");
+            $requete->bindValue(':RefPays', $Pays, \PDO::PARAM_INT);
+        } elseif ($Pays != NULL && $Agence != NULL && $Caisse == NULL) {
+            $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
+                TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
+                TbleChmod.RefUsers=:RefUsers AND TbleAgency.RefPays=:RefPays AND TbleAgency.RefAgency=:RefAgency");
+            $requete->bindValue(':RefPays', $Pays, \PDO::PARAM_INT);
+            $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        } elseif ($Pays != NULL && $Agence != NULL && $Caisse != NULL) {
+            $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
+                TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
+                TbleChmod.RefUsers=:RefUsers AND TbleAgency.RefPays=:RefPays AND TbleAgency.RefAgency=:RefAgency AND TbleCaisse.RefCaisse=:RefCaisse");
+            $requete->bindValue(':RefPays', $Pays, \PDO::PARAM_INT);
+            $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+            $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        } else {
+            $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
                 TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
                 TbleChmod.RefUsers=:RefUsers");
+        }
+
         $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requete->execute();
         $listeCaisse = $requete->fetchAll();
+
         foreach ($listeCaisse as $key => $value) {
             $listeCaisse[$key]['SoldeInitial'] = $this->SoldeInitialCaisse($Date, $value['RefCaisse']);
             $listeCaisse[$key]['SoldeInitialGlobal'] = $this->SoldeInitialCaisseGlobal($Date, $value['RefCaisse']);

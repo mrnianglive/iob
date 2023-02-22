@@ -162,7 +162,11 @@
                                           </div>
                                           <div class="modal-body">
                                               <ul>
-                                                  <?php foreach ($value['SommeDepotProduit'] as $product) { ?>
+
+                                                  <?php
+                                                        var_dump($value['SommeDepotProduit']);
+
+                                                        foreach ($value['SommeDepotProduit'] as $product) { ?>
                                                   <li><?php echo $product['NameProduit']; ?> :
                                                       <?php echo $product['total']; ?></li>
                                                   <?php } ?>

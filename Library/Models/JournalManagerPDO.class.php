@@ -817,76 +817,104 @@ class JournalManagerPDO extends JournalManager
 
     public function SomnmeVersementCaissePerfomance($debut, $fin, $Caisse)
     {
+        $requeteRemittance = $this->dao->prepare("SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse WHERE RefType=1 AND Reset_Id IS NULL AND TbleRemittance.RefCaisse=:RefCaisse AND date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin'");
+        $requeteRemittance->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requeteRemittance->execute();
+        $dataRemittance = $requeteRemittance->fetch();
         $requeteSUm = $this->dao->prepare("SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL  AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleOperations.RefCaisse=:RefCaisse AND (TbleOperations.RefType=1)");
         $requeteSUm->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
-        if (empty($data['TotalVersment'])) {
+        if (empty($data['TotalVersment']) && empty($dataRemittance['SoldeRemittance'])) {
             return 0;
         }
-        return $data['TotalVersment'];
+        return $data['TotalVersment'] + $dataRemittance['SoldeRemittance'];
     }
     public function SommeRetraitCaissePerformance($debut, $fin, $Caisse)
     {
+        $requeteRemittance = $this->dao->prepare("SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse WHERE RefType=2 AND Reset_Id IS NULL AND TbleRemittance.RefCaisse=:RefCaisse AND date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin'");
+        $requeteRemittance->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requeteRemittance->execute();
+        $dataRemittance = $requeteRemittance->fetch();
+
         $requeteSUm = $this->dao->prepare("SELECT SUM(MontantVersement) AS TotalRetrait FROM TbleOperations  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin' AND TbleOperations.RefCaisse=:RefCaisse AND (TbleOperations.RefType=2)  ");
         $requeteSUm->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
-        if (empty($data['TotalRetrait'])) {
+        if (empty($data['TotalRetrait']) && empty($dataRemittance['SoldeRemittance'])) {
             return 0;
         }
-        return $data['TotalRetrait'];
+        return $data['TotalRetrait'] + $dataRemittance['SoldeRemittance'];
     }
 
     public function NbreOperationAgencePerformance($Agence, $debut, $fin)
     {
+
+        $requeteRemittance = $this->dao->prepare("SELECT COUNT(RefRemittance) AS Nbre FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse WHERE TbleRemittance.Reset_Id IS NULL AND date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin' AND TbleCaisse.RefAgency=:agence");
+        $requeteRemittance->bindValue(':agence', $Agence, \PDO::PARAM_INT);
+        $requeteRemittance->execute();
+        $dataRemittance = $requeteRemittance->fetch();
+
         $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE (TbleOperations.Reftype=1 OR TbleOperations.Reftype=2 )  AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin' AND TbleCaisse.RefAgency=:agence");
         $requete->bindValue(':agence', $Agence, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
-        if (empty($result['Nbre'])) {
+        if (empty($result['Nbre']) && empty($dataRemittance['Nbre'])) {
             return 0;
         }
-        return $result['Nbre'];
+        return $result['Nbre'] + $dataRemittance['Nbre'];
     }
 
     public function NbreOperationCaissierPerformance($debut, $fin, $Caisse)
     {
+        $requeteRemittance = $this->dao->prepare("SELECT COUNT(RefRemittance) AS Nbre FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse WHERE TbleRemittance.Reset_Id IS NULL AND date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin' AND TbleRemittance.RefCaisse=:RefCaisse");
+        $requeteRemittance->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requeteRemittance->execute();
+        $dataRemittance = $requeteRemittance->fetch();
+
         $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse   WHERE (TbleOperations.Reftype=1 OR TbleOperations.Reftype=2 )  AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleOperations.RefCaisse=:RefCaisse ");
         $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
-        if (empty($result['Nbre'])) {
+        if (empty($result['Nbre']) && empty($dataRemittance['Nbre'])) {
             return 0;
         }
-        return $result['Nbre'];
+        return $result['Nbre'] + $dataRemittance['Nbre'];
     }
 
 
 
     public function NbreDepotCaissierPerformance($debut, $fin, $Caisse)
     {
+        $requeteRemittance = $this->dao->prepare("SELECT COUNT(RefRemittance) AS Nbre FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse WHERE TbleRemittance.Reset_Id IS NULL AND RefType=1 AND date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin' AND TbleRemittance.RefCaisse=:RefCaisse");
+        $requeteRemittance->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requeteRemittance->execute();
+        $dataRemittance = $requeteRemittance->fetch();
         $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.RefType=1 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleOperations.RefCaisse=:RefCaisse ");
         $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
-        if (empty($result['Nbre'])) {
+        if (empty($result['Nbre']) && empty($dataRemittance['Nbre'])) {
             return 0;
         }
-        return $result['Nbre'];
+        return $result['Nbre'] + $dataRemittance['Nbre'];
     }
 
 
     public function NbreRetraitCaissierPerformance($debut, $fin, $Caisse)
     {
+        $requeteRemittance = $this->dao->prepare("SELECT COUNT(RefRemittance) AS Nbre FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse WHERE TbleRemittance.Reset_Id IS NULL AND RefType=2 AND date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin' AND TbleRemittance.RefCaisse=:RefCaisse");
+        $requeteRemittance->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requeteRemittance->execute();
+        $dataRemittance = $requeteRemittance->fetch();
         $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse  WHERE TbleOperations.RefType=2 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleOperations.RefCaisse=:RefCaisse ");
         $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
-        if (empty($result['Nbre'])) {
+        if (empty($result['Nbre']) && empty($dataRemittance['Nbre'])) {
             return 0;
         }
-        return $result['Nbre'];
+        return $result['Nbre'] + $dataRemittance['Nbre'];
     }
 
     public function DeleteSolde($RefSolde)

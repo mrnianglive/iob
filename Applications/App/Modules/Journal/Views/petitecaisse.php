@@ -163,7 +163,7 @@
                                           <div class="modal-body">
                                               <ul>
 
-                                                  <?php foreach ($value['SommeDepotProduit']['RefProduit'] as $produit) { ?>
+                                                  <?php foreach ($value['SommeDepotProduit'] as $produit) { ?>
                                                   <li><?= $produit['NameProduit']; ?> :
                                                       <?= number_format($produit['totals'], 0, '.', '.'); ?>
                                                   </li>

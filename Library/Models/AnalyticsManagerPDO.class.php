@@ -385,15 +385,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
         return $result['Nbre'];
     }
 
-    public function AddUv()
-    {
-        $requete = $this->dao->prepare("INSERT INTO TbleUv(RefAgency,RefProduit,MontantDepot,RefType) VALUES(:RefAgency,:RefProduit,:MontantDepot,:RefType)");
-        $requete->bindValue(':RefAgency', $_POST['RefAgency'], \PDO::PARAM_INT);
-        $requete->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
-        $requete->bindValue(':MontantDepot', $_POST['MontantDepot'], \PDO::PARAM_INT);
-        $requete->bindValue(':RefType', $_POST['RefType'], \PDO::PARAM_INT);
-        $requete->execute();
-    }
+
 
     public function ListeDepot()
     {
@@ -403,49 +395,7 @@ class AnalyticsManagerPDO extends AnalyticsManager
         return $ListeDepot;
     }
 
-    public function UvDepot($Agence, $produit, $date)
-    {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS MontantDepot FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=1 AND DATE(TbleUv.DateDepot)=:jour');
-        $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-        $requeteSUm->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
-        $requeteSUm->bindValue(':jour', $date, \PDO::PARAM_STR);
-        $requeteSUm->execute();
-        $data = $requeteSUm->fetch();
-        if ($data == null) {
-            return 0;
-        }
-        return $data['MontantDepot'];
-    }
 
-    public function UvRetrait($Agence, $produit, $date)
-    {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS Montant FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=2 AND DATE(TbleUv.DateDepot)=:jour');
-        $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-        $requeteSUm->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
-        $requeteSUm->bindValue(':jour', $date, \PDO::PARAM_STR);
-        $requeteSUm->execute();
-        $data = $requeteSUm->fetch();
-        if ($data == null) {
-            return 0;
-        } else {
-            return $data['Montant'];
-        }
-    }
-
-    public function YesterdayReserveProduit($Agence, $date, $produit)
-    {
-        $requeteSoldeInittial = $this->dao->prepare("SELECT SoldeUV FROM TbleSoldeUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND DateSoldeUV=(SELECT MAX(DateSoldeUV) FROM TbleSoldeUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND DateSoldeUV <:today)");
-        $requeteSoldeInittial->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-        $requeteSoldeInittial->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
-        $requeteSoldeInittial->bindValue(':today', $date, \PDO::PARAM_STR);
-        $requeteSoldeInittial->execute();
-        $result = $requeteSoldeInittial->fetch();
-        if (empty($result)) {
-            return 0;
-        } else {
-            return $result['SoldeUV'];
-        }
-    }
     public function SoldeRemittanceVersementAgenceProduit($Date, $Agence, $produit)
     {
         if ($produit != 1) {

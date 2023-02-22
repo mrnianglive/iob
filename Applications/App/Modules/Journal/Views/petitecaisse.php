@@ -117,15 +117,15 @@
                               <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?></td>
                               <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
                               <td>
-                                  <button type="button" class="btn btn-info" data-toggle="modal"
-                                      data-target="#depotModal<?= $value['RefAgency']; ?>">
+                                  <button type="button" class="btn btn-light" data-toggle="modal"
+                                      data-target="#depotModal-<?= $value['RefAgency']; ?>">
                                       <?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?>
                                   </button>
 
                               </td>
                               <td>
-                                  <button type="button" class="btn btn-info" data-toggle="modal"
-                                      data-target="#retraitModal<?= $value['RefAgency']; ?>">
+                                  <button type="button" class="btn btn-light" data-toggle="modal"
+                                      data-target="#retraitModal-<?= $value['RefAgency']; ?>">
                                       <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
                                   </button>
                               </td>
@@ -151,42 +151,51 @@
                               <?php } ?>
                           </tr>
                           <!-- Modal Depot -->
-                          <div class="modal fade" id="#depotModal<?= $value['RefAgency']; ?>" tabindex="-1"
-                              role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal fade" id="#depotModal-<?= $value['RefAgency']; ?>" tabindex="-1"
+                              role="dialog" aria-labelledby="exampleModalLabel1">
                               <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                       <div class="modal-header">
-                                          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                              <span aria-hidden="true">&times;</span>
-                                          </button>
+                                          <button type="button" class="close" data-dismiss="modal"
+                                              aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                       </div>
                                       <div class="modal-body">
-                                          ...
+
+                                          <div class="form-group">
+                                              <label for="recipient-name" class="control-label">Nom</label>
+                                              <input type="text" class="form-control" name="nomPays"
+                                                  id="recipient-name1" required>
+                                          </div>
                                       </div>
                                       <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary"
+                                          <button type="button" class="btn btn-default"
                                               data-dismiss="modal">Fermer</button>
                                       </div>
                                   </div>
                               </div>
                           </div>
-                          <!--Modal Retrait-->
-                          <div class="modal fade" id="#retraitModal<?= $value['RefAgency']; ?>" tabindex="-1"
-                              role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                          <!-- Modal Retrair -->
+                          <div class="modal fade" id="#retraitModal-<?= $value['RefAgency']; ?>" tabindex="-1"
+                              role="dialog" aria-labelledby="exampleModalLabel1">
                               <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                       <div class="modal-header">
-                                          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                              <span aria-hidden="true">&times;</span>
-                                          </button>
+                                          <button type="button" class="close" data-dismiss="modal"
+                                              aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                       </div>
                                       <div class="modal-body">
-                                          ...
+
+                                          <div class="form-group">
+                                              <label for="recipient-name" class="control-label">Nom</label>
+                                              <input type="text" class="form-control" name="nomPays"
+                                                  id="recipient-name1" required>
+                                          </div>
+
+
                                       </div>
                                       <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary"
+                                          <button type="button" class="btn btn-default"
                                               data-dismiss="modal">Fermer</button>
                                       </div>
                                   </div>

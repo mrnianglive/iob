@@ -151,58 +151,30 @@
                                   <?php } ?>
                               </td>
                               <?php } ?>
+
+                              <div class="modal fade" id="depotModal-<?= $value['RefAgency']; ?>" tabindex="-1"
+                                  role="dialog" aria-labelledby="AddCaisse">
+                                  <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                          <div class="modal-header">Chmod Caisse
+                                              <button type="button" class="close" data-dismiss="modal"
+                                                  aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                          </div>
+                                          <form role="form" method="post" action="">
+                                              <div class="modal-body">
+
+                                              </div>
+                                              <div class="modal-footer">
+                                                  <button type="button" class="btn btn-default"
+                                                      data-dismiss="modal">Fermer</button>
+                                                  <button type="submit" class="btn btn-primary">Valider</button>
+                                              </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                              </div>
                           </tr>
-                          <!-- Modal Depot -->
-                          <div class="modal fade" id="#depotModal-<?= $value['RefAgency']; ?>" tabindex="-1"
-                              role="dialog" aria-labelledby="exampleModalLabel1">
-                              <div class="modal-dialog" role="document">
-                                  <div class="modal-content">
-                                      <div class="modal-header">
-                                          <button type="button" class="close" data-dismiss="modal"
-                                              aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                      </div>
-                                      <div class="modal-body">
 
-                                          <div class="form-group">
-                                              <label for="recipient-name" class="control-label">Nom</label>
-                                              <input type="text" class="form-control" name="nomPays"
-                                                  id="recipient-name1" required>
-                                          </div>
-                                      </div>
-                                      <div class="modal-footer">
-                                          <button type="button" class="btn btn-default"
-                                              data-dismiss="modal">Fermer</button>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-
-                          <!-- Modal Retrair -->
-                          <div class="modal fade" id="#retraitModal-<?= $value['RefAgency']; ?>" tabindex="-1"
-                              role="dialog" aria-labelledby="exampleModalLabel1">
-                              <div class="modal-dialog" role="document">
-                                  <div class="modal-content">
-                                      <div class="modal-header">
-                                          <button type="button" class="close" data-dismiss="modal"
-                                              aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                      </div>
-                                      <div class="modal-body">
-
-                                          <div class="form-group">
-                                              <label for="recipient-name" class="control-label">Nom</label>
-                                              <input type="text" class="form-control" name="nomPays"
-                                                  id="recipient-name1" required>
-                                          </div>
-
-
-                                      </div>
-                                      <div class="modal-footer">
-                                          <button type="button" class="btn btn-default"
-                                              data-dismiss="modal">Fermer</button>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
                           <?php } ?>
                       </tbody>
                   </table>

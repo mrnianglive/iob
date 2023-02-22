@@ -979,7 +979,7 @@ class JournalManagerPDO extends JournalManager
         foreach ($resultProduit as $produit) {
             $total = 0;
 
-            if ($produit['StatutProduit'] == 1) {
+            if ($produit['StatutProduit'] == "banque") {
                 $query = $this->dao->prepare("SELECT SUM(TbleOperations.MontantVersement) AS Somme FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.RefType=1 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND TbleOperations.RefProduit=:RefProduit AND date(TbleOperations.Approve2_Time)=:Date");
             } else {
                 $query = $this->dao->prepare("SELECT SUM(TbleRemittance.MontantTransaction) AS Somme FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleRemittance.RefType=1 AND TbleRemittance.Reset_Id IS NULL AND TbleRemittance.RefProduit=:RefProduit AND date(TbleRemittance.Insert_time)=:Date");

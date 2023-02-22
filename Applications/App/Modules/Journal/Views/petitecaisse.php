@@ -162,13 +162,14 @@
                                           </div>
                                           <div class="modal-body">
                                               <ul>
-                                                  <?php foreach ($value['SommeSortieProduit'] as $product => $total) { ?>
+                                                  <?php foreach ($value['SommeDepotProduit'] as $product => $total) { ?>
                                                   <li><?php echo $product; ?> : <?php echo $total; ?></li>
                                                   <?php } ?>
                                               </ul>
                                           </div>
                                           <div class="modal-footer">
-                                              <button type="submit" class="btn btn-primary">Valider</button>
+                                              <button type="button" class="btn btn-default"
+                                                  data-dismiss="modal">Fermer</button>
                                           </div>
                                       </div>
                                   </div>
@@ -184,9 +185,8 @@
                                           </div>
                                           <div class="modal-body">
                                               <ul>
-                                                  <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                                  <li><?= number_format($afficher['TotalRetrait'], 0, '.', '.'); ?>
-                                                  </li>
+                                                  <?php foreach ($value['SommeSortieProduit'] as $product => $total) { ?>
+                                                  <li><?php echo $product; ?> : <?php echo $total; ?></li>
                                                   <?php } ?>
                                               </ul>
 

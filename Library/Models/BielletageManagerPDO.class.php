@@ -416,10 +416,11 @@ class BielletageManagerPDO extends BielletageManager
         $query->bindValue(':RefCaisse', $caisse, \PDO::PARAM_INT);
         $query->execute();
         $result = $query->fetch();
-        $pays = $this->dao->prepare('SELECT * FROM TblePays WHERE RefPays=:RefPays');
+
+        $pays = $this->dao->prepare('SELECT * FROM tblpays WHERE RefPays=:RefPays');
         $pays->bindValue(':RefPays', $result['RefPays'], \PDO::PARAM_INT);
         $pays->execute();
-        $pays = $pays->fetch();
+        $ResultPays = $pays->fetch();
 
         $from = "no-reply@malicreances-sa.com";
         $subject = "SORTIE DE FONDS ";
@@ -432,7 +433,7 @@ class BielletageManagerPDO extends BielletageManager
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
         //Get Agency country
 
-        $to = $pays['EmailAlert'];
+        $to = $ResultPays['EmailAlert'];
         // Create email headers
         $headers .= 'From: ' . $from . "\r\n" .
             'Reply-To: ' . $from . "\r\n" .

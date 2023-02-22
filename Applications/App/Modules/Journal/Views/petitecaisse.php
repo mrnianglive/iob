@@ -163,17 +163,12 @@
                                           <div class="modal-body">
                                               <ul>
 
-                                                  <?php
-                                                        var_dump($value['SommeDepotProduit']);
-
-                                                        foreach ($value['SommeDepotProduit']['RefProduit'] as $product) { ?>
-                                                  <li><?php echo $value['SommeDepotProduit'][$product['NameProduit']]; ?>
-                                                      :
-                                                      <?php echo $product['total']; ?></li>
+                                                  <?php foreach ($value['SommeDepotProduit']['RefProduit'] as $produit) { ?>
+                                                  <li><?= $produit['NameProduit']; ?> :
+                                                      <?= number_format($produit['totals'], 0, '.', '.'); ?>
+                                                  </li>
                                                   <?php } ?>
                                               </ul>
-
-
                                           </div>
                                           <div class="modal-footer">
                                               <button type="submit" class="btn btn-primary">Valider</button>

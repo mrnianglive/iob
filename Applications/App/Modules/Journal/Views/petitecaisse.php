@@ -162,11 +162,8 @@
                                           </div>
                                           <div class="modal-body">
                                               <ul>
-
-                                                  <?php foreach ($value['SommeDepotProduit'] as $key => $produit) { ?>
-                                                  <li>
-                                                      <?= $produit['NameProduit'][0]; ?> :
-                                                  </li>
+                                                  <?php foreach ($value['SommeSortieProduit'] as $product => $total) { ?>
+                                                  <li><?php echo $product; ?> : <?php echo $total; ?></li>
                                                   <?php } ?>
                                               </ul>
                                           </div>

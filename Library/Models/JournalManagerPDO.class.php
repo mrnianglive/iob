@@ -32,55 +32,36 @@ class JournalManagerPDO extends JournalManager
         }
         return $data;
     }
-    public function UserCaisse($Date, $Pays = NULL, $Agence = NULL, $Caisse = NULL)
+    public function
+    UserCaisse($Date, $Pays = NULL, $Agence = NULL, $Caisse = NULL)
     {
-        // Define the base query for all cases
-        $query = "SELECT * FROM TbleCaisse 
-              INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency 
-              LEFT JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse";
-
-        // Define an array to hold the values to bind to the query
-        $params = array();
-
-        // Add conditions to the query and bindings based on the input parameters
-        if ($Pays != null && !$Pays != 0) {
-            $query .= " WHERE TbleAgency.RefPays=:RefPays";
-            $params[':RefPays'] = $Pays;
-        }
-        if ($Agence != null && !$Agence != 0) {
-            $query .= " AND TbleAgency.RefAgency=:RefAgency";
-            $params[':RefAgency'] = $Agence;
-        }
-        if ($Caisse != null && !$Caisse != 0) {
-            $query .= " AND TbleCaisse.RefCaisse=:RefCaisse";
-            $params[':RefCaisse'] = $Caisse;
-        }
-
-        if ($Pays == NULL && $Agence == NULL && $Caisse == NULL) {
-            $query .= ' AND TbleChmod.RefUsers=:RefUsers';
-            $params[':RefUsers'] = $_SESSION['RefUsers'];
-        }
-
-        // Prepare and execute the query
-        $requete = $this->dao->prepare($query);
-        $requete->execute($params);
-
+        $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
+                TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
+                TbleChmod.RefUsers=:RefUsers");
+        $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->execute();
         $listeCaisse = $requete->fetchAll();
         foreach ($listeCaisse as $key => $value) {
-            $listeCaisse[$key]['SoldeInitial'] =  $this->SoldeInitialCaisse($Date, $value['RefCaisse']);
-            $listeCaisse[$key]['SoldeInitialGlobal'] =  $this->SoldeInitialCaisseGlobal($Date, $value['RefCaisse']);
-            $listeCaisse[$key]['TotalAppro'] =  $this->TotalApproCaisse($Date, $value['RefCaisse']);
-            $listeCaisse[$key]['TotalVersement'] =  $this->SomnmeVersementCaisse($Date, $value['RefCaisse']);
-            $listeCaisse[$key]['TotalRetrait'] =  $this->SommeRetraitCaisse($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['SoldeInitial'] = $this->SoldeInitialCaisse($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['SoldeInitialGlobal'] = $this->SoldeInitialCaisseGlobal($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['TotalAppro'] = $this->TotalApproCaisse($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['TotalVersement'] = $this->SomnmeVersementCaisse($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['TotalRetrait'] = $this->SommeRetraitCaisse($Date, $value['RefCaisse']);
             $listeCaisse[$key]['TotalSortieCaisse'] = $this->TotalSortieCaisse($Date, $value['RefCaisse']);
             $listeCaisse[$key]['SommeVersementRemittance'] = $this->SoldeRemittanceVersement($Date, $value['RefCaisse']);
             $listeCaisse[$key]['SommeRetraitRemittance'] = $this->SoldeRemittanceRetrait($Date, $value['RefCaisse']);
-            $listeCaisse[$key]['SoldeRemittance'] = $listeCaisse[$key]['SommeVersementRemittance'] - $listeCaisse[$key]['SommeRetraitRemittance'];
-            $listeCaisse[$key]['SoldeDisponible'] =   $listeCaisse[$key]['SoldeInitialGlobal']  + $listeCaisse[$key]['TotalVersement'] - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'];
-            $listeCaisse[$key]['SoldeDisponibleGlobal'] =   $listeCaisse[$key]['SoldeInitialGlobal']  + $listeCaisse[$key]['TotalVersement'] - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'] + $listeCaisse[$key]['SoldeRemittance'];
+            $listeCaisse[$key]['SoldeRemittance'] = $listeCaisse[$key]['SommeVersementRemittance'] -
+                $listeCaisse[$key]['SommeRetraitRemittance'];
+            $listeCaisse[$key]['SoldeDisponible'] = $listeCaisse[$key]['SoldeInitialGlobal'] + $listeCaisse[$key]['TotalVersement']
+                - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'];
+            $listeCaisse[$key]['SoldeDisponibleGlobal'] = $listeCaisse[$key]['SoldeInitialGlobal'] +
+                $listeCaisse[$key]['TotalVersement'] - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'] +
+                $listeCaisse[$key]['SoldeRemittance'];
         }
         return $listeCaisse;
     }
+
+
     public function DeleteOperations($id)
     {
         $today = date("Y-m-d H:i:s");

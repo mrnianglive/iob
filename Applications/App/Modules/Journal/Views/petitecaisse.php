@@ -165,7 +165,7 @@
 
                                                   <?php foreach ($value['SommeDepotProduit'] as $key => $produit) { ?>
                                                   <li>
-                                                      <?= number_format($produit[$key]['Total'], 0, '.', '.'); ?>
+                                                      <?= $produit['NameProduit'][0]; ?> :
                                                   </li>
                                                   <?php } ?>
                                               </ul>

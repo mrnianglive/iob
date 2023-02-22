@@ -141,6 +141,7 @@ class JournalController extends \Library\BackController
             $Agence[$key]['SommeSortieProduit'] = $this->managers->getManagerOf("Journal")->SommeRetraitProduitAgence($date, $value['RefAgency']);
         }
 
+        var_dump($Agence);
         $this->page->addVar('Agence', $Agence);
     }
 

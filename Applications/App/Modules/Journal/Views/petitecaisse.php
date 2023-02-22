@@ -117,15 +117,17 @@
                               <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?></td>
                               <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
                               <td>
-                                  <button type="button" class="btn btn-light" data-toggle="modal"
-                                      data-target="#depotModal-<?= $value['RefAgency']; ?>">
+                                  <button type="button" class="btn btn-light " data-toggle="modal"
+                                      data-target="#depotModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
+                                      title="Volume Depot Produit ">
                                       <?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?>
                                   </button>
 
                               </td>
                               <td>
-                                  <button type="button" class="btn btn-light" data-toggle="modal"
-                                      data-target="#retraitModal-<?= $value['RefAgency']; ?>">
+                                  <button type="button" class="btn btn-light " data-toggle="modal"
+                                      data-target="#retraitModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
+                                      title="Volume Retrait Produit">
                                       <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
                                   </button>
                               </td>

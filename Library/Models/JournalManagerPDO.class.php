@@ -950,8 +950,6 @@ class JournalManagerPDO extends JournalManager
     }
 
 
-
-
     public function ArreterSingleCaisse($Caisse, $Date)
     {
         $SoldeRemittanceVersement = $this->SoldeRemittanceVersement($Date, $Caisse);
@@ -966,5 +964,66 @@ class JournalManagerPDO extends JournalManager
         $SoldeRemittance = $SoldeRemittanceVersement - $SoldeRemittanceRetrait;
         $SoldeDisponible =   $SoldeInitialGlobal + $TotalVersement - $TotalRetrait - $TotalSortieCaisse + $SoldeRemittance;
         return $SoldeDisponible;
+    }
+
+
+    public function SommeDepotProduitAgence($date, $Agence)
+    {
+        $queryProduit = $this->dao->prepare("SELECT TbleAgency.RefAgency, TbleChmodProduit.RefProduit, TbleProduit.StatutProduit, TbleProduit.NameProduit FROM TbleChmodProduit INNER JOIN TbleProduit ON TbleProduit.RefProduit=TbleChmodProduit.RefProduit INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse = TbleChmodProduit.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency = TbleCaisse.RefAgency WHERE TbleAgency.RefAgency=:RefAgency GROUP BY TbleAgency.RefAgency,TbleChmodProduit.RefProduit");
+        $queryProduit->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $queryProduit->execute();
+        $resultProduit = $queryProduit->fetchAll();
+
+        $totals = array();
+
+        foreach ($resultProduit as $produit) {
+            $total = 0;
+
+            if ($produit['StatutProduit'] == 1) {
+                $query = $this->dao->prepare("SELECT SUM(TbleOperations.MontantVersement) AS Somme FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.RefType=1 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND TbleOperations.RefProduit=:RefProduit AND date(TbleOperations.Approve2_Time)=:Date");
+            } else {
+                $query = $this->dao->prepare("SELECT SUM(TbleRemittance.MontantTransaction) AS Somme FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleRemittance.RefType=1 AND TbleRemittance.Reset_Id IS NULL AND TbleRemittance.RefProduit=:RefProduit AND date(TbleRemittance.Insert_time)=:Date");
+            }
+
+            $query->bindValue(':RefProduit', $produit['RefProduit'], \PDO::PARAM_INT);
+            $query->bindValue(':Date', $date, \PDO::PARAM_STR);
+            $query->execute();
+            $result = $query->fetch();
+            $total = $result['Somme'];
+
+            $totals[$produit['NameProduit']] = $total;
+        }
+
+        return $totals;
+    }
+
+    public function SommeRetraitProduitAgence($date, $Agence)
+    {
+        $queryProduit = $this->dao->prepare("SELECT TbleAgency.RefAgency, TbleChmodProduit.RefProduit, TbleProduit.StatutProduit, TbleProduit.NameProduit FROM TbleChmodProduit INNER JOIN TbleProduit ON TbleProduit.RefProduit=TbleChmodProduit.RefProduit INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse = TbleChmodProduit.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency = TbleCaisse.RefAgency WHERE TbleAgency.RefAgency=:RefAgency GROUP BY TbleAgency.RefAgency,TbleChmodProduit.RefProduit");
+        $queryProduit->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $queryProduit->execute();
+        $resultProduit = $queryProduit->fetchAll();
+
+        $totals = array();
+
+        foreach ($resultProduit as $produit) {
+            $total = 0;
+
+            if ($produit['StatutProduit'] == 1) {
+                $query = $this->dao->prepare("SELECT SUM(TbleOperations.MontantVersement) AS Somme FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.RefType=2 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND TbleOperations.RefProduit=:RefProduit AND date(TbleOperations.Approve2_Time)=:Date");
+            } else {
+                $query = $this->dao->prepare("SELECT SUM(TbleRemittance.MontantTransaction) AS Somme FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleRemittance.RefType=2 AND TbleRemittance.Reset_Id IS NULL AND TbleRemittance.RefProduit=:RefProduit AND date(TbleRemittance.Insert_time)=:Date");
+            }
+
+            $query->bindValue(':RefProduit', $produit['RefProduit'], \PDO::PARAM_INT);
+            $query->bindValue(':Date', $date, \PDO::PARAM_STR);
+            $query->execute();
+            $result = $query->fetch();
+            $total = $result['Somme'];
+
+            $totals[$produit['NameProduit']] = $total;
+        }
+
+        return $totals;
     }
 }

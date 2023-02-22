@@ -131,13 +131,14 @@ class JournalController extends \Library\BackController
             $Agence[$key]['SommeDepotWithRemittance'] = $this->managers->getManagerOf("Journal")->SommeDepotAgence($date, $value['RefAgency']) + $Agence[$key]['SommeDepotRemittance'];
             $Agence[$key]['SommeSortieWithRemittance'] = $this->managers->getManagerOf("Journal")->SommeRetraitAgence($date, $value['RefAgency']) + $Agence[$key]['SommeRetraitRemittance'];
 
-
-
             $Agence[$key]['TotalAppoAgenceSansApproInitial'] = $this->managers->getManagerOf("Journal")->TotalApproAgenceSansApproInitial($date, $value['RefAgency']);
             $Agence[$key]['TotalSortieAgence'] = $this->managers->getManagerOf("Journal")->TotalSortieAgence($date, $value['RefAgency']);
             $Agence[$key]['ReserveActuelle'] = $Agence[$key]['YesterdayReserve'] + $Agence[$key]['SommeDepot'] - $Agence[$key]['SommeSortie'] +
                 $Agence[$key]['TotalAppoAgenceSansApproInitial'] - $Agence[$key]['TotalSortieAgence'] + $Agence[$key]['SoldeRemittanceAgence'];
             $Agence[$key]['DayReserve'] =  $Agence[$key]['YesterdayReserve'] - $this->managers->getManagerOf("Journal")->TotalApproAgenceAvecApproInitial($date, $value['RefAgency']);
+
+            $Agence[$key]['SommeDepotProduit'] = $this->managers->getManagerOf("Journal")->SommeDepotProduitAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeSortieProduit'] = $this->managers->getManagerOf("Journal")->SommeRetraitProduitAgence($date, $value['RefAgency']);
         }
 
         $this->page->addVar('Agence', $Agence);

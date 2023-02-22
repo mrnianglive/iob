@@ -117,7 +117,7 @@
                               <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?></td>
                               <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
                               <td>
-                                  <button type="button" class="btn btn-light " data-toggle="modal"
+                                  <button type="button" class="btn btn-primary" data-toggle="modal"
                                       data-target="#depotModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
                                       title="Volume Depot Produit ">
                                       <?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?>
@@ -125,7 +125,7 @@
 
                               </td>
                               <td>
-                                  <button type="button" class="btn btn-light " data-toggle="modal"
+                                  <button type="button" class="btn btn-primary" data-toggle="modal"
                                       data-target="#retraitModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
                                       title="Volume Retrait Produit">
                                       <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
@@ -162,8 +162,8 @@
                                           </div>
                                           <div class="modal-body">
                                               <ul>
-                                                  <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                                  <li><?= number_format($afficher['TotalVersement'], 0, '.', '.'); ?>
+                                                  <?php foreach ($Agence['SommeDepotProduit'] as $somme) { ?>
+                                                  <li><?= number_format($somme['SommeDepotProduit'], 0, '.', '.'); ?>
                                                   </li>
                                                   <?php } ?>
                                               </ul>

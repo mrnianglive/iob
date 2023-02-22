@@ -35,7 +35,6 @@
 	<route url="/Users/deleteUsers/([0-9]+)" vars="id" action="deleteusers" module="Users"/>
 	<route url="/Users/UpdateUsers/([0-9]+)" vars="id" action="updateusers" module="Users"/>
 	<route url="/Analytics/index" module="Analytics" action="index"/>
-	<route url="/Analytics/uv" module="Analytics" action="uv"/>
 	<route url="/Journal/petite_caisse" module="Journal" action="petitecaisse"/>
 	<route url="/Analytics/chart" module="Analytics" action="chart"/>
 	<route url="/Analytics/performance" module="Analytics" action="performance"/>
@@ -54,15 +53,5 @@
 	<route url="/connexion/doubleauth" module="Connexion" action="doubleauth"/>
 	<route url="/Users/doubleauth/reset/([0-9]+)" module="Users" vars="id" action="resetauth"/>
 
-	<route url="/payements/index" module="Payements" action="index"/>
-
-	<route url="/payements/zone" module="Payements" action="zone"/>
-	<route url="/payements/zone/delete/([0-9]+)" module="Payements" vars="id" action="deleteZone"/>
-
-	<route url="/payements/beneficiaire" module="Payements" action="beneficiaire"/>
-	<route url="/payements/beneficiaire/delete/([0-9]+)" module="Payements" vars="id" action="deleteBeneficiare"/>
-
-	<route url="/payements/distributeur" module="Payements" action="distributeur"/>
-	<route url="/payements/distributeur/delete/([0-9]+)" module="Payements" vars="id" action="deleteDistributeur"/>
 
 </routes>

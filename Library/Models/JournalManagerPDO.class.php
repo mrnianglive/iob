@@ -991,7 +991,11 @@ class JournalManagerPDO extends JournalManager
             $result = $query->fetch();
             $total = $result['Somme'];
 
-            $totals[$produit['NameProduit']] = $total;
+            $totals = [
+                'RefProduit' => $produit['RefProduit'],
+                'NameProduit' => $produit['NameProduit'],
+                'Solde' => $total,
+            ];
         }
 
         return $totals;

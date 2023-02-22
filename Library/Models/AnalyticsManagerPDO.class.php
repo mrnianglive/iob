@@ -197,17 +197,6 @@ class AnalyticsManagerPDO extends AnalyticsManager
         return $data['Montant'];
     }
 
-    public function YesterdayReserveProduit($Agence, $date, $produit)
-    {
-        $requeteSoldeInittial = $this->dao->prepare("SELECT SoldeUV FROM TbleSoldeUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND DateSoldeUV=(SELECT MAX(DateSoldeUV) FROM TbleSoldeUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND DateSoldeUV <:today)");
-        $requeteSoldeInittial->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-        $requeteSoldeInittial->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
-        $requeteSoldeInittial->bindValue(':today', $date, \PDO::PARAM_STR);
-        $requeteSoldeInittial->execute();
-        $result = $requeteSoldeInittial->fetch();
-        return $result['SoldeUV'];
-    }
-
     public function SoldeRemittanceVersementAgenceProduit($Date, $Agence, $produit)
     {
         if ($produit != 1) {

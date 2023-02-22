@@ -141,7 +141,6 @@ class JournalController extends \Library\BackController
                 $this->page->addVar('day', $date);
             }
             foreach ($ListeProduit as $key => $produit) {
-                $tab[$keyagence][$key]['YesterdayReserveProduit'] = $this->managers->getManagerOf("Analytics")->YesterdayReserveProduit($agency['RefAgency'], $date, $produit['RefProduit']);
                 $tab[$keyagence][$key]['SommeDepotRemittanceProduit'] = $this->managers->getManagerOf("Analytics")->SoldeRemittanceVersementAgenceProduit($date, $agency['RefAgency'], $produit['RefProduit']);
                 $tab[$keyagence][$key]['SommeRetraitRemittanceProduit'] = $this->managers->getManagerOf("Analytics")->SoldeRemittanceRetraitAgenceProduit($date, $agency['RefAgency'], $produit['RefProduit']);
             }

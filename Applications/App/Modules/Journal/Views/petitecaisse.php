@@ -169,7 +169,7 @@
                                               </ul>
                                           </div>
                                           <div class="modal-footer">
-                                              <button type="button" class="btn btn-default"
+                                              <button type="button" class="btn btn-danger"
                                                   data-dismiss="modal">Fermer</button>
                                           </div>
                                       </div>
@@ -195,7 +195,7 @@
 
                                           </div>
                                           <div class="modal-footer">
-                                              <button type="button" class="btn btn-default"
+                                              <button type="button" class="btn btn-danger"
                                                   data-dismiss="modal">Fermer</button>
                                           </div>
                                       </div>

@@ -162,9 +162,9 @@
                                           </div>
                                           <div class="modal-body">
                                               <ul>
-                                                  <?php foreach ($Agence['SommeDepotProduit'] as $somme) { ?>
-                                                  <li><?= number_format($somme['SommeDepotProduit'], 0, '.', '.'); ?>
-                                                  </li>
+                                                  <?php foreach ($value['SommeDepotProduit'] as $product) { ?>
+                                                  <li><?php echo $product['NameProduit']; ?> :
+                                                      <?php echo $product['total']; ?></li>
                                                   <?php } ?>
                                               </ul>
 

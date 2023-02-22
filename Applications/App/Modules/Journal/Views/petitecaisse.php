@@ -116,8 +116,19 @@
                               <td><?= $value['NameAgency']; ?></td>
                               <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?></td>
                               <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
-                              <td><?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?></td>
-                              <td><?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?></td>
+                              <td>
+                                  <button type="button" class="btn btn-info" data-toggle="modal"
+                                      data-target="#depotModal<?= $value['RefAgency']; ?>">
+                                      <?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?>
+                                  </button>
+
+                              </td>
+                              <td>
+                                  <button type="button" class="btn btn-info" data-toggle="modal"
+                                      data-target="#retraitModal<?= $value['RefAgency']; ?>">
+                                      <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
+                                  </button>
+                              </td>
                               <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
                               <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
                               <td> <?php if (!empty($value['validate'])) { ?><a
@@ -139,6 +150,48 @@
                               </td>
                               <?php } ?>
                           </tr>
+                          <!-- Modal Depot -->
+                          <div class="modal fade" id="#depotModal<?= $value['RefAgency']; ?>" tabindex="-1"
+                              role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                          </button>
+                                      </div>
+                                      <div class="modal-body">
+                                          ...
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary"
+                                              data-dismiss="modal">Fermer</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <!--Modal Retrait-->
+                          <div class="modal fade" id="#retraitModal<?= $value['RefAgency']; ?>" tabindex="-1"
+                              role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                          </button>
+                                      </div>
+                                      <div class="modal-body">
+                                          ...
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary"
+                                              data-dismiss="modal">Fermer</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
                           <?php } ?>
                       </tbody>
                   </table>

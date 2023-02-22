@@ -119,7 +119,7 @@
                               <td>
                                   <button type="button" class="btn btn-primary" data-toggle="modal"
                                       data-target="#depotModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
-                                      title="Volume Depot Produit ">
+                                      title="Cliquer pour voir les details">
                                       <?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?>
                                   </button>
 
@@ -127,7 +127,7 @@
                               <td>
                                   <button type="button" class="btn btn-primary" data-toggle="modal"
                                       data-target="#retraitModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
-                                      title="Volume Retrait Produit">
+                                      title="Cliquer pour voir les details">
                                       <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
                                   </button>
                               </td>

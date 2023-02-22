@@ -43,15 +43,15 @@ class JournalManagerPDO extends JournalManager
         $params = array();
 
         // Add conditions to the query and bindings based on the input parameters
-        if ($Pays !== null) {
+        if ($Pays !== null && !$Pays != 0) {
             $query .= " WHERE TbleAgency.RefPays=:RefPays";
             $params[':RefPays'] = $Pays;
         }
-        if ($Agence !== null) {
+        if ($Agence !== null && !$Agence != 0) {
             $query .= " AND TbleAgency.RefAgency=:RefAgency";
             $params[':RefAgency'] = $Agence;
         }
-        if ($Caisse !== null) {
+        if ($Caisse !== null && !$Caisse != 0) {
             $query .= " AND TbleCaisse.RefCaisse=:RefCaisse";
             $params[':RefCaisse'] = $Caisse;
         }

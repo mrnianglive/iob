@@ -156,20 +156,49 @@
                                   role="dialog" aria-labelledby="AddCaisse">
                                   <div class="modal-dialog" role="document">
                                       <div class="modal-content">
-                                          <div class="modal-header">Chmod Caisse
+                                          <div class="modal-header">Volume Depot Produit
                                               <button type="button" class="close" data-dismiss="modal"
                                                   aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                           </div>
-                                          <form role="form" method="post" action="">
-                                              <div class="modal-body">
+                                          <div class="modal-body">
+                                              <ul>
+                                                  <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                                  <li><?= number_format($afficher['TotalVersement'], 0, '.', '.'); ?>
+                                                  </li>
+                                                  <?php } ?>
+                                              </ul>
 
-                                              </div>
-                                              <div class="modal-footer">
-                                                  <button type="button" class="btn btn-default"
-                                                      data-dismiss="modal">Fermer</button>
-                                                  <button type="submit" class="btn btn-primary">Valider</button>
-                                              </div>
-                                          </form>
+
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="submit" class="btn btn-primary">Valider</button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="modal fade" id="retraitModal-<?= $value['RefAgency']; ?>" tabindex="-1"
+                                  role="dialog" aria-labelledby="AddCaisse">
+                                  <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                          <div class="modal-header">Volume Retrait Produit
+                                              <button type="button" class="close" data-dismiss="modal"
+                                                  aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                          </div>
+                                          <div class="modal-body">
+                                              <ul>
+                                                  <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                                  <li><?= number_format($afficher['TotalRetrait'], 0, '.', '.'); ?>
+                                                  </li>
+                                                  <?php } ?>
+                                              </ul>
+
+
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="button" class="btn btn-default"
+                                                  data-dismiss="modal">Fermer</button>
+                                          </div>
                                       </div>
                                   </div>
                               </div>

@@ -166,7 +166,7 @@
                                                   <?php
                                                         var_dump($value['SommeDepotProduit']);
 
-                                                        foreach ($value['SommeDepotProduit'] as $product) { ?>
+                                                        foreach ($value['SommeDepotProduit']['RefProduit'] as $product) { ?>
                                                   <li><?php echo $value['SommeDepotProduit'][$product['NameProduit']]; ?>
                                                       :
                                                       <?php echo $product['total']; ?></li>

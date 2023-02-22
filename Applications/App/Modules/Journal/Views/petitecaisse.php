@@ -163,8 +163,9 @@
                                           <div class="modal-body">
                                               <ul>
                                                   <?php foreach ($value['SommeDepotProduit'] as $product => $total) { ?>
-                                                  <li><?php echo $product; ?> : <?php echo $total; ?></li>
-                                                  <?php } ?>
+                                                  <li><?php echo $product; ?> :
+                                                      <?php number_format($total, 0, '.', '.'); ?>
+                                                      <?php } ?>
                                               </ul>
                                           </div>
                                           <div class="modal-footer">
@@ -186,8 +187,9 @@
                                           <div class="modal-body">
                                               <ul>
                                                   <?php foreach ($value['SommeSortieProduit'] as $product => $total) { ?>
-                                                  <li><?php echo $product; ?> : <?php echo $total; ?></li>
-                                                  <?php } ?>
+                                                  <li><?php echo $product; ?> :
+                                                      <?php echo number_format($total, 0, '.', '.'); ?>
+                                                      <?php } ?>
                                               </ul>
 
 

@@ -59,6 +59,7 @@ class BielletageController extends \Library\BackController
         $sommeRemittanceDepot = 0;
         $sommeRemittanceRetrait = 0;
         $soldeRemittance = 0;
+        var_dump($usersCaisse);
         foreach ($usersCaisse as $user) {
             $solde += $user['SoldeDisponible'];
             $soldeGlobal += $user['SoldeDisponibleGlobal'];

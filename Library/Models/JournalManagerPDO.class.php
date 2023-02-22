@@ -32,8 +32,7 @@ class JournalManagerPDO extends JournalManager
         }
         return $data;
     }
-    public function
-    UserCaisse($Date, $Pays = NULL, $Agence = NULL, $Caisse = NULL)
+    public function  UserCaisse($Date, $Pays = NULL, $Agence = NULL, $Caisse = NULL)
     {
         if ($Pays != NULL && $Agence == NULL && $Caisse == NULL) {
             $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON

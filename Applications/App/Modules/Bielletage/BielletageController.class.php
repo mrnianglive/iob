@@ -10,9 +10,9 @@ class BielletageController extends \Library\BackController
         $this->page->addVar("titles", "Accueil"); // Titre de la page
 
         // Récupération des données pour l'affichage de l'accueil
-        $Country = $request->postData('RefPays');
-        $Agency  = $request->postData('RefAgency');
-        $Caisse  = $request->postData('RefCaisse');
+        $Country = isset($_POST['RefPays']) ? $_POST['RefPays'] : '';
+        $Agency = isset($_POST['RefAgency']) ? $_POST['RefAgency'] : '';
+        $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
         $data = $this->getHomeData($Country, $Agency, $Caisse);
 
 

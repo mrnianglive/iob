@@ -164,7 +164,7 @@
                                               <ul>
                                                   <?php foreach ($value['SommeDepotProduit'] as $product => $total) { ?>
                                                   <li><?php echo $product; ?> :
-                                                      <?php number_format($total, 0, '.', '.'); ?>
+                                                      <?php echo number_format($total, 0, '.', '.'); ?>
                                                       <?php } ?>
                                               </ul>
                                           </div>

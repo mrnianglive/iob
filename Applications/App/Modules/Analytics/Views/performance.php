@@ -75,6 +75,7 @@
                                     </div>
 
                                     <?php } ?>
+                                    &nbsp;
                                 </ul>
                             </td>
                             <td>

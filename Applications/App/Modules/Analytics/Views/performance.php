@@ -38,23 +38,22 @@
                             <td>
                                 <ul>
                                     <?php foreach ($value['Afficher'] as $print) { ?>
-
                                     <li>
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        <span class="btn btn-primary" data-toggle="modal"
                                             data-target="#depotModal-<?= $print['RefCaisse']; ?>" data-whatever="@mdo"
                                             title="Cliquer pour voir les details">
                                             <?= $print['NameCaisse']; ?>
-                                        </button>
+                                        </span>
                                     </li>
-
                                     <div class="modal fade" id="depotModal-<?= $print['RefCaisse']; ?>" tabindex="-1"
                                         role="dialog" aria-labelledby="AddCaisse">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">Volume Depot Produit
                                                     <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close"><span
-                                                            aria-hidden="true">&times;</span></button>
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <ul>
@@ -63,7 +62,6 @@
                                                             <?php echo number_format($total, 0, '.', '.'); ?>
                                                         </li>
                                                         <?php } ?>
-
                                                     </ul>
                                                 </div>
                                                 <div class="modal-footer">
@@ -73,10 +71,10 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <?php } ?>
                                     &nbsp;
+                                    <?php } ?>
                                 </ul>
+
                             </td>
                             <td>
                                 <ul>

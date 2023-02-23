@@ -995,6 +995,9 @@ class JournalManagerPDO extends JournalManager
 
             $totals[$produit['NameProduit']] = $total;
         }
+        if ($totals == null) {
+            $totals = 0;
+        }
 
         return $totals;
     }
@@ -1026,7 +1029,9 @@ class JournalManagerPDO extends JournalManager
 
             $totals[$produit['NameProduit']] = $total;
         }
-
+        if ($totals == null) {
+            $totals = 0;
+        }
         return $totals;
     }
 
@@ -1059,7 +1064,9 @@ class JournalManagerPDO extends JournalManager
 
             $totals[$produit['NameProduit']] = $total;
         }
-
+        if ($totals == null) {
+            $totals = 0;
+        }
         return $totals;
     }
 
@@ -1089,6 +1096,9 @@ class JournalManagerPDO extends JournalManager
             $result = $query->fetch();
             $total = $result['Somme'];
             $totals[$produit['NameProduit']] = $total;
+        }
+        if ($totals == null) {
+            $totals = 0;
         }
 
         return $totals;

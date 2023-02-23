@@ -164,7 +164,12 @@
                                               <ul>
                                                   <?php foreach ($value['SommeDepotProduit'] as $product => $total) { ?>
                                                   <li><?php echo $product; ?> :
-                                                      <?php echo number_format($total, 0, '.', '.'); ?>
+                                                      <?php if (is_numeric($total)) {
+                                                                    echo number_format($total, 0, '.', '.');
+                                                                } else {
+                                                                    echo $total === null ? '0' : '0';
+                                                                }
+                                                                ?>
                                                   </li>
                                                   <?php } ?>
                                               </ul>
@@ -189,7 +194,13 @@
                                               <ul>
                                                   <?php foreach ($value['SommeSortieProduit'] as $product => $total) { ?>
                                                   <li><?php echo $product; ?> :
-                                                      <?php echo number_format($total, 0, '.', '.'); ?>
+                                                      <?php
+                                                                if (is_numeric($total)) {
+                                                                    echo number_format($total, 0, '.', '.');
+                                                                } else {
+                                                                    echo $total === null ? '0' : '0';
+                                                                }
+                                                                ?>
                                                   </li>
                                                   <?php } ?>
                                               </ul>

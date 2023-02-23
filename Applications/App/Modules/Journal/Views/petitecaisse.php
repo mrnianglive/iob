@@ -163,6 +163,7 @@
                                                       <?= is_numeric($total) ? number_format($total, 0, '.', '.') : ($total ?? '0') ?>
                                                   </li>
                                                   <?php endforeach; ?>
+                                                  <hr>
                                                   <?php endforeach; ?>
                                               </ul>
                                           </div>

@@ -57,13 +57,15 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <ul>
-                                                        <p>Depot</p>
+                                                        <h3>Depot</h3>
                                                         <?php foreach ($print['SommeDepotProduitCaisse'] as $product => $total) { ?>
                                                         <li><?php echo $product; ?> :
                                                             <?php echo number_format($total, 0, '.', '.'); ?>
                                                         </li>
                                                         <?php } ?>
-                                                        <p>Retrait</p>
+                                                    </ul>
+                                                    <ul>
+                                                        <h3>Retrait</h3>
                                                         <?php foreach ($print['SommeRetraitProduitCaisse'] as $product => $total) { ?>
                                                         <li><?php echo $product; ?> :
                                                             <?php echo number_format($total, 0, '.', '.'); ?>

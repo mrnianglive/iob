@@ -58,7 +58,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <ul>
-                                                        <h5>Depot</h5>
+                                                        <h5>Dépôt</h5>
                                                         <?php foreach ($print['SommeDepotProduitCaisse'] as $product => $total) { ?>
                                                         <li><?php echo $product; ?> :
                                                             <?php echo number_format($total, 0, '.', '.'); ?>

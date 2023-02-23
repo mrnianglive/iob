@@ -45,55 +45,38 @@
                                             <?= $print['NameCaisse']; ?>
                                         </span>
                                     </li>
-                                    <div class="modal fade" id="depotModal-<?= $print['RefCaisse']; ?>" tabindex="-1"
-                                        role="dialog" aria-labelledby="AddCaisse">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">Volume Dépôt - Retrait Par Produit -
+                                    <div class='modal fade' id='depotModal-<?= $print['RefCaisse']; ?>' tabindex='-1'
+                                        role='dialog' aria-labelledby='AddCaisse'>
+                                        <div class='modal-dialog' role='document'>
+                                            <div class='modal-content'>
+                                                <div class='modal-header'>Volume Dépôt - Retrait Par Produit -
                                                     <?= $print['NameCaisse']; ?> - <?= $value['NameAgency']; ?>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
+                                                    <button type='button' class='close' data-dismiss='modal'
+                                                        aria-label='Close'>
+                                                        <span aria-hidden='true'>&times;</span>
                                                     </button>
                                                 </div>
-                                                <div class="modal-body">
+                                                <div class='modal-body'>
                                                     <ul>
-                                                        <h5>Dépôt</h5>
-                                                        <?php foreach ($print['SommeDepotProduitCaisse'] as $product => $total) { ?>
-                                                        <li><?php echo $product; ?> :
-                                                            <?php
-                                                                        if (is_numeric($total)) {
-                                                                            echo number_format($total, 0, '.', '.');
-                                                                        } else {
-                                                                            echo $total === null ? '0' : '0';
-                                                                        }
-
-                                                                        ?>
+                                                        <?php foreach ([$print['SommeDepotProduitCaisse'], $print['SommeRetraitProduitCaisse']] as $index => $products) : ?>
+                                                        <h5><?= $index === 0 ? 'Dépôt' : 'Retrait' ?></h5>
+                                                        <?php foreach ($products as $product => $total) : ?>
+                                                        <li><?= $product ?> :
+                                                            <?= is_numeric($total) ? number_format($total, 0, '.', '.') : ($total ?? '0') ?>
                                                         </li>
-                                                        <?php } ?>
-                                                    </ul>
-                                                    <hr>
-                                                    <ul>
-                                                        <h5>Retrait</h5>
-                                                        <?php foreach ($print['SommeRetraitProduitCaisse'] as $product => $total) { ?>
-                                                        <li><?php echo $product; ?> :
-                                                            <?php
-                                                                        if (is_numeric($total)) {
-                                                                            echo number_format($total, 0, '.', '.');
-                                                                        } else {
-                                                                            echo $total === null ? '0' : '0';
-                                                                        } ?>
-                                                        </li>
-                                                        <?php } ?>
+                                                        <?php endforeach; ?>
+                                                        <hr>
+                                                        <?php endforeach; ?>
                                                     </ul>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-danger"
-                                                        data-dismiss="modal">Fermer</button>
+                                                <div class='modal-footer'>
+                                                    <button type='button' class='btn btn-danger'
+                                                        data-dismiss='modal'>Fermer</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                     &nbsp;
                                     <?php } ?>
                                 </ul>

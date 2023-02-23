@@ -49,7 +49,8 @@
                                         role="dialog" aria-labelledby="AddCaisse">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
-                                                <div class="modal-header">Volume/Produit
+                                                <div class="modal-header">Volume Dépôt - Retrait Par Produit -
+                                                    <?= $print['NameCaisse']; ?> - <?= $value['NameAgency']; ?>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
@@ -57,15 +58,16 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <ul>
-                                                        <h3>Depot</h3>
+                                                        <h5>Depot</h5>
                                                         <?php foreach ($print['SommeDepotProduitCaisse'] as $product => $total) { ?>
                                                         <li><?php echo $product; ?> :
                                                             <?php echo number_format($total, 0, '.', '.'); ?>
                                                         </li>
                                                         <?php } ?>
                                                     </ul>
+                                                    <hr>
                                                     <ul>
-                                                        <h3>Retrait</h3>
+                                                        <h5>Retrait</h5>
                                                         <?php foreach ($print['SommeRetraitProduitCaisse'] as $product => $total) { ?>
                                                         <li><?php echo $product; ?> :
                                                             <?php echo number_format($total, 0, '.', '.'); ?>

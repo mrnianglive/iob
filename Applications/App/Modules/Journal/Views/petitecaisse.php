@@ -116,20 +116,8 @@
                               <td><?= $value['NameAgency']; ?></td>
                               <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?></td>
                               <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
-                              <td>
-                                  <button type="button" class="btn btn-primary" data-toggle="modal"
-                                      data-target="#depotModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
-                                      title="Cliquer pour voir les details">
-                                      <?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?>
-                                  </button>
-
-                              </td>
-                              <td>
-                                  <button type="button" class="btn btn-primary" data-toggle="modal"
-                                      data-target="#retraitModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
-                                      title="Cliquer pour voir les details">
-                                      <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
-                                  </button>
+                              <td><?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?></td>
+                              <td> <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
                               </td>
                               <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
                               <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
@@ -151,69 +139,6 @@
                                   <?php } ?>
                               </td>
                               <?php } ?>
-
-                              <div class="modal fade" id="depotModal-<?= $value['RefAgency']; ?>" tabindex="-1"
-                                  role="dialog" aria-labelledby="AddCaisse">
-                                  <div class="modal-dialog" role="document">
-                                      <div class="modal-content">
-                                          <div class="modal-header">Volume Depot Produit
-                                              <button type="button" class="close" data-dismiss="modal"
-                                                  aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                          </div>
-                                          <div class="modal-body">
-                                              <ul>
-                                                  <?php foreach ($value['SommeDepotProduit'] as $product => $total) { ?>
-                                                  <li><?php echo $product; ?> :
-                                                      <?php if (is_numeric($total)) {
-                                                                    echo number_format($total, 0, '.', '.');
-                                                                } else {
-                                                                    echo $total === null ? '0' : '0';
-                                                                }
-                                                                ?>
-                                                  </li>
-                                                  <?php } ?>
-                                              </ul>
-                                          </div>
-                                          <div class="modal-footer">
-                                              <button type="button" class="btn btn-danger"
-                                                  data-dismiss="modal">Fermer</button>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-
-                              <div class="modal fade" id="retraitModal-<?= $value['RefAgency']; ?>" tabindex="-1"
-                                  role="dialog" aria-labelledby="AddCaisse">
-                                  <div class="modal-dialog" role="document">
-                                      <div class="modal-content">
-                                          <div class="modal-header">Volume Retrait Produit
-                                              <button type="button" class="close" data-dismiss="modal"
-                                                  aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                          </div>
-                                          <div class="modal-body">
-                                              <ul>
-                                                  <?php foreach ($value['SommeSortieProduit'] as $product => $total) { ?>
-                                                  <li><?php echo $product; ?> :
-                                                      <?php
-                                                                if (is_numeric($total)) {
-                                                                    echo number_format($total, 0, '.', '.');
-                                                                } else {
-                                                                    echo $total === null ? '0' : '0';
-                                                                }
-                                                                ?>
-                                                  </li>
-                                                  <?php } ?>
-                                              </ul>
-
-
-                                          </div>
-                                          <div class="modal-footer">
-                                              <button type="button" class="btn btn-danger"
-                                                  data-dismiss="modal">Fermer</button>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
                           </tr>
 
                           <?php } ?>

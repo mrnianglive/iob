@@ -113,7 +113,11 @@
                       <tbody>
                           <?php foreach ($Agence as $value) { ?>
                           <tr>
-                              <td><?= $value['NameAgency']; ?></td>
+                              <td><span class="btn btn-primary" data-toggle="modal"
+                                      data-target="#depotModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
+                                      title="Cliquer pour voir les details">
+                                      <?= $value['NameAgency']; ?>
+                                  </span> </td>
                               <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?></td>
                               <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
                               <td><?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?></td>
@@ -139,6 +143,55 @@
                                   <?php } ?>
                               </td>
                               <?php } ?>
+                              <div class="modal fade" id="depotModal-<?= $value['RefAgency']; ?>" tabindex="-1"
+                                  role="dialog" aria-labelledby="AddCaisse">
+                                  <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                          <div class="modal-header">Volume Dépôt - Retrait Par Produit -
+                                              <?= $print['NameCaisse']; ?> - <?= $value['NameAgency']; ?>
+                                              <button type="button" class="close" data-dismiss="modal"
+                                                  aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                              </button>
+                                          </div>
+                                          <div class="modal-body">
+                                              <ul>
+                                                  <h5>Dépôt</h5>
+                                                  <?php foreach ($value['SommeDepotProduit'] as $product => $total) { ?>
+                                                  <li><?php echo $product; ?> :
+                                                      <?php
+                                                                if (is_numeric($total)) {
+                                                                    echo number_format($total, 0, '.', '.');
+                                                                } else {
+                                                                    echo $total === null ? '0' : '0';
+                                                                }
+
+                                                                ?>
+                                                  </li>
+                                                  <?php } ?>
+                                              </ul>
+                                              <hr>
+                                              <ul>
+                                                  <h5>Retrait</h5>
+                                                  <?php foreach ($value['SommeRetraitProduit'] as $product => $total) { ?>
+                                                  <li><?php echo $product; ?> :
+                                                      <?php
+                                                                if (is_numeric($total)) {
+                                                                    echo number_format($total, 0, '.', '.');
+                                                                } else {
+                                                                    echo $total === null ? '0' : '0';
+                                                                } ?>
+                                                  </li>
+                                                  <?php } ?>
+                                              </ul>
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="button" class="btn btn-danger"
+                                                  data-dismiss="modal">Fermer</button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
                           </tr>
 
                           <?php } ?>

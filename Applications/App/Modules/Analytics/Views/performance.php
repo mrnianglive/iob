@@ -38,7 +38,42 @@
                             <td>
                                 <ul>
                                     <?php foreach ($value['Afficher'] as $print) { ?>
-                                    <li><?= $print['NameCaisse']; ?></li>
+
+                                    <li>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#depotModal-<?= $print['RefCaisse']; ?>" data-whatever="@mdo"
+                                            title="Cliquer pour voir les details">
+                                            <?= $print['NameCaisse']; ?>
+                                        </button>
+                                    </li>
+
+                                    <div class="modal fade" id="depotModal-<?= $print['RefCaisse']; ?>" tabindex="-1"
+                                        role="dialog" aria-labelledby="AddCaisse">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">Volume Depot Produit
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span
+                                                            aria-hidden="true">&times;</span></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <ul>
+                                                        <?php foreach ($print['SommeDepotProduitCaisse'] as $product => $total) { ?>
+                                                        <li><?php echo $product; ?> :
+                                                            <?php echo number_format($total, 0, '.', '.'); ?>
+                                                        </li>
+                                                        <?php } ?>
+
+                                                    </ul>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger"
+                                                        data-dismiss="modal">Fermer</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <?php } ?>
                                 </ul>
                             </td>
@@ -81,8 +116,10 @@
                                     <?php } ?>
                                 </ul>
                             </td>
-                            <td><?= $value['NbreOP']; ?></td </tr>
-                            <?php } ?>
+                            <td><?= $value['NbreOP']; ?></td>
+
+                        </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>

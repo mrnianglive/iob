@@ -9,8 +9,12 @@
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
     <br>
-    <a href="https://login.microsoftonline.com/"><button type="button" class="btn btn-lg btn-primary btn-block">Se
-            connecter avec Microsoft</button></a>
+    <a href="https://login.microsoftonline.com/">
+        <button type="button" class="btn btn-lg btn-primary btn-block">
+            <span class="fa fa-windows"></span> Se connecter avec Microsoft
+        </button>
+    </a>
+    &nbsp;
     <button class="btn btn-lg btn-primary btn-block" type="submit" id="register">Connexion</button>
     <p class="mt-5 mb-3 text-muted">&copy; AFRIK CREANCES <?= date('Y'); ?> Developed by NIANGALY</p>
 </form>

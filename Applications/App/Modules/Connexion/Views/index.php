@@ -4,7 +4,8 @@
 <form method="post">
     <img src="/images/afc.png" alt="afc" width="200" height="100%">
     <div class="text-center social-btn">
-        <a href="#" class="btn btn-warning btn-block"><i class="fa fa-microsoft"></i> Sign in with <b>Microsoft</b></a>
+        <a href="#" class="btn btn-warning btn-block"><i class="fa-brands fa-microsoft"></i> Sign in with
+            <b>Microsoft</b></a>
     </div>
     <div class="or-seperator"><i>or</i></div>
     <label for="inputEmail" class="sr-only">Login</label>

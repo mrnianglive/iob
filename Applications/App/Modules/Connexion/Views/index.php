@@ -9,11 +9,11 @@
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
     <br>
-    <a href="https://login.microsoftonline.com/">
-        <button type="button" class="btn btn-lg btn-warm btn-block">
-            <span class="fas  fa-windows"></span> Se connecter avec Microsoft
-        </button>
-    </a>
+    <button class="bsk-btn bsk-btn-default">
+        <object type="image/svg+xml"
+            data="https://s3-eu-west-1.amazonaws.com/cdn-testing.web.bas.ac.uk/scratch/bas-style-kit/ms-pictogram/ms-pictogram.svg"
+            class="x-icon"></object>
+        Sign In</button>
     &nbsp;
     <button class="btn btn-lg btn-primary btn-block" type="submit" id="register">Connexion</button>
     <p class="mt-5 mb-3 text-muted">&copy; AFRIK CREANCES <?= date('Y'); ?> Developed by NIANGALY</p>

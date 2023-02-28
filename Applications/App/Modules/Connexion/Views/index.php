@@ -1,6 +1,6 @@
 <?php if ($user->hasFlash()) { ?>
 <p><?= $user->getFlash(); ?></p>
-<?php }  ?>
+<?php } ?>
 <form method="post">
     <img src="/images/afc.png" alt="afc" width="200" height="100%">
     <label for="inputEmail" class="sr-only">Login</label>
@@ -8,7 +8,9 @@
     <span id="statut"></span>
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
-    </br>
+    <br>
+    <a href="https://login.microsoftonline.com/"><button type="button" class="btn btn-lg btn-primary btn-block">Se
+            connecter avec Microsoft</button></a>
     <button class="btn btn-lg btn-primary btn-block" type="submit" id="register">Connexion</button>
     <p class="mt-5 mb-3 text-muted">&copy; AFRIK CREANCES <?= date('Y'); ?> Developed by NIANGALY</p>
 </form>

@@ -3,6 +3,13 @@
 <?php } ?>
 <form method="post">
     <img src="/images/afc.png" alt="afc" width="200" height="100%">
+    <div class="text-center social-btn">
+        <a href="#" class="btn btn-primary btn-block"><i class="fa fa-facebook"></i> Sign in with <b>Facebook</b></a>
+        <a href="#" class="btn btn-info btn-block"><i class="fa fa-twitter"></i> Sign in with <b>Twitter</b></a>
+        <a href="#" class="btn btn-danger btn-block"><i class="fa fa-google"></i> Sign in with <b>Google</b></a>
+    </div>
+    <div class="or-seperator"><i>or</i></div>
+
     <label for="inputEmail" class="sr-only">Login</label>
     <input type="text" id="login" class="form-control mb-1" name="login" placeholder="Login" required autofocus>
     <span id="statut"></span>

@@ -56,4 +56,6 @@
 
 	<route url="/Pannel/Pays" module="Pannel" action="listepays"/>
 
+	<route url="/authMicrosoft" module="Connexion" action="authMicrosoft"/>
+	<route url="/authMicrosoft/callback" module="Connexion" action="authMicrosoftCallback"/>
 </routes>

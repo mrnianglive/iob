@@ -64,4 +64,12 @@ class ConnexionController extends \Library\BackController
             $this->managers->getManagerOf("User")->VerifDoubleAuth($request);
         }
     }
+
+    public function executeAuthMicrosoft(\Library\HTTPRequest $request)
+    {
+        //authentification avec microsoft
+        $this->page->addVar('titles', 'Authentification Microsoft');
+
+        $this->managers->getManagerOf("User")->AuthMicrosoft($request);
+    }
 }

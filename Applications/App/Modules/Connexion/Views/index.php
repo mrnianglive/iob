@@ -4,7 +4,7 @@
 <form method="post">
     <img src="/images/afc.png" alt="afc" width="200" height="100%">
     <div class="text-center social-btn">
-        <a href="#" class="btn btn-warning btn-block"><i class="fa-brands fa-microsoft"></i> Sign in with
+        <a href="#" class="btn btn-warning btn-block"><i class="fa-brands fa-microsoft"></i> Se connecter avec
             <b>Microsoft</b></a>
     </div>
     <div class="or-seperator"><i>or</i></div>
@@ -14,6 +14,6 @@
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
     <br>
-    <button class="btn btn-lg btn-primary btn-block" type="submit" id="register">Sign in</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" id="register">Connexion</button>
     <p class="mt-5 mb-3 text-muted">&copy; AFRIK CREANCES <?= date('Y'); ?> Developed by NIANGALY</p>
 </form>

@@ -10,8 +10,8 @@
     <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
     <br>
     <a href="https://login.microsoftonline.com/">
-        <button type="button" class="btn btn-lg btn-primary btn-block">
-            <span class="fa fa-windows"></span> Se connecter avec Microsoft
+        <button type="button" class="btn btn-lg btn-warm btn-block">
+            <span class="fas  fa-windows"></span> Se connecter avec Microsoft
         </button>
     </a>
     &nbsp;

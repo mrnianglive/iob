@@ -1,6 +1,5 @@
 {
     "require": {
-        "robthree/twofactorauth": "^1.8",
-        "adnanhussainturki/microsoft-api-php": "^0.03.0"
+        "robthree/twofactorauth": "^1.8"
     }
 }

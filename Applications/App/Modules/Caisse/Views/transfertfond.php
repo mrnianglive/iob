@@ -38,7 +38,7 @@
                             </td>
                             <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
                                     class="btn btn-secondary"><i class="fa fa-print"> Reçu</i> </td>
-                            <?php if ($_SESSION['statut'] == 'admin') { ?>
+                            <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'superadmin') { ?>
                             <td>
                                 <a href="/Journal/delete/<?= $value['RefOperations']; ?>" class="btn btn-xs btn-danger"
                                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i

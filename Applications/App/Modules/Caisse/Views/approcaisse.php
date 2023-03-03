@@ -16,7 +16,7 @@
                             <th class="border-top-0">Caisse</th>
                             <th class="border-top-0">Montant</th>
                             <th class="border-top-0">Date</th>
-                            <?php if ($_SESSION['statut'] == 'admin') { ?>
+                            <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'superadmin') { ?>
                             <th class="border-top-0">Actions</th>
                             <?php } ?>
                         </tr>
@@ -36,7 +36,7 @@
                             <td>
                                 <?= $value['Approve2_Time']; ?>
                             </td>
-                            <?php if ($_SESSION['statut'] == 'admin') { ?>
+                            <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'superadmin') { ?>
                             <td>
                                 <a href="/Journal/delete/<?= $value['RefOperations']; ?>" class="btn btn-xs btn-danger"
                                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i

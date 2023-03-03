@@ -1,14 +1,14 @@
 <?php if ($user->hasFlash()) { ?>
-<p><?= $user->getFlash(); ?></p>
+    <p><?= $user->getFlash(); ?></p>
 <?php } ?>
 <form method="post">
     <img src="/images/afc.png" alt="afc" width="200" height="100%">
-    <div class="text-center social-btn">
+    <!-- <div class="text-center social-btn">
         <a href="/authMicrosoft" class="btn btn-warning btn-block"><i class="fa-brands fa-microsoft"></i> Se connecter
             avec
             <b>Microsoft</b></a>
     </div>
-    <div class="or-seperator"><i>or</i></div>
+    <div class="or-seperator"><i>or</i></div> -->
     <label for="inputEmail" class="sr-only">Login</label>
     <input type="text" id="login" class="form-control mb-1" name="login" placeholder="Login" required autofocus>
     <span id="statut"></span>

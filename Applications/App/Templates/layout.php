@@ -256,6 +256,20 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
+    <script>
+    $(document).ready(function() {
+        // Écouteur d'événements pour le bouton "Non Vérifiée"
+        $('button[data-target="#modal"]').on('click', function() {
+            // Récupérer l'ID de l'opération depuis l'attribut "data-operation-id" du bouton
+            var operationId = $(this).data('operation-id');
+            // Mettre à jour la valeur de l'input avec l'ID de l'opération
+            $('#modal-operation-id').val(operationId);
+            // Afficher l'ID dans le contenu du modal
+            $('#modal-id').text(operationId);
+        });
+    });
+    </script>
+
     <script src="/js/wizard.js" type="text/javascript"></script>
     <script src="/js/sweetalert2/sweetalert2.min.js"></script>
     <!-- Bootstrap tether Core JavaScript -->

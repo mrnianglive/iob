@@ -21,9 +21,11 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <!-- Custom CSS -->
     <link href="/css/style.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet"
+        type="text/css" />
     <link href="/js/sweetalert2/sweetalert2.css" rel="stylesheet" type="text/css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"
+        type="text/css">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
 
 </head>
@@ -41,7 +43,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <!-- ============================================================== -->
     <!-- Main wrapper - style you can find in pages.scss -->
     <!-- ============================================================== -->
-    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full" data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
+    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
+        data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
         <!-- ============================================================== -->
         <!-- Topbar header - style you can find in pages.scss -->
         <!-- ============================================================== -->
@@ -58,7 +61,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- Logo text -->
                         <span class="logo-text">
                             <!-- dark Logo text -->
-                            <img src="/images/<?= $_SESSION['logoPays'] ?? 'afch.jpeg'; ?>" alt="homepage" width="50%" />
+                            <img src="/images/<?= $_SESSION['logoPays'] ?? 'afch.jpeg'; ?>" alt="homepage"
+                                width="50%" />
                         </span>
                     </a>
                     <!-- ============================================================== -->
@@ -67,7 +71,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                     <!-- ============================================================== -->
                     <!-- toggle and nav items -->
                     <!-- ============================================================== -->
-                    <a class="nav-toggler waves-effect waves-light text-dark d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
+                    <a class="nav-toggler waves-effect waves-light text-dark d-block d-md-none"
+                        href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
                 </div>
                 <!-- ============================================================== -->
                 <!-- End Logo -->
@@ -75,7 +80,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                 <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
                     <ul class="navbar-nav d-none d-md-block d-lg-none">
                         <li class="nav-item">
-                            <a class="nav-toggler nav-link waves-effect waves-light text-white" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
+                            <a class="nav-toggler nav-link waves-effect waves-light text-white"
+                                href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
                         </li>
                     </ul>
                     <!-- ============================================================== -->
@@ -87,7 +93,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- Search -->
                         <!-- ============================================================== -->
                         <li class=" in">
-                            <form method="POST" action="/bordereau/" class="app-search d-none d-md-block mr-3" target="_blank">
+                            <form method="POST" action="/bordereau/" class="app-search d-none d-md-block mr-3"
+                                target="_blank">
                                 <input type="text" placeholder="Bordereau N°..." class="form-control mt-0" name="id">
                                 <a href="#" class="active">
                                     <i class="fa fa-search"></i>
@@ -120,38 +127,82 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <!-- User Profile-->
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/" aria-expanded="false"><i class="fas fa-home fa-fw" aria-hidden="true"></i><span class="hide-menu">Accueil</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/"
+                                aria-expanded="false"><i class="fas fa-home fa-fw" aria-hidden="true"></i><span
+                                    class="hide-menu">Accueil</span></a></li>
                         <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or (!empty($CheckOuverture) && $_SESSION['statut'] != 'Niveau1') && $_SESSION['statut'] != 'Control' && $_SESSION['statut'] != 'Head') { ?>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/bielletage/1" aria-expanded="false"><i class="fa fa-plus" aria-hidden="true"></i><span class="hide-menu">Versement</span></a></li>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/bielletage/2" aria-expanded="false"><i class="fa fa-minus" aria-hidden="true"></i><span class="hide-menu">Retrait</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/bielletage/1" aria-expanded="false"><i class="fa fa-plus"
+                                    aria-hidden="true"></i><span class="hide-menu">Versement</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/bielletage/2" aria-expanded="false"><i class="fa fa-minus"
+                                    aria-hidden="true"></i><span class="hide-menu">Retrait</span></a></li>
                         <?php } ?>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/remittances/index" aria-expanded="false"><i class="fas fa-exchange" aria-hidden="true"></i><span class="hide-menu">Remittance</span> <span class="badge badge-danger"> Nouveau ! </span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/remittances/index" aria-expanded="false"><i class="fas fa-exchange"
+                                    aria-hidden="true"></i><span class="hide-menu">Remittance</span> <span
+                                    class="badge badge-danger"> Nouveau ! </span></a></li>
 
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Journal/petite_caisse" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Petite Caisse</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Journal/index" aria-expanded="false"><i class="fa fa-table" aria-hidden="true"></i><span class="hide-menu">Journal de Caisse</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Arreter/index" aria-expanded="false"><i class="fa fa-lock" aria-hidden="true"></i><span class="hide-menu">Arreter de Caisse </span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Caisse/transfertfond" aria-expanded="false"><i class="fa fa-share" aria-hidden="true"></i><span class="hide-menu">Sortie de Fond</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Caisse/ApproCaisse" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Appro Caisse</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Analytics/performance" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Performance</span> <span class="badge badge-danger"> Nouveau ! </span></a></li></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Journal/petite_caisse" aria-expanded="false"><i class="fa fa-columns"
+                                    aria-hidden="true"></i><span class="hide-menu">Petite Caisse</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Journal/index" aria-expanded="false"><i class="fa fa-table"
+                                    aria-hidden="true"></i><span class="hide-menu">Journal de Caisse</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Arreter/index" aria-expanded="false"><i class="fa fa-lock"
+                                    aria-hidden="true"></i><span class="hide-menu">Arreter de Caisse </span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Caisse/transfertfond" aria-expanded="false"><i class="fa fa-share"
+                                    aria-hidden="true"></i><span class="hide-menu">Sortie de Fond</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Caisse/ApproCaisse" aria-expanded="false"><i class="fa fa-columns"
+                                    aria-hidden="true"></i><span class="hide-menu">Appro Caisse</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Analytics/performance" aria-expanded="false"><i class="fa fa-columns"
+                                    aria-hidden="true"></i><span class="hide-menu">Performance</span> <span
+                                    class="badge badge-danger"> Nouveau ! </span></a></li></a></li>
                         <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Niveau1' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'Control') { ?>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Analytics/chart" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Chart</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Analytics/chart" aria-expanded="false"><i class="fa fa-columns"
+                                    aria-hidden="true"></i><span class="hide-menu">Chart</span></a></li>
 
                         <?php } ?>
                         <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'superadmin') { ?>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Analytics/index" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Analytics</span></a></li>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Caisse/solde" aria-expanded="false"><i class="fa fa-globe" aria-hidden="true"></i><span class="hide-menu">Ma Caisse</span></a></li>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Pannel/Produit" aria-expanded="false"><i class="fa fa-table" aria-hidden="true"></i><span class="hide-menu">Liste Produit</span></a></li>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Pannel/Caisse" aria-expanded="false"><i class="fa fa-table" aria-hidden="true"></i><span class="hide-menu">Liste Caisse</span></a></li>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Pannel/Agence" aria-expanded="false"><i class="fa fa-table" aria-hidden="true"></i><span class="hide-menu">Liste Agence</span></a></li>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Pannel/Banque" aria-expanded="false"><i class="fa fa-table" aria-hidden="true"></i><span class="hide-menu">Liste Partenaire</span></a></li>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Users/index" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i><span class="hide-menu">Liste Users</span></a></li>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Pannel/links" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i><span class="hide-menu">Links</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Analytics/index" aria-expanded="false"><i class="fa fa-columns"
+                                    aria-hidden="true"></i><span class="hide-menu">Analytics</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Caisse/solde" aria-expanded="false"><i class="fa fa-globe"
+                                    aria-hidden="true"></i><span class="hide-menu">Ma Caisse</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Pannel/Produit" aria-expanded="false"><i class="fa fa-table"
+                                    aria-hidden="true"></i><span class="hide-menu">Liste Produit</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Pannel/Caisse" aria-expanded="false"><i class="fa fa-table"
+                                    aria-hidden="true"></i><span class="hide-menu">Liste Caisse</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Pannel/Agence" aria-expanded="false"><i class="fa fa-table"
+                                    aria-hidden="true"></i><span class="hide-menu">Liste Agence</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Pannel/Banque" aria-expanded="false"><i class="fa fa-table"
+                                    aria-hidden="true"></i><span class="hide-menu">Liste Partenaire</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Users/index" aria-expanded="false"><i class="fa fa-users"
+                                    aria-hidden="true"></i><span class="hide-menu">Liste Users</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Pannel/links" aria-expanded="false"><i class="fa fa-users"
+                                    aria-hidden="true"></i><span class="hide-menu">Links</span></a></li>
 
-                            <?php if ($_SESSION['statut'] == 'superadmin') { ?>
-                                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Pannel/Pays" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i><span class="hide-menu">Liste Pays</span></a></li>
-                            <?php } ?>
+                        <?php if ($_SESSION['statut'] == 'superadmin') { ?>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Pannel/Pays" aria-expanded="false"><i class="fa fa-users"
+                                    aria-hidden="true"></i><span class="hide-menu">Liste Pays</span></a></li>
                         <?php } ?>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Users/myprofile" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i><span class="hide-menu">Mon Profile</span></a></li>
+                        <?php } ?>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Users/myprofile" aria-expanded="false"><i class="fa fa-user"
+                                    aria-hidden="true"></i><span class="hide-menu">Mon Profile</span></a></li>
                         <li class="text-center p-20 upgrade-btn">
                             <a href="/logout" class="btn btn-block btn-danger text-white">Se Déconnecter</a>
                         </li>
@@ -192,7 +243,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
             <footer class="footer text-center">
                 <?= $_SESSION['nomPays'] ?? 'AFC'; ?> |
                 <?= date('Y'); ?>
-                © <a href="https://afrikcreances.com" target="_blank">AFRIK CREANCES</a> CONNCEPTION BY <a href="https://niangaly.com" target="_blank">NIANGALY</a>
+                © <a href="https://afrikcreances.com" target="_blank">AFRIK CREANCES</a> CONNCEPTION BY <a
+                    href="https://niangaly.com" target="_blank">NIANGALY</a>
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->
@@ -205,7 +257,21 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
     <script>
-        text
+    $(document).ready(function() {
+        // Écouteur d'événements pour le bouton "Non Vérifiée"
+        $('button[data-target="#modal"]').on('click', function() {
+            // Récupérer l'ID de l'opération depuis l'attribut "data-operation-id" du bouton
+            var operationId = $(this).data('operation-id');
+            // Mettre à jour la valeur de l'input avec l'ID de l'opération
+            $('#modal-operation-id').val(operationId);
+            // Afficher l'ID dans le contenu du modal
+            $('#modal-id').text(operationId);
+
+            // Afficher la valeur RefAgency dans le champ de formulaire correspondant
+            var refAgency = $(this).data('data-ref-agency');
+            $('#modal-ref-agency').val(refAgency);
+        });
+    });
     </script>
 
     <script src="/js/wizard.js" type="text/javascript"></script>
@@ -230,26 +296,26 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="/js/custom.js"></script>
     <script src="/scripts/getList.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#dataTable').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-            });
-            $('#dataTable1').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-            });
-            $('#dataTable2').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-            });
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
         });
+        $('#dataTable1').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+        $('#dataTable2').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
     </script>
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
@@ -260,60 +326,60 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <?php if (!empty($_SESSION['message']) && $_SESSION['message']['number'] > 0) { ?>
-        <script>
-            $(function() {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 5000
-                });
+    <script>
+    $(function() {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 5000
+        });
 
-                Toast.fire({
-                    type: '<?= $_SESSION['message']['type']; ?>',
-                    title: '<?= $_SESSION['message']['text']; ?>'
-                });
-            });
-        </script>
+        Toast.fire({
+            type: '<?= $_SESSION['message']['type']; ?>',
+            title: '<?= $_SESSION['message']['text']; ?>'
+        });
+    });
+    </script>
     <?php $_SESSION['message']['number']--;
     } ?>
     <script type="text/javascript" src="/js/idle-timer/idle-timer.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $(document).idleTimer(960000);
-        });
-        $(document).on("idle.idleTimer", function(event, elem, obj) {
-            window.location = "/logout";
-        });
+    $(document).ready(function() {
+        $(document).idleTimer(960000);
+    });
+    $(document).on("idle.idleTimer", function(event, elem, obj) {
+        window.location = "/logout";
+    });
     </script>
 
     <script>
-        $(document).ready(function() {
-            $('[data-toggle="tooltip"]').tooltip();
-            $('[data-toggle="modal"]').tooltip();
-        });
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="modal"]').tooltip();
+    });
     </script>
 
 
     <script src="/js/accounting.js"></script>
 
     <script>
-        // Configure la notation française
-        accounting.settings.number.decimal = ",";
-        accounting.settings.number.thousand = " ";
+    // Configure la notation française
+    accounting.settings.number.decimal = ",";
+    accounting.settings.number.thousand = " ";
 
-        var inputElements = document.getElementsByClassName("number-input");
-        for (var i = 0; i < inputElements.length; i++) {
-            inputElements[i].addEventListener("blur", function() {
-                var val = accounting.unformat(this.value);
-                if (!isNaN(val)) {
-                    this.value = val;
-                } else {
-                    alert("Please enter a valid number");
-                    this.focus();
-                }
-            });
-        }
+    var inputElements = document.getElementsByClassName("number-input");
+    for (var i = 0; i < inputElements.length; i++) {
+        inputElements[i].addEventListener("blur", function() {
+            var val = accounting.unformat(this.value);
+            if (!isNaN(val)) {
+                this.value = val;
+            } else {
+                alert("Please enter a valid number");
+                this.focus();
+            }
+        });
+    }
     </script>
 
 

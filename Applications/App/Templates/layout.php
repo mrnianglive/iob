@@ -268,11 +268,12 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
             $('#modal-id').text(operationId);
 
             // Afficher la valeur RefAgency dans le champ de formulaire correspondant
-            var refAgency = $(this).data('data-ref-agency');
+            var refAgency = $(this).data('ref-agency');
             $('#modal-ref-agency').val(refAgency);
         });
     });
     </script>
+
 
     <script src="/js/wizard.js" type="text/javascript"></script>
     <script src="/js/sweetalert2/sweetalert2.min.js"></script>

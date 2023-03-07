@@ -72,18 +72,18 @@
                                   style="<?php if ($value['Validate'] == 2 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color:#7ace4c;  <?php } elseif ($value['Validate'] == 1 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color: #f33155; <?php   } ?>">
                                   <?= $value['RefOperations']; ?></td>
                               <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
-                              <td> <?php if ($value['Validate'] == 1) { ?> <<button class="btn btn-danger"
+                              <td> <?php if ($value['Validate'] == 1) { ?><button class="btn btn-danger"
                                       data-toggle="modal" data-target="#modal"
                                       data-operation-id="<?= $value['RefOperations']; ?>"
                                       data-ref-agency="<?= $value['RefAgency']; ?>"
                                       title="Cliquez ici pour confirmer l'opération">
                                       Non Vérifiée
-                                      </button><?php } else { ?> <a
-                                          href="/Journal/cancelvalidate/<?= $value['RefOperations']; ?>"
-                                          class="btn btn-success"
-                                          onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vérifcation ?');">
-                                          Verifiée le <span><?= $value['DateValidate']; ?></span></a>
-                                      <?php   } ?>
+                                  </button><?php } else { ?> <a
+                                      href="/Journal/cancelvalidate/<?= $value['RefOperations']; ?>"
+                                      class="btn btn-success"
+                                      onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vérifcation ?');">
+                                      Verifiée le <span><?= $value['DateValidate']; ?></span></a>
+                                  <?php   } ?>
                               </td>
                               <?php } ?>
                               <td><?= $value['NameAgency']; ?></td>
@@ -127,7 +127,11 @@
               <form role="form" method="post" action="/Journal/validate">
                   <div class="modal-body">
                       <div class="modal-body">
-                          <input type="text" class="form-control" id="modal-operation-id" name="RefOperations" value="">
+                          <input type="hidden" class="form-control" id="modal-operation-id" name="RefOperations"
+                              value="">
+                          <p>Voulez-vous vraiment confirmer l'opération non vérifiée pour l'ID <span
+                                  id="modal-id"></span> ?</p>
+
                           <div class="form-group">
                               <label for="recipient-name" class="control-label">Date</label>
                               <input type="date" class="form-control" name="DateValidate" required>
@@ -142,12 +146,7 @@
                                   <?php   } ?>
                               </select>
                           </div>
-                          <p>Voulez-vous vraiment confirmer l'opération non vérifiée pour l'ID <span
-                                  id="modal-id"></span> ?</p>
-                          <div class="form-group">
-                              <label for="modal-ref-agency">RefAgency :</label>
-                              <input type="text" class="form-control" id="modal-ref-agency" name="ref_agency" readonly>
-                          </div>
+                          <input type="hidden" class="form-control" id="modal-ref-agency" name="RefAgency" readonly>
                           <input type="hidden" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control">
                           <input type="hidden" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
                       </div>

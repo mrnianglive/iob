@@ -205,19 +205,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            $('#modal').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget);
-                var id = button.data('id');
-                var refAgency = button.data('ref-agency');
-                var modal = $(this);
-                modal.find('.modal-title').text('Confirmation de l\'Opération');
-                modal.find('#modal-id').text(id);
-                modal.find('#modal-operation-id').val(id);
-                modal.find('#modal-ref-agency').val(refAgency);
-                modal.find('form').attr('action', '/Journal/validate');
-            });
-        });
+        text
     </script>
 
     <script src="/js/wizard.js" type="text/javascript"></script>

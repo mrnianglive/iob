@@ -108,12 +108,6 @@
                               </td>
                               <?php } ?>
                           </tr>
-                          <!--modalStatut-->
-                          <?php //$result = $match->NewMatch($value['RefOperations']);
-                                //$montant = round($result['Payments'] + $result['Deposits']);
-                                ?>
-
-                          <!--modalStatut-->
                           <?php } ?>
                       </tbody>
                   </table>
@@ -128,14 +122,13 @@
       <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Confirmation de l'Opération
-                  </h5>
+                  <h5 class="modal-title" id="exampleModalLabel">Confirmation de l'Opération</h5>
               </div>
               <form role="form" method="post" action="/Journal/validate">
-                  <div class=" modal-body">
+                  <div class="modal-body">
                       <div class="modal-body">
-                          <input type="text" class="form-control" id="modal-operation-id" name="RefOperations" value="">
-
+                          <input type="hidden" class="form-control" id="modal-operation-id" name="RefOperations"
+                              value="">
                           <div class="form-group">
                               <label for="recipient-name" class="control-label">Date</label>
                               <input type="date" class="form-control" name="DateValidate" required>
@@ -151,17 +144,16 @@
                               </select>
                           </div>
                           <p>Voulez-vous vraiment confirmer l'opération non vérifiée pour l'ID <span
-                                  id="modal-id"></span> ?
-                          </p>
-                          <input type="text" id="modal-operation-id" name="operation_id" value="">
-
-                          <input type="text" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
-                          <input type="text" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control ">
-                          <input type="text" class="form-control" id="modal-ref-agency" name="ref_agency" readonly>
-
+                                  id="modal-id"></span> ?</p>
+                          <input type="hidden" id="modal-operation-id" name="operation_id" value="">
+                          <div class="form-group">
+                              <label for="modal-ref-agency">RefAgency :</label>
+                              <input type="text" class="form-control" id="modal-ref-agency" name="ref_agency" readonly>
+                          </div>
+                          <input type="hidden" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control">
+                          <input type="hidden" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
                       </div>
                   </div>
-
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                       <button type="submit" class="btn btn-primary">Confirmer</button>

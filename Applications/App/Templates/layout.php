@@ -206,18 +206,16 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
 
     <script>
         $(document).ready(function() {
-            // Écouteur d'événements pour le bouton "Non Vérifiée"
-            $('button[data-target="#modal"]').on('click', function() {
-                // Récupérer l'ID de l'opération depuis l'attribut "data-operation-id" du bouton
-                var operationId = $(this).data('operation-id');
-                // Mettre à jour la valeur de l'input avec l'ID de l'opération
-                $('#modal-operation-id').val(operationId);
-                // Afficher l'ID dans le contenu du modal
-                $('#modal-id').text(operationId);
-
-                // Afficher la valeur RefAgency dans le champ de formulaire correspondant
-                var refAgency = $(this).data('data-ref-agency');
-                $('#modal-ref-agency').val(refAgency);
+            $('#modal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var refAgency = button.data('ref-agency');
+                var modal = $(this);
+                modal.find('.modal-title').text('Confirmation de l\'Opération');
+                modal.find('#modal-id').text(id);
+                modal.find('#modal-operation-id').val(id);
+                modal.find('#modal-ref-agency').val(refAgency);
+                modal.find('form').attr('action', '/Journal/validate');
             });
         });
     </script>

@@ -134,8 +134,7 @@
               <form role="form" method="post" action="/Journal/validate">
                   <div class=" modal-body">
                       <div class="modal-body">
-                          <input type="hidden" class="form-control" name="RefOperations"
-                              value="<?= $value['RefOperations']; ?>">
+                          <input type="text" class="form-control" id="modal-operation-id" name="RefOperations" value="">
 
                           <div class="form-group">
                               <label for="recipient-name" class="control-label">Date</label>
@@ -158,7 +157,8 @@
 
                           <input type="text" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
                           <input type="text" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control ">
-                          <input type="text" id="RefAgency" name="RefAgency" value="" class="form-control ">
+                          <input type="text" id=" data-agency-id" name="RefAgency" value="<?= $value['RefAgency']; ?>"
+                              class="form-control ">
                       </div>
                   </div>
 

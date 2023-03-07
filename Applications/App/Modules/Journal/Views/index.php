@@ -72,18 +72,18 @@
                                   style="<?php if ($value['Validate'] == 2 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color:#7ace4c;  <?php } elseif ($value['Validate'] == 1 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color: #f33155; <?php   } ?>">
                                   <?= $value['RefOperations']; ?></td>
                               <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
-                              <td> <?php if ($value['Validate'] == 1) { ?> <button class="btn btn-danger"
+                              <td> <?php if ($value['Validate'] == 1) { ?> <<button class="btn btn-danger"
                                       data-toggle="modal" data-target="#modal"
                                       data-operation-id="<?= $value['RefOperations']; ?>"
                                       data-ref-agency="<?= $value['RefAgency']; ?>"
                                       title="Cliquez ici pour confirmer l'opération">
                                       Non Vérifiée
-                                  </button> <?php } else { ?> <a
-                                      href="/Journal/cancelvalidate/<?= $value['RefOperations']; ?>"
-                                      class="btn btn-success"
-                                      onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vérifcation ?');">
-                                      Verifiée le <span><?= $value['DateValidate']; ?></span></a>
-                                  <?php   } ?>
+                                      </button><?php } else { ?> <a
+                                          href="/Journal/cancelvalidate/<?= $value['RefOperations']; ?>"
+                                          class="btn btn-success"
+                                          onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vérifcation ?');">
+                                          Verifiée le <span><?= $value['DateValidate']; ?></span></a>
+                                      <?php   } ?>
                               </td>
                               <?php } ?>
                               <td><?= $value['NameAgency']; ?></td>

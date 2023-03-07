@@ -127,8 +127,7 @@
               <form role="form" method="post" action="/Journal/validate">
                   <div class="modal-body">
                       <div class="modal-body">
-                          <input type="hidden" class="form-control" id="modal-operation-id" name="RefOperations"
-                              value="">
+                          <input type="text" class="form-control" id="modal-operation-id" name="RefOperations" value="">
                           <div class="form-group">
                               <label for="recipient-name" class="control-label">Date</label>
                               <input type="date" class="form-control" name="DateValidate" required>
@@ -145,7 +144,7 @@
                           </div>
                           <p>Voulez-vous vraiment confirmer l'opération non vérifiée pour l'ID <span
                                   id="modal-id"></span> ?</p>
-                          <input type="hidden" id="modal-operation-id" name="operation_id" value="">
+                          <input type="text" id="modal-operation-id" name="operation_id" value="">
                           <div class="form-group">
                               <label for="modal-ref-agency">RefAgency :</label>
                               <input type="text" class="form-control" id="modal-ref-agency" name="ref_agency" readonly>

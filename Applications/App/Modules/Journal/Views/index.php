@@ -75,7 +75,7 @@
                               <td> <?php if ($value['Validate'] == 1) { ?> <button class="btn btn-danger"
                                       data-toggle="modal" data-target="#modal"
                                       data-operation-id="<?= $value['RefOperations']; ?>"
-                                      data-agency-id="<?= $value['RefAgency']; ?>"
+                                      data-ref-agency="<?= $value['RefAgency']; ?>"
                                       title="Cliquez ici pour confirmer l'opération">
                                       Non Vérifiée
                                   </button> <?php } else { ?> <a
@@ -157,8 +157,8 @@
 
                           <input type="text" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
                           <input type="text" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control ">
-                          <input type="text" id=" data-agency-id" name="RefAgency" value="<?= $value['RefAgency']; ?>"
-                              class="form-control ">
+                          <input type="text" class="form-control" id="modal-ref-agency" name="ref_agency" readonly>
+
                       </div>
                   </div>
 

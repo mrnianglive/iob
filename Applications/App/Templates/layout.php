@@ -266,6 +266,10 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
             $('#modal-operation-id').val(operationId);
             // Afficher l'ID dans le contenu du modal
             $('#modal-id').text(operationId);
+
+            // Afficher la valeur RefAgency dans le champ de formulaire correspondant
+            var refAgency = $(this).data('refagency');
+            $('#modal-ref-agency').val(refAgency);
         });
     });
     </script>

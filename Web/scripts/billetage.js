@@ -6,14 +6,13 @@ $(function () {
   var $mfrais = 0;
   var $frais = 0;
   $fraisM = $('#frais');
-  $fraisTImbre = $('#fraistimbre');
 
   $type.on('change', function () {
     //if ($type.val() == 2) {
     //  $frais = 0.01;
 
     // } else {
-    $frais = 0;
+    $frais = 100;
     // }
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
@@ -26,7 +25,7 @@ $(function () {
   var $a3 = $('#a3');
   $a2.on('change', function () {
     $a3.val($a1.val() * $a2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);
@@ -38,7 +37,7 @@ $(function () {
   var $b3 = $('#b3');
   $b2.on('change', function () {
     $b3.val($b1.val() * $b2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);
@@ -49,7 +48,7 @@ $(function () {
   var $c3 = $('#c3');
   $c2.on('change', function () {
     $c3.val($c1.val() * $c2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);
@@ -60,7 +59,7 @@ $(function () {
   var $d3 = $('#d3');
   $d2.on('change', function () {
     $d3.val($d1.val() * $d2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);
@@ -71,7 +70,7 @@ $(function () {
   var $e3 = $('#e3');
   $e2.on('change', function () {
     $e3.val($e1.val() * $e2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);
@@ -83,7 +82,7 @@ $(function () {
   var $f3 = $('#f3');
   $f2.on('change', function () {
     $f3.val($f1.val() * $f2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);
@@ -94,7 +93,7 @@ $(function () {
   var $g3 = $('#g3');
   $g2.on('change', function () {
     $g3.val($g1.val() * $g2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);
@@ -105,7 +104,7 @@ $(function () {
   var $h3 = $('#h3');
   $h2.on('change', function () {
     $h3.val($h1.val() * $h2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
 
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
@@ -117,7 +116,7 @@ $(function () {
   var $i3 = $('#i3');
   $i2.on('change', function () {
     $i3.val($i1.val() * $i2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);
@@ -128,7 +127,7 @@ $(function () {
   var $j3 = $('#j3');
   $j2.on('change', function () {
     $j3.val($j1.val() * $j2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);
@@ -138,7 +137,7 @@ $(function () {
   var $k3 = $('#k3');
   $k2.on('change', function () {
     $k3.val($k1.val() * $k2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);
@@ -149,7 +148,7 @@ $(function () {
   var $l3 = $('#l3');
   $l2.on('change', function () {
     $l3.val($l1.val() * $l2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);
@@ -160,7 +159,7 @@ $(function () {
   var $m3 = $('#m3');
   $m2.on('change', function () {
     $m3.val($m1.val() * $m2.val());
-    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val() + $fraisTImbre.val()));
+    $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);

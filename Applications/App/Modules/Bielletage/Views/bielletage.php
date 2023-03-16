@@ -506,7 +506,7 @@
                                 required>
                         </div>
                     </div>
-                    <?php } elseif ($_GET['id'] == 1) { ?>
+                    <?php } elseif ($_GET['id'] == 1 && $_SESSION['RefPays'] != 1) { ?>
                     <div class="col-md-2">
                         <div class="form-group has-error">
                             <label class="control-label">Montant</label>

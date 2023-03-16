@@ -73,8 +73,11 @@ class JournalManagerPDO extends JournalManager
             $listeCaisse[$key]['SommeRetraitRemittance'] = $this->SoldeRemittanceRetrait($Date, $value['RefCaisse']);
             $listeCaisse[$key]['SoldeRemittance'] = $listeCaisse[$key]['SommeVersementRemittance'] -
                 $listeCaisse[$key]['SommeRetraitRemittance'];
+
+
             $listeCaisse[$key]['SoldeDisponible'] = $listeCaisse[$key]['SoldeInitialGlobal'] + $listeCaisse[$key]['TotalVersement']
                 - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'];
+
             $listeCaisse[$key]['SoldeDisponibleGlobal'] = $listeCaisse[$key]['SoldeInitialGlobal'] +
                 $listeCaisse[$key]['TotalVersement'] - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'] +
                 $listeCaisse[$key]['SoldeRemittance'];
@@ -415,8 +418,10 @@ class JournalManagerPDO extends JournalManager
             $ListeCaisse[$key]['TotalVersement'] =  $this->SomnmeVersementCaisse($Date, $value['RefCaisse']);
             $ListeCaisse[$key]['TotalRetrait'] =  $this->SommeRetraitCaisse($Date, $value['RefCaisse']);
             $ListeCaisse[$key]['TotalSortieCaisse'] = $this->TotalSortieCaisse($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['TotalFraisTimbre'] = $this->TotalFraisTimbreCaisse($Date, $value['RefCaisse']);
+
             $ListeCaisse[$key]['SoldeRemittance'] = $ListeCaisse[$key]['SoldeRemittanceVersement'] - $ListeCaisse[$key]['SoldeRemittanceRetrait'];
-            $ListeCaisse[$key]['SoldeDisponible'] =   $ListeCaisse[$key]['SoldeInitialGlobal']  + $ListeCaisse[$key]['TotalVersement'] - $ListeCaisse[$key]['TotalRetrait'] - $ListeCaisse[$key]['TotalSortieCaisse'] + $ListeCaisse[$key]['SoldeRemittance'];
+            $ListeCaisse[$key]['SoldeDisponible'] =   $ListeCaisse[$key]['SoldeInitialGlobal']  + $ListeCaisse[$key]['TotalVersement'] - $ListeCaisse[$key]['TotalRetrait'] - $ListeCaisse[$key]['TotalSortieCaisse'] + $ListeCaisse[$key]['SoldeRemittance'] + $ListeCaisse[$key]['TotalFraisTimbre'];
         }
         return $ListeCaisse;
     }
@@ -960,10 +965,11 @@ class JournalManagerPDO extends JournalManager
         $SoldeInitialGlobal =  $this->SoldeInitialCaisseGlobal($Date, $Caisse);
         $TotalAppro =  $this->TotalApproCaisse($Date, $Caisse);
         $TotalVersement =  $this->SomnmeVersementCaisse($Date, $Caisse);
+        $TotalFraisTimbre =  $this->TotalFraisTimbreCaisse($Date, $Caisse);
         $TotalRetrait =  $this->SommeRetraitCaisse($Date, $Caisse);
         $TotalSortieCaisse = $this->TotalSortieCaisse($Date, $Caisse);
         $SoldeRemittance = $SoldeRemittanceVersement - $SoldeRemittanceRetrait;
-        $SoldeDisponible =   $SoldeInitialGlobal + $TotalVersement - $TotalRetrait - $TotalSortieCaisse + $SoldeRemittance;
+        $SoldeDisponible =   $SoldeInitialGlobal + $TotalVersement - $TotalRetrait - $TotalSortieCaisse + $SoldeRemittance + $TotalFraisTimbre;
         return $SoldeDisponible;
     }
 
@@ -1110,6 +1116,19 @@ class JournalManagerPDO extends JournalManager
         $requeteSUm = $this->dao->prepare('SELECT SUM(fraisTimbre) AS TotalVersment FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleAgency.RefAgency=:RefAgency AND (TbleOperations.RefType=1)');
         $requeteSUm->bindValue(':jour', $Date, \PDO::PARAM_STR);
         $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteSUm->execute();
+        $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == 0) {
+            return 0;
+        }
+        return $data['TotalVersment'];
+    }
+
+    public function TotalFraisTimbreCaisse($Date, $Caisse)
+    {
+        $requeteSUm = $this->dao->prepare('SELECT SUM(fraisTimbre) AS TotalVersment FROM TbleOperations  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleOperations.RefCaisse=:RefCaisse AND (TbleOperations.RefType=1)');
+        $requeteSUm->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         if ($data['TotalVersment'] == 0) {

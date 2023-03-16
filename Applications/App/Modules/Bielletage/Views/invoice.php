@@ -65,7 +65,7 @@
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          VERSE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETIRE <?php } ?> :
                          <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>
-                     <p>TIMBRE FISCAL : XOF 0</p>
+                     <p>FRAIS TIMBRE: <?= $GetInvoice['fraisTimbre']; ?> XOF</p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
                          <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>
@@ -208,7 +208,7 @@
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          VERSE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETIRE <?php } ?> :
                          <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>
-                     <p>TIMBRE FISCAL :XOF 0</p>
+                     <p>FRAIS TIMBRE: <?= $GetInvoice['fraisTimbre']; ?> XOF</p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
                          <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>

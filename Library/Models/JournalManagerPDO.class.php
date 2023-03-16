@@ -74,13 +74,16 @@ class JournalManagerPDO extends JournalManager
             $listeCaisse[$key]['SoldeRemittance'] = $listeCaisse[$key]['SommeVersementRemittance'] -
                 $listeCaisse[$key]['SommeRetraitRemittance'];
 
+            $ListeCaisse[$key]['TotalFraisTimbre'] = $this->TotalFraisTimbreCaisse($Date, $value['RefCaisse']);
+
+
 
             $listeCaisse[$key]['SoldeDisponible'] = $listeCaisse[$key]['SoldeInitialGlobal'] + $listeCaisse[$key]['TotalVersement']
-                - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'];
+                - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'] + $ListeCaisse[$key]['TotalFraisTimbre'];
 
             $listeCaisse[$key]['SoldeDisponibleGlobal'] = $listeCaisse[$key]['SoldeInitialGlobal'] +
                 $listeCaisse[$key]['TotalVersement'] - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'] +
-                $listeCaisse[$key]['SoldeRemittance'];
+                $listeCaisse[$key]['SoldeRemittance'] +   $ListeCaisse[$key]['TotalFraisTimbre'];
         }
         return $listeCaisse;
     }

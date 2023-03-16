@@ -1103,4 +1103,18 @@ class JournalManagerPDO extends JournalManager
 
         return $totals;
     }
+
+
+    public function SommeFraisTimbreAgence($Date, $Agence)
+    {
+        $requeteSUm = $this->dao->prepare('SELECT SUM(fraisTimbre) AS TotalVersment FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleAgency.RefAgency=:RefAgency AND (TbleOperations.RefType=1)');
+        $requeteSUm->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteSUm->execute();
+        $data = $requeteSUm->fetch();
+        if ($data['TotalVersment'] == 0) {
+            return 0;
+        }
+        return $data['TotalVersment'];
+    }
 }

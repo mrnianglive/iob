@@ -103,6 +103,9 @@
                               <th class="border-top-0">Solde Reserve</th>
                               <th class="border-top-0">Depot</th>
                               <th class="border-top-0">Retrait</th>
+                              <?php if ($_SESSION['RefPays'] != 1) { ?>
+                              <th class="border-top-0">Frais Timbre</th>
+                              <?php } ?>
                               <th class="border-top-0">Solde Agence</th>
                               <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
                               <th class="border-top-0">Action</th>
@@ -123,6 +126,9 @@
                               <td><?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?></td>
                               <td> <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
                               </td>
+                              <?php if ($_SESSION['RefPays'] != 1) { ?>
+                              <td><?= number_format($value['SommeTimbre'], 0, '.', '.'); ?></td>
+                              <?php } ?>
                               <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
                               <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
                               <td> <?php if (!empty($value['validate'])) { ?><a

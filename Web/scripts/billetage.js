@@ -8,12 +8,12 @@ $(function () {
   $fraisM = $('#frais');
 
   $type.on('change', function () {
-    //if ($type.val() == 2) {
-    //  $frais = 0.01;
+    if ($type.val() == 2) {
+      $frais = 0.01;
 
-    // } else {
-    $frais = 100;
-    // }
+    } else {
+      $frais = 100;
+    }
     $mfrais = $total.val() * $frais;
     $mtotal.val($total.val() - $mfrais);
     $fraisM.val($mfrais);

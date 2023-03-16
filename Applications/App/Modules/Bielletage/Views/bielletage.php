@@ -516,7 +516,7 @@
                     <div class="col-md-2">
                         <div class="form-group has-error">
                             <label class="control-label">FRAIS TIMBRE</label>
-                            <input type="int" id="fraistimbre" class="form-control" name="fraistimbre" value="100"
+                            <input type="int" id="fraisTimbre" class="form-control" name="fraisTimbre" value="100"
                                 readonly>
                         </div>
                     </div>

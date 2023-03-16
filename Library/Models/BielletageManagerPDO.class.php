@@ -156,12 +156,19 @@ class BielletageManagerPDO extends BielletageManager
                 $this->SortieCaisse2Caisse();
                 $this->ApproCaisse2Caisse();
             } else {
+                if (isset($_POST['fraisTimbre'])) {
+                    $fraisTimbre = $_POST['fraisTimbre'];
+                    $montantVersement = $_POST['MontantVersement'] - $fraisTimbre;
+                } else {
+                    $fraisTimbre = 0;
+                    $montantVersement = $_POST['MontantVersement'];
+                }
 
-                $requeteAddversement = $this->dao->prepare('INSERT INTO TbleOperations(RefCaisse,NumCompte,NameClient,MontantVersement,Remarque,Insert_Id,Insert_Time,Approve1_Id,Approve1_Time,Approve2_Id,Approve2_Time,Bordereau,NameDeposant,TelDeposant,RefType,TypeAppro,RefProduit,TypeRetrait,uniqid,RefPays) VALUES(:RefCaisse,:NumCompte,:NameClient,:MontantVersement,:Remarque,:Insert_Id,:Insert_Time,:Approve1_Id,:Approve1_Time,:Approve2_Id,:Approve2_Time,:Bordereau,:NameDeposant,:TelDeposant,:RefType,:TypeAppro,:RefProduit,:TypeRetrait,:uniqid,:RefPays)');
+                $requeteAddversement = $this->dao->prepare('INSERT INTO TbleOperations(RefCaisse,NumCompte,NameClient,MontantVersement,Remarque,Insert_Id,Insert_Time,Approve1_Id,Approve1_Time,Approve2_Id,Approve2_Time,Bordereau,NameDeposant,TelDeposant,RefType,TypeAppro,RefProduit,TypeRetrait,uniqid,RefPays,fraisTimbre) VALUES(:RefCaisse,:NumCompte,:NameClient,:MontantVersement,:Remarque,:Insert_Id,:Insert_Time,:Approve1_Id,:Approve1_Time,:Approve2_Id,:Approve2_Time,:Bordereau,:NameDeposant,:TelDeposant,:RefType,:TypeAppro,:RefProduit,:TypeRetrait,:uniqid,:RefPays,:fraisTimbre)');
                 $requeteAddversement->bindValue(':RefCaisse', $_POST['RefCaisse'], \PDO::PARAM_INT);
                 $requeteAddversement->bindValue(':NumCompte', $_POST['NumCompte'], \PDO::PARAM_STR);
                 $requeteAddversement->bindValue(':NameClient', $_POST['NameClient'], \PDO::PARAM_STR);
-                $requeteAddversement->bindValue(':MontantVersement', $_POST['MontantVersement'], \PDO::PARAM_STR);
+                $requeteAddversement->bindValue(':MontantVersement', $montantVersement, \PDO::PARAM_STR);
                 $requeteAddversement->bindValue(':Remarque', $_POST['Remarque'], \PDO::PARAM_STR);
                 $requeteAddversement->bindValue(':Insert_Id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
                 $requeteAddversement->bindValue(':Insert_Time', $date, \PDO::PARAM_STR);
@@ -178,6 +185,7 @@ class BielletageManagerPDO extends BielletageManager
                 $requeteAddversement->bindValue(':TypeRetrait', $TypeRetrait, \PDO::PARAM_INT);
                 $requeteAddversement->bindValue(':uniqid', $result, \PDO::PARAM_STR);
                 $requeteAddversement->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+                $requeteAddversement->bindValue(':fraisTimbre', $fraisTimbre, \PDO::PARAM_INT);
                 $requeteAddversement->execute();
                 $Refoperations = $this->dao->lastInsertId();
                 $requetteBilletage = $this->dao->prepare('INSERT INTO TbleBilletage(RefOperations,a1,a2,b1,b2,c1,c2,d1,d2,e1,e2,f1,f2,g1,g2,h1,h2,i1,i2,j1,j2,k1,k2,l1,l2,m1,m2) VALUES(:RefOperations,:a1,:a2,:b1,:b2,:c1,:c2,:d1,:d2,:e1,:e2,:f1,:f2,:g1,:g2,:h1,:h2,:i1,:i2,:j1,:j2,:k1,:k2,:l1,:l2,:m1,:m2)');

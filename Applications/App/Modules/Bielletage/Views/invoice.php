@@ -213,12 +213,13 @@
                      <p>FRAIS TIMBRE: <?= $GetInvoice['fraisTimbre']; ?> XOF</p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
-                         <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>
-                     <span class="text-uppercase"><?= $numberToLetter; ?> XOF</span>
-                     <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
-                     <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
-                     <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['login']; ?></p>
-                     <span style="float: left;">SIGNATURE</span>
+                         <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?>
+
+                         <<?= $numberToLetter; ?> </p>
+                             <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
+                             <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
+                             <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['login']; ?></p>
+                             <span style="float: left;">SIGNATURE</span>
                  </div>
                  <div style="width: 48%;display: inline-block;vertical-align: top;">
                      <div style="border: 1px solid grey;border-radius: 4px;padding: 4px 8px;margin-bottom: 10px;">

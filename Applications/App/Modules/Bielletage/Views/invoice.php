@@ -69,10 +69,10 @@
                      <p>FRAIS TIMBRE: <?= $GetInvoice['fraisTimbre']; ?> XOF</p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
-                         <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>
-                     <p class="text-uppercase">
-                         <?= $numberToLetter; ?>
+                         <?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>
+                         <?= $numberToLetter; ?> XOF
                      </p>
+
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
                      <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
                      <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['login']; ?></p>
@@ -210,15 +210,14 @@
                      <p class="text-uppercase">TITULAIRE : <?= $GetInvoice['NameClient']; ?></p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          VERSE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETIRE <?php } ?> :
-                         <?= number_format($GetInvoice['MontantVersement'] + $GetInvoice['fraisTimbre'], 0, ".", ",") ?>
-
-                         <?= $numberToLetter; ?> XOF</p>
-
+                         <?= number_format($GetInvoice['MontantVersement'] + $GetInvoice['fraisTimbre'], 0, ".", ",") . " XOF"; ?>
+                     </p>
                      <p>FRAIS TIMBRE: <?= $GetInvoice['fraisTimbre']; ?> XOF
                      </p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
-                         <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?>
+                         <?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>
+                         <?= $numberToLetter; ?> XOF
                      </p>
 
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>

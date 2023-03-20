@@ -2,6 +2,9 @@
 
 namespace Applications\App\Modules\Bielletage;
 
+require_once '__DIR__' . '/../../../../Web/config/nombre_en_lettre.php';
+
+
 class BielletageController extends \Library\BackController
 {
 
@@ -143,6 +146,7 @@ class BielletageController extends \Library\BackController
 
     public function executeInvoice(\Library\HTTPRequest $request)
     {
+
         $this->page->addVar("titles", "Bordereau"); // Titre de la page
         $this->page->setTemplate('bordereau');
         if ($request->method() == 'POST') {
@@ -155,6 +159,8 @@ class BielletageController extends \Library\BackController
         $getResetStatus = $this->managers->getManagerOf("Bielletage")->getResetStatus($reference);
         $this->page->addVar("getResetStatus", $getResetStatus); // Creation de la variable, ajout d'une variable a la vue
 
+        $numberToLetter = $this->managers->getManagerOf("Bielletage")->NumberToLetter($Invoice['MontantVersement']);
+        $this->page->addVar("numberToLetter", $numberToLetter); // Creation de la variable, ajout d'une variable a la vue
     }
     public function executeAdd(\Library\HTTPRequest $request)
     {

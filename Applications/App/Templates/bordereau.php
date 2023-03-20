@@ -1,5 +1,5 @@
 <?php
-require_once "/config/nombre_en_lettre.php";
+require_once '__DIR__' . '/../../Web/config/nombre_en_lettre.php';
 ?>
 
 <!DOCTYPE html>

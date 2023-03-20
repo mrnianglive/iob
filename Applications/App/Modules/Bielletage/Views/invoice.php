@@ -69,8 +69,8 @@
                      <p>FRAIS TIMBRE: <?= $GetInvoice['fraisTimbre']; ?> XOF</p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
-                         <?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>
-                         <?= $numberToLetter; ?> XOF
+                         <?= $numberToLetter; ?> (<?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>)
+                         XOF
                      </p>
 
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
@@ -216,8 +216,9 @@
                      </p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
-                         <?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>
-                         <?= $numberToLetter; ?> XOF
+
+                         <?= $numberToLetter; ?> (<?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>)
+                         XOF
                      </p>
 
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>

@@ -194,7 +194,7 @@
                      <?php } ?>
                  </div>
              </div>
-             <br>
+             &ensp;
              <div class="row">
                  <div style="width: 48%;display: inline-block;vertical-align: top;">
                      <p>AGENCE : <?= $GetInvoice['NameAgency']; ?></p>
@@ -292,9 +292,9 @@
                  </div>
              </div>
          </div>
-         <h6 style="text-align:right;">
+         <h5 style="text-align:right;">
              <?php if ($GetInvoice['RefPays'] == 1) { ?>MALI CREANCES SA - Intermediare en Opérations de Banque et
              Recouvrement |www.malicreances-sa.com<?php } else { ?>AFRIK CREANCES - Intermédiation en opérations
              bancaires et non bancaires |www.afrikcreances.com<?php } ?>
-         </h6>
+         </h5>
      </div>

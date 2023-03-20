@@ -2,9 +2,6 @@
 
 namespace Applications\App\Modules\Bielletage;
 
-require_once '__DIR__' . '/../../../../Web/config/nombre_en_lettre.php';
-
-
 class BielletageController extends \Library\BackController
 {
 

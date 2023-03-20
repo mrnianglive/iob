@@ -43,7 +43,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="a3" class="form-control" name="a3" readonly style="border: 1px solid #0DFF70;">
+                            <input type="int" id="a3" class="form-control" name="a3" readonly style="border: 1px solid #44E922;">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -62,7 +62,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="b3" class="form-control" name="b3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="b3" class="form-control" name="b3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -81,7 +81,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="c3" class="form-control" name="c3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="c3" class="form-control" name="c3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -100,7 +100,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="d3" class="form-control" name="d3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="d3" class="form-control" name="d3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -119,7 +119,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="e3" class="form-control" name="e3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="e3" class="form-control" name="e3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -138,7 +138,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="f3" class="form-control" name="f3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="f3" class="form-control" name="f3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -157,7 +157,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="g3" class="form-control" name="g3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="g3" class="form-control" name="g3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -176,7 +176,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="h3" class="form-control" name="h3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="h3" class="form-control" name="h3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                 </div>
@@ -199,7 +199,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="i3" class="form-control" name="i3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="i3" class="form-control" name="i3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -218,7 +218,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="j3" class="form-control" name="j3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="j3" class="form-control" name="j3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -237,7 +237,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="k3" class="form-control" name="k3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="k3" class="form-control" name="k3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -256,7 +256,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="l3" class="form-control" name="l3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="l3" class="form-control" name="l3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -275,7 +275,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="m3" class="form-control" name="m3" readonly style="border: 1px solid  #0DFF70;">
+                            <input type="int" id="m3" class="form-control" name="m3" readonly style="border: 1px solid  #44E922;">
                         </div>
                     </div>
                 </div>

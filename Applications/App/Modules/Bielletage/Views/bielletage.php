@@ -30,26 +30,20 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="a1" class="form-control" name="a1" value="10000" readonly>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
                             <input type="int" id="a2" class="form-control number-input" name="a2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="a3" class="form-control" name="a3" readonly>
+                            <input type="int" id="a1" class="form-control" name="a1" value="10000" readonly>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="b1" class="form-control" name="b1" value="5000" readonly>
+                            <input type="int" id="a3" class="form-control" name="a3" readonly>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -61,14 +55,14 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="b3" class="form-control" name="b3" readonly>
+                            <input type="int" id="b1" class="form-control" name="b1" value="5000" readonly>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="c1" class="form-control" name="c1" value="2000" readonly>
+                            <input type="int" id="b3" class="form-control" name="b3" readonly>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -80,14 +74,14 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="c3" class="form-control" name="c3" readonly>
+                            <input type="int" id="c1" class="form-control" name="c1" value="2000" readonly>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="d1" name="d1" value="1000" readonly>
+                            <input type="int" id="c3" class="form-control" name="c3" readonly>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -99,14 +93,14 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="d3" class="form-control" name="d3" readonly>
+                            <input type="int" class="form-control" id="d1" name="d1" value="1000" readonly>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="e1" name="e1" value="500" readonly>
+                            <input type="int" id="d3" class="form-control" name="d3" readonly>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -118,14 +112,14 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="e3" class="form-control" name="e3" readonly>
+                            <input type="int" class="form-control" id="e1" name="e1" value="500" readonly>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="f1" name="f1" value="250" readonly>
+                            <input type="int" id="e3" class="form-control" name="e3" readonly>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -137,14 +131,14 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="f3" class="form-control" name="f3" readonly>
+                            <input type="int" class="form-control" id="f1" name="f1" value="250" readonly>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="g1" name="g1" value="200" readonly>
+                            <input type="int" id="f3" class="form-control" name="f3" readonly>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -156,13 +150,14 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="g3" class="form-control" name="g3" readonly>
+                            <input type="int" class="form-control" id="g1" name="g1" value="200" readonly>
                         </div>
                     </div>
+
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="h1" name="h1" value="100" readonly>
+                            <input type="int" id="g3" class="form-control" name="g3" readonly>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -171,6 +166,13 @@
                             <input type="int" class="form-control number-input" id="h2" name="h2" autocomplete="OFF">
                         </div>
                     </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="h1" name="h1" value="100" readonly>
+                        </div>
+                    </div>
+
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
@@ -184,26 +186,20 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="i1" name="i1" value="50" readonly>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
                             <input type="int" class="form-control number-input" id="i2" name="i2" autocomplete="OFF">
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="i3" class="form-control" name="i3" readonly>
+                            <input type="int" class="form-control" id="i1" name="i1" value="50" readonly>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="j1" name="j1" value="25" readonly>
+                            <input type="int" id="i3" class="form-control" name="i3" readonly>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -215,14 +211,14 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="j3" class="form-control" name="j3" readonly>
+                            <input type="int" class="form-control" id="j1" name="j1" value="25" readonly>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="k1" name="k1" value="10" readonly>
+                            <input type="int" id="j3" class="form-control" name="j3" readonly>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -234,14 +230,14 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="k3" class="form-control" name="k3" readonly>
+                            <input type="int" class="form-control" id="k1" name="k1" value="10" readonly>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="l1" name="l1" value="5" readonly>
+                            <input type="int" id="k3" class="form-control" name="k3" readonly>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -253,14 +249,14 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="l3" class="form-control" name="l3" readonly>
+                            <input type="int" class="form-control" id="l1" name="l1" value="5" readonly>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" class="form-control" id="m1" name="m1" value="1" readonly>
+                            <input type="int" id="l3" class="form-control" name="l3" readonly>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -269,6 +265,13 @@
                             <input type="int" class="form-control number-input" id="m2" name="m2" autocomplete="OFF">
                         </div>
                     </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="m1" name="m1" value="1" readonly>
+                        </div>
+                    </div>
+
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>

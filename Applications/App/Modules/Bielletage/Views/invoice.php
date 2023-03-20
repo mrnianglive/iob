@@ -215,6 +215,8 @@
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
                          <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>
+                     <span style="float: left;"> <?= nombre_en_lettre($GetInvoice['MontantVersement'], 'XOF'); ?></span>
+
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
                      <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
                      <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['login']; ?></p>

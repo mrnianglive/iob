@@ -498,7 +498,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group has-error">
-                                        <label class="control-label">Montant à Payer</label>
+                                        <label class="control-label">Montant à Créditer *</label>
                                         <input type="int" id="mtotal" class="form-control" name="MontantVersement" readonly="" required>
                                     </div>
                                 </div>

@@ -43,7 +43,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="int" id="a3" class="form-control" name="a3" readonly style="border: 1px solid coral;">
+                            <input type="int" id="a3" class="form-control" name="a3" readonly style="border: 1px solid #E50DFF;">
                         </div>
                     </div>
                     <div class="col-sm-2">

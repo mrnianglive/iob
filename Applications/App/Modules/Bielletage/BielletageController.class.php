@@ -134,6 +134,8 @@ class BielletageController extends \Library\BackController
 
         $TypeRetrait = $manager->TypeRetrait();
         $this->page->addVar("TypeRetrait", $TypeRetrait);
+        $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("ListePays", $ListePays);
 
         $AllPermissions = $this->managers->getManagerOf('Pannel')->UserPermission();
         $permissions = array_column($AllPermissions, 'access');

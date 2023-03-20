@@ -226,7 +226,14 @@
                      <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
                      <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['login']; ?></p>
                  </div>
-                 <div style="width: 48%;display: inline-block;vertical-align: top;">
+                 <div style="width: 48%;display: inline-block;vertical-align: top;float:right;">
+                     <h5 style="text-align:right;">
+                         <?php if ($GetInvoice['RefPays'] == 1) { ?>MALI CREANCES SA - Intermediare en Opérations de
+                         Banque et
+                         Recouvrement |www.malicreances-sa.com<?php } else { ?>AFRIK CREANCES - Intermédiation en
+                         opérations
+                         bancaires et non bancaires |www.afrikcreances.com<?php } ?>
+                     </h5>
                      <div style="border: 1px solid grey;border-radius: 4px;padding: 4px 8px;margin-bottom: 10px;">
                          <p style="text-align: center;">
                              <b><u><?php if ($GetInvoice['RefType'] == 1) { ?>DEPOSANT<?php } elseif ($GetInvoice['RefType'] == 2) { ?>AUTEUR
@@ -290,12 +297,8 @@
                          </tbody>
                      </table>
                  </div>
-             </div>
-             <h5 style="text-align:right;">
-                 <?php if ($GetInvoice['RefPays'] == 1) { ?>MALI CREANCES SA - Intermediare en Opérations de Banque et
-                 Recouvrement |www.malicreances-sa.com<?php } else { ?>AFRIK CREANCES - Intermédiation en opérations
-                 bancaires et non bancaires |www.afrikcreances.com<?php } ?>
-             </h5>
-         </div>
 
-     </div>
+
+
+             </div>
+         </div>

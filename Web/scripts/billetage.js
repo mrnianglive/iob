@@ -16,7 +16,7 @@ $(function () {
     $frais = 0;
     // }
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
 
   });
@@ -28,7 +28,7 @@ $(function () {
     $a3.val($a1.val() * $a2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
 
 
@@ -40,7 +40,7 @@ $(function () {
     $b3.val($b1.val() * $b2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
   });
 
@@ -51,7 +51,7 @@ $(function () {
     $c3.val($c1.val() * $c2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
   });
 
@@ -62,7 +62,7 @@ $(function () {
     $d3.val($d1.val() * $d2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
   });
 
@@ -73,7 +73,7 @@ $(function () {
     $e3.val($e1.val() * $e2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
 
   });
@@ -85,7 +85,7 @@ $(function () {
     $f3.val($f1.val() * $f2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
   });
 
@@ -96,7 +96,7 @@ $(function () {
     $g3.val($g1.val() * $g2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
   });
 
@@ -108,7 +108,7 @@ $(function () {
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
 
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
   });
 
@@ -130,7 +130,7 @@ $(function () {
     $j3.val($j1.val() * $j2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
   });
   var $k1 = $('#k1');
@@ -140,7 +140,7 @@ $(function () {
     $k3.val($k1.val() * $k2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
   });
 
@@ -151,7 +151,7 @@ $(function () {
     $l3.val($l1.val() * $l2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
   });
 
@@ -162,7 +162,7 @@ $(function () {
     $m3.val($m1.val() * $m2.val());
     $total.val(Number($a3.val()) + Number($b3.val()) + Number($c3.val()) + Number($d3.val()) + Number($e3.val()) + Number($f3.val()) + Number($g3.val()) + Number($h3.val()) + Number($i3.val()) + Number($j3.val()) + Number($k3.val()) + Number($l3.val()) + Number($m3.val()));
     $mfrais = $total.val() * $frais;
-    $mtotal.val($total.val() - $mfrais + Number($fraisTimbre.val()));
+    $mtotal.val($total.val() - $mfrais - Number($fraisTimbre.val()));
     $fraisM.val($mfrais);
   });
 

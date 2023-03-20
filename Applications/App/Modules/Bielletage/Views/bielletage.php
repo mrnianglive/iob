@@ -33,7 +33,7 @@
                             <input type="int" id="a2" class="form-control number-input" name="a2" autocomplete="OFF">
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-2" style="border: 1px solid blue;">
                         <div class="form-group">
                             <label class="control-label"></label>
                             <input type="int" id="a1" class="form-control" name="a1" value="10000" readonly>

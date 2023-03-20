@@ -1,22 +1,25 @@
      <div class="wrapper wrapper-content" style="margin: 0px 32px;padding: 0px !important;">
          <div style="padding: 0px !important;">
-             <div class="row" style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
+             <div class="row"
+                 style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
                  <div style="width: 10%; display: inline-block; vertical-align: top;">
                      <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                         <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px; width: 100%;">
-                         <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px; width: 100%;">
+                     <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px; width: 100%;">
+                     <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px; width: 100%;">
                      <?php } else { ?>
-                         <img src="/images/afc.png" alt="Logo" style="height: 80px; width: 250%;">
+                     <img src="/images/afc.png" alt="Logo" style="height: 80px; width: 250%;">
                      <?php } ?>
                  </div>
                  <div style="text-align: center; width: 88%; display: inline-block;">
                      <p>
                          <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                             MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement
+                         MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement
                          <?php } else { ?>
-                             AFRIK CREANCES
+                         AFRIK CREANCES
                          <?php } ?>
-                         <img style="float: right; margin-right: -15px;" src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>" width="80" height="80" alt="Logo">
+                         <img style="float: right; margin-right: -15px;"
+                             src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
+                             width="80" height="80" alt="Logo">
                      </p>
                      <h2>
                          <?php
@@ -40,7 +43,7 @@
                      </h2>
                      <h3>BANQUE</h3>
                      <?php if ($getResetStatus == true) { ?>
-                         <h3 style="color:#c62828;">Opération Annulée</h3>
+                     <h3 style="color:#c62828;">Opération Annulée</h3>
                      <?php } ?>
                  </div>
              </div>
@@ -56,17 +59,17 @@
                      <p>DATE : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?> <?= gmdate("H:i:s"); ?></p>
                      <p>MOTIF : <?= $GetInvoice['Remarque']; ?></p>
                      <p>N° DU COMPTE <?php if ($GetInvoice['RefType'] == 1) { ?>
-                             CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
+                         CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
                          <?= $GetInvoice['NumCompte']; ?></p>
                      <p class="text-uppercase">TITULAIRE : <?= $GetInvoice['NameClient']; ?></p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          VERSE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETIRE <?php } ?> :
-                     <?= number_format($GetInvoice['MontantVersement'] + $GetInvoice['fraisTimbre'], 0, ".", ",") . " XOF"; ?>
+                         <?= number_format($GetInvoice['MontantVersement'] + $GetInvoice['fraisTimbre'], 0, ".", ",") . " XOF"; ?>
                      </p>
                      <p>FRAIS TIMBRE: <?= $GetInvoice['fraisTimbre']; ?> XOF</p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
-                     <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>
+                         <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
                      <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
                      <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['login']; ?></p>
@@ -142,23 +145,26 @@
          </div>
          <hr>
          <div style="padding: 0px !important;">
-             <div class="row" style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
+             <div class="row"
+                 style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
                  <div style="width: 10%; display: inline-block; vertical-align: top;">
                      <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                         <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px; width: 100%;">
-                         <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px; width: 100%;">
+                     <img src="/bordereau/mlc.jpg" alt="Logo" style="height: 40px; width: 100%;">
+                     <img src="/bordereau/ecobank.jpg" alt="Logo" style="height: 40px; width: 100%;">
                      <?php } else { ?>
-                         <img src="/images/afc.png" alt="Logo" style="height: 80px; width: 250%;">
+                     <img src="/images/afc.png" alt="Logo" style="height: 80px; width: 250%;">
                      <?php } ?>
                  </div>
                  <div style="text-align: center; width: 88%; display: inline-block;">
                      <p>
                          <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                             MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement
+                         MALI CREANCES SA - Intermediare en Opérations de Banque et Recouvrement
                          <?php } else { ?>
-                             AFRIK CREANCES
+                         AFRIK CREANCES
                          <?php } ?>
-                         <img style="float: right; margin-right: -15px;" src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>" width="80" height="80" alt="Logo">
+                         <img style="float: right; margin-right: -15px;"
+                             src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
+                             width="80" height="80" alt="Logo">
                      </p>
                      <h2>
                          <?php
@@ -182,7 +188,7 @@
                      </h2>
                      <h3>CLIENT</h3>
                      <?php if ($getResetStatus == true) { ?>
-                         <h3 style="color:#c62828;">Opération Annulée</h3>
+                     <h3 style="color:#c62828;">Opération Annulée</h3>
                      <?php } ?>
                  </div>
              </div>
@@ -198,21 +204,21 @@
                      <p>DATE : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?> <?= gmdate("H:i:s"); ?></p>
                      <p>MOTIF : <?= $GetInvoice['Remarque']; ?></p>
                      <p>N° DU COMPTE <?php if ($GetInvoice['RefType'] == 1) { ?>
-                             CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
+                         CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
                          <?= $GetInvoice['NumCompte']; ?></p>
                      <p class="text-uppercase">TITULAIRE : <?= $GetInvoice['NameClient']; ?></p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          VERSE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETIRE <?php } ?> :
-                     <?= number_format($GetInvoice['MontantVersement'] + $GetInvoice['fraisTimbre'], 0, ".", ",") . " XOF"; ?>
+                         <?= number_format($GetInvoice['MontantVersement'] + $GetInvoice['fraisTimbre'], 0, ".", ",") . " XOF"; ?>
                      </p>
                      <p>FRAIS TIMBRE: <?= $GetInvoice['fraisTimbre']; ?> XOF</p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
-                     <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>
+                         <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
                      <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
                      <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['login']; ?></p>
-                     <span style="float: left;">Signature</span>
+                     <span style="float: left;">SIGNATURE</span>
                  </div>
                  <div style="width: 48%;display: inline-block;vertical-align: top;">
                      <div style="border: 1px solid grey;border-radius: 4px;padding: 4px 8px;margin-bottom: 10px;">
@@ -222,7 +228,7 @@
                          </p>
                          <p class="text-uppercase">Nom & Prénom : <?= $GetInvoice['NameDeposant']; ?></p>
                          <p class="text-uppercase">Tel : <?= $GetInvoice['TelDeposant']; ?></p>
-                         <p class="text-uppercase">Signature :</p>
+                         <p class="text-uppercase">SIGNATURE :</p>
                          <br>
                      </div>
                      <table class="table table-bordered" style="border: none !important;">

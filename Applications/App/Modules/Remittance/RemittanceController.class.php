@@ -46,7 +46,8 @@ class RemittanceController extends \Library\BackController
             $Operation = $this->managers->getManagerOf('Remittance')->ListeOperations(date('Y-m-d'), date('Y-m-d'));
             $this->page->addVar('Operation', $Operation);
         }
-
+        $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("ListePays", $ListePays);
         $permissions = array();
         $AllPermissions = $this->managers->getManagerOf('Pannel')->UserPermission();
         foreach ($AllPermissions as $key => $value) {

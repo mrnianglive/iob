@@ -290,66 +290,161 @@ class ArreterManagerPDO extends ArreterManager
         }
     }
 
-    function convertNumberToWords($number)
+    function NumberToLetter($nombre, $uppercase = false, $lang = 'fr-FR')
     {
-        $units = array("", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "douze", "treize", "quatorze", "quinze", "seize");
-        $tens = array("", "dix", "vingt", "trente", "quarante", "cinquante", "soixante", "soixante-dix", "quatre-vingt", "quatre-vingt-dix");
-        $thousands = array("", "mille", "million", "milliard", "billion", "billiard", "trillion", "trilliard");
 
-        if (!is_numeric($number)) {
-            return false;
+        $toLetter = [
+            0 => "zéro",
+            1 => "un",
+            2 => "deux",
+            3 => "trois",
+            4 => "quatre",
+            5 => "cinq",
+            6 => "six",
+            7 => "sept",
+            8 => "huit",
+            9 => "neuf",
+            10 => "dix",
+            11 => "onze",
+            12 => "douze",
+            13 => "treize",
+            14 => "quatorze",
+            15 => "quinze",
+            16 => "seize",
+            17 => "dix-sept",
+            18 => "dix-huit",
+            19 => "dix-neuf",
+            20 => "vingt",
+            30 => "trente",
+            40 => "quarante",
+            50 => "cinquante",
+            60 => "soixante",
+            70 => "soixante-dix",
+            80 => "quatre-vingt",
+            90 => "quatre-vingt-dix",
+        ];
+
+        if ($lang !== 'fr-FR') {
+            // Ajouter des entrées au tableau pour d'autres langues si nécessaire
+            return "Langue non supportée";
         }
 
-        if ($number < 0) {
-            return "moins " . convertNumberToWords(abs($number));
+        $numberToLetter = '';
+        $nombre = strtr((string)$nombre, [" " => ""]);
+        $nb = floatval($nombre);
+
+        if (strlen($nombre) > 15) {
+            return "dépassement de capacité";
+        }
+        if (!is_numeric($nombre)) {
+            return "Nombre non valide";
         }
 
-        $result = "";
+        // Ajouter un cas pour les nombres négatifs
+        $is_negative = false;
+        if ($nb < 0) {
+            $is_negative = true;
+            $nb = abs($nb);
+            $numberToLetter .= "moins ";
+        }
 
-        // Diviser le nombre en blocs de trois chiffres
-        $blocks = array_reverse(str_split(str_pad($number, ceil(strlen($number) / 3) * 3, "0", STR_PAD_LEFT), 3));
-
-        // Pour chaque bloc, convertir en toutes lettres
-        foreach ($blocks as $i => $block) {
-            $block = (int) $block;
-            if ($block > 0) {
-                $blockResult = "";
-                if ($block < 17) {
-                    $blockResult .= $units[$block];
-                } elseif ($block < 100) {
-                    $ten = (int) ($block / 10);
-                    $unit = $block % 10;
-                    $blockResult .= $tens[$ten];
-                    if ($unit == 1 || $unit == 11) {
-                        $blockResult .= " et " . $units[$unit];
-                    } elseif ($unit > 1) {
-                        $blockResult .= "-" . $units[$unit];
-                    }
-                } else {
-                    $hundred = (int) ($block / 100);
-                    $remainder = $block % 100;
-                    if ($hundred > 1) {
-                        $blockResult .= $units[$hundred] . " cent";
-                    } elseif ($hundred == 1) {
-                        $blockResult .= "cent";
-                    }
-                    if ($remainder > 0) {
-                        if ($hundred > 0) {
-                            $blockResult .= " ";
+        if (ceil($nb) != $nb) {
+            $nb = explode('.', $nombre);
+            $numberToLetter .= NumberToLetter($nb[0], $uppercase, $lang) . " virgule " . NumberToLetter($nb[1], $uppercase, $lang);
+        } else {
+            $n = strlen($nombre);
+            switch ($n) {
+                case 1:
+                    $numberToLetter = $toLetter[$nb];
+                    break;
+                case 2:
+                    if ($nb > 19) {
+                        $quotient = floor($nb / 10);
+                        $reste = $nb % 10;
+                        if ($nb < 71 || ($nb > 79 && $nb < 91)) {
+                            if ($reste == 0) {
+                                $numberToLetter = $toLetter[$quotient * 10];
+                            } else if ($reste == 1) {
+                                $numberToLetter = $toLetter[$quotient * 10] . "-et-" . $toLetter[$reste];
+                            } else {
+                                $numberToLetter = $toLetter[$quotient * 10] . "-" . $toLetter[$reste];
+                            }
+                        } else {
+                            $numberToLetter = $toLetter[($quotient - 1) * 10] . "-" . $toLetter[10 + $reste];
                         }
-                        $blockResult .= convertNumberToWords($remainder);
+                    } else            $numberToLetter = $toLetter[$nb];
+                    break;
+
+                case 3:
+                    $quotient = floor($nb / 100);
+                    $reste = $nb % 100;
+                    if ($quotient == 1 && $reste == 0) {
+                        $numberToLetter = "cent";
+                    } else if ($quotient == 1 && $reste != 0) {
+                        $numberToLetter = "cent" . " " . NumberToLetter($reste, $uppercase, $lang);
+                    } else if ($quotient > 1 && $reste == 0) {
+                        $numberToLetter = $toLetter[$quotient] . " cents";
+                    } else if ($quotient > 1 && $reste != 0) {
+                        $numberToLetter = $toLetter[$quotient] . " cent " . NumberToLetter($reste, $uppercase, $lang);
                     }
-                }
-                if ($i > 0) {
-                    $blockResult .= " " . $thousands[$i];
-                    if ($block > 1 && $i == 1) {
-                        $blockResult .= "s";
+                    break;
+
+                case 4:
+                case 5:
+                case 6:
+                    $quotient = floor($nb / 1000);
+                    $reste = $nb - $quotient * 1000;
+                    if ($quotient == 1 && $reste == 0) {
+                        $numberToLetter = "mille";
+                    } else if ($quotient == 1 && $reste != 0) {
+                        $numberToLetter = "mille" . " " . NumberToLetter($reste, $uppercase, $lang);
+                    } else if ($quotient > 1 && $reste == 0) {
+                        $numberToLetter = NumberToLetter($quotient, $uppercase, $lang) . " mille";
+                    } else if ($quotient > 1 && $reste != 0) {
+                        $numberToLetter = NumberToLetter($quotient, $uppercase, $lang) . " mille " . NumberToLetter($reste, $uppercase, $lang);
                     }
-                }
-                $result .= $blockResult . " ";
+                    break;
+
+                default:
+                    $divisors = array(
+                        1000000000000 => "billion",
+                        1000000000 => "milliard",
+                        1000000 => "million",
+                    );
+                    foreach ($divisors as $divisor => $word) {
+                        if ($nb >= $divisor) {
+                            $quotient = floor($nb / $divisor);
+                            $reste = $nb - $quotient * $divisor;
+                            if ($quotient == 1 && $reste == 0) {
+                                $numberToLetter = "un " . $word;
+                            } else if ($quotient == 1 && $reste != 0) {
+                                $numberToLetter = "un " . $word . " " . NumberToLetter($reste, $uppercase, $lang);
+                            } else if ($quotient > 1 && $reste == 0) {
+                                $numberToLetter = NumberToLetter($quotient, $uppercase, $lang) . " " . $word . "s";
+                            } else if ($quotient > 1 && $reste != 0) {
+                                $numberToLetter = NumberToLetter($quotient, $uppercase, $lang) . " " . $word . "s " . NumberToLetter($reste, $uppercase, $lang);
+                            }
+                            break;
+                        }
+                    }
+            }
+
+            // Respecter l'accord de quatre-vingt
+            if (substr($numberToLetter, strlen($numberToLetter) - 12, 12) == "quatre-vingt") {
+                $numberToLetter .= "s";
             }
         }
 
-        return trim($result);
+        // Mettre en majuscule
+        if ($uppercase) {
+            $numberToLetter = mb_strtoupper(mb_substr($numberToLetter, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($numberToLetter, 1, mb_strlen($numberToLetter) - 1, 'UTF-8');
+        }
+
+        // Ajouter des espaces insécables pour améliorer la lisibilité
+        $numberToLetter = str_replace(' -', ' -', $numberToLetter); // espace insécable avant le tiret
+        $numberToLetter = str_replace('-', ' - ', $numberToLetter); // espace insécable de chaque côté du tiret
+        $numberToLetter = str_replace('  ', ' ', $numberToLetter); // supprimer les espaces en double
+
+        return $numberToLetter;
     }
 }

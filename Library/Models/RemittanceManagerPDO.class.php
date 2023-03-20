@@ -23,6 +23,12 @@ class RemittanceManagerPDO extends RemittanceManager
 
     public function Add()
     {
+        if (isset($_SESSION['RefPays'])) {
+            $pays = $_SESSION['RefPays'];
+        } else {
+            $pays = $_POST['RefPays'];
+        }
+
         $requete = $this->dao->prepare("INSERT INTO TbleRemittance(RefCaisse,RefProduit,RefType,NumPhone,NomComplet,MontantTransaction,Insert_id,RefPays) VALUES(:RefCaisse,:RefProduit,:RefType,:NumPhone,:NomComplet,:MontantTransaction,:Insert_id,:RefPays)");
         $requete->bindValue(':RefCaisse', $_POST['RefCaisse'], \PDO::PARAM_INT);
         $requete->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
@@ -31,7 +37,7 @@ class RemittanceManagerPDO extends RemittanceManager
         $requete->bindValue(':NomComplet', $_POST['NomComplet'], \PDO::PARAM_STR);
         $requete->bindValue(':MontantTransaction', $_POST['MontantTransaction'], \PDO::PARAM_STR);
         $requete->bindValue(':Insert_id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
-        $requete->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
+        $requete->bindValue(':RefPays', $pays, \PDO::PARAM_INT);
         $requete->execute();
         $id = $this->dao->lastInsertId();
         if (!empty($_POST['Antidate'])) {

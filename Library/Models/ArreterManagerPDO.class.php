@@ -290,9 +290,8 @@ class ArreterManagerPDO extends ArreterManager
         }
     }
 
-    function NumberToLetter($nombre, $uppercase = false, $lang = 'fr-FR')
+    function NumberToLetter($number, $uppercase = false, $lang = 'fr')
     {
-
         $toLetter = [
             0 => "zéro",
             1 => "un",
@@ -324,126 +323,70 @@ class ArreterManagerPDO extends ArreterManager
             90 => "quatre-vingt-dix",
         ];
 
-        if ($lang !== 'fr-FR') {
-            // Ajouter des entrées au tableau pour d'autres langues si nécessaire
-            return "Langue non supportée";
-        }
-
         $numberToLetter = '';
-        $nombre = strtr((string)$nombre, [" " => ""]);
-        $nb = floatval($nombre);
+        $nb = floatval($number);
 
-        if (strlen($nombre) > 15) {
-            return "dépassement de capacité";
-        }
-        if (!is_numeric($nombre)) {
-            return "Nombre non valide";
-        }
-
-        // Ajouter un cas pour les nombres négatifs
-        $is_negative = false;
-        if ($nb < 0) {
-            $is_negative = true;
-            $nb = abs($nb);
-            $numberToLetter .= "moins ";
-        }
-
+        if ($nb > 999999999) return "dépassement de capacité";
+        if (!is_numeric($number)) return "Nombre non valide";
         if (ceil($nb) != $nb) {
-            $nb = explode('.', $nombre);
-            $numberToLetter .= NumberToLetter($nb[0], $uppercase, $lang) . " virgule " . NumberToLetter($nb[1], $uppercase, $lang);
-        } else {
-            $n = strlen($nombre);
-            switch ($n) {
-                case 1:
-                    $numberToLetter = $toLetter[$nb];
-                    break;
-                case 2:
-                    if ($nb > 19) {
-                        $quotient = floor($nb / 10);
-                        $reste = $nb % 10;
-                        if ($nb < 71 || ($nb > 79 && $nb < 91)) {
-                            if ($reste == 0) {
-                                $numberToLetter = $toLetter[$quotient * 10];
-                            } else if ($reste == 1) {
-                                $numberToLetter = $toLetter[$quotient * 10] . "-et-" . $toLetter[$reste];
-                            } else {
-                                $numberToLetter = $toLetter[$quotient * 10] . "-" . $toLetter[$reste];
-                            }
-                        } else {
-                            $numberToLetter = $toLetter[($quotient - 1) * 10] . "-" . $toLetter[10 + $reste];
-                        }
-                    } else            $numberToLetter = $toLetter[$nb];
-                    break;
-
-                case 3:
-                    $quotient = floor($nb / 100);
-                    $reste = $nb % 100;
-                    if ($quotient == 1 && $reste == 0) {
-                        $numberToLetter = "cent";
-                    } else if ($quotient == 1 && $reste != 0) {
-                        $numberToLetter = "cent" . " " . NumberToLetter($reste, $uppercase, $lang);
-                    } else if ($quotient > 1 && $reste == 0) {
-                        $numberToLetter = $toLetter[$quotient] . " cents";
-                    } else if ($quotient > 1 && $reste != 0) {
-                        $numberToLetter = $toLetter[$quotient] . " cent " . NumberToLetter($reste, $uppercase, $lang);
-                    }
-                    break;
-
-                case 4:
-                case 5:
-                case 6:
-                    $quotient = floor($nb / 1000);
-                    $reste = $nb - $quotient * 1000;
-                    if ($quotient == 1 && $reste == 0) {
-                        $numberToLetter = "mille";
-                    } else if ($quotient == 1 && $reste != 0) {
-                        $numberToLetter = "mille" . " " . NumberToLetter($reste, $uppercase, $lang);
-                    } else if ($quotient > 1 && $reste == 0) {
-                        $numberToLetter = NumberToLetter($quotient, $uppercase, $lang) . " mille";
-                    } else if ($quotient > 1 && $reste != 0) {
-                        $numberToLetter = NumberToLetter($quotient, $uppercase, $lang) . " mille " . NumberToLetter($reste, $uppercase, $lang);
-                    }
-                    break;
-
-                default:
-                    $divisors = array(
-                        1000000000000 => "billion",
-                        1000000000 => "milliard",
-                        1000000 => "million",
-                    );
-                    foreach ($divisors as $divisor => $word) {
-                        if ($nb >= $divisor) {
-                            $quotient = floor($nb / $divisor);
-                            $reste = $nb - $quotient * $divisor;
-                            if ($quotient == 1 && $reste == 0) {
-                                $numberToLetter = "un " . $word;
-                            } else if ($quotient == 1 && $reste != 0) {
-                                $numberToLetter = "un " . $word . " " . NumberToLetter($reste, $uppercase, $lang);
-                            } else if ($quotient > 1 && $reste == 0) {
-                                $numberToLetter = NumberToLetter($quotient, $uppercase, $lang) . " " . $word . "s";
-                            } else if ($quotient > 1 && $reste != 0) {
-                                $numberToLetter = NumberToLetter($quotient, $uppercase, $lang) . " " . $word . "s " . NumberToLetter($reste, $uppercase, $lang);
-                            }
-                            break;
-                        }
-                    }
-            }
-
-            // Respecter l'accord de quatre-vingt
-            if (substr($numberToLetter, strlen($numberToLetter) - 12, 12) == "quatre-vingt") {
-                $numberToLetter .= "s";
-            }
+            $nb = explode('.', $number);
+            return NumberToLetter($nb[0]) . " virgule " . NumberToLetter($nb[1]);
         }
 
-        // Mettre en majuscule
+        if ($nb < 0) {
+            $numberToLetter .= 'moins ';
+            $nb *= -1;
+        }
+
+        $n = strlen($number);
+        switch ($n) {
+            case 1:
+                $numberToLetter .= $toLetter[$nb];
+                break;
+            case 2:
+                if ($nb > 19) {
+                    $quotient = floor($nb / 10);
+                    $reste = $nb % 10;
+                    if ($nb < 71 || ($nb > 79 && $nb < 91)) {
+                        if ($reste == 0) $numberToLetter .= $toLetter[$quotient * 10];
+                        if ($reste == 1) $numberToLetter .= $toLetter[$quotient * 10] . "-et-" . $toLetter[$reste];
+                        if ($reste > 1) $numberToLetter .= $toLetter[$quotient * 10] . "-" . $toLetter[$reste];
+                    } else $numberToLetter .= $toLetter[($quotient - 1) * 10] . "-" . $toLetter[10 + $reste];
+                } else $numberToLetter .= $toLetter[$nb];
+                break;
+
+            case 3:
+                $quotient = floor($nb / 100);
+                $reste = $nb % 100;
+                if ($quotient == 1 && $reste == 0) $numberToLetter .= "cent";
+                if ($quotient == 1 && $reste != 0) $numberToLetter .= "cent" . " " . NumberToLetter($reste);
+                if ($quotient > 1 && $reste == 0) $numberToLetter($quotient) . " cents";
+                if ($quotient > 1 && $reste != 0) $numberToLetter .= NumberToLetter($quotient) . " cent " . NumberToLetter($reste);
+                break;
+            case 4:
+            case 5:
+            case 6:
+                $quotient = floor($nb / 1000);
+                $reste = $nb - $quotient * 1000;
+                if ($quotient == 1 && $reste == 0) $numberToLetter .= "mille";
+                if ($quotient == 1 && $reste != 0) $numberToLetter .= "mille" . " " . NumberToLetter($reste);
+                if ($quotient > 1 && $reste == 0) $numberToLetter .= NumberToLetter($quotient) . " mille";
+                if ($quotient > 1 && $reste != 0) $numberToLetter .= NumberToLetter($quotient) . " mille " . NumberToLetter($reste);
+                break;
+            case 7:
+            case 8:
+            case 9:
+                $quotient = floor($nb / 1000000);
+                $reste = $nb % 1000000;
+                if ($quotient == 1 && $reste == 0) $numberToLetter .= "un million";
+                if ($quotient == 1 && $reste != 0) $numberToLetter .= "un million" . " " . NumberToLetter($reste);
+                if ($quotient > 1 && $reste == 0) $numberToLetter .= NumberToLetter($quotient) . " millions";
+                if ($quotient > 1 && $reste != 0) $numberToLetter .= NumberToLetter($quotient) . " millions " . NumberToLetter($reste);
+                break;
+        }
         if ($uppercase) {
-            $numberToLetter = mb_strtoupper(mb_substr($numberToLetter, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($numberToLetter, 1, mb_strlen($numberToLetter) - 1, 'UTF-8');
+            $numberToLetter = ucfirst($numberToLetter);
         }
-
-        // Ajouter des espaces insécables pour améliorer la lisibilité
-        $numberToLetter = str_replace(' -', ' -', $numberToLetter); // espace insécable avant le tiret
-        $numberToLetter = str_replace('-', ' - ', $numberToLetter); // espace insécable de chaque côté du tiret
-        $numberToLetter = str_replace('  ', ' ', $numberToLetter); // supprimer les espaces en double
 
         return $numberToLetter;
     }

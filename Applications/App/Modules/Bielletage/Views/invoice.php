@@ -211,7 +211,7 @@
                      <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?></p>
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
                      <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
-                     <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['login ']; ?></p>
+                     <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['login']; ?></p>
                      <p class="text-uppercase">Signature :</p>
                  </div>
                  <div style="width: 48%;display: inline-block;vertical-align: top;">

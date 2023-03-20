@@ -290,122 +290,66 @@ class ArreterManagerPDO extends ArreterManager
         }
     }
 
-
-    public  function NumberToLetter($nombre, $U = null, $D = null)
+    function convertNumberToWords($number)
     {
+        $units = array("", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "douze", "treize", "quatorze", "quinze", "seize");
+        $tens = array("", "dix", "vingt", "trente", "quarante", "cinquante", "soixante", "soixante-dix", "quatre-vingt", "quatre-vingt-dix");
+        $thousands = array("", "mille", "million", "milliard", "billion", "billiard", "trillion", "trilliard");
 
-        $toLetter = [
-            0 => "zéro",
-            1 => "un",
-            2 => "deux",
-            3 => "trois",
-            4 => "quatre",
-            5 => "cinq",
-            6 => "six",
-            7 => "sept",
-            8 => "huit",
-            9 => "neuf",
-            10 => "dix",
-            11 => "onze",
-            12 => "douze",
-            13 => "treize",
-            14 => "quatorze",
-            15 => "quinze",
-            16 => "seize",
-            17 => "dix-sept",
-            18 => "dix-huit",
-            19 => "dix-neuf",
-            20 => "vingt",
-            30 => "trente",
-            40 => "quarante",
-            50 => "cinquante",
-            60 => "soixante",
-            70 => "soixante-dix",
-            80 => "quatre-vingt",
-            90 => "quatre-vingt-dix",
-        ];
-
-        global $toLetter;
-        $numberToLetter = '';
-        $nombre = strtr((string)$nombre, [" " => ""]);
-        $nb = floatval($nombre);
-
-        if (strlen($nombre) > 15) return "dépassement de capacité";
-        if (!is_numeric($nombre)) return "Nombre non valide";
-        if (ceil($nb) != $nb) {
-            $nb = explode('.', $nombre);
-            return NumberToLetter($nb[0]) . ($U ? " $U et " : " virgule ") . NumberToLetter($nb[1]) . ($D ? " $D" : "");
+        if (!is_numeric($number)) {
+            return false;
         }
 
-        $n = strlen($nombre);
-        switch ($n) {
-            case 1:
-                $numberToLetter = $toLetter[$nb];
-                break;
-            case 2:
-                if ($nb > 19) {
-                    $quotient = floor($nb / 10);
-                    $reste = $nb % 10;
-                    if ($nb < 71 || ($nb > 79 && $nb < 91)) {
-                        if ($reste == 0) $numberToLetter = $toLetter[$quotient * 10];
-                        if ($reste == 1) $numberToLetter = $toLetter[$quotient * 10] . "-et-" . $toLetter[$reste];
-                        if ($reste > 1) $numberToLetter = $toLetter[$quotient * 10] . "-" . $toLetter[$reste];
-                    } else $numberToLetter = $toLetter[($quotient - 1) * 10] . "-" . $toLetter[10 + $reste];
-                } else $numberToLetter = $toLetter[$nb];
-                break;
-
-            case 3:
-                $quotient = floor($nb / 100);
-                $reste = $nb % 100;
-                if ($quotient == 1 && $reste == 0) $numberToLetter = "cent";
-                if ($quotient == 1 && $reste != 0) $numberToLetter = "cent" . " " . NumberToLetter($reste);
-                if ($quotient > 1 && $reste == 0) $numberToLetter = $toLetter[$quotient] . " cents";
-                if ($quotient > 1 && $reste != 0) $numberToLetter = $toLetter[$quotient] . " cent " . NumberToLetter($reste);
-                break;
-            case 4:
-            case 5:
-            case 6:
-                $quotient = floor($nb / 1000);
-                $reste = $nb - $quotient * 1000;
-                if ($quotient == 1 && $reste == 0) $numberToLetter = "mille";
-                if ($quotient == 1 && $reste != 0) $numberToLetter = "mille" . " " . NumberToLetter($reste);
-                if ($quotient > 1 && $reste == 0) $numberToLetter = NumberToLetter($quotient) . " mille";
-                if ($quotient > 1 && $reste != 0) $numberToLetter = NumberToLetter($quotient) . " mille " . NumberToLetter($reste);
-                break;
-            case 7:
-            case 8:
-            case 9:
-                $quotient = floor($nb / 1000000);
-                $reste = $nb % 1000000;
-                if ($quotient == 1 && $reste == 0) $numberToLetter = "un million";
-                if ($quotient == 1 && $reste != 0) $numberToLetter = "un million" . " " . NumberToLetter($reste);
-                if ($quotient > 1 && $reste == 0) $numberToLetter = NumberToLetter($quotient) . " millions";
-                if ($quotient > 1 && $reste != 0) $numberToLetter = NumberToLetter($quotient) . " millions " . NumberToLetter($reste);
-                break;
-            case 10:
-            case 11:
-            case 12:
-                $quotient = floor($nb / 1000000000);
-                $reste = $nb - $quotient * 1000000000;
-                if ($quotient == 1 && $reste == 0) $numberToLetter = "un milliard";
-                if ($quotient == 1 && $reste != 0) $numberToLetter = "un milliard" . " " . NumberToLetter($reste);
-                if ($quotient > 1 && $reste == 0) $numberToLetter = NumberToLetter($quotient) . " milliards";
-                if ($quotient > 1 && $reste != 0) $numberToLetter = NumberToLetter($quotient) . " milliards " . NumberToLetter($reste);
-                break;
-            case 13:
-            case 14:
-            case 15:
-                $quotient = floor($nb / 1000000000000);
-                $reste = $nb - $quotient * 1000000000000;
-                if ($quotient == 1 && $reste == 0) $numberToLetter = "un billion";
-                if ($quotient == 1 && $reste != 0) $numberToLetter = "un billion" . " " . NumberToLetter($reste);
-                if ($quotient > 1 && $reste == 0) $numberToLetter = NumberToLetter($quotient) . " billions";
-                if ($quotient > 1 && $reste != 0) $numberToLetter = NumberToLetter($quotient) . " billions " . NumberToLetter($reste);
-                break;
+        if ($number < 0) {
+            return "moins " . convertNumberToWords(abs($number));
         }
-        /*respect de l'accord de quatre-vingt*/
-        if (substr($numberToLetter, strlen($numberToLetter) - 12, 12) == "quatre-vingt") $numberToLetter .= "s";
 
-        return $numberToLetter;
+        $result = "";
+
+        // Diviser le nombre en blocs de trois chiffres
+        $blocks = array_reverse(str_split(str_pad($number, ceil(strlen($number) / 3) * 3, "0", STR_PAD_LEFT), 3));
+
+        // Pour chaque bloc, convertir en toutes lettres
+        foreach ($blocks as $i => $block) {
+            $block = (int) $block;
+            if ($block > 0) {
+                $blockResult = "";
+                if ($block < 17) {
+                    $blockResult .= $units[$block];
+                } elseif ($block < 100) {
+                    $ten = (int) ($block / 10);
+                    $unit = $block % 10;
+                    $blockResult .= $tens[$ten];
+                    if ($unit == 1 || $unit == 11) {
+                        $blockResult .= " et " . $units[$unit];
+                    } elseif ($unit > 1) {
+                        $blockResult .= "-" . $units[$unit];
+                    }
+                } else {
+                    $hundred = (int) ($block / 100);
+                    $remainder = $block % 100;
+                    if ($hundred > 1) {
+                        $blockResult .= $units[$hundred] . " cent";
+                    } elseif ($hundred == 1) {
+                        $blockResult .= "cent";
+                    }
+                    if ($remainder > 0) {
+                        if ($hundred > 0) {
+                            $blockResult .= " ";
+                        }
+                        $blockResult .= convertNumberToWords($remainder);
+                    }
+                }
+                if ($i > 0) {
+                    $blockResult .= " " . $thousands[$i];
+                    if ($block > 1 && $i == 1) {
+                        $blockResult .= "s";
+                    }
+                }
+                $result .= $blockResult . " ";
+            }
+        }
+
+        return trim($result);
     }
 }

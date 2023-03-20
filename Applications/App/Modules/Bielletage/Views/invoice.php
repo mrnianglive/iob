@@ -1,7 +1,3 @@
-     <?php
-        require_once '__DIR__' . '/../../../../Web/config/nombre_en_lettre.php';
-        ?>
-
      <div class="wrapper wrapper-content" style="margin: 0px 32px;padding: 0px !important;">
          <div style="padding: 0px !important;">
              <div class="row" style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">

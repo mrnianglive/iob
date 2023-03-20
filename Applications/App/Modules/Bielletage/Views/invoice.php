@@ -292,7 +292,7 @@
              </div>
          </div>
          <h5 style="text-align:right;">
-             <?php if ($GetInvoice['RefPays'] == 1) { ?>MALI CREANCES SA VOUS SOUHAITE UN BON MOIS DE RAMADAN
+             <?php if ($GetInvoice['RefPays'] == 1) { ?>MALI CREANCES SA VOUS SOUHAITE UN BON MOIS DE RAMADAN.
              <?php } else { ?>AFRIK CREANCES - Intermédiation en opérations
              bancaires et non bancaires |www.afrikcreances.com<?php } ?>
          </h5>

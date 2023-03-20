@@ -13,10 +13,10 @@
                      <p>
                          <?php if ($GetInvoice['RefPays'] == 1) { ?>
                              MALI CREANCES SA - Intermediare en Opérations de Banque et
-                             Recouvrement |www.malicreances-sa.com <?php } else { ?>
+                             Recouvrement<?php } else { ?>
                              AFRIK CREANCES - Intermédiation en opérations
-                             bancaires et non bancaires |www.afrikcreances.com <?php } ?>
-                         <img style="float: right; margin-right: -15px;" src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>" width="80" height="80" alt="Logo">
+                             bancaires et non bancaires<?php } ?>
+                             <img style="float: right; margin-right: -15px;" src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>" width="80" height="80" alt="Logo">
                      </p>
                      <h2>
                          <?php
@@ -157,9 +157,9 @@
                      <p>
                          <?php if ($GetInvoice['RefPays'] == 1) { ?>
                              MALI CREANCES SA - Intermediare en Opérations de Banque et
-                             Recouvrement |www.malicreances-sa.com <?php } else { ?>
+                             Recouvrement<?php } else { ?>
                              AFRIK CREANCES - Intermédiation en opérations
-                             bancaires et non bancaires |www.afrikcreances.com <?php } ?>
+                             bancaires et non bancaires <?php } ?>
                          <img style="float: right; margin-right: -15px;" src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>" width="80" height="80" alt="Logo">
                      </p>
                      <h2>

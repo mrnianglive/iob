@@ -80,7 +80,7 @@
                          </p>
                          <p class="text-uppercase">Nom & Prénom : <?= $GetInvoice['NameDeposant']; ?></p>
                          <p class="text-uppercase">Tel : <?= $GetInvoice['TelDeposant']; ?></p>
-                         <p class="text-uppercase">Signature :</p>
+                         <p class="text-uppercase">SIGNATURE</p>
                          <br>
                      </div>
                      <table class="table table-bordered" style="border: none !important;">
@@ -209,7 +209,6 @@
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
                      <?= number_format($GetInvoice['MontantVersement'], 0, ".", ",") . " XOF"; ?>
                      </p>
-                     <p class="text-uppercase"><?= $numberToLetter; ?> </p>
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
                      <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
                      <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['login']; ?></p>
@@ -221,9 +220,11 @@
                              <b><u><?php if ($GetInvoice['RefType'] == 1) { ?>DEPOSANT<?php } elseif ($GetInvoice['RefType'] == 2) { ?>AUTEUR
                                      DU RETRAIT<?php } ?></u></b>
                          </p>
+                         <p class="text-uppercase">MONTANT EN LETTRE:
+                             <?= $numberToLetter; ?>
                          <p class="text-uppercase">Nom & Prénom : <?= $GetInvoice['NameDeposant']; ?></p>
                          <p class="text-uppercase">Tel : <?= $GetInvoice['TelDeposant']; ?></p>
-                         <p class="text-uppercase">SIGNATURE :</p>
+                         <p class="text-uppercase">SIGNATURE</p>
                          <br>
                      </div>
                      <table class="table table-bordered" style="border: none !important;">

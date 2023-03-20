@@ -157,7 +157,7 @@ class BielletageController extends \Library\BackController
         $this->page->addVar("GetInvoice", $Invoice); // Creation de la variable, ajout d'une variable a la vue
         $getResetStatus = $this->managers->getManagerOf("Bielletage")->getResetStatus($reference);
         $this->page->addVar("getResetStatus", $getResetStatus); // Creation de la variable, ajout d'une variable a la vue
-        $numberToLetter = $this->managers->getManagerOf('Arreter')->NumberToLetter($Invoice['MontantVersement']);
+        $numberToLetter = $this->managers->getManagerOf('Arreter')->NumberToLetter(intval($Invoice['MontantVersement']));
         $this->page->addVar("numberToLetter", $numberToLetter); // Creation de la variable, ajout d'une variable a la vue
     }
     public function executeAdd(\Library\HTTPRequest $request)

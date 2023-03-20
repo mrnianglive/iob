@@ -291,10 +291,11 @@
                      </table>
                  </div>
              </div>
-             <p style="text-align:right;">
-                 <?php if ($GetInvoice['RefPays'] == 1) { ?>MALI CREANCES SA - Intermediare en Opérations de Banque et
-                 Recouvrement |www.malicreances-sa.com<?php } else { ?>AFRIK CREANCES - Intermédiation en opérations
-                 bancaires et non bancaires |www.afrikcreances.com<?php } ?>
-             </p>
+
          </div>
+         <p style="text-align:right;">
+             <?php if ($GetInvoice['RefPays'] == 1) { ?>MALI CREANCES SA - Intermediare en Opérations de Banque et
+             Recouvrement |www.malicreances-sa.com<?php } else { ?>AFRIK CREANCES - Intermédiation en opérations
+             bancaires et non bancaires |www.afrikcreances.com<?php } ?>
+         </p>
      </div>

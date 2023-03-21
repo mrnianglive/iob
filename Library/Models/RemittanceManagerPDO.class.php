@@ -53,6 +53,10 @@ class RemittanceManagerPDO extends RemittanceManager
         $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requete->execute();
         $ListeOperations = $requete->fetchAll();
+        foreach ($ListeOperations as $key => $value) {
+            $ListeOperations[$key]['SoldeRemittanceVersement'] = $this->SoldeRemittanceVersementAgence($date, $date, $value['RefAgency']);
+            $ListeOperations[$key]['SoldeRemittanceRetrait'] = $this->SoldeRemittanceRetraitAgence($date, $date, $value['RefAgency']);
+        }
         return $ListeOperations;
     }
 
@@ -75,6 +79,8 @@ class RemittanceManagerPDO extends RemittanceManager
         foreach ($data as $key => $value) {
             $data[$key]['Debut'] = $debut;
             $data[$key]['Debut'] = $fin;
+            $data[$key]['SoldeRemittanceVersement'] = $this->SoldeRemittanceVersementAgence($debut, $fin, $Agence);
+            $data[$key]['SoldeRemittanceRetrait'] = $this->SoldeRemittanceRetraitAgence($debut, $fin, $Agence);
         }
         return $data;
     }
@@ -95,5 +101,36 @@ class RemittanceManagerPDO extends RemittanceManager
         $requete = $this->dao->prepare("UPDATE TbleRemittance SET Validate= 1,DateValidate=NULL,RefValidate=NULL,DateValidate=NULL,SentFromAgency=NULL WHERE RefRemittance=:RefRemittance");
         $requete->bindValue(':RefRemittance', $id, \PDO::PARAM_STR);
         $requete->execute();
+    }
+
+    public function SoldeRemittanceVersementAgence($Debut, $Fin, $Agence)
+    {
+        $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE DATE(TbleRemittance.Insert_time) BETWEEN :Debut AND :Fin AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=1  AND TbleRemittance.Reset_Id IS NULL');  //AND RefCaisse=:RefCaisse  
+
+
+        $requete->bindValue(':Debut', $Debut, \PDO::PARAM_STR);
+        $requete->bindValue(':Fin', $Fin, \PDO::PARAM_STR);
+        $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requete->execute();
+        $result = $requete->fetch();
+        if ($result['SoldeRemittance'] == 0) {
+            return 0;
+        }
+        return $result['SoldeRemittance'];
+    }
+
+
+    public function SoldeRemittanceRetraitAgence($Debut, $Fin, $Agence)
+    {
+        $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE DATE(TbleRemittance.Insert_time) BETWEEN :Debut AND :Fin AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=2  AND TbleRemittance.Reset_Id IS NULL');  //AND RefCaisse=:RefCaisse  
+        $requete->bindValue(':Debut', $Debut, \PDO::PARAM_STR);
+        $requete->bindValue(':Fin', $Fin, \PDO::PARAM_STR);
+        $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requete->execute();
+        $result = $requete->fetch();
+        if ($result['SoldeRemittance'] == 0) {
+            return 0;
+        }
+        return $result['SoldeRemittance'];
     }
 }

@@ -20,6 +20,8 @@ class RemittanceController extends \Library\BackController
         $this->page->addVar('Debut', $request->postData('Debut'));
         $this->page->addVar('Fin', $request->postData('Fin'));
         $this->page->addVar('Value', $request->postData('RefAgency'));
+        $SoldeRemittanceVersement = 0;
+        $SoldeRemittanceRetrait = 0;
         if ($request->method() == 'POST' && $request->postData('RefCaisse')) {
             $this->managers->getManagerOf("Remittance")->Add($request);
             $_SESSION['message']['type'] = 'success';
@@ -41,9 +43,23 @@ class RemittanceController extends \Library\BackController
                 $this->page->addVar('Fin', $request->postData('Fin'));
                 $this->page->addVar('Value', $request->postData('RefAgency'));
             }
+
+            foreach ($Operation as $key => $value) {
+                $SoldeRemittanceVersement += $value['SoldeRemittanceVersement'];
+                $SoldeRemittanceRetrait += $value['SoldeRemittanceRetrait'];
+            }
+            $this->page->addVar('SoldeRemittanceVersement', $SoldeRemittanceVersement);
+            $this->page->addVar('SoldeRemittanceRetrait', $SoldeRemittanceRetrait);
             $this->page->addVar('Operation', $Operation);
         } else {
             $Operation = $this->managers->getManagerOf('Remittance')->ListeOperations(date('Y-m-d'), date('Y-m-d'));
+            foreach ($Operation as $key => $value) {
+                $SoldeRemittanceVersement += $value['SoldeRemittanceVersement'];
+                $SoldeRemittanceRetrait += $value['SoldeRemittanceRetrait'];
+            }
+            $this->page->addVar('SoldeRemittanceVersement', $SoldeRemittanceVersement);
+            $this->page->addVar('SoldeRemittanceRetrait', $SoldeRemittanceRetrait);
+
             $this->page->addVar('Operation', $Operation);
         }
         $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();

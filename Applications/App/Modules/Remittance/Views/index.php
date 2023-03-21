@@ -25,13 +25,13 @@
 
             <div class="form-group mx-sm-3 mb-1">
                 <label for="inputPassword2" class="sr-only">Total Depot</label>
-                <input type="text" value="<? //= number_format($sommeVersementPeriode, 0, '.', '.'); 
+                <input type="text" value="<?= number_format($SoldeRemittanceVersement, 0, '.', '.');
                                             ?>" class="form-control" readonly>
             </div>
             <div class="form-group mx-sm-3 mb-1">
                 <label for="inputPassword2" class="sr-only">Total Retrait</label>
 
-                <input type="text" value="<? //= number_format($sommeRetraitPeriode, 0, '.', '.'); 
+                <input type="text" value="<?= number_format($SoldeRemittanceRetrait, 0, '.', '.');
                                             ?>" class="form-control" readonly>
             </div>
 

@@ -21,6 +21,17 @@
                 <label for="inputPassword2" class="sr-only">Au</label>
                 <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
             </div>
+
+
+            <div class="form-group mx-sm-3 mb-1">Total Depot
+                <input type="text" value="<? //= number_format($sommeVersementPeriode, 0, '.', '.'); 
+                                            ?>" class="form-control" readonly>
+            </div>
+            <div class="form-group mx-sm-3 mb-1">Total Retrait
+                <input type="text" value="<? //= number_format($sommeRetraitPeriode, 0, '.', '.'); 
+                                            ?>" class="form-control" readonly>
+            </div>
+
             <button type="submit" class="btn btn-primary mb-1" data-toggle="tooltip"
                 title="Cliquez pour lancer la recherche"><i class="fa fa-search"></i></button>
         </form><br />

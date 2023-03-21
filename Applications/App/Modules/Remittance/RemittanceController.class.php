@@ -45,8 +45,11 @@ class RemittanceController extends \Library\BackController
             }
 
             foreach ($Operation as $key => $value) {
-                $SoldeRemittanceVersement += $value['SoldeRemittanceVersement'];
-                $SoldeRemittanceRetrait += $value['SoldeRemittanceRetrait'];
+                if ($value['RefType'] == 1) {
+                    $SoldeRemittanceVersement += $value['MontantTransaction'];
+                } else {
+                    $SoldeRemittanceRetrait += $value['MontantTransaction'];
+                }
             }
             $this->page->addVar('SoldeRemittanceVersement', $SoldeRemittanceVersement);
             $this->page->addVar('SoldeRemittanceRetrait', $SoldeRemittanceRetrait);
@@ -54,8 +57,12 @@ class RemittanceController extends \Library\BackController
         } else {
             $Operation = $this->managers->getManagerOf('Remittance')->ListeOperations(date('Y-m-d'), date('Y-m-d'));
             foreach ($Operation as $key => $value) {
-                $SoldeRemittanceVersement += $value['SoldeRemittanceVersement'];
-                $SoldeRemittanceRetrait += $value['SoldeRemittanceRetrait'];
+
+                if ($value['RefType'] == 1) {
+                    $SoldeRemittanceVersement += $value['MontantTransaction'];
+                } else {
+                    $SoldeRemittanceRetrait += $value['MontantTransaction'];
+                }
             }
             $this->page->addVar('SoldeRemittanceVersement', $SoldeRemittanceVersement);
             $this->page->addVar('SoldeRemittanceRetrait', $SoldeRemittanceRetrait);

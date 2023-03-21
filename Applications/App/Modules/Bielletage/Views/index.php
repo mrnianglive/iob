@@ -121,7 +121,11 @@
                 <table id="dataTable" class="display nowrap" cellspacing="0" width="100%">
                     <thead>
                         <tr>
+
                             <th class="border-top-0">RECU</th>
+                            <?php if (in_array(1, $permission)) { ?>
+                            <th class="border-top-0">Action</th>
+                            <?php } ?>
                             <th class="border-top-0">REF</th>
                             <th class="border-top-0">AGENCE</th>
                             <th class="border-top-0">PRODUIT</th>
@@ -140,6 +144,12 @@
                             <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
                                     class="btn btn-primary" data-toggle="tooltip"
                                     title="Cliquez ici pour imprimer le bordereau"><i class="fa fa-print"></i> </td>
+                            <?php if (in_array(1, $permission)) { ?>
+                            <td><a href="/Journal/delete/<?= $value['RefOperations']; ?>" class="btn btn-xs btn-danger"
+                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i
+                                        class="fa fa-trash"></i></a>
+                            </td>
+                            <?php } ?>
                             <td> <?= $value['RefOperations']; ?></td>
                             <td> <?= $value['NameAgency']; ?></td>
                             <td> <?= $value['NameProduit']; ?></td>

@@ -9,6 +9,13 @@ class BielletageController extends \Library\BackController
     {
         $this->page->addVar("titles", "Accueil"); // Titre de la page
 
+        $permissions = array();
+        $AllPermissions = $this->managers->getManagerOf('Pannel')->UserPermission();
+        foreach ($AllPermissions as $key => $value) {
+            $permissions[] = $value['access'];
+        }
+        $this->page->addVar('permission', $permissions);
+
         // Récupération des données pour l'affichage de l'accueil
         $Country = isset($_POST['RefPays']) ? $_POST['RefPays'] : '';
         $Agency = isset($_POST['RefAgency']) ? $_POST['RefAgency'] : '';

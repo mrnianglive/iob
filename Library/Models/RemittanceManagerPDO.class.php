@@ -53,10 +53,10 @@ class RemittanceManagerPDO extends RemittanceManager
         $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requete->execute();
         $ListeOperations = $requete->fetchAll();
-        foreach ($ListeOperations as $key => $value) {
-            $ListeOperations[$key]['SoldeRemittanceVersement'] = $this->SoldeRemittanceVersementAgence($date, $date, $value['RefAgency']);
-            $ListeOperations[$key]['SoldeRemittanceRetrait'] = $this->SoldeRemittanceRetraitAgence($date, $date, $value['RefAgency']);
-        }
+        // foreach ($ListeOperations as $key => $value) {
+        //     $ListeOperations[$key]['SoldeRemittanceVersement'] = $this->SoldeRemittanceVersementAgence($date, $date, $value['RefAgency']);
+        //     $ListeOperations[$key]['SoldeRemittanceRetrait'] = $this->SoldeRemittanceRetraitAgence($date, $date, $value['RefAgency']);
+        // }
         return $ListeOperations;
     }
 
@@ -79,8 +79,8 @@ class RemittanceManagerPDO extends RemittanceManager
         foreach ($data as $key => $value) {
             $data[$key]['Debut'] = $debut;
             $data[$key]['Debut'] = $fin;
-            $data[$key]['SoldeRemittanceVersement'] = $this->SoldeRemittanceVersementAgence($debut, $fin, $Agence);
-            $data[$key]['SoldeRemittanceRetrait'] = $this->SoldeRemittanceRetraitAgence($debut, $fin, $Agence);
+            // $data[$key]['SoldeRemittanceVersement'] = $this->SoldeRemittanceVersementAgence($debut, $fin, $Agence);
+            // $data[$key]['SoldeRemittanceRetrait'] = $this->SoldeRemittanceRetraitAgence($debut, $fin, $Agence);
         }
         return $data;
     }

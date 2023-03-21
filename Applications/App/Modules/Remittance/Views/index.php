@@ -23,11 +23,11 @@
             </div>
 
 
-            <div class="form-group mx-sm-3 mb-1">Total Depot
+            <div class="col-md-2">Total Depot
                 <input type="text" value="<? //= number_format($sommeVersementPeriode, 0, '.', '.'); 
                                             ?>" class="form-control" readonly>
             </div>
-            <div class="form-group mx-sm-3 mb-1">Total Retrait
+            <div class="col-md-2">Total Retrait
                 <input type="text" value="<? //= number_format($sommeRetraitPeriode, 0, '.', '.'); 
                                             ?>" class="form-control" readonly>
             </div>

@@ -4,7 +4,7 @@
                  style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
                  <div style="width: 10%; display: inline-block; vertical-align: top;">
                      <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                     <img src="/images/mlc.png" alt="Logo" style="height: 80px; width: 250%;">
+                     <img src="/images/mlc.png" alt="Logo" style="height: 100px; width: 250%;">
                      <?php } else { ?>
                      <img src="/images/afc.png" alt="Logo" style="height: 80px; width: 250%;">
                      <?php } ?>
@@ -75,7 +75,8 @@
 
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
                      <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
-                     <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['PrenomUsers']; ?></p>
+                     <p class="text-uppercase">CAISSIER(E) :
+                         <?= $GetInvoice['PrenomUsers'] . ' ' . $GetInvoice['NomUsers']; ?></p>
                  </div>
                  <div style="width: 48%;display: inline-block;vertical-align: top;">
                      <div style="border: 1px solid grey;border-radius: 4px;padding: 4px 8px;margin-bottom: 10px;">
@@ -223,7 +224,8 @@
 
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
                      <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
-                     <p class="text-uppercase">CAISSIER(E) : <?= $GetInvoice['PrenomUsers']; ?></p>
+                     <p class="text-uppercase">CAISSIER(E) :
+                         <?= $GetInvoice['PrenomUsers'] . ' ' . $GetInvoice['NomUsers']; ?></p>
                  </div>
                  <div style="width: 48%;display: inline-block;vertical-align: top;">
                      <div style="border: 1px solid grey;border-radius: 4px;padding: 4px 8px;margin-bottom: 10px;">

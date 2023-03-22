@@ -109,7 +109,7 @@ class BielletageManagerPDO extends BielletageManager
     }
     public function GetInvoice($id)
     {
-        $requeteGetInvoice = $this->dao->prepare("SELECT * FROM TbleBilletage INNER JOIN TbleOperations ON TbleOperations.RefOperations=TbleBilletage.RefOperations INNER JOIN TbleUsers ON TbleUsers.RefUsers=TbleOperations.Insert_Id INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit INNER JOIN TbleBanque ON TbleBanque.RefBanque=TbleProduit.RefBanque WHERE  TbleBilletage.RefOperations=:RefOperations");
+        $requeteGetInvoice = $this->dao->prepare("SELECT * FROM TbleBilletage INNER JOIN TbleOperations ON TbleOperations.RefOperations=TbleBilletage.RefOperations INNER JOIN TbleUsers ON TbleUsers.RefUsers=TbleOperations.Insert_Id INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit LEFT JOIN TbleBanque ON TbleBanque.RefBanque=TbleProduit.RefBanque WHERE  TbleBilletage.RefOperations=:RefOperations");
         $requeteGetInvoice->bindValue(':RefOperations', $id, \PDO::PARAM_INT);
         $requeteGetInvoice->execute();
         $dataInvoice = $requeteGetInvoice->fetch();

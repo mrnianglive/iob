@@ -161,7 +161,7 @@
                      <p>
                          <?php if ($GetInvoice['RefPays'] == 1) { ?>
                          MALI CREANCES SA
-                         <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE' . $GetInvoice['NameBanque'] : ''; ?>
+                         <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <?php } else { ?>
                          AFRIK CREANCES
                          <?php } ?>

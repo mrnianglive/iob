@@ -14,7 +14,7 @@
                          <?= $GetInvoice['NameBanque'] ? 'PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
-                             width="80" height="80" alt="Logo">
+                             width="151" height="151" alt="Logo">
                      </p>
                      <h2>
                          <?php

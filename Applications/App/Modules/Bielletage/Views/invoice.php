@@ -16,6 +16,7 @@
                          <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <?php } else { ?>
                          AFRIK CREANCES
+                         <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <?php } ?>
                          <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
@@ -164,6 +165,8 @@
                          <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <?php } else { ?>
                          AFRIK CREANCES
+                         <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
+
                          <?php } ?>
                          <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"

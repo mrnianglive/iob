@@ -11,11 +11,7 @@
                  </div>
                  <div style="text-align: center; width: 88%; display: inline-block;">
                      <p>
-                         <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                         <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
-                         <?php } else { ?>
-                         <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
-                         <?php } ?>
+                         <?= $GetInvoice['NameBanque'] ? 'PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
                              width="80" height="80" alt="Logo">
@@ -158,12 +154,7 @@
                  </div>
                  <div style="text-align: center; width: 88%; display: inline-block;">
                      <p>
-                         <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                         <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
-                         <?php } else { ?>
-                         <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
-
-                         <?php } ?>
+                         <?= $GetInvoice['NameBanque'] ? 'PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
                              width="80" height="80" alt="Logo">

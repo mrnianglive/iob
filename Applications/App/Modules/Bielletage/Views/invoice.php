@@ -12,10 +12,8 @@
                  <div style="text-align: center; width: 88%; display: inline-block;">
                      <p>
                          <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                         MALI CREANCES SA
                          <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <?php } else { ?>
-                         AFRIK CREANCES
                          <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <?php } ?>
                          <img style="float: right; margin-right: -15px;"
@@ -161,10 +159,8 @@
                  <div style="text-align: center; width: 88%; display: inline-block;">
                      <p>
                          <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                         MALI CREANCES SA
                          <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <?php } else { ?>
-                         AFRIK CREANCES
                          <?= $GetInvoice['NameBanque'] ? ' - PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
 
                          <?php } ?>

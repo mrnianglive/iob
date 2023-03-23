@@ -1,22 +1,21 @@
      <div class="wrapper wrapper-content" style="margin: 0px 32px;padding: 0px !important;">
          <div style="padding: 0px !important;">
-             <div class="row"
-                 style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
-                 <div style="width: 10%; display: inline-block; vertical-align: top;">
+             <header class="row" style="background-color: #efefef; padding: 1rem;">
+                 <div class="image-container" style="display: flex; align-items: center;">
                      <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                     <img src="/images/mlc.png" alt="Logo" style="height: 80px; width: 250%;">
+                     <img src="/images/mlc.png" alt="Logo" style="max-width: 100%; height: auto;">
                      <?php } else { ?>
-                     <img src="/images/afc.png" alt="Logo" style="height: 90px; width: 300%;">
+                     <img src="/images/afc.png" alt="Logo" style="max-width: 100%; height: auto;">
                      <?php } ?>
                  </div>
-                 <div style="text-align: center; width: 88%; display: inline-block;">
+                 <div class="text-container"
+                     style="display: flex; flex-direction: column; justify-content: center; text-align: center;">
                      <p>
                          <?= $GetInvoice['NameBanque'] ? 'PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
-                         <img style="float: right; margin-right: -15px;"
-                             src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
-                             width="80" height="80" alt="Logo">
                      </p>
-                     <h2>
+                     <img src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
+                         width="80" height="80" alt="QR Code">
+                     <h1>
                          <?php
                             $type = '';
                             switch ($GetInvoice['RefType']) {
@@ -35,14 +34,13 @@
                             }
                             echo $type . ' ESPECES';
                             ?>
-                     </h2>
-                     <h3>BANQUE</h3>
+                     </h1>
+                     <h2>BANQUE</h2>
                      <?php if ($getResetStatus == true) { ?>
                      <h3 style="color:#c62828;">Opération Annulée</h3>
                      <?php } ?>
                  </div>
-             </div>
-
+             </header>
              <br>
              <div class="row">
                  <div style="width: 48%;display: inline-block;vertical-align: top;">

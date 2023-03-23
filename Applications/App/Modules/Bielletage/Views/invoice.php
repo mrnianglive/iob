@@ -6,11 +6,11 @@
                      <?php if ($GetInvoice['RefPays'] == 1) { ?>
                      <img src="/images/mlc.png" alt="Logo" style="height: 80px; width: 250%;">
                      <?php } else { ?>
-                     <img src="/images/afc.png" alt="Logo" style="height: 80px; width: auto;">
+                     <img src="/images/afc.png" alt="Logo" style="height: 80px; width: 250%;">
                      <?php } ?>
                  </div>
                  <div style="text-align: center; width: 88%; display: inline-block;">
-                     <p>
+                     <p class="text-uppercase">
                          <?= $GetInvoice['NameBanque'] ? 'PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
@@ -153,7 +153,7 @@
                      <?php } ?>
                  </div>
                  <div style="text-align: center; width: 88%; display: inline-block;">
-                     <p>
+                     <p class="text-uppercase">
                          <?= $GetInvoice['NameBanque'] ? 'PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"

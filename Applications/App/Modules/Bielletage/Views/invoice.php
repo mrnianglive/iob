@@ -4,37 +4,37 @@
                  style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
                  <div style="width: 10%; display: inline-block; vertical-align: top;">
                      <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                     <img src="/images/mlc.png" alt="Logo" style="height: 80px; width: 250%;">
+                     <img src="/images/mlc.png" alt="Logo" width="80" height="80">
                      <?php } else { ?>
-                     <img src="/images/afc.png" alt="Logo" style="height: 80px; width: 250%;">
+                     <img src="/images/afc.png" alt="Logo" width="80" height="80"">
                      <?php } ?>
                  </div>
-                 <div style="text-align: center; width: 88%; display: inline-block;">
+                 <div style=" text-align: center; width: 88%; display: inline-block;">
                      <p class="text-uppercase">
                          <?= $GetInvoice['NameBanque'] ? 'PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
                          <img style="float: right; margin-right: -15px;"
                              src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
-                             width="151" height="151" alt="Logo">
+                             width="80" height="80" alt="Logo">
                      </p>
                      <h2>
                          <?php
-                            $type = '';
-                            switch ($GetInvoice['RefType']) {
-                                case 1:
-                                    $type = 'VERSEMENT';
-                                    break;
-                                case 2:
-                                    $type = 'RETRAIT';
-                                    break;
-                                case 3:
-                                    $type = 'APPRO CAISSE';
-                                    break;
-                                case 4:
-                                    $type = 'SORTIE DE FOND';
-                                    break;
-                            }
-                            echo $type . ' ESPECES';
-                            ?>
+                                $type = '';
+                                switch ($GetInvoice['RefType']) {
+                                    case 1:
+                                        $type = 'VERSEMENT';
+                                        break;
+                                    case 2:
+                                        $type = 'RETRAIT';
+                                        break;
+                                    case 3:
+                                        $type = 'APPRO CAISSE';
+                                        break;
+                                    case 4:
+                                        $type = 'SORTIE DE FOND';
+                                        break;
+                                }
+                                echo $type . ' ESPECES';
+                                ?>
                      </h2>
                      <h3>BANQUE</h3>
                      <?php if ($getResetStatus == true) { ?>

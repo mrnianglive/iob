@@ -4,7 +4,7 @@
                  style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
                  <div style="width: 10%; display: inline-block; vertical-align: top;">
                      <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                     <img src="/bordereau/mlc.jpg" alt="Logo" width="80" height="80">
+                     <img src="/images/mlc.png" alt="Logo" width="80" height="80">
                      <?php } else { ?>
                      <img src="/images/afc.png" alt="Logo" width="80" height="80">
                      <?php } ?>
@@ -147,7 +147,7 @@
                  style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
                  <div style="width: 10%; display: inline-block; vertical-align: top;">
                      <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                     <img src="/bordereau/mlc.jpg" alt="Logo" width="80" height="80">
+                     <img src="/images/mlc.png" alt="Logo" width="80" height="80">
                      <?php } else { ?>
                      <img src="/images/afc.png" alt="Logo" width="80" height="80">
                      <?php } ?>

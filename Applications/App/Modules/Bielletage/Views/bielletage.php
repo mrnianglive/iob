@@ -315,7 +315,6 @@
             <?php if ($_GET['id'] == 5) { ?>
             <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                 <div class="row">
-
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">Source</label>
@@ -390,10 +389,6 @@
                 </div>
 
             </div>
-
-
-
-
             <?php } else { ?>
 
             <!--Normal Div3-->
@@ -661,7 +656,20 @@
             </div>
             <?php } ?>
             <div id="step-4" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-4">
-
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-4">
+                        <a href="#" class="d-block">
+                            <img src="/images/mlc.png" alt="Ecobank" class="img-circle mx-auto mb-2">
+                            Ecobank
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <a href="#" class="d-block">
+                            <img src="/images/mlc.png" alt="BICIM Mali" class="img-circle mx-auto mb-2">
+                            BICIM Mali
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 

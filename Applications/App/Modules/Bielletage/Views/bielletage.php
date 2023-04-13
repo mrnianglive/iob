@@ -653,31 +653,7 @@
 
             </div>
             <?php } ?>
-            <div id="step-4" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-4">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 col-lg-4">
-                        <a href="https://www.example.com/produit1">
-                            <img src="https://via.placeholder.com/150" alt="Produit 1"
-                                class="rounded-circle circle-img mx-auto mb-2">
-                            <h5 class="mb-0">Produit 1</h5>
-                        </a>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <a href="https://www.example.com/produit2">
-                            <img src="https://via.placeholder.com/150" alt="Produit 2"
-                                class="rounded-circle circle-img mx-auto mb-2">
-                            <h5 class="mb-0">Produit 2</h5>
-                        </a>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <a href="https://www.example.com/produit3">
-                            <img src="https://via.placeholder.com/150" alt="Produit 3"
-                                class="rounded-circle circle-img mx-auto mb-2">
-                            <h5 class="mb-0">Produit 3</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
+
 
 
         </div>

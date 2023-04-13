@@ -659,18 +659,21 @@
                 <div class="row justify-content-center">
                     <div class="col-md-6 col-lg-4">
                         <a href="#" class="d-block">
-                            <img src="/images/mlc.png" alt="Ecobank" class="img-circle mx-auto mb-2">
-                            Ecobank
+                            <img src="chemin/vers/image1.jpg" alt="Ecobank"
+                                class="rounded-circle circle-img mx-auto mb-2">
+                            <h5 class="mb-0">Ecobank</h5>
                         </a>
                     </div>
                     <div class="col-md-6 col-lg-4">
                         <a href="#" class="d-block">
-                            <img src="/images/mlc.png" alt="BICIM Mali" class="img-circle mx-auto mb-2">
-                            BICIM Mali
+                            <img src="chemin/vers/image2.jpg" alt="BICIM Mali"
+                                class="rounded-circle circle-img mx-auto mb-2">
+                            <h5 class="mb-0">BICIM Mali</h5>
                         </a>
                     </div>
                 </div>
             </div>
+
         </div>
 
 

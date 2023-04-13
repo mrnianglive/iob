@@ -659,22 +659,7 @@
 
         </div>
         <?php } ?>
-        <div id="step-4" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-4">
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-4">
-                    <a href="#" class="d-block">
-                        <img src="chemin/vers/image1.jpg" alt="Ecobank" class="img-circle mx-auto mb-2">
-                        Ecobank
-                    </a>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="#" class="d-block">
-                        <img src="chemin/vers/image2.jpg" alt="BICIM Mali" class="img-circle mx-auto mb-2">
-                        BICIM Mali
-                    </a>
-                </div>
-            </div>
-        </div>
+
 
 
     </form>

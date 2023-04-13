@@ -660,6 +660,15 @@
         </div>
         <?php } ?>
 
+        <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+
+            <ul class="list-inline pull-right">
+                <li><button type="button" class="btn btn-default prev-step">1</button></li>
+                <li><button type="button" class="btn btn-primary next-step">2</button></li>
+            </ul>
+
+        </div>
+
 
 
     </form>

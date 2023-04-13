@@ -581,109 +581,108 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <?php } else { ?>
-                <div class="row">
-                    <?php if ($_GET['id'] == 2) { ?>
-                    <div class="col-md-4">
-                        <div class="form-group has-error">
-                            <label class="control-label">Remarque *</label>
-                            <input type="text" class="form-control" name="Remarque" required="" placeholder="Remarque"
-                                autocomplete="OFF">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group has-error">
-                            <label class="control-label">Type *</label>
-                            <select class="form-control" name="TypeRetrait" tabindex="1" id="TypeRetrait" required="">
-                                <?php foreach ($TypeRetrait as $type) { ?>
-                                <option value="<?= $type['RefTypeRetrait']; ?>"><?= $type['NameTypeRetrait']; ?>
-                                </option>
-                                <?php } ?>
-
-                            </select>
-                        </div>
-                    </div>
                     <?php } else { ?>
-                    <div class="col-md-6">
-                        <div class="form-group has-error">
-                            <label class="control-label">Remarque *</label>
-                            <input type="text" class="form-control" name="Remarque" required="" placeholder="Remarque"
-                                autocomplete="OFF">
+                    <div class="row">
+                        <?php if ($_GET['id'] == 2) { ?>
+                        <div class="col-md-4">
+                            <div class="form-group has-error">
+                                <label class="control-label">Remarque *</label>
+                                <input type="text" class="form-control" name="Remarque" required=""
+                                    placeholder="Remarque" autocomplete="OFF">
+                            </div>
                         </div>
+                        <div class="col-md-2">
+                            <div class="form-group has-error">
+                                <label class="control-label">Type *</label>
+                                <select class="form-control" name="TypeRetrait" tabindex="1" id="TypeRetrait"
+                                    required="">
+                                    <?php foreach ($TypeRetrait as $type) { ?>
+                                    <option value="<?= $type['RefTypeRetrait']; ?>"><?= $type['NameTypeRetrait']; ?>
+                                    </option>
+                                    <?php } ?>
+
+                                </select>
+                            </div>
+                        </div>
+                        <?php } else { ?>
+                        <div class="col-md-6">
+                            <div class="form-group has-error">
+                                <label class="control-label">Remarque *</label>
+                                <input type="text" class="form-control" name="Remarque" required=""
+                                    placeholder="Remarque" autocomplete="OFF">
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <div class=" col-md-3">
+                            <div class="form-group has-error">
+                                <label class="control-label">Deposant/Auteur Retrait *</label>
+                                <input type="text" class="form-control" name="NameDeposant" required=""
+                                    placeholder="Nom du deposant/Auteur duRetrait" autocomplete="OFF">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group has-error">
+                                <label class="control-label">Téléphone *</label>
+                                <input type="text" class="form-control" name="TelDeposant" required=""
+                                    placeholder="Téléphone" autocomplete="OFF">
+                            </div>
+                        </div>
+                        <?php if (in_array(3, $permission)) { ?>
+                        <div class="col-md-3">
+                            <div class="form-group has-error">
+                                <label class="control-label">Antidaté l'opération</label>
+                                <input type="date" class="form-control" name="Antidate">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group has-error">
+                                <label class="control-label">Pays</label>
+                                <select name="RefPays" class="form-control">
+                                    <option value="">Veuillez Choisir le Pays</option>
+                                    <?php foreach ($ListePays as $key => $value) { ?>
+                                    <option value="<?= $value['RefPays']; ?>"><?= $value['nomPays']; ?></option>
+                                    <?php   } ?>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <?php } ?>
                     </div>
                     <?php } ?>
-                    <div class=" col-md-3">
-                        <div class="form-group has-error">
-                            <label class="control-label">Deposant/Auteur Retrait *</label>
-                            <input type="text" class="form-control" name="NameDeposant" required=""
-                                placeholder="Nom du deposant/Auteur duRetrait" autocomplete="OFF">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group has-error">
-                            <label class="control-label">Téléphone *</label>
-                            <input type="text" class="form-control" name="TelDeposant" required=""
-                                placeholder="Téléphone" autocomplete="OFF">
-                        </div>
-                    </div>
-                    <?php if (in_array(3, $permission)) { ?>
-                    <div class="col-md-3">
-                        <div class="form-group has-error">
-                            <label class="control-label">Antidaté l'opération</label>
-                            <input type="date" class="form-control" name="Antidate">
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group has-error">
-                            <label class="control-label">Pays</label>
-                            <select name="RefPays" class="form-control">
-                                <option value="">Veuillez Choisir le Pays</option>
-                                <?php foreach ($ListePays as $key => $value) { ?>
-                                <option value="<?= $value['RefPays']; ?>"><?= $value['nomPays']; ?></option>
-                                <?php   } ?>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <?php } ?>
                 </div>
-                <?php } ?>
+
+            </div>
+            <?php } ?>
+            <div id="step-4" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-4">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-4">
+                        <a href="https://www.example.com/produit1">
+                            <img src="https://via.placeholder.com/150" alt="Produit 1"
+                                class="rounded-circle circle-img mx-auto mb-2">
+                            <h5 class="mb-0">Produit 1</h5>
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <a href="https://www.example.com/produit2">
+                            <img src="https://via.placeholder.com/150" alt="Produit 2"
+                                class="rounded-circle circle-img mx-auto mb-2">
+                            <h5 class="mb-0">Produit 2</h5>
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <a href="https://www.example.com/produit3">
+                            <img src="https://via.placeholder.com/150" alt="Produit 3"
+                                class="rounded-circle circle-img mx-auto mb-2">
+                            <h5 class="mb-0">Produit 3</h5>
+                        </a>
+                    </div>
+                </div>
             </div>
 
+
         </div>
-        <?php } ?>
-        <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.example.com/produit1">
-                        <img src="https://via.placeholder.com/150" alt="Produit 1"
-                            class="rounded-circle circle-img mx-auto mb-2">
-                        <h5 class="mb-0">Produit 1</h5>
-                    </a>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.example.com/produit2">
-                        <img src="https://via.placeholder.com/150" alt="Produit 2"
-                            class="rounded-circle circle-img mx-auto mb-2">
-                        <h5 class="mb-0">Produit 2</h5>
-                    </a>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.example.com/produit3">
-                        <img src="https://via.placeholder.com/150" alt="Produit 3"
-                            class="rounded-circle circle-img mx-auto mb-2">
-                        <h5 class="mb-0">Produit 3</h5>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-
-
-
-
     </form>
+
 </div>

@@ -654,32 +654,179 @@
             </div>
             <?php } ?>
 
-            <div id="step-4" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-4">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 col-lg-4">
-                        <a href="https://www.example.com/produit1">
-                            <img src="https://via.placeholder.com/150" alt="Produit 1"
-                                class="rounded-circle circle-img mx-auto mb-2">
-                            <h5 class="mb-0">Produit 1</h5>
-                        </a>
+            <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+                <input type="hidden" class="form-control" name="RefType" value="<?= $_GET['id']; ?>">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="a2" class="form-control number-input" name="a2" autocomplete="OFF"
+                                style="border: 1px solid coral;">
+                        </div>
                     </div>
-                    <div class="col-md-6 col-lg-4">
-                        <a href="https://www.example.com/produit2">
-                            <img src="https://via.placeholder.com/150" alt="Produit 2"
-                                class="rounded-circle circle-img mx-auto mb-2">
-                            <h5 class="mb-0">Produit 2</h5>
-                        </a>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="a1" class="form-control" name="a1" value="10000" readonly>
+                        </div>
                     </div>
-                    <div class="col-md-6 col-lg-4">
-                        <a href="https://www.example.com/produit3">
-                            <img src="https://via.placeholder.com/150" alt="Produit 3"
-                                class="rounded-circle circle-img mx-auto mb-2">
-                            <h5 class="mb-0">Produit 3</h5>
-                        </a>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="a3" class="form-control" name="a3" readonly
+                                style="border: 1px solid #44E922;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="b2" class="form-control number-input" name="b2" autocomplete="OFF"
+                                style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="b1" class="form-control" name="b1" value="5000" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="b3" class="form-control" name="b3" readonly
+                                style="border: 1px solid  #44E922;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="c2" class="form-control number-input" name="c2" autocomplete="OFF"
+                                style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="c1" class="form-control" name="c1" value="2000" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="c3" class="form-control" name="c3" readonly
+                                style="border: 1px solid  #44E922;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control number-input" id="d2" name="d2" autocomplete="OFF"
+                                style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="d1" name="d1" value="1000" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="d3" class="form-control" name="d3" readonly
+                                style="border: 1px solid  #44E922;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control number-input" id="e2" name="e2" autocomplete="OFF"
+                                style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="e1" name="e1" value="500" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="e3" class="form-control" name="e3" readonly
+                                style="border: 1px solid  #44E922;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control number-input" id="f2" name="f2" autocomplete="OFF"
+                                style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="f1" name="f1" value="250" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="f3" class="form-control" name="f3" readonly
+                                style="border: 1px solid  #44E922;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control number-input" id="g2" name="g2" autocomplete="OFF"
+                                style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="g1" name="g1" value="200" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="g3" class="form-control" name="g3" readonly
+                                style="border: 1px solid  #44E922;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control number-input" id="h2" name="h2" autocomplete="OFF"
+                                style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="h1" name="h1" value="100" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="h3" class="form-control" name="h3" readonly
+                                style="border: 1px solid  #44E922;">
+                        </div>
                     </div>
                 </div>
             </div>
-
 
 
         </div>

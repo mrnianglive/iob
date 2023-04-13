@@ -656,7 +656,7 @@
             </div>
             <?php } ?>
             <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
-                <div class="row ">
+                <div class="row justify-content-center">
                     <div class="col-md-6 col-lg-4">
                         <a href="https://www.example.com/produit1">
                             <img src="https://via.placeholder.com/150" alt="Produit 1"

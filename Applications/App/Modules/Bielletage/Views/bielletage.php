@@ -657,17 +657,13 @@
             <?php } ?>
             <div id="step-4" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-4">
                 <div class="row justify-content-center">
-                    <div class="col-md-6 col-lg-4">
-                        <a href="#" class="d-block">
-                            <img src="/images/mlc.png" alt="Ecobank" class="rounded-circle circle-img mx-auto mb-2">
-                            <h5 class="mb-0">Ecobank</h5>
-                        </a>
+                    <div class="card" style="width: 18rem;">
+                        <img src="..." class="card-img-top" alt="...">
+
                     </div>
-                    <div class="col-md-6 col-lg-4">
-                        <a href="#" class="d-block">
-                            <img src="/images/mlc.png" alt="BICIM Mali" class="rounded-circle circle-img mx-auto mb-2">
-                            <h5 class="mb-0">BICIM Mali</h5>
-                        </a>
+                    <div class="card" style="width: 18rem;">
+                        <img src="..." class="card-img-top" alt="...">
+
                     </div>
                 </div>
             </div>

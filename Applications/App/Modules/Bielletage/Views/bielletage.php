@@ -31,7 +31,6 @@
         <div class="tab-content">
             <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                 <input type="hidden" class="form-control" name="RefType" value="<?= $_GET['id']; ?>">
-
                 <div class="row">
                     <div class="col-sm-2">
                         <div class="form-group">
@@ -390,7 +389,6 @@
 
             </div>
             <?php } else { ?>
-
             <!--Normal Div3-->
             <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                 <div class="row">

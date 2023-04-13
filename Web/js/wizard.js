@@ -9,7 +9,7 @@ $(document).ready(function () {
         selected: 0,
         theme: 'arrows',
         transition: {
-            animation: 'slide-horizontal', // Effect on navigation, none/fade/slide-horizontal/slide-vertical/slide-swing
+            animation: 'slide-swing', // Effect on navigation, none/fade/slide-horizontal/slide-vertical/slide-swing
         },
         toolbarSettings: {
             toolbarExtraButtons: [btnFinish]

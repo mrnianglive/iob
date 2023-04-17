@@ -12,7 +12,7 @@ if (isset($_GET['Caisse'])) {
         if ($value['StatutProduit'] == 'banque') { // Uniquement Ecobank
             $tableau[$value['RefProduit']] = [
                 'nom' => $value['NameProduit'],
-                'image' => $value['ImageProduit'] // Remplacez 'ImageProduit' par le nom de la colonne correspondante dans votre base de données
+                'image' => $value['img'] // Remplacez 'ImageProduit' par le nom de la colonne correspondante dans votre base de données
             ];
         }
     }

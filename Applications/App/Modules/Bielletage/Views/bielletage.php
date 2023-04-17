@@ -39,27 +39,46 @@
         <div class="tab-content">
 
             <div id="step-1" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-1">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 col-lg-4">
-                        <a href="https://www.example.com/produit1">
-                            <img src="https://via.placeholder.com/150" alt="Produit 1" class="rounded-circle circle-img mx-auto mb-2">
-                            <h5 class="mb-0">Produit 1</h5>
-                        </a>
+                <form>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="produit" id="produit1" value="produit1">
+                                <label class="form-check-label" for="produit1">
+                                    <img src="https://via.placeholder.com/150" alt="Produit 1" class="rounded-circle circle-img mx-auto mb-2">
+                                    <h5 class="mb-0">Produit 1</h5>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="produit" id="produit2" value="produit2">
+                                <label class="form-check-label" for="produit2">
+                                    <img src="https://via.placeholder.com/150" alt="Produit 2" class="rounded-circle circle-img mx-auto mb-2">
+                                    <h5 class="mb-0">Produit 2</h5>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="produit" id="produit3" value="produit3">
+                                <label class="form-check-label" for="produit3">
+                                    <img src="https://via.placeholder.com/150" alt="Produit 3" class="rounded-circle circle-img mx-auto mb-2">
+                                    <h5 class="mb-0">Produit 3</h5>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6 col-lg-4">
-                        <a href="https://www.example.com/produit2">
-                            <img src="https://via.placeholder.com/150" alt="Produit 2" class="rounded-circle circle-img mx-auto mb-2">
-                            <h5 class="mb-0">Produit 2</h5>
-                        </a>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <a href="https://www.example.com/produit3">
-                            <img src="https://via.placeholder.com/150" alt="Produit 3" class="rounded-circle circle-img mx-auto mb-2">
-                            <h5 class="mb-0">Produit 3</h5>
-                        </a>
-                    </div>
-                </div>
+                </form>
             </div>
+
+            <style>
+                .form-check-input:checked+.form-check-label {
+                    background-color: #007bff;
+                    color: #fff;
+                }
+            </style>
+
             &nbsp;
             <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
                 <input type="hidden" class="form-control" name="RefType" value="<?= $_GET['id']; ?>">

@@ -10,7 +10,10 @@ if (isset($_GET['Caisse'])) {
     $resultat = $requete->fetchAll();
     foreach ($resultat as $key => $value) {
         if ($value['StatutProduit'] == 'banque') { // Uniquement Ecobank
-            $tableau[$value['RefProduit']][] = $value['NameProduit'];
+            $tableau[$value['RefProduit']] = [
+                'nom' => $value['NameProduit'],
+                'image' => $value['ImageProduit'] // Remplacez 'ImageProduit' par le nom de la colonne correspondante dans votre base de données
+            ];
         }
     }
     echo json_encode($tableau);

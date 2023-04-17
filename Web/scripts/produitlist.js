@@ -11,14 +11,15 @@ $(function () {
             success: function (json) {
                 $.each(json, function (index, value) {
                     var produitHtml = `
-                    <div class="form-check d-inline mx-2">
-                        <input class="form-check-input" type="radio" name="RefProduit" id="produit${index}" value="${index}">
-                        <label class="form-check-label d-block bg-light p-3 rounded-circle" for="produit${index}">
-                        <div class="circle-img">
-                            <img src="${value.image}" alt="${value.nom}" class="mx-auto mb-2 produit-img">
+                         <div class="form-check">
+                            <input class="form-check-input" type="radio" name="RefProduit" id="produit${index}" value="${index}">
+                            <label class="form-check-label d-block bg-light p-3 rounded-circle" for="produit${index}">
+                                <div class="circle-img">
+                                    <img src="${value.image}" width="150" height="150" alt="${value.nom}" class="mx-auto mb-2">
+                                </div>
+                            </label>
                         </div>
-                        </label>
-                    </div>
+                      
                     `;
                     $liste.append(produitHtml);
                 });

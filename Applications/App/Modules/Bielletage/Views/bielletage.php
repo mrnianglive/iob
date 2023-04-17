@@ -316,112 +316,80 @@
             </div>
             <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                 <div class="row">
-                    <div class="col-sm-2">
+
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" class="form-control number-input" id="i2" name="i2" autocomplete="OFF"
-                                style="border: 1px solid coral;">
+                            <label class="control-label">Source</label>
+                            <select class="form-control" name="RefCaisse" tabindex="1" required="">
+                                <?php foreach ($CheckOuverture as $key => $Caisse) {
+                                    if ($Caisse['caisse'] != $Caisse['RefCaisse']) {
+                                ?>
+                                <option value="<?= $Caisse['RefCaisse']; ?>">
+                                    <?= $Caisse['NameCaisse'] . " " . $Caisse['NameAgency']; ?></option>
+                                <?php }
+                                }   ?>
+                            </select>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" class="form-control" id="i1" name="i1" value="50" readonly>
+                            <label class="control-label">Destination</label>
+                            <select class="form-control" name="Destination" tabindex="1" required="">
+
+                                <?php foreach ($CheckOuverture as $key => $Caisse) {
+                                    if ($Caisse['caisse'] != $Caisse['RefCaisse']) {
+                                ?>
+                                <option value="<?= $Caisse['RefCaisse']; ?>">
+                                    <?= $Caisse['NameCaisse'] . " " . $Caisse['NameAgency']; ?></option>
+                                <?php }
+                                }   ?>
+                            </select>
                         </div>
                     </div>
 
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" id="i3" class="form-control" name="i3" readonly
-                                style="border: 1px solid  #44E922;">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" class="form-control number-input" id="j2" name="j2" autocomplete="OFF"
-                                style="border: 1px solid coral;">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" class="form-control" id="j1" name="j1" value="25" readonly>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" id="j3" class="form-control" name="j3" readonly
-                                style="border: 1px solid  #44E922;">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" class="form-control number-input" id="k2" name="k2" autocomplete="OFF"
-                                style="border: 1px solid coral;">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" class="form-control" id="k1" name="k1" value="10" readonly>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" id="k3" class="form-control" name="k3" readonly
-                                style="border: 1px solid  #44E922;">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" class="form-control number-input" id="l2" name="l2" autocomplete="OFF"
-                                style="border: 1px solid coral;">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" class="form-control" id="l1" name="l1" value="5" readonly>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" id="l3" class="form-control" name="l3" readonly
-                                style="border: 1px solid  #44E922;">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" class="form-control number-input" id="m2" name="m2" autocomplete="OFF"
-                                style="border: 1px solid coral;">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" class="form-control" id="m1" name="m1" value="1" readonly>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label class="control-label"></label>
-                            <input type="int" id="m3" class="form-control" name="m3" readonly
-                                style="border: 1px solid  #44E922;">
-                        </div>
-                    </div>
                 </div>
+                <div class=" row">
+                    <div class="col-md-6">
+                        <div class="form-group has-error">
+                            <label class="control-label">Montant *</label>
+                            <input type="int" id="total" class="form-control" name="MontantVersement" readonly=""
+                                required>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="form-group has-error">
+                            <label class="control-label">Remarque *</label>
+                            <input type="text" class="form-control" name="Remarque" value="Transfert Caisse2Caisse"
+                                readonly="" placeholder="Remarque" autocomplete="OFF">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group has-error">
+                            <label class="control-label">Deposant/Auteur Retrait *</label>
+                            <input type="text" class="form-control" name="NameDeposant"
+                                value="<?= $_SESSION['PrenomUsers'], " " . $_SESSION['NomUsers']; ?>" readonly=""
+                                autocomplete="OFF">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group has-error">
+                            <label class="control-label">Téléphone *</label>
+                            <input type="text" class="form-control" name="TelDeposant" value="Opération Interne"
+                                readonly="" placeholder="Téléphone" autocomplete="OFF">
+                        </div>
+                    </div>
+                    <?php if (in_array(3, $permission)) { ?>
+                    <div class="col-md-6">
+                        <div class="form-group has-error">
+                            <label class="control-label">Antidaté l'opération</label>
+                            <input type="date" class="form-control" name="Antidate">
+                        </div>
+                    </div>
+                    <?php } ?>
+                </div>
+
             </div>
 
         </div>

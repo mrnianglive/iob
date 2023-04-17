@@ -124,7 +124,7 @@ class JournalManagerPDO extends JournalManager
             return $DataSomnmeRetrait['TotalPeriodeRetrait'];
         }
     }
-    public function sommeVersementPeriode($debut = NULL, $fin = NULL, $Agence = NULL, $produit)
+    public function sommeVersementPeriode($debut = NULL, $fin = NULL, $Agence = NULL, $produit = NULL)
     {
         if (!empty($debut) && !empty($fin) && !empty($Agence) && !empty($produit)) {
             $requete = $this->dao->prepare("SELECT SUM(MontantVersement) AS TotalPeriodeVersement FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse  INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'   AND TbleAgency.RefAgency=:Agence  AND (TbleOperations.RefType=1)  AND TbleOperations.RefProduit=:RefProduit ");

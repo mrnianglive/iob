@@ -1,6 +1,6 @@
 $(function () {
     var $Caisse = $('#RefCaisse');
-    var $liste = $('#RefProduit');
+    var $liste = $('#ProduitList');
     $Caisse.on('click', function () {
         var val = $(this).val();
         if (val != null) $liste.empty();

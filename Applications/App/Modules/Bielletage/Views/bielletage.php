@@ -38,7 +38,7 @@
     <form method="POST" action='/bielletage/add'>
         <br />
         <div class="tab-content">
-            <div id="step-4" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-4" style="background-color: #EDF1F5;">
+            <div id="step-4" class="tab-pane " role="tabpanel" aria-labelledby="step-4" style="background-color: #EDF1F5;">
 
                 <div id="ProduitList">
 

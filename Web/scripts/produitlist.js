@@ -1,6 +1,6 @@
 $(function () {
     var $Caisse = $('#RefCaisse');
-    var $liste = $('#RefProduit');
+    var $liste = $('#ProduitList');
     $Caisse.on('click', function () {
         var val = $(this).val();
         if (val != null) $liste.empty();
@@ -11,14 +11,14 @@ $(function () {
             success: function (json) {
                 $.each(json, function (index, value) {
                     var produitHtml = `
-                        <div class="col-md-6 col-lg-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="produit" id="produit${index}" value="${index}">
-                                <label class="form-check-label" for="produit${index}">
-                                    <img src="https://via.placeholder.com/150" alt="${value}" class="rounded-circle circle-img mx-auto mb-2">
-                                    <h5 class="mb-0">${value}</h5>
-                                </label>
-                            </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="RefProduit" id="produit${index}" value="${index}">
+                            <label class="form-check-label d-block bg-light p-3 rounded-circle" for="produit${index}">
+                                <div class="circle-img">
+                                    <img src="https://via.placeholder.com/150" alt="${value}" class="mx-auto mb-2">
+                                </div>
+                                <h5 class="mb-0">${value}</h5>
+                            </label>
                         </div>
                     `;
                     $liste.append(produitHtml);

@@ -39,31 +39,21 @@
         <div class="tab-content">
 
             <div id="step-1" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-1" style="background-color: #EDF1F5;">
-
                 <div class="row justify-content-center">
                     <div class="col-md-6">
-
                         <div class="form-group">
                             <label class="control-label">Caisse</label>
                             <select class="form-control" name="RefCaisse" tabindex="1" required="">
                                 <?php foreach ($CheckOuverture as $key => $Caisse) {
-                                    if ($Caisse['caisse'] != $Caisse['RefCaisse']) {
-                                ?>
+                                    if ($Caisse['caisse'] != $Caisse['RefCaisse']) { ?>
                                         <option value="<?= $Caisse['RefCaisse']; ?>">
-                                            <?= $Caisse['NameCaisse'] . " " . $Caisse['NameAgency']; ?></option>
+                                            <?= $Caisse['NameCaisse'] . " " . $Caisse['NameAgency']; ?>
+                                        </option>
                                 <?php }
                                 } ?>
-
                             </select>
                         </div>
                     </div>
-                    <br>
-
-
-
-
-
-
                     <div class="col-md-6 col-lg-4">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="produit" id="produit1" value="produit1">
@@ -98,7 +88,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
 

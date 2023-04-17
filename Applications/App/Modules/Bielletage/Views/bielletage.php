@@ -40,20 +40,7 @@
         <div class="tab-content">
             <div id="step-4" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-4" style="background-color: #EDF1F5;">
                 <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="control-label">Caisse</label>
-                            <select class="form-control" name="RefCaisse" id="RefCaisse" tabindex="1" required="">
-                                <?php foreach ($CheckOuverture as $key => $Caisse) {
-                                    if ($Caisse['caisse'] != $Caisse['RefCaisse']) { ?>
-                                        <option value="<?= $Caisse['RefCaisse']; ?>">
-                                            <?= $Caisse['NameCaisse'] . " " . $Caisse['NameAgency']; ?>
-                                        </option>
-                                <?php }
-                                } ?>
-                            </select>
-                        </div>
-                    </div>
+
                     <div class="col-md-6">
                         <div class="row" id="RefProduit">
                         </div>

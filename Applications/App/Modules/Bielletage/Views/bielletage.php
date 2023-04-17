@@ -45,7 +45,9 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="produit" id="produit1" value="produit1">
                             <label class="form-check-label d-block bg-light p-3 rounded-circle" for="produit1">
-                                <img src="https://via.placeholder.com/150" alt="Produit 1" class="mx-auto mb-2">
+                                <div class="circle-img">
+                                    <img src="https://via.placeholder.com/150" alt="Produit 1" class="mx-auto mb-2">
+                                </div>
                                 <h5 class="mb-0">Produit 1</h5>
                             </label>
                         </div>
@@ -54,7 +56,9 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="produit" id="produit2" value="produit2">
                             <label class="form-check-label d-block bg-light p-3 rounded-circle" for="produit2">
-                                <img src="https://via.placeholder.com/150" alt="Produit 2" class="mx-auto mb-2">
+                                <div class="circle-img">
+                                    <img src="https://via.placeholder.com/150" alt="Produit 2" class="mx-auto mb-2">
+                                </div>
                                 <h5 class="mb-0">Produit 2</h5>
                             </label>
                         </div>
@@ -63,7 +67,9 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="produit" id="produit3" value="produit3">
                             <label class="form-check-label d-block bg-light p-3 rounded-circle" for="produit3">
-                                <img src="https://via.placeholder.com/150" alt="Produit 3" class="mx-auto mb-2">
+                                <div class="circle-img">
+                                    <img src="https://via.placeholder.com/150" alt="Produit 3" class="mx-auto mb-2">
+                                </div>
                                 <h5 class="mb-0">Produit 3</h5>
                             </label>
                         </div>
@@ -71,6 +77,7 @@
                 </div>
 
             </div>
+
 
 
             &nbsp;

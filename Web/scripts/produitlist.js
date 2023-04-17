@@ -11,6 +11,7 @@ $(function () {
             success: function (json) {
                 $.each(json, function (index, value) {
                     var produitHtml = `
+                        <div class="from-group">
                          <div class="form-check">
                             <input class="form-check-input" type="radio" name="RefProduit" id="produit${index}" value="${index}">
                             <label class="form-check-label d-block bg-light p-3 rounded-circle" for="produit${index}">
@@ -18,6 +19,7 @@ $(function () {
                                     <img src="${value.image}" width="150" height="150" alt="${value.nom}" class="rounded">
                                 </div>
                             </label>
+                        </div>
                         </div>
                       
                     `;

@@ -38,7 +38,7 @@
         <br />
         <div class="tab-content">
 
-            <div id="step-1" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-1">
+            <div id="step-1" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-1" style="background-color: #EDF1F5;">
 
                 <div class="row justify-content-center">
                     <div class="col-md-6 col-lg-4">
@@ -71,6 +71,7 @@
                 </div>
 
             </div>
+
 
             &nbsp;
             <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">

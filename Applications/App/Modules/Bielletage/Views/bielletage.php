@@ -39,7 +39,103 @@
         <div class="tab-content">
 
             <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control number-input" id="i2" name="i2" autocomplete="OFF" style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="i1" name="i1" value="50" readonly>
+                        </div>
+                    </div>
 
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="i3" class="form-control" name="i3" readonly style="border: 1px solid  #44E922;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control number-input" id="j2" name="j2" autocomplete="OFF" style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="j1" name="j1" value="25" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="j3" class="form-control" name="j3" readonly style="border: 1px solid  #44E922;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control number-input" id="k2" name="k2" autocomplete="OFF" style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="k1" name="k1" value="10" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="k3" class="form-control" name="k3" readonly style="border: 1px solid  #44E922;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control number-input" id="l2" name="l2" autocomplete="OFF" style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="l1" name="l1" value="5" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="l3" class="form-control" name="l3" readonly style="border: 1px solid  #44E922;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control number-input" id="m2" name="m2" autocomplete="OFF" style="border: 1px solid coral;">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" class="form-control" id="m1" name="m1" value="1" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label"></label>
+                            <input type="int" id="m3" class="form-control" name="m3" readonly style="border: 1px solid  #44E922;">
+                        </div>
+                    </div>
+                </div>
             </div>
 
 

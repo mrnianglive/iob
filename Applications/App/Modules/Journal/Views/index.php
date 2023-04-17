@@ -6,8 +6,9 @@
                       <select class="form-control" name="RefAgency" tabindex="1" required="" id="RefAgency">
                           <?php foreach ($UserAgence as $key => $Agence) {
                             ?>
-                              <option value="<?= $Agence['RefAgency']; ?>" <?php if ($Agence['RefAgency'] == $Value) { ?> selected="" <?php } ?>>
-                                  <?= $Agence['NameAgency']; ?></option>
+                          <option value="<?= $Agence['RefAgency']; ?>" <?php if ($Agence['RefAgency'] == $Value) { ?>
+                              selected="" <?php } ?>>
+                              <?= $Agence['NameAgency']; ?></option>
                           <?php }   ?>
                       </select>
                   </div>
@@ -19,22 +20,25 @@
                   </div>
 
                   <div class="col-md-2">Produit
-                      <div id="RefProduit">
-
-                      </div>
+                      <select class="form-control" name="RefProduit" tabindex="1" id="RefProduit" required="">
+                          <option></option>
+                      </select>
                   </div>
 
 
 
                   <div class=""></br>
-                      <button type="submit" class="btn btn-primary" data-toggle="tooltip" title="Cliquez ici pour lancer la recherche"><i class="fas fa-search"></i></button>
+                      <button type="submit" class="btn btn-primary" data-toggle="tooltip"
+                          title="Cliquez ici pour lancer la recherche"><i class="fas fa-search"></i></button>
                   </div>
 
                   <div class="col-md-2 ">Total Depot
-                      <input type="text" value="<?= number_format($sommeVersementPeriode, 0, '.', '.'); ?>" class="form-control" readonly>
+                      <input type="text" value="<?= number_format($sommeVersementPeriode, 0, '.', '.'); ?>"
+                          class="form-control" readonly>
                   </div>
                   <div class="col-md-2">Total Retrait
-                      <input type="text" value="<?= number_format($sommeRetraitPeriode, 0, '.', '.'); ?>" class="form-control" readonly>
+                      <input type="text" value="<?= number_format($sommeRetraitPeriode, 0, '.', '.'); ?>"
+                          class="form-control" readonly>
                   </div>
                   <!-- <div class="col-md-2">Solde Especes
                       <input type="text" value="<? //= number_format($Solde, 0, '.', '.');  
@@ -52,7 +56,7 @@
                           <tr>
                               <th class="border-top-0">ID</th>
                               <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
-                                  <th class="border-top-0">Statut</th>
+                              <th class="border-top-0">Statut</th>
                               <?php } ?>
                               <th class="border-top-0">Agence</th>
                               <th class="border-top-0">Produit</th>
@@ -66,41 +70,54 @@
                               <th class="border-top-0">RECU</th>
                               <th class="border-top-0">From</th>
                               <?php if (in_array(1, $permission)) { ?>
-                                  <th class="border-top-0">Action</th>
+                              <th class="border-top-0">Action</th>
                               <?php } ?>
                           </tr>
                       </thead>
                       <tbody>
                           <?php foreach ($Operations as $key => $value) { ?>
-                              <tr>
+                          <tr>
 
-                                  <td style="<?php if ($value['Validate'] == 2 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color:#7ace4c;  <?php } elseif ($value['Validate'] == 1 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color: #f33155; <?php   } ?>">
-                                      <?= $value['RefOperations']; ?></td>
-                                  <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
-                                      <td> <?php if ($value['Validate'] == 1) { ?><button class="btn btn-danger" data-toggle="modal" data-target="#modal" data-operation-id="<?= $value['RefOperations']; ?>" data-ref-agency="<?= $value['RefAgency']; ?>" title="Cliquez ici pour confirmer l'opération">
-                                                  Non Vérifiée
-                                              </button><?php } else { ?> <a href="/Journal/cancelvalidate/<?= $value['RefOperations']; ?>" class="btn btn-success" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vérifcation ?');">
-                                                  Verifiée le <span><?= $value['DateValidate']; ?></span></a>
-                                          <?php   } ?>
-                                      </td>
-                                  <?php } ?>
-                                  <td><?= $value['NameAgency']; ?></td>
-                                  <td><?= $value['NameProduit']; ?></td>
-                                  <td><?= $value['NameType']; ?></td>
-                                  <td><?= $value['NameClient']; ?></td>
-                                  <td><?= $value['NumCompte']; ?></td>
-                                  <td><?= $value['MontantVersement']; ?></td>
-                                  <td><?= $value['Remarque']; ?></td>
-                                  <td><?= date('d/m/Y', strtotime($value['Approve2_Time'])); ?></td>
-                                  <td><?= $value['login']; ?></td>
-                                  <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank" class="btn btn-secondary" data-toggle="tooltip" title="Cliquez ici pour imprimer le bordereau"><i class="fa fa-print">
-                                              Reçu</i> </td>
-                                  <td><?= $value['SentFromAgency']; ?></td>
-                                  <?php if (in_array(1, $permission)) { ?>
-                                      <td><a href="/Journal/delete/<?= $value['RefOperations']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i class="fa fa-trash"></i></a>
-                                      </td>
-                                  <?php } ?>
-                              </tr>
+                              <td
+                                  style="<?php if ($value['Validate'] == 2 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color:#7ace4c;  <?php } elseif ($value['Validate'] == 1 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color: #f33155; <?php   } ?>">
+                                  <?= $value['RefOperations']; ?></td>
+                              <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
+                              <td> <?php if ($value['Validate'] == 1) { ?><button class="btn btn-danger"
+                                      data-toggle="modal" data-target="#modal"
+                                      data-operation-id="<?= $value['RefOperations']; ?>"
+                                      data-ref-agency="<?= $value['RefAgency']; ?>"
+                                      title="Cliquez ici pour confirmer l'opération">
+                                      Non Vérifiée
+                                  </button><?php } else { ?> <a
+                                      href="/Journal/cancelvalidate/<?= $value['RefOperations']; ?>"
+                                      class="btn btn-success"
+                                      onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vérifcation ?');">
+                                      Verifiée le <span><?= $value['DateValidate']; ?></span></a>
+                                  <?php   } ?>
+                              </td>
+                              <?php } ?>
+                              <td><?= $value['NameAgency']; ?></td>
+                              <td><?= $value['NameProduit']; ?></td>
+                              <td><?= $value['NameType']; ?></td>
+                              <td><?= $value['NameClient']; ?></td>
+                              <td><?= $value['NumCompte']; ?></td>
+                              <td><?= $value['MontantVersement']; ?></td>
+                              <td><?= $value['Remarque']; ?></td>
+                              <td><?= date('d/m/Y', strtotime($value['Approve2_Time'])); ?></td>
+                              <td><?= $value['login']; ?></td>
+                              <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
+                                      class="btn btn-secondary" data-toggle="tooltip"
+                                      title="Cliquez ici pour imprimer le bordereau"><i class="fa fa-print">
+                                          Reçu</i> </td>
+                              <td><?= $value['SentFromAgency']; ?></td>
+                              <?php if (in_array(1, $permission)) { ?>
+                              <td><a href="/Journal/delete/<?= $value['RefOperations']; ?>"
+                                      class="btn btn-xs btn-danger"
+                                      onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i
+                                          class="fa fa-trash"></i></a>
+                              </td>
+                              <?php } ?>
+                          </tr>
                           <?php } ?>
                       </tbody>
                   </table>
@@ -118,7 +135,8 @@
               <form role="form" method="post" action="/Journal/validate">
                   <div class="modal-body">
                       <div class="modal-body">
-                          <input type="hidden" class="form-control" id="modal-operation-id" name="RefOperations" value="">
+                          <input type="hidden" class="form-control" id="modal-operation-id" name="RefOperations"
+                              value="">
                           <div class="form-group">
                               <label for="recipient-name" class="control-label">Date</label>
                               <input type="date" class="form-control" name="DateValidate" required>
@@ -128,8 +146,8 @@
                               <select name="SentFromAgency" class="form-control" required>
                                   <option value="">Veuillez Choisir l'agence</option>
                                   <?php foreach ($ListeAgence as $key => $agence) { ?>
-                                      <option value="<?= $agence['RefAgency']; ?>">
-                                          <?= $agence['NameAgency']; ?></option>
+                                  <option value="<?= $agence['RefAgency']; ?>">
+                                      <?= $agence['NameAgency']; ?></option>
                                   <?php   } ?>
                               </select>
                           </div>

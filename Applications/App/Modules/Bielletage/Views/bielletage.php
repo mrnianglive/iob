@@ -456,14 +456,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Produit *</label>
-                                <select class="form-control" name="RefProduit" tabindex="1" id="RefProduit" required="">
-                                    <option></option>
-                                </select>
-                            </div>
-                        </div> -->
+
                                     <?php if (($_GET['id'] == 1 or $_GET['id'] == 2)) { ?>
                                         <div class="col-md-6">
                                             <div class="form-group"><label class="control-label" id="label">Numéro de
@@ -622,3 +615,5 @@
                 </div>
             <?php } ?>
         </div>
+
+    </form>

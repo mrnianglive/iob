@@ -313,7 +313,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Source</label>
-                                <select class="form-control" name="RefCaisse" tabindex="1" required="">
+                                <select class="form-control" name="RefCaisse" id="RefCaisse" tabindex="1" required="">
                                     <?php foreach ($CheckOuverture as $key => $Caisse) {
                                         if ($Caisse['caisse'] != $Caisse['RefCaisse']) {
                                     ?>

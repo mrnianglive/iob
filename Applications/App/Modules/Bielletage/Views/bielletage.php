@@ -60,9 +60,7 @@
                     </div>
                 </div>
             </div>
-
-
-
+            &nbsp;
             <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
                 <input type="hidden" class="form-control" name="RefType" value="<?= $_GET['id']; ?>">
                 <div class="row">

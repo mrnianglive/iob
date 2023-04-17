@@ -47,6 +47,18 @@
                     </div>
                 </div>
             </div>
+            <style>
+                .circle-img {
+                    width: 150px;
+                    height: 150px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    margin: 0 auto;
+                    text-align: center;
+                    background-color: #fff;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                }
+            </style>
 
 
 

@@ -17,7 +17,6 @@ $(function () {
                                 <div class="circle-img">
                                     <img src="https://ecobank.com/img/eco/eco_logo_blue.jpg" width="150" height="150" alt="${value}" class="mx-auto mb-2">
                                 </div>
-                                <h5 class="mb-0">${value}</h5>
                             </label>
                         </div>
                     `;

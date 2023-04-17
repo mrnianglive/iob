@@ -39,9 +39,10 @@
         <br />
         <div class="tab-content">
             <div id="step-4" class="tab-pane " role="tabpanel" aria-labelledby="step-4" style="background-color: #EDF1F5;">
+                <div class="row justify-content-center">
+                    <div id="ProduitList">
 
-                <div id="ProduitList">
-
+                    </div>
                 </div>
             </div>
 

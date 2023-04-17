@@ -288,9 +288,8 @@
                     </div>
                 </div>
             </div>
-            <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
-                <?php if (isset($_GET['id']) == 5) { ?>
-
+            <?php if ($_GET['id'] == 5) { ?>
+                <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -321,9 +320,8 @@
                                 </select>
                             </div>
                         </div>
-
                     </div>
-                    <div class=" row">
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group has-error">
                                 <label class="control-label">Montant *</label>
@@ -359,7 +357,12 @@
                             </div>
                         <?php } ?>
                     </div>
-                <?php } else { ?>
+
+                </div>
+            <?php } else { ?>
+
+                <!--Normal Div3-->
+                <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                     <div class="row">
                         <?php if ($_GET['id'] == 3 or $_GET['id'] == 4) { ?>
                             <?php if ($_GET['id'] == 3) { ?>
@@ -514,7 +517,7 @@
                                         </div>
                                     <?php } ?>
                                 </div>
-                                <?php if (isset($_GET['id']) == 3) { ?>
+                                <?php if ($_GET['id'] == 3) { ?>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group has-error">
@@ -537,7 +540,7 @@
                                     </div>
                                 <?php } else { ?>
                                     <div class="row">
-                                        <?php if (isset($_GET['id']) == 2) { ?>
+                                        <?php if ($_GET['id'] == 2) { ?>
                                             <div class="col-md-4">
                                                 <div class="form-group has-error">
                                                     <label class="control-label">Remarque *</label>
@@ -601,8 +604,7 @@
                                     </div>
                                 <?php } ?>
                     </div>
-                <?php } ?>
 
-            </div>
-
+                </div>
+            <?php } ?>
         </div>

@@ -15,7 +15,7 @@ $(function () {
                             <input class="form-check-input" type="radio" name="RefProduit" id="produit${index}" value="${index}">
                             <label class="form-check-label d-block bg-light p-3 rounded-circle" for="produit${index}">
                                 <div class="circle-img">
-                                    <img src="https://via.placeholder.com/150" alt="${value}" class="mx-auto mb-2">
+                                    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fecobank.com%2F&psig=AOvVaw2vr8Xd02RsL8LhalhfyW2E&ust=1681813231033000&source=images&cd=vfe&ved=0CA4QjRxqFwoTCIi6rdTYsP4CFQAAAAAdAAAAABAD" width="150" height="150" alt="${value}" class="mx-auto mb-2">
                                 </div>
                                 <h5 class="mb-0">${value}</h5>
                             </label>

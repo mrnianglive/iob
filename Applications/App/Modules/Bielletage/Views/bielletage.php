@@ -42,26 +42,17 @@
                 <div class="row justify-content-center">
 
                     <div class="col-md-6">
-                        <div class="row" id="RefProduit">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="control-label">Code Produit</label>
+                                    <input type="int" id="a2" class="form-control number-input" name="a2" autocomplete="OFF" style="border: 1px solid coral;">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <style>
-                .circle-img {
-                    width: 150px;
-                    height: 150px;
-                    border-radius: 50%;
-                    overflow: hidden;
-                    margin: 0 auto;
-                    text-align: center;
-                    background-color: #fff;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-                }
-            </style>
-
-
-
             &nbsp;
             <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                 <input type="hidden" class="form-control" name="RefType" value="<?= $_GET['id']; ?>">

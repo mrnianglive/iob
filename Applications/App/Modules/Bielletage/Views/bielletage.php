@@ -1,8 +1,17 @@
 <div id="smartwizard">
     <ul class="nav">
         <li class="nav-item">
-            <a class="nav-link" href="#step-1">
+            <a class="nav-link" href="#step-4">
                 Produit
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#step-1">
+                Bielletage-<?php if (isset($_GET['id'])) {
+                                if ($_GET['id'] == 1) { ?>Versement<?php } elseif ($_GET['id'] == 2) { ?>Retrait<?php } elseif ($_GET['id'] == 3) { ?>Appro
+                Caisse<?php } elseif ($_GET['id'] == 4) { ?>Sortie de
+                Fond<?php } elseif ($_GET['id'] == 5) { ?>Transfert Caisse2Caisse<?php }
+                                                                                                        } ?>
             </a>
         </li>
         <li class="nav-item">
@@ -23,22 +32,13 @@
                                                                                                         } ?>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#step-4">
-                Bielletage-<?php if (isset($_GET['id'])) {
-                                if ($_GET['id'] == 1) { ?>Versement<?php } elseif ($_GET['id'] == 2) { ?>Retrait<?php } elseif ($_GET['id'] == 3) { ?>Appro
-                Caisse<?php } elseif ($_GET['id'] == 4) { ?>Sortie de
-                Fond<?php } elseif ($_GET['id'] == 5) { ?>Transfert Caisse2Caisse<?php }
-                                                                                                        } ?>
-            </a>
-        </li>
     </ul>
 
     <form method="POST" action='/bielletage/add'>
         <br />
         <div class="tab-content">
 
-            <div id="step-1" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-1"
+            <div id="step-4" class="tab-pane text-center" role="tabpanel" aria-labelledby="step-4"
                 style="background-color: #EDF1F5;">
 
                 <div class="row justify-content-center">
@@ -82,7 +82,7 @@
 
 
             &nbsp;
-            <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+            <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                 <input type="hidden" class="form-control" name="RefType" value="<?= $_GET['id']; ?>">
                 <div class="row">
                     <div class="col-sm-2">
@@ -255,7 +255,7 @@
                     </div>
                 </div>
             </div>
-            <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+            <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
                 <div class="row">
                     <div class="col-sm-2">
                         <div class="form-group">
@@ -365,7 +365,7 @@
                 </div>
             </div>
             <?php if ($_GET['id'] == 5) { ?>
-            <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+            <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -441,7 +441,7 @@
 
             </div>
             <?php } else { ?>
-            <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+            <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                 <div class="row">
                     <?php if ($_GET['id'] == 3 or $_GET['id'] == 4) { ?>
                     <?php if ($_GET['id'] == 3) { ?>

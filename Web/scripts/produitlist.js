@@ -15,7 +15,7 @@ $(function () {
                             <input class="form-check-input" type="radio" name="RefProduit" id="produit${index}" value="${index}">
                             <label class="form-check-label d-block bg-light p-3 rounded-circle" for="produit${index}">
                                 <div class="circle-img">
-                                    <img src="${value.image}" width="150" height="150" alt="${value.nom}" class="mx-auto mb-2">
+                                    <img src="${value.image}" width="150" height="150" alt="${value.nom}" class="rounded">
                                 </div>
                             </label>
                         </div>

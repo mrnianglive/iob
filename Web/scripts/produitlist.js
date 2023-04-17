@@ -18,7 +18,6 @@ $(function () {
                                 <div class="circle-img">
                                     <img src="${value.image}" width="150" height="150" alt="${value.nom}" class="mx-auto mb-2">
                                 </div>
-                                <h5 class="mb-0">${value.nom}</h5>
                             </label>
                         </div>
                         </div>

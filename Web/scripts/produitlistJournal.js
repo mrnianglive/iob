@@ -1,12 +1,12 @@
 $(function () {
-    var $Agency = $('#RefAgency');
+    var $Caisse = $('#RefAgency');
     var $liste = $('#RefProduit');
-    $Agency.on('click', function () {
+    $Caisse.on('click', function () {
         var val = $(this).val();
         if (val != null) $liste.empty();
         $.ajax({
             url: '/config/requetelisteJournal.php',
-            data: 'Agency=' + val,
+            data: 'Caisse=' + val,
             dataType: 'json',
             success: function (json) {
                 $.each(json, function (index, value) {

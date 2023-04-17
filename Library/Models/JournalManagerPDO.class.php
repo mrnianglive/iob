@@ -19,16 +19,18 @@ class JournalManagerPDO extends JournalManager
         }
         return $data;
     }
-    public function GetOperations($debut, $fin, $Agence)
+    public function GetOperations($debut, $fin, $Agence, $produit)
     {
         //Old Query before View on SQL $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit INNER JOIN TbleUsers ON TbleUsers.Refusers=TbleOperations.Insert_Id    WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleAgency.RefAgency=:Agence AND  (TbleOperations.RefType=1 OR TbleOperations.RefType=2 OR TbleOperations.RefType=4  ) ORDER BY TbleOperations.datePayement ASC");
-        $requete = $this->dao->prepare(" SELECT * FROM operations WHERE operations.Approve2_Id IS NOT NULL AND operations.Reset_Id IS NULL AND  date(operations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND operations.RefAgency=:Agence AND  (operations.RefType=1 OR operations.RefType=2 OR operations.RefType=4  ) ORDER BY operations.datePayement ASC");
+        $requete = $this->dao->prepare(" SELECT * FROM operations WHERE operations.Approve2_Id IS NOT NULL AND operations.Reset_Id IS NULL AND  date(operations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND operations.RefAgency=:Agence AND (operations.RefProduit=:produit) AND (operations.RefType=1 OR operations.RefType=2 OR operations.RefType=4  ) ORDER BY operations.datePayement ASC");
         $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
+        $requete->bindValue(':produit', $produit, \PDO::PARAM_INT);
         $requete->execute();
         $data = $requete->fetchAll();
         foreach ($data as $key => $value) {
             $data[$key]['Debut'] = $debut;
             $data[$key]['Debut'] = $fin;
+            $data[$key]['RefProduit'] = $produit;
         }
         return $data;
     }
@@ -98,11 +100,12 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':RefOperations', $id, \PDO::PARAM_INT);
         $requete->execute();
     }
-    public function sommeRetraitPeriode($debut = NULL, $fin = NULL, $Agence = NULL)
+    public function sommeRetraitPeriode($debut = NULL, $fin = NULL, $Agence = NULL, $produit)
     {
-        if (!empty($debut) && !empty($fin) && !empty($Agence)) {
-            $SommeRetraitPeriode = $this->dao->prepare("SELECT SUM(MontantVersement) AS TotalPeriodeRetrait FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse  INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'   AND TbleAgency.RefAgency=:Agence AND  (TbleOperations.RefType=2) ");
+        if (!empty($debut) && !empty($fin) && !empty($Agence) && !empty($produit)) {
+            $SommeRetraitPeriode = $this->dao->prepare("SELECT SUM(MontantVersement) AS TotalPeriodeRetrait FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse  INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'   AND TbleAgency.RefAgency=:Agence AND  (TbleOperations.RefType=2) AND TbleOperations.RefProduit=:RefProduit");
             $SommeRetraitPeriode->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
+            $SommeRetraitPeriode->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
             $SommeRetraitPeriode->execute();
             $DataSomnmeRetrait = $SommeRetraitPeriode->fetch();
             if ($DataSomnmeRetrait['TotalPeriodeRetrait'] == NULL) {
@@ -121,11 +124,12 @@ class JournalManagerPDO extends JournalManager
             return $DataSomnmeRetrait['TotalPeriodeRetrait'];
         }
     }
-    public function sommeVersementPeriode($debut = NULL, $fin = NULL, $Agence = NULL)
+    public function sommeVersementPeriode($debut = NULL, $fin = NULL, $Agence = NULL, $produit)
     {
-        if (!empty($debut) && !empty($fin) && !empty($Agence)) {
-            $requete = $this->dao->prepare("SELECT SUM(MontantVersement) AS TotalPeriodeVersement FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse  INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'   AND TbleAgency.RefAgency=:Agence  AND (TbleOperations.RefType=1)  ");
+        if (!empty($debut) && !empty($fin) && !empty($Agence) && !empty($produit)) {
+            $requete = $this->dao->prepare("SELECT SUM(MontantVersement) AS TotalPeriodeVersement FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse  INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'   AND TbleAgency.RefAgency=:Agence  AND (TbleOperations.RefType=1)  AND TbleOperations.RefProduit=:RefProduit ");
             $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
+            $requete->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
             $requete->execute();
             $data = $requete->fetch();
             if ($data['TotalPeriodeVersement'] == NULL) {

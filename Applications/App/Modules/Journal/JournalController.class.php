@@ -14,36 +14,41 @@ class JournalController extends \Library\BackController
         $this->page->addVar('Debut', $request->postData('Debut'));
         $this->page->addVar('Fin', $request->postData('Fin'));
         $this->page->addVar('Value', $request->postData('RefAgency'));
+        $this->page->addVar('RefProduit', $request->postData('RefProduit'));
+
         $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
         $this->page->addVar("ListeAgence", $ListeAgence);
         if (!empty($request->postData('RefAgency')) or isset($_GET['value'])) {
             if (isset($_GET['debut']) && isset($_GET['fin']) && isset($_GET['value'])) {
-                $Operations = $this->managers->getManagerOf('Journal')->GetOperations($_GET['debut'], $_GET['fin'], $_GET['value']);
+                $Operations = $this->managers->getManagerOf('Journal')->GetOperations($_GET['debut'], $_GET['fin'], $_GET['value'], $_GET['RefProduit']);
                 $this->page->addVar('Debut', $_GET['debut']);
                 $this->page->addVar('Fin', $_GET['fin']);
                 $this->page->addVar('Value', $_GET['value']);
+                $this->page->addVar('RefProduit', $_GET['RefProduit']);
             } else {
-                $Operations = $this->managers->getManagerOf('Journal')->GetOperations($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+                $Operations = $this->managers->getManagerOf('Journal')->GetOperations($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'), $request->postData('RefProduit'));
                 $this->page->addVar('Debut', $request->postData('Debut'));
                 $this->page->addVar('Fin', $request->postData('Fin'));
                 $this->page->addVar('Value', $request->postData('RefAgency'));
+                $this->page->addVar('RefProduit', $request->postData('RefProduit'));
             }
             $this->page->addVar('Operations', $Operations);
 
 
-            $SoldeRemittanceVersementAgencePeriode = $this->managers->getManagerOf('Journal')->SoldeRemittanceVersementAgencePeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
-            $SoldeRemittanceRetraitAgencePeriode = $this->managers->getManagerOf('Journal')->SoldeRemittanceRetraitAgencePeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $SoldeRemittanceVersementAgencePeriode = $this->managers->getManagerOf('Journal')->SoldeRemittanceVersementAgencePeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'), $request->postData('RefProduit'));
+            $SoldeRemittanceRetraitAgencePeriode = $this->managers->getManagerOf('Journal')->SoldeRemittanceRetraitAgencePeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'), $request->postData('RefProduit'));
             $SoldeRemittanceAgence = $SoldeRemittanceVersementAgencePeriode - $SoldeRemittanceRetraitAgencePeriode;
 
-            $sommeVersementPeriode = $this->managers->getManagerOf('Journal')->sommeVersementPeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $sommeVersementPeriode = $this->managers->getManagerOf('Journal')->sommeVersementPeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'), $request->postData('RefProduit'));
             $this->page->addVar('sommeVersementPeriode', $sommeVersementPeriode);
-            $sommeRetraitPeriode = $this->managers->getManagerOf('Journal')->sommeRetraitPeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $sommeRetraitPeriode = $this->managers->getManagerOf('Journal')->sommeRetraitPeriode($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'), $request->postData('RefProduit'));
             $this->page->addVar('sommeRetraitPeriode', $sommeRetraitPeriode);
-            $sommeVersementPeriodeAvecAppro = $this->managers->getManagerOf('Journal')->sommeVersementPeriodeAvecAppro($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+
+            $sommeVersementPeriodeAvecAppro = $this->managers->getManagerOf('Journal')->sommeVersementPeriodeAvecAppro($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'), $request->postData('RefProduit'));
             $this->page->addVar('sommeVersementPeriodeAvecAppro', $sommeVersementPeriodeAvecAppro);
-            $sommeRetraitPeriodeAvecSortie = $this->managers->getManagerOf('Journal')->sommeRetraitPeriodeAvecSortie($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $sommeRetraitPeriodeAvecSortie = $this->managers->getManagerOf('Journal')->sommeRetraitPeriodeAvecSortie($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'), $request->postData('RefProduit'));
             $this->page->addVar('sommeRetraitPeriodeAvecSortie', $sommeRetraitPeriodeAvecSortie);
-            $Yesterday = $this->managers->getManagerOf('Journal')->YesterdaySoldeAgence($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
+            $Yesterday = $this->managers->getManagerOf('Journal')->YesterdaySoldeAgence($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'), $request->postData('RefProduit'));
             $Solde = ($sommeVersementPeriodeAvecAppro - $sommeRetraitPeriodeAvecSortie) + $Yesterday + $SoldeRemittanceAgence;
             $this->page->addVar('Solde', $Solde);
         } else {

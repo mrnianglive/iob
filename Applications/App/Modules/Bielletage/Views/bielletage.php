@@ -591,29 +591,30 @@
                                                 <input type="text" class="form-control" name="TelDeposant" required="" placeholder="Téléphone" autocomplete="OFF">
                                             </div>
                                         </div>
-                                        <?php if (in_array(3, $permission)) { ?>
-                                            <div class="col-md-3">
-                                                <div class="form-group has-error">
-                                                    <label class="control-label">Antidaté l'opération</label>
-                                                    <input type="date" class="form-control" name="Antidate">
-                                                </div>
-                                            </div>
 
-                                            <div class="col-md-3">
-                                                <div class="form-group has-error">
-                                                    <label class="control-label">Pays</label>
-                                                    <select name="RefPays" class="form-control">
-                                                        <option value="">Veuillez Choisir le Pays</option>
-                                                        <?php foreach ($ListePays as $key => $value) { ?>
-                                                            <option value="<?= $value['RefPays']; ?>"><?= $value['nomPays']; ?></option>
-                                                        <?php   } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-
-                                        <?php } ?>
                                     </div>
+                                <?php } ?>
+                                <?php if (in_array(3, $permission)) { ?>
+                                    <div class="col-md-3">
+                                        <div class="form-group has-error">
+                                            <label class="control-label">Antidaté l'opération</label>
+                                            <input type="date" class="form-control" name="Antidate">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group has-error">
+                                            <label class="control-label">Pays</label>
+                                            <select name="RefPays" class="form-control">
+                                                <option value="">Veuillez Choisir le Pays</option>
+                                                <?php foreach ($ListePays as $key => $value) { ?>
+                                                    <option value="<?= $value['RefPays']; ?>"><?= $value['nomPays']; ?></option>
+                                                <?php   } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
                                 <?php } ?>
                     </div>
 

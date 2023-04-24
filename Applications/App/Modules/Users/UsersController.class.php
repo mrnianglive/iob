@@ -12,11 +12,13 @@ class UsersController extends \Library\BackController
 
         $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
         $this->page->addVar("ListePays", $ListePays);
+        $caisse = array();
+        $VerifAppro = array();
+
         foreach ($Users as $key => $value) {
             foreach ($ListeCaisse as $key1 => $value1) {
-                $caisse[$value['RefUsers']][$value1['RefCaisse']] =
-                    $this->managers->getManagerOf('User')->VerifCaisse($value1['RefCaisse'], $value['RefUsers']);
-                $VerifAppro[$value['RefUsers']][$value1['RefCaisse']] =  $this->managers->getManagerOf('User')->VerifCaisseAppro($value1['RefCaisse'], $value['RefUsers']);
+                $caisse[$value['RefUsers']][$value1['RefCaisse']] = $this->managers->getManagerOf('User')->VerifCaisse($value1['RefCaisse'], $value['RefUsers']);
+                $VerifAppro[$value['RefUsers']][$value1['RefCaisse']] = $this->managers->getManagerOf('User')->VerifCaisseAppro($value1['RefCaisse'], $value['RefUsers']);
             }
         }
         $this->page->addVar("ListeUsers", $Users); // Creation de la variable, ajout d'une variable a la vue

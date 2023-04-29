@@ -123,7 +123,7 @@
                         <tr>
 
                             <th class="border-top-0">RECU</th>
-                            <?php if (in_array(1, $permission)) { ?>
+                            <?php if (in_array(1, $permission) || $_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
                             <th class="border-top-0">Action</th>
                             <?php } ?>
                             <th class="border-top-0">REF</th>
@@ -144,7 +144,7 @@
                             <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
                                     class="btn btn-primary" data-toggle="tooltip"
                                     title="Cliquez ici pour imprimer le bordereau"><i class="fa fa-print"></i> </td>
-                            <?php if (in_array(1, $permission)) { ?>
+                            <?php if (in_array(1, $permission) || $_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
                             <td><a href="/Journal/delete/<?= $value['RefOperations']; ?>" class="btn btn-xs btn-danger"
                                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i
                                         class="fa fa-trash"></i></a>

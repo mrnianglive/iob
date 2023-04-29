@@ -66,7 +66,7 @@
                               <th class="border-top-0">Caissier</th>
                               <th class="border-top-0">RECU</th>
                               <th class="border-top-0">From</th>
-                              <?php if (in_array(1, $permission)) { ?>
+                              <?php if (in_array(1, $permission) || $_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
                               <th class="border-top-0">Action</th>
                               <?php } ?>
                           </tr>
@@ -107,7 +107,7 @@
                                       title="Cliquez ici pour imprimer le bordereau"><i class="fa fa-print">
                                           Reçu</i> </td>
                               <td><?= $value['SentFromAgency']; ?></td>
-                              <?php if (in_array(1, $permission)) { ?>
+                              <?php if (in_array(1, $permission) || $_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
                               <td><a href="/Journal/delete/<?= $value['RefOperations']; ?>"
                                       class="btn btn-xs btn-danger"
                                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i

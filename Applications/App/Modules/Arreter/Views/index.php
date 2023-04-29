@@ -33,7 +33,7 @@
                                         } else {
                                             ?>
                                   <?php
-                                                if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse') {
+                                                if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'caissier') {
                                                 ?>
                                   <a href="/Arreter/close/<?= $value['RefCaisse']; ?>" class="btn btn-danger"
                                       data-toggle="tooltip" title="Cliquez ici pour  arreter la caisse">

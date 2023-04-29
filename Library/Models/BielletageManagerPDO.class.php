@@ -163,7 +163,8 @@ class BielletageManagerPDO extends BielletageManager
             } else {
                 if (isset($_POST['fraisTimbre'])) {
                     $fraisTimbre = $_POST['fraisTimbre'];
-                    $montantVersement = $_POST['MontantVersement'] - $fraisTimbre;
+                    // $montantVersement = $_POST['MontantVersement'] - $fraisTimbre;
+                    $montantVersement = $_POST['MontantVersement'];
                 } else {
                     $fraisTimbre = 0;
                     $montantVersement = $_POST['MontantVersement'];

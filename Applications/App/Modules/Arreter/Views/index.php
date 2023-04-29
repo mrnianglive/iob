@@ -24,7 +24,7 @@
                                       title="Cliquez ici pour annuler l'arrêté de Caisse"><i
                                           class="fa  fa-lock"></i></a>
                                   <?php } else { ?>
-                                  <a <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse') { ?>
+                                  <a <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'caissier') { ?>
                                       href="/Arreter/close/<?= $value['RefCaisse']; ?>" <?php } ?>
                                       class="btn btn-danger" data-toggle="tooltip"
                                       title="Cliquez ici pour  arreter la caisse"><i class="fa fa-unlock"></i></a>

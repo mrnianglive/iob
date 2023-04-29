@@ -5,8 +5,8 @@
               <div class="user-bg">
                   <div class="overlay-box">
                       <div class="user-content">
-                          <a href="javascript:void(0)"><img src="/images/mlc.png" width="100" height="100"
-                                  class="thumb-lg img-circle" alt="img"></a>
+                          <a href="javascript:void(0)"><img src="/images/<?= $_SESSION['logoPays'] ?? 'afch.jpeg'; ?>"
+                                  width="100" height="100" class="thumb-lg img-circle" alt="img"></a>
                           <h4 class="text-white mt-2"><?= $Info['NomUsers'] . " " . $Info['PrenomUsers']; ?></h4>
                           <h5 class="text-white mt-2"><?= $Info['email']; ?></h5>
                       </div>

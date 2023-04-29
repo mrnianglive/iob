@@ -17,18 +17,37 @@
                               <td><?= $value['NameCaisse']; ?></td>
                               <td><?= $value['NameAgency']; ?></td>
                               <td>
-                                  <?php if (!empty($value['Valide'])) { ?>
-                                  <a <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin') { ?>
-                                      href="/Arreter/delete/<?= $value['Valide']['RefSolde']; ?>" <?php } ?>
-                                      class="btn btn-success" data-toggle="tooltip"
-                                      title="Cliquez ici pour annuler l'arrêté de Caisse"><i
-                                          class="fa  fa-lock"></i></a>
-                                  <?php } else { ?>
-                                  <a <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'caissier') { ?>
-                                      href="/Arreter/close/<?= $value['RefCaisse']; ?>" <?php } ?>
-                                      class="btn btn-danger" data-toggle="tooltip"
-                                      title="Cliquez ici pour  arreter la caisse"><i class="fa fa-unlock"></i></a>
-                                  <?php } ?>
+                                  <?php
+                                        $isAdminOrSuperadmin = $_SESSION['statut'] == 'superadmin' || $_SESSION['statut'] == 'admin';
+                                        $isChefCaisseOrCaissier = $_SESSION['statut'] == 'ChefCaisse' || $_SESSION['statut'] == 'caissier';
+
+                                        if (!empty($value['Valide'])) {
+                                            if ($isAdminOrSuperadmin) {
+                                                $href = "/Arreter/delete/" . $value['Valide']['RefSolde'];
+                                            } else {
+                                                $href = "#";
+                                            }
+
+                                            $class = "btn btn-success";
+                                            $title = "Cliquez ici pour annuler l'arrêté de Caisse";
+                                            $icon = "fa fa-lock";
+                                        } else {
+                                            if ($isAdminOrSuperadmin || $isChefCaisseOrCaissier) {
+                                                $href = "/Arreter/close/" . $value['RefCaisse'];
+                                            } else {
+                                                $href = "#";
+                                            }
+
+                                            $class = "btn btn-danger";
+                                            $title = "Cliquez ici pour  arreter la caisse";
+                                            $icon = "fa fa-unlock";
+                                        }
+                                        ?>
+
+                                  <a href="<?= $href; ?>" class="<?= $class; ?>" data-toggle="tooltip"
+                                      title="<?= $title; ?>">
+                                      <i class="<?= $icon; ?>"></i>
+                                  </a>
 
 
                                   <a href="/Arreter/View/<?= $value['RefCaisse']; ?>" class="btn btn-primary"

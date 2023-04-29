@@ -19,7 +19,7 @@
                               <td>
                                   <?php
                                         $isAdminOrSuperadmin = $_SESSION['statut'] == 'superadmin' || $_SESSION['statut'] == 'admin';
-                                        $isChefCaisseOrCaissier = $_SESSION['statut'] == 'ChefCaisse' || $_SESSION['statut'] == 'caissier';
+                                        $isChefCaisseOrCaissier = $_SESSION['statut'] == 'ChefCaisse' || $_SESSION['statut'] == 'Caissier';
 
                                         if (!empty($value['Valide'])) {
                                             if ($isAdminOrSuperadmin) {

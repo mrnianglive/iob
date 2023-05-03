@@ -6,7 +6,7 @@
                      <?php if ($GetInvoice['RefPays'] == 1) { ?>
                      <img src="/images/mali.png" alt="Logo" width="80" height="80">
                      <?php } else { ?>
-                     <img src="/images/afc.png" alt="Logo" width="80" height="80">
+                     <img src="/images/mali.png" alt="Logo" width="80" height="80">
                      <?php } ?>
                  </div>
                  <div style=" text-align: center; width: 88%; display: inline-block;">

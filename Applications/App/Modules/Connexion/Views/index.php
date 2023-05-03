@@ -2,7 +2,7 @@
     <p><?= $user->getFlash(); ?></p>
 <?php } ?>
 <form method="post">
-    <img src="/images/afc.png" alt="afc" width="200" height="100%">
+    <img src="/images/mlc.png" alt="mlc" width="200" height="100%">
     <!-- <div class="text-center social-btn">
         <a href="/authMicrosoft" class="btn btn-warning btn-block"><i class="fa-brands fa-microsoft"></i> Se connecter
             avec

@@ -1,5 +1,5 @@
 <?php if ($user->hasFlash()) { ?>
-<p><?= $user->getFlash(); ?></p>
+    <p><?= $user->getFlash(); ?></p>
 <?php } ?>
 <form method="post">
     <img src="/images/mlc.png" alt="mlc" width="200" height="100%">
@@ -16,5 +16,7 @@
     <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
     &nbsp;
     <button class="btn btn-lg btn-info btn-block" type="submit" id="register">Connexion</button>
-
+    <p class="mt-5 mb-3 text-muted">&copy; MALI CREANCES
+        <?= date('Y'); ?>
+    </p>
 </form>

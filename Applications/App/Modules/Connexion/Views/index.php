@@ -16,5 +16,6 @@
     <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
     &nbsp;
     <button class="btn btn-lg btn-info btn-block" type="submit" id="register">Connexion</button>
-    <p class="mt-5 mb-3 text-muted">&copy; IOB AGENCY |MALI CREANCES <?= date('Y'); ?></p>
+    <p class="mt-5 mb-3 text-muted">&copy; IOB AGENCY |MALI CREANCES Tous les droits sont réservés. <?= date('Y'); ?>
+    </p>
 </form>

@@ -1,20 +1,17 @@
      <div class="wrapper wrapper-content" style="margin: 0px 32px;padding: 0px !important;">
          <div style="padding: 0px !important;">
-             <div class="row"
-                 style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
+             <div class="row" style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
                  <div style="width: 10%; display: inline-block; vertical-align: top;">
                      <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                     <img src="/images/mali.png" alt="Logo" width="80" height="80">
+                         <img src="/images/mali.png" alt="Logo" width="80" height="80">
                      <?php } else { ?>
-                     <img src="/images/mali.png" alt="Logo" width="80" height="80">
+                         <img src="/images/mali.png" alt="Logo" width="80" height="80">
                      <?php } ?>
                  </div>
                  <div style=" text-align: center; width: 88%; display: inline-block;">
                      <p class="text-uppercase">
                          <?= $GetInvoice['NameBanque'] ? 'PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
-                         <img style="float: right; margin-right: -15px;"
-                             src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
-                             width="80" height="80" alt="Logo">
+                         <img style="float: right; margin-right: -15px;" src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>" width="80" height="80" alt="Logo">
                      </p>
                      <h2>
                          <?php
@@ -38,7 +35,7 @@
                      </h2>
                      <h3>BANQUE</h3>
                      <?php if ($getResetStatus == true) { ?>
-                     <h3 style="color:#c62828;">Opération Annulée</h3>
+                         <h3 style="color:#c62828;">Opération Annulée</h3>
                      <?php } ?>
                  </div>
              </div>
@@ -54,18 +51,18 @@
                      <p>DATE : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?> <?= gmdate("H:i:s"); ?></p>
                      <p>MOTIF : <?= $GetInvoice['Remarque']; ?></p>
                      <p>N° DU COMPTE <?php if ($GetInvoice['RefType'] == 1) { ?>
-                         CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
+                             CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
                          <?= $GetInvoice['NumCompte']; ?></p>
                      <p class="text-uppercase">TITULAIRE : <?= $GetInvoice['NameClient']; ?></p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          VERSE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETIRE <?php } ?> :
-                         <?= number_format($GetInvoice['MontantVersement'] + $GetInvoice['fraisTimbre'], 0, ".", ",") . " XOF"; ?>
+                     <?= number_format($GetInvoice['MontantVersement'] + $GetInvoice['fraisTimbre'], 0, ".", ",") . " XOF"; ?>
                      </p>
                      <p>FRAIS TIMBRE: <?= $GetInvoice['fraisTimbre']; ?> XOF</p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
-                         <?= $numberToLetter; ?> (<?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>)
-                         XOF
+                     <?= $numberToLetter; ?> (<?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>)
+                     XOF
                      </p>
 
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
@@ -143,21 +140,18 @@
          </div>
          <hr>
          <div style="padding: 0px !important;">
-             <div class="row"
-                 style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
+             <div class="row" style="border: 1px solid grey;border-radius: 4px;padding: 4px; background-color: #efefef;">
                  <div style="width: 10%; display: inline-block; vertical-align: top;">
                      <?php if ($GetInvoice['RefPays'] == 1) { ?>
-                     <img src="/images/mali.png" alt="Logo" width="80" height="80">
+                         <img src="/images/mali.png" alt="Logo" width="80" height="80">
                      <?php } else { ?>
-                     <img src="/images/afc.png" alt="Logo" width="80" height="80">
+                         <img src="/images/afc.png" alt="Logo" width="80" height="80">
                      <?php } ?>
                  </div>
                  <div style="text-align: center; width: 88%; display: inline-block;">
                      <p class="text-uppercase">
                          <?= $GetInvoice['NameBanque'] ? 'PARTENAIRE ' . $GetInvoice['NameBanque'] : ''; ?>
-                         <img style="float: right; margin-right: -15px;"
-                             src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>"
-                             width="80" height="80" alt="Logo">
+                         <img style="float: right; margin-right: -15px;" src="/qr-code-generator.php?text=<?= $GetInvoice['uniqid'] ?: $GetInvoice['RefOperations'] . '' . date('dmY', strtotime($GetInvoice['Insert_Time'])); ?>" width="80" height="80" alt="Logo">
                      </p>
                      <h2>
                          <?php
@@ -181,7 +175,7 @@
                      </h2>
                      <h3>CLIENT</h3>
                      <?php if ($getResetStatus == true) { ?>
-                     <h3 style="color:#c62828;">Opération Annulée</h3>
+                         <h3 style="color:#c62828;">Opération Annulée</h3>
                      <?php } ?>
                  </div>
              </div>
@@ -196,20 +190,20 @@
                      <p>DATE : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?> <?= gmdate("H:i:s"); ?></p>
                      <p>MOTIF : <?= $GetInvoice['Remarque']; ?></p>
                      <p>N° DU COMPTE <?php if ($GetInvoice['RefType'] == 1) { ?>
-                         CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
+                             CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
                          <?= $GetInvoice['NumCompte']; ?></p>
                      <p class="text-uppercase">TITULAIRE : <?= $GetInvoice['NameClient']; ?></p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          VERSE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> RETIRE <?php } ?> :
-                         <?= number_format($GetInvoice['MontantVersement'] + $GetInvoice['fraisTimbre'], 0, ".", ",") . " XOF"; ?>
+                     <?= number_format($GetInvoice['MontantVersement'] + $GetInvoice['fraisTimbre'], 0, ".", ",") . " XOF"; ?>
                      </p>
                      <p>FRAIS TIMBRE: <?= $GetInvoice['fraisTimbre']; ?> XOF
                      </p>
                      <p>MONTANT<?php if ($GetInvoice['RefType'] == 1) { ?>
                          CREDITE<?php } elseif ($GetInvoice['RefType'] == 2) { ?> DEBITE <?php } ?> :
 
-                         <?= $numberToLetter; ?> (<?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>)
-                         XOF
+                     <?= $numberToLetter; ?> (<?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>)
+                     XOF
                      </p>
 
                      <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>

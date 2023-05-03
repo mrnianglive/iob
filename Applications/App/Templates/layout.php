@@ -208,7 +208,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
             <footer class="footer text-center">
                 <?= $_SESSION['nomPays'] ?? 'MALI CREANCES'; ?> |
                 <?= date('Y'); ?>
-                © <a href="https://malicreances-sa.com" target="_blank">MALI CREANCES</a>
+                © <a href="https://malicreances-sa.com" target="_blank">MALI CREANCES | Tous les droits sont réservés.
+                </a>
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->

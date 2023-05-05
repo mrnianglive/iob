@@ -128,7 +128,7 @@ class BielletageController extends \Library\BackController
         $this->app()->httpResponse()->redirect('/Arreter/index');
     }
 
-    public function executeBielletage(\Library\HTTPRequest $request)
+    public function executeBielletagebefore(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Nouvelle Opération");
 

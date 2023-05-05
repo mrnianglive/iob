@@ -249,6 +249,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="/scripts/billetage.js"></script>
     <script src="/scripts/Checklogin.js"></script>
     <script src="/scripts/clientName.js"></script>
+    <script src="/scripts/produitlistbefore.js"></script>
+
     <script src="/scripts/produitlist.js"></script>
     <script src="/scripts/produitlistJournal.js"></script>
     <script src="/scripts/produitlistRemittance.js"></script>

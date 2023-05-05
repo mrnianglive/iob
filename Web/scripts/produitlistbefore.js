@@ -5,7 +5,7 @@ $(function () {
         var val = $(this).val();
         if (val != null) $liste.empty();
         $.ajax({
-            url: '/config/requeteliste.php',
+            url: '/config/requetelistebefore.php',
             data: 'Caisse=' + val,
             dataType: 'json',
             success: function (json) {

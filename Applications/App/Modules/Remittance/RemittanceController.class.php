@@ -23,12 +23,37 @@ class RemittanceController extends \Library\BackController
         $SoldeRemittanceVersement = 0;
         $SoldeRemittanceRetrait = 0;
         if ($request->method() == 'POST' && $request->postData('RefCaisse')) {
-            $this->managers->getManagerOf("Remittance")->Add($request);
-            $_SESSION['message']['type'] = 'success';
-            $_SESSION['message']['text'] = 'Ajout réussie !';
-            $_SESSION['message']['number'] = 2;
-            $this->app()->httpResponse()->redirect('/remittances/index'); //Retour en arriere
 
+            $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($request->postData('RefCaisse'));
+            $YesterdayReserve = $this->managers->getManagerOf("Journal")->YesterdayReserve($GetAgencyUsingCaisseID['RefAgency'], date('Y-m-d'));
+            $VerifAppro  = $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal(date('Y-m-d'), $GetAgencyUsingCaisseID['RefAgency']);
+            $SoldeActuelleCaisse = $this->managers->getManagerOf("Journal")->SoldeActuelleCaisse(date('Y-m-d'), $request->postData('RefCaisse'));
+
+            if ($VerifAppro) {
+                $_SESSION['message']['type'] = 'warning';
+                $_SESSION['message']['text'] = 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération';
+                $_SESSION['message']['number'] = 2;
+                $this->app()->httpResponse()->redirect('/remittances/index'); //Retour en arriere
+            } else {
+                if (($request->postData('MontantTransaction') <= $SoldeActuelleCaisse) && $_POST['RefType'] == 2) {
+                    $this->managers->getManagerOf("Remittance")->Add($request);
+                    $_SESSION['message']['type'] = 'success';
+                    $_SESSION['message']['text'] = 'Ajout réussie !';
+                    $_SESSION['message']['number'] = 2;
+                    $this->app()->httpResponse()->redirect('/remittances/index'); //Retour en arriere
+                } else {
+                    $_SESSION['message']['type'] = 'warning';
+                    $_SESSION['message']['text'] = 'Le Montant de la transaction supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou Contactez votre administrateur .';
+                    $_SESSION['message']['number'] = 2;
+                    $this->app()->httpResponse()->redirect('/remittances/index'); //Retour en arriere
+                }
+
+                $this->managers->getManagerOf("Remittance")->Add($request);
+                $_SESSION['message']['type'] = 'success';
+                $_SESSION['message']['text'] = 'Ajout réussie !';
+                $_SESSION['message']['number'] = 2;
+                $this->app()->httpResponse()->redirect('/remittances/index'); //Retour en arriere
+            }
         }
 
         if (!empty($request->postData('RefAgency')) or isset($_GET['value'])) {

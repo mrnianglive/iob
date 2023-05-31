@@ -21,7 +21,7 @@ class UserManagerPDO extends UserManager
 
         $IP = $this->getIPAddress();
         if (!empty($login) && !empty($Password)) {
-            $requete = $this->dao->prepare("SELECT *  FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE login=:login");
+            $requete = $this->dao->prepare("SELECT *  FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE login=:login AND TbleUsers.RefStatut =8");
             $requete->bindValue(':login', $login, \PDO::PARAM_STR);
             $requete->execute();
             $resultat = $requete->fetch();

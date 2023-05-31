@@ -74,91 +74,7 @@ class UserManagerPDO extends UserManager
         $requete->bindValue(':password', $password, \PDO::PARAM_STR);
         $requete->execute();
     }
-    public function ListeUsers()
-    {
-        if ($_SESSION['statut'] == 'superadmin') {
-            $requeteUsers = $this->dao->prepare('SELECT * FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut LEFT JOIN tblpays ON tblpays.RefPays=TbleUsers.RefPays');
-        } else {
-            $requeteUsers = $this->dao->prepare('SELECT * FROM TbleUsers  INNER JOIN tblpays ON tblpays.RefPays=TbleUsers.RefPays INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE TbleUsers.RefPays=:RefPays');
-            $requeteUsers->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
-        }
-        $requeteUsers->execute();
-        $ListeUsers = $requeteUsers->fetchAll();
-        foreach ($ListeUsers as $key => $value) {
-            $ListeUsers[$key]['Verify'] = $this->VerifCaisse(NULL, $value['RefUsers']);
-        }
-        return $ListeUsers;
-    }
 
-    public function ListeCaisse()
-    {
-        if ($_SESSION['statut'] == 'superadmin') {
-            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency');
-        } else {
-            $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefPays=:RefPays');
-            $requeteAgence->bindValue(':RefPays', $_SESSION['RefPays'], \PDO::PARAM_INT);
-        }
-        $requeteAgence->execute();
-        $ListeCaisse = $requeteAgence->fetchAll();
-        return $ListeCaisse;
-    }
-    public function VerifCaisse($Caisse, $Users)
-    {
-        $requeteCaisse = $this->dao->prepare("SELECT * FROM TbleChmod WHERE RefCaisse=:caisse AND RefUsers=:users");
-        $requeteCaisse->bindValue(':caisse', $Caisse, \PDO::PARAM_INT);
-        $requeteCaisse->bindValue(':users', $Users, \PDO::PARAM_INT);
-        $requeteCaisse->execute();
-        $Verfiy = $requeteCaisse->fetch();
-        if (!empty($Verfiy && isset($Verfiy))) {
-            return $Verfiy['RefCaisse'];
-        }
-        return null;
-    }
-    public function VerifCaisseAppro($Caisse, $Users)
-    {
-        $requeteCaisse = $this->dao->prepare("SELECT * FROM TbleChmodAppro WHERE RefCaisse=:caisse AND RefUsers=:users");
-        $requeteCaisse->bindValue(':caisse', $Caisse, \PDO::PARAM_INT);
-        $requeteCaisse->bindValue(':users', $Users, \PDO::PARAM_INT);
-        $requeteCaisse->execute();
-        $Verfiy = $requeteCaisse->fetch();
-        if (!empty($Verfiy && isset($Verfiy))) {
-            return $Verfiy['RefCaisse'];
-        }
-        return null;
-    }
-    public function ListeStatut()
-    {
-        if ($_SESSION['statut'] == 'superadmin') {
-            $requeteStatut = $this->dao->prepare('SELECT * FROM TbleStatut ');
-        } else {
-            $requeteStatut = $this->dao->prepare('SELECT * FROM TbleStatut WHERE Name!=:name AND Name!=:name2');
-            $requeteStatut->bindValue(':name', 'superadmin', \PDO::PARAM_STR);
-            $requeteStatut->bindValue(':name2', 'admin', \PDO::PARAM_STR);
-        }
-        $requeteStatut->execute();
-        $displayStatut = $requeteStatut->fetchAll();
-        return $displayStatut;
-    }
-    public function AddUser()
-    {
-        $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-        $query = $this->dao->prepare('INSERT INTO TbleUsers (login,password,NomUsers,PrenomUsers,email,RefStatut,RefPays) VALUES(:login,:password,:NomUsers,:PrenomUsers,:email,:RefStatut,:RefPays)');
-        $query->bindValue(':login', $_POST['login'],  \PDO::PARAM_STR);
-        $query->bindValue(':password', $password, \PDO::PARAM_STR);
-        $query->bindValue(':NomUsers', $_POST['NomUsers'], \PDO::PARAM_STR);
-        $query->bindValue(':PrenomUsers', $_POST['PrenomUsers'], \PDO::PARAM_STR);
-        $query->bindValue(':email', $_POST['email'], \PDO::PARAM_STR);
-        $query->bindValue(':RefStatut', $_POST['RefStatut'], \PDO::PARAM_STR);
-        $query->bindValue(':RefPays', $_POST['RefPays'], \PDO::PARAM_STR);
-        $query->execute();
-        $this->SendUserinfo($_POST['email'], $_POST['login'], $_POST['password']);
-    }
-    public function DeleteUsers($Users)
-    {
-        $requete = $this->dao->prepare('DELETE FROM TbleUsers WHERE RefUsers=:RefUsers');
-        $requete->bindValue(':RefUsers', $Users, \PDO::PARAM_INT);
-        $requete->execute();
-    }
     public function GetUserInfo($Users)
     {
         $requete = $this->dao->prepare('SELECT * FROM TbleUsers INNER JOIN TbleStatut ON TbleStatut.RefStatut=TbleUsers.RefStatut WHERE RefUsers=:RefUsers');
@@ -273,13 +189,7 @@ class UserManagerPDO extends UserManager
         }
     }
 
-    public function DoubleAuth()
-    {
-        $requete = $this->dao->prepare("UPDATE TbleUsers SET secret=:secret WHERE RefUsers=:RefUsers");
-        $requete->bindValue(':secret', $_POST['secret'], \PDO::PARAM_STR);
-        $requete->bindValue(':RefUsers', $_POST['RefUsers'], \PDO::PARAM_INT);
-        $requete->execute();
-    }
+
 
     public function VerifDoubleAuth()
     {
@@ -294,15 +204,5 @@ class UserManagerPDO extends UserManager
             $_SESSION['message']['number'] = 2;
             header('Location: /connexion/doubleauth');
         }
-    }
-    public function ResetAuth($id)
-    {
-        $requete = $this->dao->prepare("UPDATE TbleUsers SET secret = NULL WHERE RefUsers=:RefUsers");
-        $requete->bindValue(':RefUsers', $id, \PDO::PARAM_INT);
-        $requete->execute();
-    }
-
-    public function AuthMicrosoft()
-    {
     }
 }

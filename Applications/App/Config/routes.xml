@@ -13,9 +13,6 @@
 	<route url="/Users/myprofile" module="Users" action="profile"/>
 	<route url="/Users/NewPassword" module="Users" action="newpassword"/>
 
-	<route url="/Users/index" module="Users" action="index"/>
-	<route url="/Users/deleteUsers/([0-9]+)" vars="id" action="deleteusers" module="Users"/>
-	<route url="/Users/UpdateUsers/([0-9]+)" vars="id" action="updateusers" module="Users"/>
 	<route url="/Users/doubleauth/reset/([0-9]+)" module="Users" vars="id" action="resetauth"/>
 	<route url="/Users/doubleauth/([0-9]+)" module="Users" vars="id" action="doubleauth"/>
 

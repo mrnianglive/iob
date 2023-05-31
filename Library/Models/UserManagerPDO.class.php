@@ -179,6 +179,7 @@ class UserManagerPDO extends UserManager
             $requete->bindValue(':RefStatut', $_POST['RefStatut'], \PDO::PARAM_INT);
             $requete->bindValue(':RefUsers', $_POST['RefUsers'], \PDO::PARAM_INT);
             $requete->bindValue(':RefPays', $_POST['RefPays'], \PDO::PARAM_INT);
+            $requete->bindValue(':RefBanque', $_POST['RefBanque'], \PDO::PARAM_INT);
             $requete->execute();
         } else {
             $requete = $this->dao->prepare("UPDATE TbleUsers SET NomUsers=:NomUsers,PrenomUsers=:PrenomUsers,email=:email,RefStatut=:RefStatut,RefPays=:RefPays WHERE RefUsers=:RefUsers");
@@ -188,7 +189,7 @@ class UserManagerPDO extends UserManager
             $requete->bindValue(':RefStatut', $_POST['RefStatut'], \PDO::PARAM_INT);
             $requete->bindValue(':RefPays', $_POST['RefPays'], \PDO::PARAM_INT);
             $requete->bindValue(':RefUsers', $_POST['RefUsers'], \PDO::PARAM_INT);
-
+            $requete->bindValue(':RefBanque', $_POST['RefBanque'], \PDO::PARAM_INT);
             $requete->execute();
         }
     }

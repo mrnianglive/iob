@@ -94,6 +94,9 @@ class UsersController extends \Library\BackController
         $this->page->addVar("ListeStatut", $ListeStatut);
         $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
         $this->page->addVar("ListePays", $ListePays);
+        $ListeBanque  = $this->managers->getManagerOf("Pannel")->ListeBanque();
+        $this->page->addVar("ListeBanque", $ListeBanque);
+
         if ($request->method() == 'POST') {
             $this->managers->getManagerOf("User")->UpdateUsers($request);
             $_SESSION['message']['type'] = 'success';

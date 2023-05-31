@@ -171,7 +171,7 @@ class UserManagerPDO extends UserManager
     {
         if (!empty($_POST['password'])) {
             $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-            $requete = $this->dao->prepare("UPDATE TbleUsers SET password=:password,NomUsers=:NomUsers,PrenomUsers=:PrenomUsers,email=:email,RefStatut=:RefStatut,RefPays=:RefPays WHERE RefUsers=:RefUsers");
+            $requete = $this->dao->prepare("UPDATE TbleUsers SET password=:password,NomUsers=:NomUsers,PrenomUsers=:PrenomUsers,email=:email,RefStatut=:RefStatut,RefPays=:RefPays,RefBanque=:RefBanque WHERE RefUsers=:RefUsers");
             $requete->bindValue(':password', $password, \PDO::PARAM_STR);
             $requete->bindValue(':NomUsers', $_POST['NomUsers'], \PDO::PARAM_STR);
             $requete->bindValue(':PrenomUsers', $_POST['PrenomUsers'], \PDO::PARAM_STR);
@@ -182,7 +182,7 @@ class UserManagerPDO extends UserManager
             $requete->bindValue(':RefBanque', $_POST['RefBanque'], \PDO::PARAM_INT);
             $requete->execute();
         } else {
-            $requete = $this->dao->prepare("UPDATE TbleUsers SET NomUsers=:NomUsers,PrenomUsers=:PrenomUsers,email=:email,RefStatut=:RefStatut,RefPays=:RefPays WHERE RefUsers=:RefUsers");
+            $requete = $this->dao->prepare("UPDATE TbleUsers SET NomUsers=:NomUsers,PrenomUsers=:PrenomUsers,email=:email,RefStatut=:RefStatut,RefPays=:RefPays,RefBanque=:RefBanque WHERE RefUsers=:RefUsers");
             $requete->bindValue(':NomUsers', $_POST['NomUsers'], \PDO::PARAM_STR);
             $requete->bindValue(':PrenomUsers', $_POST['PrenomUsers'], \PDO::PARAM_STR);
             $requete->bindValue(':email', $_POST['email'], \PDO::PARAM_STR);

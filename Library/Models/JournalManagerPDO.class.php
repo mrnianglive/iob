@@ -13,6 +13,9 @@ class JournalManagerPDO extends JournalManager
         $requete->bindValue(':RefBanque', $_SESSION['RefBanque'], \PDO::PARAM_INT);
         $requete->execute();
         $data = $requete->fetchAll();
+        if (empty($data)) {
+            $data = null;
+        }
         return $data;
     }
     public function GetOperations($debut, $fin, $Agence)
@@ -25,6 +28,9 @@ class JournalManagerPDO extends JournalManager
         foreach ($data as $key => $value) {
             $data[$key]['Debut'] = $debut;
             $data[$key]['Debut'] = $fin;
+        }
+        if (empty($data)) {
+            $data = null;
         }
         return $data;
     }

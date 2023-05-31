@@ -23,8 +23,9 @@
                     <select class="form-control" name="RefStatut" required>
                         <option>Veuillez Choisir</option>
                         <?php foreach ($ListeStatut as $key => $statut) { ?>
-                            <option value="<?= $statut['RefStatut']; ?>" <?php if ($statut['RefStatut'] == $Info['RefStatut']) { ?> selected="" <?php } ?>>
-                                <?= $statut['Name']; ?></option>
+                        <option value="<?= $statut['RefStatut']; ?>"
+                            <?php if ($statut['RefStatut'] == $Info['RefStatut']) { ?> selected="" <?php } ?>>
+                            <?= $statut['Name']; ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -40,8 +41,9 @@
                     <select class="form-control" name="RefPays" required>
                         <option>Veuillez Choisir</option>
                         <?php foreach ($ListePays as $key => $pays) { ?>
-                            <option value="<?= $pays['RefPays']; ?>" <?php if ($pays['RefPays'] == $Info['RefPays']) { ?> selected="" <?php } ?>>
-                                <?= $pays['nomPays']; ?></option>
+                        <option value="<?= $pays['RefPays']; ?>" <?php if ($pays['RefPays'] == $Info['RefPays']) { ?>
+                            selected="" <?php } ?>>
+                            <?= $pays['nomPays']; ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -50,8 +52,9 @@
                     <select class="form-control" name="RefBanque" required>
                         <option>Veuillez Choisir</option>
                         <?php foreach ($ListeBanque as $key => $banque) { ?>
-                            <option value="<?= $banque['RefBanque']; ?>" <?php if ($banque['RefBanque'] == $Info['RefBanque']) { ?> selected="" <?php } ?>>
-                                <?= $banque['NameBanque']; ?></option>
+                        <option value="<?= $banque['RefBanque']; ?>"
+                            <?php if ($banque['RefBanque'] == $Info['RefBanque']) { ?> selected="" <?php } ?>>
+                            <?= $banque['NameBanque']; ?></option>
                         <?php } ?>
                     </select>
                 </div>

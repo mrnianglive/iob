@@ -142,7 +142,7 @@ class UserManagerPDO extends UserManager
     public function AddUser()
     {
         $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-        $query = $this->dao->prepare('INSERT INTO TbleUsers (login,password,NomUsers,PrenomUsers,email,RefStatut,RefPays) VALUES(:login,:password,:NomUsers,:PrenomUsers,:email,:RefStatut,:RefPays)');
+        $query = $this->dao->prepare('INSERT INTO TbleUsers (login,password,NomUsers,PrenomUsers,email,RefStatut,RefPays,RefBanque) VALUES(:login,:password,:NomUsers,:PrenomUsers,:email,:RefStatut,:RefPays,:RefBanque)');
         $query->bindValue(':login', $_POST['login'],  \PDO::PARAM_STR);
         $query->bindValue(':password', $password, \PDO::PARAM_STR);
         $query->bindValue(':NomUsers', $_POST['NomUsers'], \PDO::PARAM_STR);
@@ -150,6 +150,8 @@ class UserManagerPDO extends UserManager
         $query->bindValue(':email', $_POST['email'], \PDO::PARAM_STR);
         $query->bindValue(':RefStatut', $_POST['RefStatut'], \PDO::PARAM_STR);
         $query->bindValue(':RefPays', $_POST['RefPays'], \PDO::PARAM_STR);
+        $query->bindValue(':RefBanque', $_POST['RefBanque'], \PDO::PARAM_STR);
+
         $query->execute();
         $this->SendUserinfo($_POST['email'], $_POST['login'], $_POST['password']);
     }

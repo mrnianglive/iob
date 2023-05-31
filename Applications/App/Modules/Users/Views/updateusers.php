@@ -49,7 +49,7 @@
                 </div>
                 <div class="form-group">
                     <label for="stataut" class="control-label">Partenaire</label>
-                    <select class="form-control" name="RefBanque" required>
+                    <select class="form-control" name="RefBanque">
                         <option>Veuillez Choisir</option>
                         <?php foreach ($ListeBanque as $key => $banque) { ?>
                         <option value="<?= $banque['RefBanque']; ?>"

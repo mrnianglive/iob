@@ -12,6 +12,8 @@ class UsersController extends \Library\BackController
 
         $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
         $this->page->addVar("ListePays", $ListePays);
+        $ListeBanque  = $this->managers->getManagerOf("Pannel")->ListeBanque();
+        $this->page->addVar("ListeBanque", $ListeBanque);
         $caisse = array();
         $VerifAppro = array();
 

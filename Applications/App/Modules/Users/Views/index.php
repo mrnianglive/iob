@@ -156,6 +156,16 @@
                         </select>
                     </div>
 
+                    <div class="form-group">
+                        <label for="stataut" class="control-label">Partenaire</label>
+                        <select class="form-control" name="RefBanque">
+                            <option>Veuillez Choisir</option>
+                            <?php foreach ($ListeBanque as $key => $banque) { ?>
+                                <option value="<?= $banque['RefBanque']; ?>" <?php if ($banque['RefBanque'] == $Info['RefBanque']) { ?> selected="" <?php } ?>>
+                                    <?= $banque['NameBanque']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
 
                 </div>
                 <div class="modal-footer">

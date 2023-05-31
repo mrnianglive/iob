@@ -9,11 +9,10 @@ class JournalController extends \Library\BackController
         $this->page->addVar("titles", "Journal de Caisse"); // Titre de la page
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
         $this->page->addVar('UserAgence', $Agence);
+
         $this->page->addVar('Debut', $request->postData('Debut'));
         $this->page->addVar('Fin', $request->postData('Fin'));
         $this->page->addVar('Value', $request->postData('RefAgency'));
-        $this->page->addVar('RefProduit', $request->postData('RefProduit'));
-
         $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
         $this->page->addVar("ListeAgence", $ListeAgence);
         if (!empty($request->postData('RefAgency')) or isset($_GET['value'])) {
@@ -22,13 +21,11 @@ class JournalController extends \Library\BackController
                 $this->page->addVar('Debut', $_GET['debut']);
                 $this->page->addVar('Fin', $_GET['fin']);
                 $this->page->addVar('Value', $_GET['value']);
-                $this->page->addVar('RefProduit', $_GET['RefProduit']);
             } else {
-                $Operations = $this->managers->getManagerOf('Journal')->GetOperations($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'), $request->postData('RefProduit'));
+                $Operations = $this->managers->getManagerOf('Journal')->GetOperations($request->postData('Debut'), $request->postData('Fin'), $request->postData('RefAgency'));
                 $this->page->addVar('Debut', $request->postData('Debut'));
                 $this->page->addVar('Fin', $request->postData('Fin'));
                 $this->page->addVar('Value', $request->postData('RefAgency'));
-                $this->page->addVar('RefProduit', $request->postData('RefProduit'));
             }
             $this->page->addVar('Operations', $Operations);
         } else {

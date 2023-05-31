@@ -20,6 +20,8 @@ class ConnexionController extends \Library\BackController
                         $_SESSION['logoPays'] = $getPaysName['logo'];
                     }
                     $_SESSION['RefUsers'] = $User['RefUsers'];
+                    $_SESSION['RefBanque'] = $User['RefBanque'];
+
                     $_SESSION['login'] = $User['login'];
                     $_SESSION['NomUsers'] = $User['NomUsers'];
                     $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
@@ -36,6 +38,7 @@ class ConnexionController extends \Library\BackController
                     }
                     $_SESSION['login'] = $User['login'];
                     $_SESSION['NomUsers'] = $User['NomUsers'];
+                    $_SESSION['RefBanque'] = $User['RefBanque'];
                     $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
                     $_SESSION['statut'] = $User['Name'];
                     $_SESSION['RefUsers'] = $User['RefUsers'];
@@ -63,13 +66,5 @@ class ConnexionController extends \Library\BackController
         if ($request->method() == 'POST' && !empty($request->postData('tfa_code'))) {
             $this->managers->getManagerOf("User")->VerifDoubleAuth($request);
         }
-    }
-
-    public function executeAuthMicrosoft(\Library\HTTPRequest $request)
-    {
-        //authentification avec microsoft
-        $this->page->addVar('titles', 'Authentification Microsoft');
-
-        $this->managers->getManagerOf("User")->AuthMicrosoft($request);
     }
 }

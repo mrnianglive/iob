@@ -1,6 +1,6 @@
   <div class="row">
       <div class="col-md-12">
-          <form method="POST" action="/Journal/index" id="formulaire">
+          <form method="POST" action="/" id="formulaire">
               <div class="input-group">
                   <div class="">Agence
                       <select class="form-control" name="RefAgency" tabindex="1" required="" id="RefAgency">

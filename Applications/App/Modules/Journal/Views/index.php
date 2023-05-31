@@ -36,7 +36,6 @@
                       <thead>
                           <tr>
                               <th class="border-top-0">ID</th>
-
                               <th class="border-top-0">Agence</th>
                               <th class="border-top-0">Produit</th>
                               <th class="border-top-0">Operation</th>
@@ -48,7 +47,6 @@
                               <th class="border-top-0">Caissier</th>
                               <th class="border-top-0">RECU</th>
                               <th class="border-top-0">From</th>
-
                           </tr>
                       </thead>
                       <tbody>

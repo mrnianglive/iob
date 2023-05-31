@@ -11,6 +11,12 @@ class ConnexionController extends \Library\BackController
         if ($request->method() == 'POST' && !empty($request->postData('login')) && !empty($request->postData('password'))) {
             $User = $this->managers->getManagerOf('User')->login($request->postData('login'), $request->postData('password'));
             if (!empty($User)) {
+                if ($User['RefStatut'] == 8) {
+                    $_SESSION['message']['type'] = 'danger';
+                    $_SESSION['message']['text'] = 'Compte désactivé , veuillez contacter l\'administrateur !';
+                    $_SESSION['message']['number'] = 2;
+                    $this->app()->httpResponse()->redirect('/connexion');
+                }
                 if (!empty($User['secret'])) {
                     $this->app()->user()->setAuthenticated();
                     if (!empty($User['RefPays']) && $User['RefPays'] != 0) {

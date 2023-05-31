@@ -31,14 +31,6 @@ class JournalController extends \Library\BackController
         } else {
             $Operations = $this->managers->getManagerOf('Journal')->Operations();
             $this->page->addVar('Operations', $Operations);
-
-
-            $UsersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'));
-            $SoldeGlobal = 0;
-            foreach ($UsersCaisse as $key => $value) {
-                $SoldeGlobal += $value['SoldeDisponibleGlobal'];
-            }
-            $this->page->addVar('Solde', $SoldeGlobal);
         }
     }
 }

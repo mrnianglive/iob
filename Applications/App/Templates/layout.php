@@ -137,7 +137,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                     <ul id="sidebarnav">
                         <!-- User Profile-->
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/" aria-expanded="false"><i class="fas fa-home fa-fw" aria-hidden="true"></i><span class="hide-menu">Accueil</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Journal/index" aria-expanded="false"><i class="fa fa-table" aria-hidden="true"></i><span class="hide-menu">Journal de Caisse</span></a></li>
+                        <!-- <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Journal/index" aria-expanded="false"><i class="fa fa-table" aria-hidden="true"></i><span class="hide-menu">Journal de Caisse</span></a></li> -->
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Users/myprofile" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i><span class="hide-menu">Mon Profile</span></a></li>
                         <li class="text-center p-20 upgrade-btn">
                             <a href="/logout" class="btn btn-block btn-danger text-white">Se Déconnecter</a>
@@ -217,7 +217,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/smartwizard@5/dist/js/jquery.smartWizard.min.js" type="text/javascript">
     </script>
-    <script src="/scripts/billetage.js"></script>
+    <!-- <script src="/scripts/billetage.js"></script>
     <script src="/scripts/Checklogin.js"></script>
     <script src="/scripts/clientName.js"></script>
     <script src="/scripts/produitlistbefore.js"></script>
@@ -225,7 +225,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="/scripts/produitlist.js"></script>
     <script src="/scripts/produitlistJournal.js"></script>
     <script src="/scripts/produitlistRemittance.js"></script>
-    <script src="/scripts/hidden.js"></script>
+    <script src="/scripts/hidden.js"></script> -->
     <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/js/app-style-switcher.js"></script>
     <!--Wave Effects -->
@@ -234,7 +234,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="/js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
     <script src="/js/custom.js"></script>
-    <script src="/scripts/getList.js"></script>
+    <!-- <script src="/scripts/getList.js"></script> -->
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable({
@@ -301,7 +301,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     </script>
 
 
-    <script src="/js/accounting.js"></script>
+    <!-- <script src="/js/accounting.js"></script>
 
     <script>
         // Configure la notation française
@@ -320,7 +320,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                 }
             });
         }
-    </script>
+    </script> -->
 
 
 </body>

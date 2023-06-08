@@ -29,7 +29,7 @@ class RemittanceController extends \Library\BackController
             $VerifAppro  = $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal(date('Y-m-d'), $GetAgencyUsingCaisseID['RefAgency']);
             $SoldeActuelleCaisse = $this->managers->getManagerOf("Journal")->SoldeActuelleCaisse(date('Y-m-d'), $request->postData('RefCaisse'));
 
-            if ($VerifAppro) {
+            if ($VerifAppro != 0) {
                 $_SESSION['message']['type'] = 'warning';
                 $_SESSION['message']['text'] = 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération';
                 $_SESSION['message']['number'] = 2;

@@ -36,7 +36,6 @@ class RemittanceController extends \Library\BackController
                 $this->app()->httpResponse()->redirect('/remittances/index'); //Retour en arriere
             } else {
                 if (($request->postData('MontantTransaction') <= $SoldeActuelleCaisse) && $_POST['RefType'] == 2) {
-                    $this->managers->getManagerOf("Remittance")->Add($request);
                     $_SESSION['message']['type'] = 'success';
                     $_SESSION['message']['text'] = 'Ajout réussie !';
                     $_SESSION['message']['number'] = 2;

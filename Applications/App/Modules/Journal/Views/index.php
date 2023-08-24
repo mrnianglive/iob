@@ -83,6 +83,7 @@
                                       data-toggle="modal" data-target="#modal"
                                       data-operation-id="<?= $value['RefOperations']; ?>"
                                       data-ref-agency="<?= $value['RefAgency']; ?>"
+                                      data-ref-produit="<?= $value['RefProduit']; ?>"
                                       title="Cliquez ici pour confirmer l'opération">
                                       Non Vérifiée
                                   </button><?php } else { ?> <a
@@ -151,7 +152,7 @@
                           <input type="hidden" class="form-control" id="modal-ref-agency" name="RefAgency" readonly>
                           <input type="hidden" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control">
                           <input type="hidden" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
-                          <input type="hidden" id="modal-ref-produit" name="RefProduit" class="form-control">
+                          <input type="text" id="modal-ref-produit" name="RefProduit" class="form-control">
                       </div>
                   </div>
                   <div class="modal-footer">

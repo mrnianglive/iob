@@ -88,7 +88,7 @@ class JournalController extends \Library\BackController
         $_SESSION['message']['text'] = 'Opération validée avec succès';
         $_SESSION['message']['number'] = 2;
         if (!empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {
-            $this->app()->httpResponse()->redirect("/Journal/index/" . $request->postData('Debut') . "/" . $request->postData('Fin') . "/" . $request->postData('RefAgency')); //Retour en arriere
+            $this->app()->httpResponse()->redirect("/Journal/index/" . $request->postData('Debut') . "/" . $request->postData('Fin') . "/" . $request->postData('RefAgency') . "/" . $request->postData('RefProduit')); //Retour en arriere
         } else {
             $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
         }

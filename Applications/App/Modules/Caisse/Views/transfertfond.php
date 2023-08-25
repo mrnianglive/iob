@@ -12,10 +12,10 @@
                             <?php }   ?>
                         </select>
                     </div>
-                    <div class="col-md-2">Du
+                    <div class="col-md-4">Du
                         <input type="date" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
                     </div>
-                    <div class="col-md-2">Au
+                    <div class="col-md-4">Au
                         <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
                     </div>
                     <div class=""></br>

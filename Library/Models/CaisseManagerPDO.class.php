@@ -113,15 +113,17 @@ class CaisseManagerPDO extends CaisseManager
         }
         return $data['Transfert'];
     }
-    public function ListeFond($Agence = NULL, $Debut = NULL, $Fin = NULL)
+    public function ListeFond($Agence, $Debut, $Fin)
     {
         if ($Agence != NULL && $Debut != NULL && $Fin != NULL) {
-            $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  TbleChmod.RefUsers=:RefUsers AND TbleOperations.RefType=4 AND  date(TbleOperations.Approve2_Time) BETWEEN '$Debut' AND '$Fin'  AND TbleAgency.RefAgency=:Agence ");
+            $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  TbleChmod.RefUsers=:RefUsers AND TbleOperations.RefType=4 AND  date(TbleOperations.Approve2_Time) BETWEEN :Debut AND :Fin  AND TbleAgency.RefAgency=:Agence ");
             $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
+            $requete->bindValue(':Debut', $Debut, \PDO::PARAM_STR); // Assurez-vous que $Debut est au format 'Y-m-d'
+            $requete->bindValue(':Fin', $Fin, \PDO::PARAM_STR);     // Assurez-vous que $Fin est au format 'Y-m-d'
         } else {
             $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  TbleChmod.RefUsers=:RefUsers AND TbleOperations.RefType=4 AND  date(TbleOperations.Approve2_Time)=:today");
-            $requete->bindValue(':today', date('Y-m-d'), \PDO::PARAM_INT);
+            $requete->bindValue(':today', date('Y-m-d'), \PDO::PARAM_STR);
             $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         }
         $requete->execute();

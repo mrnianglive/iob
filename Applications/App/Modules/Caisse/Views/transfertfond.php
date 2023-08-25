@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="white-box">
-            <form method="POST" id="formulaire">
+            <form method="POST" action="/Caisse/transfertfond" id="formulaire">
                 <div class="input-group">
                     <div class="">Agence
                         <select class="form-control" name="RefAgency" tabindex="1" required="" id="RefAgency">

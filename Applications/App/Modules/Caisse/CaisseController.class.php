@@ -32,6 +32,8 @@ class CaisseController extends \Library\BackController
         $this->page->addVar('Fin', $request->postData('Fin'));
         $this->page->addVar('RefAgency', $request->postData('RefAgency'));
 
+        print_r($_POST);
+
         if (!empty($request->postData('RefAgency')) && !empty($request->postData('Debut') && !empty($request->postData('Fin')))) {
             $ListeFond  = $this->managers->getManagerOf("Caisse")->ListeFond($request->postData('RefAgency'), $request->postData('Debut'), $request->postData('Fin')); //Recuperation de la liste
             $this->page->addVar("ListeFond", $ListeFond);

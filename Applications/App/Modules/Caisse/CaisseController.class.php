@@ -29,9 +29,6 @@ class CaisseController extends \Library\BackController
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
         $this->page->addVar('UserAgence', $Agence);
 
-
-        print_r($_POST);
-
         if (!empty($request->postData('RefAgency')) && !empty($request->postData('Debut') && !empty($request->postData('Fin')))) {
 
             $this->page->addVar('Debut', $request->postData('Debut')) ?? $this->page->addVar('Debut', $request->getData('Debut'));
@@ -45,10 +42,6 @@ class CaisseController extends \Library\BackController
             $ListeFond  = $this->managers->getManagerOf("Caisse")->ListeFond(); //Recuperation de la liste
             $this->page->addVar("ListeFond", $ListeFond);
         }
-        $Fond  = $this->managers->getManagerOf("Caisse")->ListeFond(); //Recuperation de la liste
-        $this->page->addVar("ListeFond", $Fond); // Creation d
-
-
 
         // if ($request->method() == 'POST') {
         //     $AddTransfert  = $this->managers->getManagerOf("Caisse")->AddTransfert($request); //Recuperation de la liste

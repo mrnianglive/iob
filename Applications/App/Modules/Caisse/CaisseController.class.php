@@ -28,9 +28,9 @@ class CaisseController extends \Library\BackController
         $this->page->addVar("ListeCaisse", $UserCaisse); // Creation de la variable, ajout d'une variable a la vue
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
         $this->page->addVar('UserAgence', $Agence);
-        $this->page->addVar('Debut', $request->postData('Debut'));
-        $this->page->addVar('Fin', $request->postData('Fin'));
-        $this->page->addVar('RefAgency', $request->postData('RefAgency'));
+        $this->page->addVar('Debut', $request->postData('Debut')) ?? $this->page->addVar('Debut', $request->getData('Debut'));
+        $this->page->addVar('Fin', $request->postData('Fin')) ?? $this->page->addVar('Fin', $request->getData('Fin'));
+        $this->page->addVar('RefAgency', $request->postData('RefAgency')) ?? $this->page->addVar('RefAgency', $request->getData('RefAgency'));
 
         print_r($_POST);
 
@@ -43,6 +43,8 @@ class CaisseController extends \Library\BackController
         }
         $Fond  = $this->managers->getManagerOf("Caisse")->ListeFond(); //Recuperation de la liste
         $this->page->addVar("ListeFond", $Fond); // Creation d
+
+
 
         // if ($request->method() == 'POST') {
         //     $AddTransfert  = $this->managers->getManagerOf("Caisse")->AddTransfert($request); //Recuperation de la liste

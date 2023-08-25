@@ -29,17 +29,18 @@ class CaisseController extends \Library\BackController
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
         $this->page->addVar('UserAgence', $Agence);
 
-        if (!empty($request->postData('RefAgency')) && !empty($request->postData('Debut') && !empty($request->postData('Fin')))) {
-
-            $this->page->addVar('Debut', $request->postData('Debut')) ?? $this->page->addVar('Debut', $request->getData('Debut'));
-            $this->page->addVar('Fin', $request->postData('Fin')) ?? $this->page->addVar('Fin', $request->getData('Fin'));
-            $this->page->addVar('RefAgency', $request->postData('RefAgency')) ?? $this->page->addVar('RefAgency', $request->getData('RefAgency'));
-            $ListeFond  = $this->managers->getManagerOf("Caisse")->ListeFond($request->postData('RefAgency'), $request->postData('Debut'), $request->postData('Fin')); //Recuperation de la liste
-
-
+        if (!empty($request->postData('RefAgency')) && !empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {
+            $this->page->addVar('Debut', $request->postData('Debut') ?? $request->getData('Debut'));
+            $this->page->addVar('Fin', $request->postData('Fin') ?? $request->getData('Fin'));
+            $this->page->addVar('RefAgency', $request->postData('RefAgency') ?? $request->getData('RefAgency'));
+            $ListeFond = $this->managers->getManagerOf("Caisse")->ListeFond(
+                $request->postData('RefAgency'),
+                $request->postData('Debut'),
+                $request->postData('Fin')
+            );
             $this->page->addVar("ListeFond", $ListeFond);
         } else {
-            $ListeFond  = $this->managers->getManagerOf("Caisse")->ListeFond(); //Recuperation de la liste
+            $ListeFond = $this->managers->getManagerOf("Caisse")->ListeFond();
             $this->page->addVar("ListeFond", $ListeFond);
         }
 

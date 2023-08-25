@@ -1,7 +1,28 @@
 <div class="row">
     <div class="col-md-12">
-
         <div class="white-box">
+            <form method="POST" action="/Journal/index" id="formulaire">
+                <div class="input-group">
+                    <div class="">Agence
+                        <select class="form-control" name="RefAgency" tabindex="1" required="" id="RefAgency">
+                            <?php foreach ($UserAgence as $key => $Agence) {
+                            ?>
+                                <option value="<?= $Agence['RefAgency']; ?>" <?php if ($Agence['RefAgency'] == $Value) { ?> selected="" <?php } ?>>
+                                    <?= $Agence['NameAgency']; ?></option>
+                            <?php }   ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2">Du
+                        <input type="date" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
+                    </div>
+                    <div class="col-md-2">Au
+                        <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
+                    </div>
+                </div>
+            </form>
+            <br />
+
+
             <h3 class="box-title">Sortie de Fond</h3>
             <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'superadmin') { ?>
                 <a href="/bielletage/4" class="btn btn-primary" data-toggle="tooltip" title="Cliquez ici pour Initier"><i class="fa fa-plus"> Transferer</i></a> <br /> <br />

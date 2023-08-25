@@ -27,6 +27,12 @@ class CaisseController extends \Library\BackController
         $this->page->addVar("ListeFond", $Fond); // Creation d
         $UserCaisse  = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d')); //Recuperation de la liste
         $this->page->addVar("ListeCaisse", $UserCaisse); // Creation de la variable, ajout d'une variable a la vue
+        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
+        $this->page->addVar('UserAgence', $Agence);
+        $this->page->addVar('Debut', $request->postData('Debut'));
+        $this->page->addVar('Fin', $request->postData('Fin'));
+        $this->page->addVar('Value', $request->postData('RefAgency'));
+
         if ($request->method() == 'POST') {
             $AddTransfert  = $this->managers->getManagerOf("Caisse")->AddTransfert($request); //Recuperation de la liste
             $_SESSION['message']['type'] = 'success';

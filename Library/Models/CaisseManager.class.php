@@ -13,7 +13,6 @@ abstract class CaisseManager extends \Library\Manager
     abstract protected function Retrait($Caisse);
     abstract protected function  Appro($Caisse);
     abstract protected function  Transfert($Caisse);
-    abstract protected function ListeFond();
     abstract protected function AddTransfert();
     abstract protected function ListeAppro();
     abstract protected function AddAppro();

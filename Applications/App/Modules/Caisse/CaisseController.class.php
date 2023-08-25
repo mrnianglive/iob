@@ -23,8 +23,7 @@ class CaisseController extends \Library\BackController
     public function executeTransfertfond(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Liste des Transfert de fond"); // Titre de la page
-        $Fond  = $this->managers->getManagerOf("Caisse")->ListeFond(); //Recuperation de la liste
-        $this->page->addVar("ListeFond", $Fond); // Creation d
+
         $UserCaisse  = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d')); //Recuperation de la liste
         $this->page->addVar("ListeCaisse", $UserCaisse); // Creation de la variable, ajout d'une variable a la vue
         $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
@@ -33,13 +32,23 @@ class CaisseController extends \Library\BackController
         $this->page->addVar('Fin', $request->postData('Fin'));
         $this->page->addVar('Value', $request->postData('RefAgency'));
 
-        if ($request->method() == 'POST') {
-            $AddTransfert  = $this->managers->getManagerOf("Caisse")->AddTransfert($request); //Recuperation de la liste
-            $_SESSION['message']['type'] = 'success';
-            $_SESSION['message']['text'] = 'Ajout réussie !';
-            $_SESSION['message']['number'] = 2;
-            $this->app()->httpResponse()->redirect('/Caisse/transfertfond'); //Retour en arriere
+        if (!empty($request->postData('RefAgency')) && !empty($request->postData('Debut') && !empty($request->postData('Fin')))) {
+            $ListeFond  = $this->managers->getManagerOf("Caisse")->ListeFond($request->postData('RefAgency'), $request->postData('Debut'), $request->postData('Fin')); //Recuperation de la liste
+            $this->page->addVar("ListeFond", $ListeFond);
+        } else {
+            $ListeFond  = $this->managers->getManagerOf("Caisse")->ListeFond(); //Recuperation de la liste
+            $this->page->addVar("ListeFond", $ListeFond);
         }
+        $Fond  = $this->managers->getManagerOf("Caisse")->ListeFond(); //Recuperation de la liste
+        $this->page->addVar("ListeFond", $Fond); // Creation d
+
+        // if ($request->method() == 'POST') {
+        //     $AddTransfert  = $this->managers->getManagerOf("Caisse")->AddTransfert($request); //Recuperation de la liste
+        //     $_SESSION['message']['type'] = 'success';
+        //     $_SESSION['message']['text'] = 'Ajout réussie !';
+        //     $_SESSION['message']['number'] = 2;
+        //     $this->app()->httpResponse()->redirect('/Caisse/transfertfond'); //Retour en arriere
+        // }
     }
     public function executeApprocaisse(\Library\HTTPRequest $request)
     {

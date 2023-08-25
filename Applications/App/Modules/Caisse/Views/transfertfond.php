@@ -1,6 +1,8 @@
 <div class="row">
     <div class="col-md-12">
         <div class="white-box">
+
+            <h3 class="box-title">Sortie de Fond</h3>
             <form method="POST" action="/Caisse/transfertfond" id="formulaire">
                 <div class="input-group">
                     <div class="">Agence
@@ -27,7 +29,6 @@
             <br />
 
 
-            <h3 class="box-title">Sortie de Fond</h3>
             <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'superadmin') { ?>
                 <a href="/bielletage/4" class="btn btn-primary" data-toggle="tooltip" title="Cliquez ici pour Initier"><i class="fa fa-plus"> Transferer</i></a> <br /> <br />
             <?php } ?>

@@ -120,7 +120,8 @@ class CaisseManagerPDO extends CaisseManager
             $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
         } else {
-            $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  TbleChmod.RefUsers=:RefUsers AND TbleOperations.RefType=4  ");
+            $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  TbleChmod.RefUsers=:RefUsers AND TbleOperations.RefType=4 AND  date(operations.Approve2_Time)=:today");
+            $requete->bindValue(':today', date('Y-m-d'), \PDO::PARAM_INT);
             $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         }
         $requete->execute();

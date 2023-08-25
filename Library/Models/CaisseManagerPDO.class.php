@@ -115,7 +115,7 @@ class CaisseManagerPDO extends CaisseManager
     }
     public function ListeFond($Agence = NULL, $Debut = NULL, $Fin = NULL)
     {
-        if (!empty($Agence)) {
+        if ($Agence != NULL && $Debut != NULL && $Fin != NULL) {
             $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleOperations.RefCaisse WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  TbleChmod.RefUsers=:RefUsers AND TbleOperations.RefType=4 AND  date(TbleOperations.Approve2_Time) BETWEEN '$Debut' AND '$Fin'  AND TbleAgency.RefAgency=:Agence ");
             $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
             $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);

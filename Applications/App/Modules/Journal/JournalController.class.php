@@ -53,10 +53,12 @@ class JournalController extends \Library\BackController
         }
         $this->page->addVar('Operations', $Operations);
 
-        $sommeVersementPeriode = $journalManager->sommeVersementPeriode($Debut, $Fin, $Value, $RefProduit);
+        $sommeVersementPeriode = 0;
+        // $journalManager->sommeVersementPeriode($Debut, $Fin, $Value, $RefProduit);
         $this->page->addVar('sommeVersementPeriode', $sommeVersementPeriode);
 
-        $sommeRetraitPeriode = $journalManager->sommeRetraitPeriode($Debut, $Fin, $Value, $RefProduit);
+        $sommeRetraitPeriode = 0;
+        //  $journalManager->sommeRetraitPeriode($Debut, $Fin, $Value, $RefProduit);
         $this->page->addVar('sommeRetraitPeriode', $sommeRetraitPeriode);
 
         $UsersCaisse = $journalManager->UserCaisse(date('Y-m-d'));

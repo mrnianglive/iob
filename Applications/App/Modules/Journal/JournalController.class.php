@@ -53,20 +53,18 @@ class JournalController extends \Library\BackController
         }
         $this->page->addVar('Operations', $Operations);
 
-        $sommeVersementPeriode = 0;
-        // $journalManager->sommeVersementPeriode($Debut, $Fin, $Value, $RefProduit);
+        $sommeVersementPeriode = $journalManager->sommeVersementPeriode($Debut, $Fin, $Value, $RefProduit);
         $this->page->addVar('sommeVersementPeriode', $sommeVersementPeriode);
 
-        $sommeRetraitPeriode = 0;
-        //  $journalManager->sommeRetraitPeriode($Debut, $Fin, $Value, $RefProduit);
+        $sommeRetraitPeriode = $journalManager->sommeRetraitPeriode($Debut, $Fin, $Value, $RefProduit);
         $this->page->addVar('sommeRetraitPeriode', $sommeRetraitPeriode);
 
         $UsersCaisse = $journalManager->UserCaisse(date('Y-m-d'));
-        // // $SoldeGlobal = 0;
-        // // foreach ($UsersCaisse as $key => $value) {
-        // //     $SoldeGlobal += $value['SoldeDisponibleGlobal'];
-        // // }
-        // $this->page->addVar('Solde', $SoldeGlobal);
+        $SoldeGlobal = 0;
+        foreach ($UsersCaisse as $key => $value) {
+            $SoldeGlobal += $value['SoldeDisponibleGlobal'];
+        }
+        $this->page->addVar('Solde', $SoldeGlobal);
 
         $this->page->addVar('match', $journalManager);
 

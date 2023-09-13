@@ -43,7 +43,11 @@ class JournalController extends \Library\BackController
             $RefProduit = $_GET['produit'] ?? $RefProduit;
 
             $Operations = $journalManager->GetOperations($Debut, $Fin, $Value, $RefProduit);
-            $this->page->addVars(compact('Debut', 'Fin', 'Value', 'RefProduit'));
+            // $this->page->addVars(compact('Debut', 'Fin', 'Value', 'RefProduit'));
+            $this->page->addVar('Debut', $Debut);
+            $this->page->addVar('Fin', $Fin);
+            $this->page->addVar('Value', $Value);
+            $this->page->addVar('RefProduit', $RefProduit);
         } else {
             $Operations = $journalManager->Operations();
         }

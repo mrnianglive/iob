@@ -33,7 +33,7 @@ class JournalManagerPDO extends JournalManager
               WHERE o.Approve2_Id IS NOT NULL
                 AND o.Reset_Id IS NULL
                 AND o.Approve2_Time = :jour
-                AND o.RefType IN (1, 2, ,3,4)
+                AND o.RefType IN (1, 2,3,4)
               ORDER BY o.datePayement ASC';
 
         $requete = $this->dao->prepare($query);

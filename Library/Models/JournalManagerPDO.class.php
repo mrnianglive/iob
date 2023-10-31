@@ -33,7 +33,7 @@ class JournalManagerPDO extends JournalManager
               WHERE o.Approve2_Id IS NOT NULL
                 AND o.Reset_Id IS NULL
                 AND o.Approve2_Time = :jour
-                AND o.RefType IN (1, 2, 4)
+                AND o.RefType IN (1, 2, ,3,4)
               ORDER BY o.datePayement ASC';
 
         $requete = $this->dao->prepare($query);
@@ -53,7 +53,7 @@ class JournalManagerPDO extends JournalManager
     public function GetOperations($debut, $fin, $Agence, $produit)
     {
         //Old Query before View on SQL $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit INNER JOIN TbleUsers ON TbleUsers.Refusers=TbleOperations.Insert_Id    WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleAgency.RefAgency=:Agence AND  (TbleOperations.RefType=1 OR TbleOperations.RefType=2 OR TbleOperations.RefType=4  ) ORDER BY TbleOperations.datePayement ASC");
-        $requete = $this->dao->prepare(" SELECT * FROM operations WHERE operations.Approve2_Id IS NOT NULL AND operations.Reset_Id IS NULL AND  date(operations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND operations.RefAgency=:Agence AND (operations.RefProduit=:produit) AND (operations.RefType=1 OR operations.RefType=2 OR operations.RefType=4  ) ORDER BY operations.datePayement ASC");
+        $requete = $this->dao->prepare(" SELECT * FROM operations WHERE operations.Approve2_Id IS NOT NULL AND operations.Reset_Id IS NULL AND  date(operations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND operations.RefAgency=:Agence AND (operations.RefProduit=:produit) AND (operations.RefType=1 OR operations.RefType=2 OR operations.RefType=3 OR operations.RefType=4  ) ORDER BY operations.datePayement ASC");
         $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
         $requete->bindValue(':produit', $produit, \PDO::PARAM_INT);
         $requete->execute();

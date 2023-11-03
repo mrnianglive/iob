@@ -507,7 +507,6 @@
                                 </div>
                             <?php   } else { ?>
                                 <div class="col-md-6">
-                                    <div id="alertContainer" style="display: none; color: red;"></div>
                                     <div class="form-group has-error">
                                         <label class="control-label">Montant</label>
                                         <input type="int" id="total" class="form-control" name="MontantVersement" readonly="" required>
@@ -535,6 +534,12 @@
                                         <input type="text" class="form-control" name="TelDeposant" value="Opération Interne" readonly="" placeholder="Téléphone" autocomplete="OFF">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group has-error">
+                                    <div id="alertContainer" style="display: none; color: red;"></div>
+                                </div>
+
                             </div>
                         <?php } else { ?>
                             <div class="row">

@@ -21,9 +21,9 @@ if (isset($_GET['NumCompte'], $_GET['MontantVersement'])) {
     $moyenne = $resultat ? $resultat['moyenne'] : 0; // Vérifier si le résultat est non nul avant d'accéder à la clé
 
     if ($montant > $moyenne) {
-        $response['message'] = "Alerte: Transaction inhabituelle! Versement de $montant, supérieur à la moyenne de $moyenne. Vérifiez avec le déposant.";
+        $response['message'] = "Alerte: Transaction inhabituelle! Le montant est supérieur à la moyenne.";
     } else {
-        $response['message'] = "Transaction normale. Versement de $montant, inférieur à la moyenne de $moyenne.";
+        $response['message'] = "Alerte: Transaction normale ! Le montant est inférieur à la moyenne.";
     }
 } else {
     $response['message'] = "Erreur: Les données nécessaires ne sont pas fournies.";

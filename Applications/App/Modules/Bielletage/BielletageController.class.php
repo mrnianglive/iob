@@ -167,49 +167,116 @@ class BielletageController extends \Library\BackController
         $numberToLetter = $this->managers->getManagerOf('Arreter')->NumberToLetter(intval($Invoice['MontantVersement']));
         $this->page->addVar("numberToLetter", $numberToLetter); // Creation de la variable, ajout d'une variable a la vue
     }
+    // public function executeAdd(\Library\HTTPRequest $request)
+    // {
+    //     $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($request->postData('RefCaisse'));
+    //     $YesterdayReserve = $this->managers->getManagerOf("Journal")->YesterdayReserve($GetAgencyUsingCaisseID['RefAgency'], date('Y-m-d'));
+    //     $VerifAppro  = $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal(date('Y-m-d'), $GetAgencyUsingCaisseID['RefAgency']);
+
+    //     if (!empty($request->postData('Antidate'))) {
+    //         //Antidate Operation
+    //         $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
+    //     } else {
+
+    //         if ($VerifAppro == 0 && ($request->postData('RefType') == 1 || $request->postData('RefType') == 2)) {
+    //             $_SESSION['message']['type'] = 'warning';
+    //             $_SESSION['message']['text'] = 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération';
+    //             $_SESSION['message']['number'] = 2;
+    //             $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
+    //         } else {
+
+    //             if ($request->postData('RefType') == 3 && $request->postData('TypeAppro') == 1) {
+    //                 if ($request->postData('MontantVersement') <= $YesterdayReserve) {
+    //                     $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
+    //                 } else {
+    //                     $_SESSION['message']['type'] = 'warning';
+    //                     $_SESSION['message']['text'] = 'Le Montant de la transaction est supérieur au solde de la reserve.';
+    //                     $_SESSION['message']['number'] = 2;
+    //                     $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
+    //                 }
+    //             } elseif ($request->postData('RefType') == 4 or $request->postData('RefType') == 2 or $request->postData('RefType') == 5) {
+    //                 $SoldeActuelleCaisse = $this->managers->getManagerOf("Journal")->SoldeActuelleCaisse(date('Y-m-d'), $request->postData('RefCaisse'));
+    //                 if ($request->postData('MontantVersement') <= $SoldeActuelleCaisse) {
+    //                     $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
+    //                 } else {
+    //                     $_SESSION['message']['type'] = 'warning';
+    //                     $_SESSION['message']['text'] = 'Le Montant de la transaction supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou Contactez votre administrateur .';
+    //                     $_SESSION['message']['number'] = 2;
+    //                     $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
+    //                 }
+    //             } else {
+    //                 $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
+    //             }
+    //         }
+    //     }
+    // }
+
+
+
     public function executeAdd(\Library\HTTPRequest $request)
     {
-        $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($request->postData('RefCaisse'));
-        $YesterdayReserve = $this->managers->getManagerOf("Journal")->YesterdayReserve($GetAgencyUsingCaisseID['RefAgency'], date('Y-m-d'));
-        $VerifAppro  = $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal(date('Y-m-d'), $GetAgencyUsingCaisseID['RefAgency']);
+        $RefCaisse = $request->postData('RefCaisse');
+        $RefType = $request->postData('RefType');
+        $TypeAppro = $request->postData('TypeAppro');
+        $MontantVersement = $request->postData('MontantVersement');
+        $Antidate = $request->postData('Antidate');
 
-        if (!empty($request->postData('Antidate'))) {
-            //Antidate Operation
-            $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
-        } else {
+        $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($RefCaisse);
+        $RefAgency = $GetAgencyUsingCaisseID['RefAgency'];
+        $Today = date('Y-m-d');
 
-            if ($VerifAppro == 0 && ($request->postData('RefType') == 1 || $request->postData('RefType') == 2)) {
-                $_SESSION['message']['type'] = 'warning';
-                $_SESSION['message']['text'] = 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération';
-                $_SESSION['message']['number'] = 2;
-                $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
-            } else {
+        // Redirect with message
+        $redirectWithMessage = function ($type, $text, $number, $RefType) {
+            $_SESSION['message'] = compact('type', 'text', 'number');
+            $this->app()->httpResponse()->redirect('/bielletage/' . $RefType);
+        };
 
-                if ($request->postData('RefType') == 3 && $request->postData('TypeAppro') == 1) {
-                    if ($request->postData('MontantVersement') <= $YesterdayReserve) {
-                        $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
-                    } else {
-                        $_SESSION['message']['type'] = 'warning';
-                        $_SESSION['message']['text'] = 'Le Montant de la transaction est supérieur au solde de la reserve.';
-                        $_SESSION['message']['number'] = 2;
-                        $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
-                    }
-                } elseif ($request->postData('RefType') == 4 or $request->postData('RefType') == 2 or $request->postData('RefType') == 5) {
-                    $SoldeActuelleCaisse = $this->managers->getManagerOf("Journal")->SoldeActuelleCaisse(date('Y-m-d'), $request->postData('RefCaisse'));
-                    if ($request->postData('MontantVersement') <= $SoldeActuelleCaisse) {
-                        $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
-                    } else {
-                        $_SESSION['message']['type'] = 'warning';
-                        $_SESSION['message']['text'] = 'Le Montant de la transaction supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou Contactez votre administrateur .';
-                        $_SESSION['message']['number'] = 2;
-                        $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
-                    }
-                } else {
-                    $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
-                }
-            }
+        // Check for Antidate
+        if (!empty($Antidate)) {
+            $this->managers->getManagerOf("Bielletage")->Add();
+            return;
         }
+
+        // Check for required Approvisionnement
+        if ($this->isRequiredApprovisionnement($RefType, $RefAgency, $Today)) {
+            $redirectWithMessage('warning', 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération', 2);
+            return;
+        }
+
+        // Check for Montant Versement vs Yesterday Reserve
+        if ($RefType == 3 && $TypeAppro == 1 && !$this->isValidMontantVersement($MontantVersement, $RefAgency, $Today)) {
+            $redirectWithMessage('warning', 'Le Montant de la transaction est supérieur au solde de la reserve.', 2);
+            return;
+        }
+
+        // Check for Montant Versement vs Solde Actuelle Caisse
+        if (in_array($RefType, [2, 4, 5]) && !$this->isValidSoldeCaisse($MontantVersement, $RefCaisse, $Today)) {
+            $redirectWithMessage('warning', 'Le Montant de la transaction supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou Contactez votre administrateur.', 2);
+            return;
+        }
+
+        // If all checks pass, Add
+        $this->managers->getManagerOf("Bielletage")->Add();
     }
+
+    private function isRequiredApprovisionnement($RefType, $RefAgency, $Today)
+    {
+        $VerifAppro = $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal($Today, $RefAgency);
+        return ($VerifAppro == 0 && in_array($RefType, [1, 2]));
+    }
+
+    private function isValidMontantVersement($MontantVersement, $RefAgency, $Today)
+    {
+        $YesterdayReserve = $this->managers->getManagerOf("Journal")->YesterdayReserve($RefAgency, $Today);
+        return $MontantVersement <= $YesterdayReserve;
+    }
+
+    private function isValidSoldeCaisse($MontantVersement, $RefCaisse, $Today)
+    {
+        $SoldeActuelleCaisse = $this->managers->getManagerOf("Journal")->SoldeActuelleCaisse($Today, $RefCaisse);
+        return $MontantVersement <= $SoldeActuelleCaisse;
+    }
+
 
     public function executeDashboard(\Library\HTTPRequest $request)
     {

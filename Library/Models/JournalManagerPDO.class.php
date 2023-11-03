@@ -555,24 +555,52 @@ class JournalManagerPDO extends JournalManager
     }
 
 
+    // public function SoldeInitialAgence($Date, $Agence)
+    // {
+    //     $GetCaisseUsingAgence = $this->dao->prepare('SELECT RefCaisse FROM TbleCaisse WHERE RefAgency=:RefAgency');
+    //     $GetCaisseUsingAgence->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+    //     $GetCaisseUsingAgence->execute();
+    //     $Caisse = $GetCaisseUsingAgence->fetch();
+    //     $Caisse = $Caisse['RefCaisse'];
+
+    //     $requeteSoldeInittial = $this->dao->prepare('SELECT SUM(MontantVersement) AS SoldeInitial FROM TbleOperations  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleOperations.TypeAppro=1  AND TbleOperations.RefType=3 AND TbleOperations.RefCaisse=:RefCaisse ');
+    //     $requeteSoldeInittial->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+    //     $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
+    //     $requeteSoldeInittial->execute();
+    //     $result = $requeteSoldeInittial->fetch();
+    //     if ($result['SoldeInitial'] == 0) {
+    //         return 0;
+    //     }
+    //     return $result['SoldeInitial'];
+    // }
+
+
     public function SoldeInitialAgence($Date, $Agence)
     {
-        $GetCaisseUsingAgence = $this->dao->prepare('SELECT RefCaisse FROM TbleCaisse WHERE RefAgency=:RefAgency');
-        $GetCaisseUsingAgence->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-        $GetCaisseUsingAgence->execute();
-        $Caisse = $GetCaisseUsingAgence->fetch();
-        $Caisse = $Caisse['RefCaisse'];
+        // Cette requête va chercher directement la somme des montants pour une agence donnée et une date donnée
+        // en joignant les tables TbleCaisse et TbleOperations sur RefCaisse
+        $requeteSoldeInitial = $this->dao->prepare(
+            'SELECT SUM(Op.MontantVersement) AS SoldeInitial 
+        FROM TbleOperations AS Op
+        INNER JOIN TbleCaisse AS Caisse ON Caisse.RefCaisse = Op.RefCaisse 
+        WHERE Op.Approve2_Id IS NOT NULL 
+        AND Op.Reset_Id IS NULL 
+        AND Op.Approve2_Time = :jour 
+        AND Op.TypeAppro = 1 
+        AND Op.RefType = 3 
+        AND Caisse.RefAgency = :RefAgency'
+        );
+        $requeteSoldeInitial->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteSoldeInitial->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requeteSoldeInitial->execute();
 
-        $requeteSoldeInittial = $this->dao->prepare('SELECT SUM(MontantVersement) AS SoldeInitial FROM TbleOperations  WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour AND TbleOperations.TypeAppro=1  AND TbleOperations.RefType=3 AND TbleOperations.RefCaisse=:RefCaisse ');
-        $requeteSoldeInittial->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
-        $requeteSoldeInittial->bindValue(':jour', $Date, \PDO::PARAM_STR);
-        $requeteSoldeInittial->execute();
-        $result = $requeteSoldeInittial->fetch();
-        if ($result['SoldeInitial'] == 0) {
-            return 0;
-        }
-        return $result['SoldeInitial'];
+        // On peut utiliser fetchColumn() pour récupérer directement la première colonne du résultat
+        $soldeInitial = $requeteSoldeInitial->fetchColumn();
+
+        // Si $soldeInitial est FALSE (aucun résultat trouvé), ou NULL, on retourne 0
+        return $soldeInitial ?: 0;
     }
+
 
 
 

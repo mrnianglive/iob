@@ -32,29 +32,57 @@ class ArreterController extends \Library\BackController
         $this->app()->httpResponse()->redirect('/Arreter/index'); //Retour en arriere
     }
 
+    // public function executeReserve(\Library\HTTPRequest $request)
+    // {
+    //     $this->managers->getManagerOf("Journal")->Reserve($request); //Arreter Reserve
+    //     $Agence  = $this->managers->getManagerOf("Pannel")->GetAgency($request->postData('RefAgency')); //Recuperation de la liste
+    //     $Caisse = $this->managers->getManagerOf('Journal')->CaisseAgence($Agence['RefAgency'], $request->postData('daycloture'));
+    //     $Solde = 0;
+    //     foreach ($Caisse as $clef => $data) {
+
+    //         $CheckClose = $this->managers->getManagerOf('Bielletage')->CheckDailyClose($data['RefCaisse']);
+    //         if (empty($CheckClose)) {
+    //             $Solde = $Caisse[$clef]['SoldeDisponible'];
+    //             if (!empty($request->postData('daycloture'))) {
+    //                 $datecloture = $request->postData('daycloture');
+    //             } else {
+    //                 $datecloture = ('Y-m-d H:i:s');
+    //             }
+
+    //             $this->managers->getManagerOf('Arreter')->StopCaisse($data['RefCaisse'], $Solde, $datecloture);
+    //         }
+    //     }
+
+    //     $this->app()->httpResponse()->redirect('/Journal/petite_caisse'); //Retour en arriere
+    // }
+
+
+
     public function executeReserve(\Library\HTTPRequest $request)
     {
-        $this->managers->getManagerOf("Journal")->Reserve($request); //Arreter Reserve
-        $Agence  = $this->managers->getManagerOf("Pannel")->GetAgency($request->postData('RefAgency')); //Recuperation de la liste
-        $Caisse = $this->managers->getManagerOf('Journal')->CaisseAgence($Agence['RefAgency'], $request->postData('daycloture'));
-        $Solde = 0;
-        foreach ($Caisse as $clef => $data) {
+        // Arrêter la réserve
+        $this->managers->getManagerOf("Journal")->Reserve($request);
 
+        // Récupération de l'agence
+        $Agence = $this->managers->getManagerOf("Pannel")->GetAgency($request->postData('RefAgency'));
+
+        // Définir la date de clôture une seule fois
+        $datecloture = !empty($request->postData('daycloture')) ? $request->postData('daycloture') : date('Y-m-d H:i:s');
+
+        // Récupération des caisses de l'agence et arrêt des caisses qui n'ont pas été fermées
+        $Caisse = $this->managers->getManagerOf('Journal')->CaisseAgence($Agence['RefAgency'], $datecloture);
+        foreach ($Caisse as $data) {
             $CheckClose = $this->managers->getManagerOf('Bielletage')->CheckDailyClose($data['RefCaisse']);
             if (empty($CheckClose)) {
-                $Solde = $Caisse[$clef]['SoldeDisponible'];
-                if (!empty($request->postData('daycloture'))) {
-                    $datecloture = $request->postData('daycloture');
-                } else {
-                    $datecloture = ('Y-m-d H:i:s');
-                }
-
-                $this->managers->getManagerOf('Arreter')->StopCaisse($data['RefCaisse'], $Solde, $datecloture);
+                // Seulement si la caisse n'est pas fermée
+                $this->managers->getManagerOf('Arreter')->StopCaisse($data['RefCaisse'], $data['SoldeDisponible'], $datecloture);
             }
         }
 
-        $this->app()->httpResponse()->redirect('/Journal/petite_caisse'); //Retour en arriere
+        // Redirection
+        $this->app()->httpResponse()->redirect('/Journal/petite_caisse');
     }
+
 
 
     public function executeReserveuv(\Library\HTTPRequest $request)

@@ -666,7 +666,7 @@ class BielletageManagerPDO extends BielletageManager
         $stmt = $this->dao->prepare(
             "SELECT COUNT(*) as OperationCount 
         FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency
-        WHERE TbleAgency.RefAgency = :RefAgency AND DateOperation > :LastBalanceDate
+        WHERE TbleAgency.RefAgency = :RefAgency AND Approve1_Time > :LastBalanceDate
         UNION ALL
         SELECT COUNT(*) 
         FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency

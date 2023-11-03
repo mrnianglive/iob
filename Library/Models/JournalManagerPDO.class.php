@@ -552,39 +552,54 @@ class JournalManagerPDO extends JournalManager
 
     public function HasOperationsSinceLastBalance($RefAgency)
     {
-        // Fetch the date of the last balance from TbleCompte
-        $stmtLastBalance = $this->dao->prepare("SELECT MAX(DateSolde) as LastBalanceDate FROM TbleCompte WHERE RefAgency = :RefAgency");
+        // Récupération de la date du dernier solde pour l'agence
+        $stmtLastBalance = $this->dao->prepare("
+        SELECT MAX(DateSolde) as LastBalanceDate
+        FROM TbleCompte
+        WHERE RefAgency = :RefAgency
+    ");
         $stmtLastBalance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
         $stmtLastBalance->execute();
         $lastBalanceResult = $stmtLastBalance->fetch();
 
-        // If there's no balance at all, we return an error or false to indicate an initial balance is needed
-        if (!$lastBalanceResult || empty($lastBalanceResult['LastBalanceDate'])) {
+        if (
+            !$lastBalanceResult || empty($lastBalanceResult['LastBalanceDate'])
+        ) {
             return 'Il n’y a aucun solde enregistré pour cette agence. Veuillez enregistrer un solde initial.';
         }
 
-        $lastBalanceDate = $lastBalanceResult['LastBalanceDate'];
+        // Convertir la date du dernier solde en objet DateTime
+        $lastBalanceDate = new \DateTime($lastBalanceResult['LastBalanceDate']);
+        $currentDate = new \DateTime(); // Date d'aujourd'hui
 
-        // Now, let's check if there have been operations since that date in TbleOperations
-        $stmtOperations = $this->dao->prepare("SELECT COUNT(*) as OperationCount FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency = :RefAgency AND Approve2_Time > :LastBalanceDate");
-        $stmtOperations->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
-        $stmtOperations->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
-        $stmtOperations->execute();
-        $operationsResult = $stmtOperations->fetch();
-
-        // Now, let's check if there have been operations since that date in TbleRemittance
-        $stmtRemittance = $this->dao->prepare("SELECT COUNT(*) as OperationCount FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency = :RefAgency AND Insert_time > :LastBalanceDate");
-        $stmtRemittance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
-        $stmtRemittance->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
-        $stmtRemittance->execute();
-        $remittanceResult = $stmtRemittance->fetch();
-
-        // If there have been operations since the last balance, we need to warn the user
-        if ($operationsResult && $operationsResult['OperationCount'] > 0 || $remittanceResult && $remittanceResult['OperationCount'] > 0) {
-            return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée.';
+        // Trouver le dernier jour ouvrable
+        if ($currentDate->format('N') == 1) { // Si aujourd'hui est lundi
+            $currentDate->modify('-3 days'); // On revient au vendredi
+        } elseif ($currentDate->format('N') >= 2 && $currentDate->format('N') <= 6) { // Du mardi au samedi
+            $currentDate->modify('-1 day'); // On revient au jour précédent
         }
 
-        // If no operations have occurred since the last balance, we are clear to proceed
+        // Si le dernier solde est antérieur au dernier jour ouvrable, vérifier les opérations
+        if ($lastBalanceDate->format('Y-m-d') < $currentDate->format('Y-m-d')) {
+            // Vérifier s'il y a eu des opérations depuis le dernier solde
+            $stmtOperations = $this->dao->prepare("
+            SELECT COUNT(*) as OperationCount
+            FROM TbleOperations
+            INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse = TbleOperations.RefCaisse
+            WHERE TbleCaisse.RefAgency = :RefAgency AND Approve2_Time > :LastBalanceDate
+        ");
+            $stmtOperations->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+            $stmtOperations->bindValue(':LastBalanceDate', $lastBalanceDate->format('Y-m-d'), \PDO::PARAM_STR);
+            $stmtOperations->execute();
+            $operationsResult = $stmtOperations->fetch();
+
+            if ($operationsResult && $operationsResult['OperationCount'] > 0) {
+                // Des opérations ont eu lieu après le dernier solde et avant la dernière journée ouvrable
+                return "Des opérations ont été enregistrées après le dernier solde. Veuillez procéder à la clôture de la journée du " . $currentDate->format('Y-m-d') . ".";
+            }
+        }
+
+        // Si le dernier solde est le dernier jour ouvrable ou qu'il n'y a pas eu d'opérations depuis, pas d'alerte
         return false;
     }
 

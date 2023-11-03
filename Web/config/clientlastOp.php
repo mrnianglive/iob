@@ -19,14 +19,13 @@ if (isset($_GET['NumCompte']) && isset($_GET['MontantVersement'])) {
         $response['message'] = "Alerte: Le client a effectué une transaction qui est considérablement plus élevée que ses 5 dernières transactions.";
     }
 
-    // Renvoyer également le nom du client ou d'autres informations nécessaires
-    // En supposant qu'une colonne `nameClient` existe dans votre base de données pour le nom du client.
-    $query = $baseDeDonnee->prepare("SELECT nameClient FROM TbleClients WHERE NumCompte=:NumCompte");
+    // Récupérer le nom du client
+    $query = $baseDeDonnee->prepare("SELECT NameClient FROM TbleOperations WHERE NumCompte=:NumCompte LIMIT 1");
     $query->bindValue(':NumCompte', $NumCompte, PDO::PARAM_INT);
     $query->execute();
 
-    $clientData = $query->fetch();
-    $response['nameClient'] = $clientData['nameClient'];
+    $data = $query->fetch();
+    $response['nameClient'] = $data['NameClient'];
 
     echo json_encode($response);
 }

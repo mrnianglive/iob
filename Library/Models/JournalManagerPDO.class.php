@@ -572,8 +572,15 @@ class JournalManagerPDO extends JournalManager
         $stmtOperations->execute();
         $operationsResult = $stmtOperations->fetch();
 
+        // Now, let's check if there have been operations since that date in TbleRemittance
+        $stmtRemittance = $this->dao->prepare("SELECT COUNT(*) as OperationCount FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency = :RefAgency AND Insert_time > :LastBalanceDate");
+        $stmtRemittance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+        $stmtRemittance->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
+        $stmtRemittance->execute();
+        $remittanceResult = $stmtRemittance->fetch();
+
         // If there have been operations since the last balance, we need to warn the user
-        if ($operationsResult && $operationsResult['OperationCount'] > 0) {
+        if ($operationsResult && $operationsResult['OperationCount'] > 0 || $remittanceResult && $remittanceResult['OperationCount'] > 0) {
             return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée.';
         }
 

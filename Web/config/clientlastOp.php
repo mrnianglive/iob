@@ -1,7 +1,5 @@
 <?php
 require("db.php");
-session_start();
-
 $response = ['message' => '']; // Structure de réponse initiale
 
 if (isset($_GET['NumCompte'], $_GET['MontantVersement'])) {
@@ -14,7 +12,7 @@ if (isset($_GET['NumCompte'], $_GET['MontantVersement'])) {
          FROM TbleOperations 
          WHERE NumCompte=:NumCompte AND Approve2_Id IS NOT NULL AND Reset_Id IS NULL 
          ORDER BY Approve2_Time DESC 
-         LIMIT 5"
+         LIMIT 3"
     );
     $requete->bindValue(':NumCompte', $NumCompte, PDO::PARAM_INT);
     $requete->execute();
@@ -23,17 +21,9 @@ if (isset($_GET['NumCompte'], $_GET['MontantVersement'])) {
     $moyenne = $resultat ? $resultat['moyenne'] : 0; // Vérifier si le résultat est non nul avant d'accéder à la clé
 
     if ($montant > $moyenne) {
-        $_SESSION['message']['type'] = 'warning';
-        $_SESSION['message']['text'] = "Alerte: Transaction inhabituelle! Versement de $montant, supérieur à la moyenne de $moyenne. Vérifiez avec le déposant.";
-        $_SESSION['message']['number'] = 1;
-
         $response['message'] = "Alerte: Transaction inhabituelle! Versement de $montant, supérieur à la moyenne de $moyenne. Vérifiez avec le déposant.";
     } else {
-        $_SESSION['message']['type'] = 'success';
-        $_SESSION['message']['text'] = "Le montant est inférieur ou égal à la moyenne, pas d'alerte.";
-        $_SESSION['message']['number'] = 1;
-
-        $response['message'] = "Le montant est inférieur ou égal à la moyenne, pas d'alerte.";
+        $response['message'] = "Transaction normale. Versement de $montant, inférieur à la moyenne de $moyenne.";
     }
 } else {
     $response['message'] = "Erreur: Les données nécessaires ne sont pas fournies.";

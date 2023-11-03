@@ -129,28 +129,31 @@ class BielletageController extends \Library\BackController
     }
     private function checkAgencyBalanceStatus($RefAgency)
     {
-        // Vous devrez passer la date actuelle, vous pouvez la formater selon les besoins de votre application
         $currentDate = date('Y-m-d');
         $result = $this->managers->getManagerOf("Bielletage")->HasOperationsSinceLastBalance($RefAgency, $currentDate);
+        $agencyData = $this->managers->getManagerOf("Pannel")->GetAgency($RefAgency);
+
+        // Assurez-vous que le nom de l'agence est une chaîne
+        $agencyName = is_array($agencyData) ? $agencyData['NameAgency'] ?? 'Inconnue' : $agencyData;
+
         $data = [
             'error_message' => '',
             'success_message' => ''
         ];
 
-        if (is_string($result)) {
-            // Si le résultat est une chaîne de caractères, cela signifie qu'il n'y a pas d'opérations ou une erreur
-            // Utilisez le message tel quel comme message d'erreur
-            $data['error_message'] = $result;
-        } elseif ($result === true) {
-            // Des opérations ont été trouvées
-            $data['success_message'] = "Des opérations ont été enregistrées depuis la dernière balance pour l'agence.";
+        if ($result !== false) {
+            // Si result contient un message d'erreur spécifique, ajoutez le nom de l'agence ici aussi
+            $data['error_message'] = "{$agencyName}: {$result}";
         } else {
-            // Aucune opération n'a été trouvée, et tout est en ordre
-            $data['success_message'] = "Tout est en ordre avec le solde de l'agence.";
+            // Message de succès incluant le nom de l'agence
+            $data['success_message'] = "Tout est en ordre avec le solde de l'agence '{$agencyName}'.";
         }
 
         return $data;
     }
+
+
+
 
 
 

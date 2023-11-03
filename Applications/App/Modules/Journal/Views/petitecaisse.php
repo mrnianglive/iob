@@ -135,7 +135,7 @@
                                       title="Cliquer pour voir les details">
                                       <?= $value['NameAgency']; ?>
                                   </span> </td>
-                              <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?>
+                              <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?><br>
                                   <small>
                                       <?= $value['LastDate']; ?>
                                   </small>

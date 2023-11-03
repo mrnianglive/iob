@@ -42,28 +42,32 @@
 
 <?php if ($_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
 <div class="col-lg-12 col-sm-12 col-xs-12">
-    <?php foreach ($Agence as $value) : ?>
+    <!-- <?php foreach ($Agence as $value) : ?>
     <?php if ($value['SommeDepot'] == 0) : ?>
     <div class="alert alert-danger" role="alert">
-        <strong><?= htmlspecialchars($value['NameAgency']); ?> | Appro:</strong> Le solde de la réserve est
-        <?= number_format($value['YesterdayReserve'], 0, '.', ' '); ?>. Merci d'approvisionner l'agence.
+        <strong><? //= htmlspecialchars($value['NameAgency']); 
+                ?> | Appro:</strong> Le solde de la réserve est
+        <? //= number_format($value['YesterdayReserve'], 0, '.', ' '); 
+        ?>. Merci d'approvisionner l'agence.
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <?php endif; ?>
-    <?php endforeach; ?>
+    <?php endforeach; ?> -->
+
+    <?php if (!empty($balanceStatus['error_message'])) : ?>
+    <div class="alert alert-danger" role="alert">
+        <span><?= htmlspecialchars($balanceStatus['error_message']) ?></span>
+    </div>
+    <?php elseif (!empty($balanceStatus['success_message'])) : ?>
+    <div class="alert alert-success" role="alert">
+        <span><?= htmlspecialchars($balanceStatus['success_message']) ?></span>
+    </div>
+    <?php endif; ?>
 </div>
 
-<?php if (!empty($balanceStatus['error_message'])) : ?>
-<div class="alert alert-danger" role="alert">
-    <span><?= htmlspecialchars($balanceStatus['error_message']) ?></span>
-</div>
-<?php elseif (!empty($balanceStatus['success_message'])) : ?>
-<div class="alert alert-success" role="alert">
-    <span><?= htmlspecialchars($balanceStatus['success_message']) ?></span>
-</div>
-<?php endif; ?>
+
 
 <?php } ?>
 <div class="row justify-content-center">

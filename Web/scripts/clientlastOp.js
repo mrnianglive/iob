@@ -1,36 +1,37 @@
 $(function () {
     var $NumCompte = $('#NumCompte');
     var $NameClient = $('#NameClient');
-    var $MontantVersement = $('#total');
-    var $alertContainer = $('#alert-container');
+    var $AlertMessage = $('#AlertMessage'); // Ajout d'une référence pour l'alerte
 
     $NumCompte.on('change', function () {
         var val = $(this).val();
-        var montant = $MontantVersement.val();
+        $NameClient.empty();
+        $AlertMessage.empty(); // Vider le message précédent
 
-        if (val != null) $NameClient.empty();
+        if (val) {
+            $.ajax({
+                url: '/config/clientlastOp.php', // Assurez-vous que l'URL est correcte
+                data: { NumCompte: val }, // Envoyer les données comme un objet
+                dataType: 'json',
+                success: function (response) {
+                    if (response.nameClient) {
+                        $NameClient.val(response.nameClient);
+                    } else {
+                        $NameClient.val(''); // Vider le champ si aucune donnée n'est reçue
+                    }
 
-        $.ajax({
-            url: '/config/clientlastOp.php',
-            data: {
-                'NumCompte': val,
-                'MontantVersement': montant
-            },
-            dataType: 'json',
-            method: 'POST',
-            success: function (json) {
-                if (json && json.message) {
-                    $alertContainer.text(json.message).fadeIn();
-                } else {
-                    $alertContainer.fadeOut();
+                    // Vérifier et afficher le message d'alerte si présent
+                    if (response.message) {
+                        $AlertMessage.text(response.message).show();
+                    } else {
+                        $AlertMessage.hide();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Gérer l'erreur
+                    console.error("Erreur AJAX: " + status + " - " + error);
                 }
-
-                if (json && json.nameClient) {
-                    $NameClient.val(json.nameClient);
-                } else {
-                    $NameClient.val('');
-                }
-            }
-        });
+            });
+        }
     });
 });

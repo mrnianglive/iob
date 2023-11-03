@@ -29,6 +29,3 @@ if (isset($_GET['NumCompte']) && isset($_GET['MontantVersement'])) {
 
     echo json_encode($response);
 }
-
-
-echo  $_GET['NumCompte'] . " " . $_GET['MontantVersement'];

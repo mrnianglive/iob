@@ -550,6 +550,62 @@ class JournalManagerPDO extends JournalManager
     }
 
 
+    public function HasOperationsSinceLastBalance($RefAgency)
+    {
+        // Fetch the date of the last balance from TbleCompte
+        $stmtLastBalance = $this->dao->prepare("SELECT MAX(DateSolde) as LastBalanceDate FROM TbleCompte WHERE RefAgency = :RefAgency");
+        $stmtLastBalance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+        $stmtLastBalance->execute();
+        $lastBalanceResult = $stmtLastBalance->fetch();
+
+        // If there's no balance at all, we return an error or false to indicate an initial balance is needed
+        if (!$lastBalanceResult || empty($lastBalanceResult['LastBalanceDate'])) {
+            return 'Il n’y a aucun solde enregistré pour cette agence. Veuillez enregistrer un solde initial.';
+        }
+
+        $lastBalanceDate = $lastBalanceResult['LastBalanceDate'];
+
+        // Now, let's check if there have been operations since that date in TbleOperations
+        $stmtOperations = $this->dao->prepare("SELECT COUNT(*) as OperationCount FROM TbleOperations WHERE RefAgency = :RefAgency AND Approve2_Time > :LastBalanceDate");
+        $stmtOperations->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+        $stmtOperations->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
+        $stmtOperations->execute();
+        $operationsResult = $stmtOperations->fetch();
+
+        // If there have been operations since the last balance, we need to warn the user
+        if ($operationsResult && $operationsResult['OperationCount'] > 0) {
+            return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée.';
+        }
+
+        // If no operations have occurred since the last balance, we are clear to proceed
+        return false;
+    }
+
+
+    public function GetLastBalanceDate($RefAgency)
+    {
+        // Prepare the SQL query to retrieve the latest balance date for the given agency
+        $stmt = $this->dao->prepare("SELECT MAX(DateSolde) as LastBalanceDate FROM TbleCompte WHERE RefAgency = :RefAgency");
+        $stmt->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Fetch the result
+        $result = $stmt->fetch();
+
+        // If there's a result, return the date
+        if ($result && !empty($result['LastBalanceDate'])) {
+            return $result['LastBalanceDate'];
+        } else {
+            // If there's no record, we can decide to return a default value or false/null
+            // Depending on how you want to handle this case in your application logic
+            return false; // or return null; or an appropriate default date
+        }
+    }
+
+
+
+
+
     public function SommeDepotAgence($Date, $Agence)
     {
         $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleAgency.RefAgency=:RefAgency AND (TbleOperations.RefType=1)');

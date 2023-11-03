@@ -151,6 +151,8 @@ class RemittanceController extends \Library\BackController
 
             // D'autres vérifications nécessaires...
 
+
+
             // Si toutes les vérifications sont bonnes, on peut ajouter l'opération
             $this->managers->getManagerOf("Remittance")->Add($request);
             $this->addFlash('success', 'Ajout réussi !');

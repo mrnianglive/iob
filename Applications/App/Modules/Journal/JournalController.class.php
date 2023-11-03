@@ -132,7 +132,8 @@ class JournalController extends \Library\BackController
             $Agence[$key]['YesterdayReserve'] = $reserveData['SoldeCompte'];
 
             // Additionally, if you want to store the date of the last recorded balance
-            $Agence[$key]['LastDate'] = $reserveData['DateSolde'] ?? null; // Assuming 'null' is returned when no date is found
+            $Agence[$key]['LastDate'] = $this->managers->getManagerOf("Journal")->displayDaysSinceLastDate($reserveData['DateSolde']);
+
 
 
             $Agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SommeDepotAgence($date, $value['RefAgency']);

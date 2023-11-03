@@ -3,6 +3,7 @@
 namespace Library\Models;
 
 use \Library\Entities\Journal;
+use DateTime;
 
 class JournalManagerPDO extends JournalManager
 {
@@ -657,6 +658,34 @@ class JournalManagerPDO extends JournalManager
             return false; // or return null; or an appropriate default date
         }
     }
+
+    function displayDaysSinceLastDate($lastDateString)
+    {
+        // Vérifiez d'abord si la chaîne de date est non vide
+        if (!empty($lastDateString)) {
+            try {
+                // Créer un objet DateTime à partir de la chaîne de date
+                $lastDate = new DateTime($lastDateString);
+                // Obtenir la date actuelle
+                $currentDate = new DateTime();
+                // Calculer l'intervalle
+                $interval = $currentDate->diff($lastDate);
+
+                // Retournez la chaîne de caractères formatée
+                return "<small>" . htmlspecialchars(
+                    $lastDate->format('Y-m-d'),
+                    ENT_QUOTES,
+                    'UTF-8'
+                ) .
+                    "</small> Il y'a " . $interval->days . " jours";
+            } catch (\Exception $e) {
+                // En cas d'erreur de format de date, retournez une erreur pour être géré plus tard
+                return "Date invalide fournie.";
+            }
+        }
+        return "Date non définie."; // Retournez si la date n'est pas définie
+    }
+
 
 
 

@@ -169,6 +169,18 @@ class BielletageManagerPDO extends BielletageManager
                     $fraisTimbre = 0;
                     $montantVersement = $_POST['MontantVersement'];
                 }
+                //adding Interval Check Operation 
+
+                $montantVersement = $_POST['MontantVersement'];
+                $numCompte = $_POST['NumCompte'];
+
+                // Appel de la fonction de vérification avant de continuer l'opération.
+                if ($this->verifierOperationSimilaire($numCompte, $montantVersement)) {
+                    $_SESSION['message']['type'] = 'error';
+                    $_SESSION['message']['text'] = "Une opération similaire a été détectée dans les 5 dernières minutes pour ce compte. Veuillez patienter avant de réessayer. Merci !";
+                    header("location: /");
+                    exit;
+                }
 
                 $requeteAddversement = $this->dao->prepare('INSERT INTO TbleOperations(RefCaisse,NumCompte,NameClient,MontantVersement,Remarque,Insert_Id,Insert_Time,Approve1_Id,Approve1_Time,Approve2_Id,Approve2_Time,Bordereau,NameDeposant,TelDeposant,RefType,TypeAppro,RefProduit,TypeRetrait,uniqid,RefPays,fraisTimbre) VALUES(:RefCaisse,:NumCompte,:NameClient,:MontantVersement,:Remarque,:Insert_Id,:Insert_Time,:Approve1_Id,:Approve1_Time,:Approve2_Id,:Approve2_Time,:Bordereau,:NameDeposant,:TelDeposant,:RefType,:TypeAppro,:RefProduit,:TypeRetrait,:uniqid,:RefPays,:fraisTimbre)');
                 $requeteAddversement->bindValue(':RefCaisse', $_POST['RefCaisse'], \PDO::PARAM_INT);
@@ -241,6 +253,27 @@ class BielletageManagerPDO extends BielletageManager
             header("location: /");
         }
     }
+
+    private function verifierOperationSimilaire($numCompte, $montantVersement)
+    {
+        $currentTime = date('Y-m-d H:i:s'); // Assurez-vous que le format correspond à celui de votre base de données.
+        $timeIntervalStart = date('Y-m-d H:i:s', strtotime('-5 minutes', strtotime($currentTime))); // Début de l'intervalle de temps de 5 minutes avant.
+
+        // Préparez et exécutez la requête.
+        $checkOperationQuery = $this->dao->prepare("SELECT * FROM TbleOperations WHERE NumCompte = :NumCompte AND MontantVersement = :MontantVersement AND Insert_Time BETWEEN :StartTime AND :EndTime");
+        $checkOperationQuery->execute([
+            ':NumCompte' => $numCompte,
+            ':MontantVersement' => $montantVersement,
+            ':StartTime' => $timeIntervalStart,
+            ':EndTime' => $currentTime
+        ]);
+
+        // Vérifiez si la requête a renvoyé une ligne.
+        return $checkOperationQuery->fetch() !== false;
+    }
+
+
+
     public function YesterdaySolde($Agence = NULL)
     {
     }

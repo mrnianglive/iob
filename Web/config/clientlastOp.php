@@ -1,32 +1,32 @@
 <?php
 require("db.php");
 
-if (isset($_GET['NumCompte'])) {
-    $query = $baseDeDonnee->prepare("SELECT * FROM TbleOperations WHERE NumCompte=:NumCompte AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL ORDER BY DateOperation DESC LIMIT 5");
-    $query->bindValue(':NumCompte', $_GET['NumCompte'], PDO::PARAM_INT);
+$response = [];
+
+if (isset($_GET['NumCompte']) && isset($_GET['MontantVersement'])) {
+    $NumCompte = $_GET['NumCompte'];
+    $newTransactionAmount = (float) $_GET['MontantVersement'];
+
+    $query = $baseDeDonnee->prepare("SELECT MontantVersement FROM TbleOperations WHERE NumCompte=:NumCompte AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL ORDER BY DateTransaction DESC LIMIT 5");
+    $query->bindValue(':NumCompte', $NumCompte, PDO::PARAM_INT);
     $query->execute();
-    $operations = $query->fetchAll();
 
-    $message = "";
-    if (count($operations) > 0) {
-        $total = 0;
-        foreach ($operations as $operation) {
-            $total += $operation['Montant'];
-        }
-        $moyenne = $total / count($operations);
+    $recentTransactions = $query->fetchAll(PDO::FETCH_COLUMN, 0);
+    $averageRecentTransaction = array_sum($recentTransactions) / count($recentTransactions);
 
-        $operationElevée = false;
-        foreach ($operations as $operation) {
-            if ($operation['Montant'] > 2 * $moyenne) {
-                $operationElevée = true;
-                break;
-            }
-        }
-
-        if ($operationElevée) {
-            $message = "Alerte : Changement soudain du comportement de transaction. Ce client, qui avait généralement des transactions de faible valeur, a effectué une transaction de grande valeur récemment. Veuillez vérifier les détails de la transaction et contacter le client pour confirmer.";
-        }
+    // Si le nouveau montant est, disons, 3 fois supérieur à la moyenne des transactions récentes, on génère une alerte
+    if ($newTransactionAmount > $averageRecentTransaction * 3) {
+        $response['message'] = "Alerte: Le client a effectué une transaction qui est considérablement plus élevée que ses 5 dernières transactions.";
     }
 
-    echo json_encode(['message' => $message]);
+    // Renvoyer également le nom du client ou d'autres informations nécessaires
+    // En supposant qu'une colonne `nameClient` existe dans votre base de données pour le nom du client.
+    $query = $baseDeDonnee->prepare("SELECT nameClient FROM TbleClients WHERE NumCompte=:NumCompte");
+    $query->bindValue(':NumCompte', $NumCompte, PDO::PARAM_INT);
+    $query->execute();
+
+    $clientData = $query->fetch();
+    $response['nameClient'] = $clientData['nameClient'];
+
+    echo json_encode($response);
 }

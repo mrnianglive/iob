@@ -1,21 +1,28 @@
 $(function () {
     var $NumCompte = $('#NumCompte');
     var $NameClient = $('#NameClient');
+    var $MontantVersement = $('#total');
     var $alertContainer = $('#alert-container');
 
     $NumCompte.on('change', function () {
         var val = $(this).val();
+        var montant = $MontantVersement.val();
+
         if (val != null) $NameClient.empty();
 
         $.ajax({
             url: '/config/clientlastOp.php',
-            data: 'NumCompte=' + val,
+            data: {
+                'NumCompte': val,
+                'MontantVersement': montant
+            },
             dataType: 'json',
+            method: 'POST',
             success: function (json) {
                 if (json && json.message) {
-                    $alertContainer.text(json.message).fadeIn(); // Affiche le message dans le conteneur.
+                    $alertContainer.text(json.message).fadeIn();
                 } else {
-                    $alertContainer.fadeOut(); // Cache le conteneur si il n'y a pas de message.
+                    $alertContainer.fadeOut();
                 }
 
                 if (json && json.nameClient) {

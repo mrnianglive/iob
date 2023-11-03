@@ -629,7 +629,7 @@ class BielletageManagerPDO extends BielletageManager
     {
         // Récupération de la date et du montant du dernier solde pour l'agence
         $stmtLastBalance = $this->dao->prepare("
-        SELECT MAX(DateSolde) as LastBalanceDate, Solde
+        SELECT MAX(DateSolde) as LastBalanceDate, SoldeCompte as Solde
         FROM TbleCompte
         WHERE RefAgency = :RefAgency
     ");

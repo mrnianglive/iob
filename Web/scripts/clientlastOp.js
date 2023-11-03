@@ -17,11 +17,13 @@ $(function () {
                 },
                 dataType: 'json',
                 success: function (response) {
-                    if (response.message) {
-                        $alertContainer.text(response.message).show(); // Affiche le message dans le conteneur d'alerte
+                    var messageContainer = $('#alertContainer');
+                    if (response.message.includes("Alerte")) {
+                        messageContainer.css('color', 'red');
                     } else {
-                        $alertContainer.hide(); // Cache le conteneur d'alerte si aucun message n'est retourné
+                        messageContainer.css('color', 'green');
                     }
+                    messageContainer.text(response.message).show();
                 },
                 error: function (xhr, status, error) {
                     console.error("An error occurred: " + error);

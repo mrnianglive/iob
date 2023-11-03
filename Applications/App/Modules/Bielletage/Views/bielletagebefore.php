@@ -599,12 +599,10 @@
 
 
                                 <?php } ?>
-                                <div class="col-md-3">
 
-                                    <div id="alertContainer" style="display: none; color: red;"></div>
+                                <div id="alertContainer" style="display: none; color: red;"></div>
 
 
-                                </div>
                             </div>
 
                         <?php } ?>

@@ -591,29 +591,20 @@ class JournalManagerPDO extends JournalManager
 
     public function HasOperationsSinceLastBalance($RefAgency)
     {
-        // Récupération de la date du dernier solde pour l'agence
-        $stmtLastBalance = $this->dao->prepare("
-        SELECT MAX(DateSolde) as LastBalanceDate
-        FROM TbleCompte
-        WHERE RefAgency = :RefAgency
-    ");
-        $stmtLastBalance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
-        $stmtLastBalance->execute();
-        $lastBalanceResult = $stmtLastBalance->fetch();
+        // Utilisation de la fonction YesterdayReserve pour obtenir le dernier solde et la date
+        $currentDate = new \DateTime(); // Date d'aujourd'hui
+        $yesterdayReserve = $this->YesterdayReserve($RefAgency, $currentDate->format('Y-m-d'));
 
-        if (!$lastBalanceResult || empty($lastBalanceResult['LastBalanceDate'])) {
+        if (empty($yesterdayReserve['DateSolde'])) {
             return 'Il n’y a aucun solde enregistré pour cette agence. Veuillez enregistrer un solde initial.';
         }
 
-        $lastBalanceDate = new \DateTime($lastBalanceResult['LastBalanceDate']);
-        $currentDate = new \DateTime(); // Date d'aujourd'hui
-
-        // Vérifiez si le dernier solde est bien antérieur à la date actuelle
+        $lastBalanceDate = new \DateTime($yesterdayReserve['DateSolde']);
+        $lastBalanceAmount = $yesterdayReserve['SoldeCompte']; // Montant du dernier solde
         $interval = $currentDate->diff($lastBalanceDate);
-        if (
-            $interval->days > 1
-        ) { // Si la différence est de plus d'un jour
-            return "Le dernier solde de l'agence date de plus de {$interval->days} jours. Veuillez vérifier et procéder à la clôture avant de continuer.";
+
+        if ($interval->days > 1) { // Si la différence est de plus d'un jour
+            return "Le dernier solde de l'agence date de plus de {$interval->days} jours avec un montant de {$lastBalanceAmount}. Veuillez vérifier et procéder à la clôture si nécessaire.";
         }
 
         // Vérification des opérations depuis la date du dernier solde
@@ -630,7 +621,7 @@ class JournalManagerPDO extends JournalManager
 
         // Si des opérations ont été enregistrées depuis le dernier solde, retournez un message d'avertissement
         if ($operationsResult && $operationsResult['OperationCount'] > 0) {
-            return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée avant de continuer.';
+            return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée.';
         }
 
         // Si aucune opération n'a eu lieu depuis le dernier solde, aucun message d'erreur n'est retourné

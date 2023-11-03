@@ -625,28 +625,52 @@ class BielletageManagerPDO extends BielletageManager
         $requetteBilletage->execute();
     }
 
+
+    public function YesterdayReserve($Agence, $date)
+    {
+        $requeteSoldeInittial = $this->dao->prepare(
+            "SELECT SoldeCompte, DateSolde 
+         FROM TbleCompte 
+         WHERE DateSolde=(SELECT MAX(DateSolde) 
+                          FROM TbleCompte 
+                          WHERE RefAgency=:RefAgency 
+                          AND DateSolde <:today)"
+        );
+        $requeteSoldeInittial->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteSoldeInittial->bindValue(':today', $date, \PDO::PARAM_STR);
+        $requeteSoldeInittial->execute();
+        $result = $requeteSoldeInittial->fetch();
+
+        // Check if the result is not empty and both SoldeCompte and DateSolde are present
+        if (!empty($result) && isset($result['SoldeCompte']) && isset($result['DateSolde'])) {
+            // Return both balance and date
+            return [
+                'SoldeCompte' => $result['SoldeCompte'],
+                'DateSolde' => $result['DateSolde']
+            ];
+        } else {
+            // Return a default structure with balance as 0 and no date
+            return [
+                'SoldeCompte' => 0,
+                'DateSolde' => null
+            ];
+        }
+    }
+
     public function HasOperationsSinceLastBalance($RefAgency)
     {
-        // Récupération de la date et du montant du dernier solde pour l'agence
-        $stmtLastBalance = $this->dao->prepare("
-        SELECT MAX(DateSolde) as LastBalanceDate, SoldeCompte as Solde
-        FROM TbleCompte
-        WHERE RefAgency = :RefAgency
-    ");
-        $stmtLastBalance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
-        $stmtLastBalance->execute();
-        $lastBalanceResult = $stmtLastBalance->fetch();
+        // Utilisation de la fonction YesterdayReserve pour obtenir le dernier solde et la date
+        $currentDate = new \DateTime(); // Date d'aujourd'hui
+        $yesterdayReserve = $this->YesterdayReserve($RefAgency, $currentDate->format('Y-m-d'));
 
-        if (!$lastBalanceResult || empty($lastBalanceResult['LastBalanceDate'])) {
+        if (empty($yesterdayReserve['DateSolde'])) {
             return 'Il n’y a aucun solde enregistré pour cette agence. Veuillez enregistrer un solde initial.';
         }
 
-        $lastBalanceDate = new \DateTime($lastBalanceResult['LastBalanceDate']);
-        $lastBalanceAmount = $lastBalanceResult['Solde']; // Assurez-vous que la colonne Solde est bien présente dans la table TbleCompte et contient le solde correspondant à la date du dernier solde
-        $currentDate = new \DateTime(); // Date d'aujourd'hui
-
-        // Vérifiez si le dernier solde est bien antérieur à la date actuelle
+        $lastBalanceDate = new \DateTime($yesterdayReserve['DateSolde']);
+        $lastBalanceAmount = $yesterdayReserve['SoldeCompte']; // Montant du dernier solde
         $interval = $currentDate->diff($lastBalanceDate);
+
         if ($interval->days > 1) { // Si la différence est de plus d'un jour
             return "Le dernier solde de l'agence date de plus de {$interval->days} jours avec un montant de {$lastBalanceAmount}. Veuillez vérifier et procéder à la clôture si nécessaire.";
         }

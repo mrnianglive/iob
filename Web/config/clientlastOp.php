@@ -24,11 +24,11 @@ if (isset($_GET['NumCompte'], $_GET['MontantVersement'])) {
         if ($montant > $moyenne) {
             $response['message'] = "Alerte: Transaction inhabituelle détectée! Le montant est supérieur à la moyenne des transactions précédentes.";
         } else {
-            $response['message'] = "Transaction normale: Le montant est dans la plage attendue basée sur l'historique.";
+            $response['message'] = "Avis : Transaction normale ! Le montant est dans la plage attendue basée sur l'historique.";
         }
     } else {
         // Aucune transaction précédente trouvée - cela pourrait être un nouveau client
-        $response['message'] = "Avis: Pas d'historique de transaction. Veuillez procéder à une vérification manuelle pour un nouveau client.";
+        $response['message'] = "Avis : Aucun historique de transactions trouvé. Il se peut que ce soit un nouveau client. Veuillez vérifier le numéro de compte avec le déposant avant de procéder.";
     }
 } else {
     $response['message'] = "Erreur: Les données nécessaires pour effectuer l'analyse ne sont pas fournies.";

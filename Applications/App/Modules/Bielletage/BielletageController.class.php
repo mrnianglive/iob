@@ -258,19 +258,19 @@ class BielletageController extends \Library\BackController
 
         // Vérifier si l'approvisionnement est requis
         if ($this->isRequiredApprovisionnement($RefType, $RefAgency, $Today)) {
-            $redirectWithMessage('warning', 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération', 2);
+            $redirectWithMessage('warning', 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération', 2, $RefType);
             return;
         }
 
         // Vérifier le montant du versement par rapport à la réserve de la veille
         if ($RefType == 3 && $TypeAppro == 1 && !$this->isValidMontantVersement($MontantVersement, $RefAgency, $Today)) {
-            $redirectWithMessage('warning', 'Le montant de la transaction est supérieur au solde de la réserve.', 2);
+            $redirectWithMessage('warning', 'Le montant de la transaction est supérieur au solde de la réserve.', 2, $RefType);
             return;
         }
 
         // Vérifier le montant du versement par rapport au solde actuel de la caisse
         if (in_array($RefType, [2, 4, 5]) && !$this->isValidSoldeCaisse($MontantVersement, $RefCaisse, $Today)) {
-            $redirectWithMessage('warning', 'Le montant de la transaction est supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou contactez votre administrateur.', 2);
+            $redirectWithMessage('warning', 'Le montant de la transaction est supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou contactez votre administrateur.', 2, $RefType);
             return;
         }
 

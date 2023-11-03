@@ -40,7 +40,7 @@
 &nbsp;
 <?php } ?>
 
-<?php if ($_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier' or $_SESSION['statut'] == 'admin') : ?>
+<?php if ($_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier' or $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'superadmin') : ?>
 <div class="col-lg-12 col-sm-12 col-xs-12">
     <?php foreach ($Agence as $value) : ?>
 

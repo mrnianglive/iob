@@ -626,56 +626,65 @@ class BielletageManagerPDO extends BielletageManager
     }
 
 
-    public function HasOperationsSinceLastBalance($RefAgency, $currentDate)
+    public function HasOperationsSinceLastBalance($RefAgency)
     {
-        // Fetch the date of the last balance and the name of the agency from TbleCompte and TbleAgency
+        // Récupération de la date du dernier solde pour l'agence
         $stmtLastBalance = $this->dao->prepare("
-        SELECT 
-            MAX(TbleCompte.DateSolde) as LastBalanceDate,
-            TbleAgency.NameAgency as AgencyName
-        FROM 
-            TbleCompte
-        INNER JOIN TbleAgency ON TbleAgency.RefAgency = TbleCompte.RefAgency
-        WHERE 
-            TbleCompte.RefAgency = :RefAgency
-        GROUP BY 
-            TbleAgency.NameAgency
+        SELECT MAX(DateSolde) as LastBalanceDate
+        FROM TbleCompte
+        WHERE RefAgency = :RefAgency
     ");
         $stmtLastBalance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
         $stmtLastBalance->execute();
         $lastBalanceResult = $stmtLastBalance->fetch();
 
-        // Check if there's no last balance date or agency name
         if (!$lastBalanceResult || empty($lastBalanceResult['LastBalanceDate'])) {
             return 'Il n’y a aucun solde enregistré pour cette agence. Veuillez enregistrer un solde initial.';
         }
 
-        // If there's no agency name, you can decide to return a default name or an error
-        if (empty($lastBalanceResult['AgencyName'])) {
-            return "Le nom de l'agence est introuvable pour l'agence référencée par {$RefAgency}.";
+        $lastBalanceDate = new \DateTime($lastBalanceResult['LastBalanceDate']);
+        $currentDate = new \DateTime(); // Date d'aujourd'hui
+
+        // Vérifier s'il y a eu des opérations après le dernier solde mais le même jour
+        $stmtOperations = $this->dao->prepare("
+        SELECT COUNT(*) as OperationCount
+        FROM TbleOperations
+        INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse = TbleOperations.RefCaisse
+        WHERE TbleCaisse.RefAgency = :RefAgency AND DATE(Approve2_Time) = :LastBalanceDate
+    ");
+        $stmtOperations->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+        $stmtOperations->bindValue(':LastBalanceDate', $lastBalanceDate->format('Y-m-d'), \PDO::PARAM_STR);
+        $stmtOperations->execute();
+        $operationsResult = $stmtOperations->fetch();
+
+        // Si des opérations ont été effectuées le même jour que le dernier solde, aucun problème
+        if ($operationsResult && $operationsResult['OperationCount'] > 0) {
+            return false;
         }
 
-        $agencyName = $lastBalanceResult['AgencyName']; // Storing the agency name
-        $lastBalanceDate = new \DateTime($lastBalanceResult['LastBalanceDate']);
-        $currentDateTime = new \DateTime($currentDate);
-        $yesterdayDateTime = clone $currentDateTime;
-        $yesterdayDateTime->modify('-1 day');
+        // Vérifier si le dernier solde n'est pas d'aujourd'hui et s'il y a eu des opérations depuis
+        if ($lastBalanceDate->format('Y-m-d') != $currentDate->format('Y-m-d')) {
+            $stmtOperationsSince = $this->dao->prepare("
+            SELECT COUNT(*) as OperationCount
+            FROM TbleOperations
+            INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse = TbleOperations.RefCaisse
+            WHERE TbleCaisse.RefAgency = :RefAgency AND Approve2_Time > :LastBalanceDate
+        ");
+            $stmtOperationsSince->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+            $stmtOperationsSince->bindValue(':LastBalanceDate', $lastBalanceDate->format('Y-m-d'), \PDO::PARAM_STR);
+            $stmtOperationsSince->execute();
+            $operationsSinceResult = $stmtOperationsSince->fetch();
 
-        // Check if last balance date is not yesterday
-        if ($lastBalanceDate->format('Y-m-d') != $yesterdayDateTime->format('Y-m-d')) {
-            // Check for operations after last balance date
-            $hasOperations = $this->checkForOperationsSince($RefAgency, $lastBalanceDate->format('Y-m-d'));
-            if ($hasOperations) {
-                return "Des opérations ont été enregistrées depuis le dernier solde pour l'agence {$agencyName}. Veuillez procéder à la clôture de la journée concernée.";
-            } else {
-                // No operations since last balance, and it's not yesterday's date
-                return "L’agence {$agencyName} n’a pas été approvisionnée aujourd’hui ou le solde d’hier ne correspond pas.";
+            // Si des opérations ont eu lieu après le dernier solde et avant la dernière journée ouvrable
+            if ($operationsSinceResult && $operationsSinceResult['OperationCount'] > 0) {
+                return "Des opérations ont été enregistrées après le dernier solde et avant la fin de la journée. Veuillez vérifier et procéder à la clôture si nécessaire.";
             }
         }
 
-        // Last balance was from yesterday and no operations today
+        // Si le dernier solde est d'aujourd'hui ou qu'il n'y a pas eu d'opérations depuis, pas d'alerte
         return false;
     }
+
 
 
     private function checkForOperationsSince($RefAgency, $lastBalanceDate)

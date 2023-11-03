@@ -612,7 +612,7 @@ class JournalManagerPDO extends JournalManager
         if (
             $interval->days > 1
         ) { // Si la différence est de plus d'un jour
-            return "Le dernier solde de l'agence date de plus de {$interval->days} jours. Veuillez vérifier et procéder à la clôture si nécessaire.";
+            return "Le dernier solde de l'agence date de plus de {$interval->days} jours. Veuillez vérifier et procéder à la clôture avant de continuer.";
         }
 
         // Vérification des opérations depuis la date du dernier solde
@@ -629,7 +629,7 @@ class JournalManagerPDO extends JournalManager
 
         // Si des opérations ont été enregistrées depuis le dernier solde, retournez un message d'avertissement
         if ($operationsResult && $operationsResult['OperationCount'] > 0) {
-            return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée.';
+            return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée avant de continuer.';
         }
 
         // Si aucune opération n'a eu lieu depuis le dernier solde, aucun message d'erreur n'est retourné

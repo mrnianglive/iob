@@ -341,20 +341,25 @@ class BielletageController extends \Library\BackController
         $YesterdayReserveDate = $this->managers->getManagerOf("Journal")->GetLastBalanceDate($RefAgency);
 
         // Convert to DateTime objects for comparison
-        $lastBalanceDateTime = new DateTime($YesterdayReserveDate);
-        $currentDateDateTime = new DateTime($date);
+        $lastBalanceDateTime = new \DateTime($YesterdayReserveDate);
+        $currentDateDateTime = new \DateTime($date);
 
         // Check if last known balance is not from yesterday
         if ($lastBalanceDateTime->format('Y-m-d') != $currentDateDateTime->modify('-1 day')->format('Y-m-d')) {
             // Check if there were operations since the last known balance
-            if ($this->managers->getManagerOf("Journal")->HasOperationsSinceLastBalance($RefAgency, $YesterdayReserveDate)) {
+            $operationsSinceLastBalance = $this->managers->getManagerOf("Journal")->HasOperationsSinceLastBalance($RefAgency);
+
+            // If HasOperationsSinceLastBalance returns a string, it's an error message
+            if (is_string($operationsSinceLastBalance)) {
                 // Prompt user to close the books for the last operational day
-                return "La dernière clôture de solde ne correspond pas à la date attendue (hier). Des opérations ont été effectuées depuis. Veuillez procéder à la clôture de la journée concernée.";
+                return $operationsSinceLastBalance;
             }
         }
+
         // If the balance is up-to-date or no operations since last balance, return null indicating no error
         return null;
     }
+
 
 
 

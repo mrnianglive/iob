@@ -518,17 +518,33 @@ class JournalManagerPDO extends JournalManager
 
     public function YesterdayReserve($Agence, $date)
     {
-        $requeteSoldeInittial = $this->dao->prepare("SELECT SoldeCompte FROM TbleCompte WHERE DateSolde=(SELECT MAX(DateSolde) FROM TbleCompte WHERE RefAgency=:RefAgency AND DateSolde <:today)");
+        // Adjust the SELECT statement to include DateSolde
+        $requeteSoldeInittial = $this->dao->prepare(
+            "SELECT SoldeCompte, MAX(DateSolde) AS LastDate 
+        FROM TbleCompte 
+        WHERE RefAgency=:RefAgency AND DateSolde <:today"
+        );
         $requeteSoldeInittial->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSoldeInittial->bindValue(':today', $date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
-        if (!empty($result['SoldeCompte'])) {
-            return $result['SoldeCompte'];
+
+        // Check if there's a result and that the 'SoldeCompte' is not empty
+        if (!empty($result) && !empty($result['SoldeCompte'])) {
+            // Return both the balance and the date
+            return [
+                'SoldeCompte' => $result['SoldeCompte'],
+                'LastDate' => $result['LastDate'] // This will be the date of the last recorded balance
+            ];
         } else {
-            return 0;
+            // Return both as zero or null if there's no previous balance
+            return [
+                'SoldeCompte' => 0,
+                'LastDate' => null // Or you can return a default date or indicate no previous date
+            ];
         }
     }
+
     public function SommeDepotAgence($Date, $Agence)
     {
         $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleAgency.RefAgency=:RefAgency AND (TbleOperations.RefType=1)');

@@ -98,14 +98,14 @@
         </div>
     </div>
 </div>
-<?php if ($_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier' or $_SESSION['statut'] == 'admin') { ?>
-
-<?php foreach ($links as $key => $name) { ?>
-<a href="<?= $name['url']; ?>" <?php if ($name['target'] == 1) { ?> target="_blank" <?php } ?>
-    class="btn btn-<?= $name['btn']; ?> mt-1"><i class="fa-solid fa-link"></i>
-    <?= $name['url_name']; ?></a>
-<?php } ?>
-<?php } ?>
+<?php if (in_array($_SESSION['statut'], ['ChefCaisse', 'Caissier', 'admin'])) : ?>
+<?php foreach ($links as $name) : ?>
+<a href="<?= htmlspecialchars($name['url']); ?>" <?= $name['target'] == 1 ? 'target="_blank"' : ''; ?>
+    class="btn btn-<?= htmlspecialchars($name['btn']); ?> mt-1">
+    <i class="fa-solid fa-link"></i> <?= htmlspecialchars($name['url_name']); ?>
+</a>
+<?php endforeach; ?>
+<?php endif; ?>
 &nbsp;
 
 

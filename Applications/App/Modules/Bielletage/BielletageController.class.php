@@ -24,10 +24,7 @@ class BielletageController extends \Library\BackController
         $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
         $data = $this->getHomeData($Country, $Agency, $Caisse);
 
-        $balanceStatus = $this->checkAgencyBalanceStatus($Agency);
 
-        // Ajouter le résultat de la vérification du solde à la page qui sera rendue.
-        $this->page->addVar('balanceStatus', $balanceStatus);
 
 
         // Ajout des données à la vue
@@ -98,6 +95,10 @@ class BielletageController extends \Library\BackController
             // Additionally, if you want to store the date of the last recorded balance
             $Agence[$key]['LastDate'] = $reserveData['DateSolde'] ?? null; // Assuming 'null' is returned when no date is found
 
+            $Agency[$key]['CheckAgencyBalance'] = $this->checkAgencyBalanceStatus($value['RefAgency']);
+
+
+            // Ajouter le résultat de la vérification du solde à la page qui sera rendue.
 
         }
 
@@ -123,7 +124,8 @@ class BielletageController extends \Library\BackController
             'ListeCaisse' => $ListeCaisse,
             'Country' => $Country,
             'Agency' => $Agency,
-            'Caisse' => $Caisse
+            'Caisse' => $Caisse,
+
         );
     }
 

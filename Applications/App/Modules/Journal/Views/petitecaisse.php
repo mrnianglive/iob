@@ -129,24 +129,17 @@
                       </thead>
                       <tbody>
                           <?php foreach ($Agence as $value) { ?>
-                          <?php
-                                // Assuming that $value['YesterdayReserve'] is now an array with 'SoldeCompte' and 'LastDate'
-                                $reserveData = $value['YesterdayReserve'];
-                                $formattedBalance = number_format($reserveData['SoldeCompte'], 0, '.', '.');
-                                $formattedDate = isset($reserveData['LastDate']) ? date('d-m-Y', strtotime($reserveData['LastDate'])) : 'N/A';
-                                ?>
-
                           <tr>
                               <td><span class="btn btn-primary" data-toggle="modal"
                                       data-target="#depotModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
                                       title="Cliquer pour voir les details">
                                       <?= $value['NameAgency']; ?>
                                   </span> </td>
-                              <td>
-                                  <?= $formattedBalance; ?><br>
-                                  <small><?= $formattedDate; ?></small>
+                              <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?>
+                                  <small>
+                                      <?= $value['LastDate']; ?>
+                                  </small>
                               </td>
-
                               <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
                               <td><?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?></td>
                               <td> <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>

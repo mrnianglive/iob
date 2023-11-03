@@ -125,7 +125,15 @@ class JournalController extends \Library\BackController
             $Agence[$key]['SoldeRemittanceAgence'] = $Agence[$key]['SommeDepotRemittance'] - $Agence[$key]['SommeRetraitRemittance'];
             $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], $date);
             $Agence[$key]['validate'] = $this->managers->getManagerOf("Journal")->CheckDailyClose($value['RefAgency'], $date);
-            $Agence[$key]['YesterdayReserve'] = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], $date);
+
+            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], $date);
+
+            // Assigning the balance to 'YesterdayReserve'
+            $Agence[$key]['YesterdayReserve'] = $reserveData['SoldeCompte'];
+
+            // Additionally, if you want to store the date of the last recorded balance
+            $Agence[$key]['LastDate'] = $reserveData['LastDate'] ?? null; // Assuming 'null' is returned when no date is found
+
 
             $Agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SommeDepotAgence($date, $value['RefAgency']);
             $Agence[$key]['SommeSortie'] = $this->managers->getManagerOf("Journal")->SommeRetraitAgence($date, $value['RefAgency']);

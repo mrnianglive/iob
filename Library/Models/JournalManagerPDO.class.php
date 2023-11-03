@@ -550,48 +550,92 @@ class JournalManagerPDO extends JournalManager
     }
 
 
+    // public function HasOperationsSinceLastBalance($RefAgency)
+    // {
+    //     // Fetch the date of the last balance from TbleCompte
+    //     $stmtLastBalance = $this->dao->prepare("SELECT MAX(DateSolde) as LastBalanceDate FROM TbleCompte WHERE RefAgency = :RefAgency");
+    //     $stmtLastBalance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+    //     $stmtLastBalance->execute();
+    //     $lastBalanceResult = $stmtLastBalance->fetch();
+
+    //     // If there's no balance at all, we return an error or false to indicate an initial balance is needed
+    //     if (!$lastBalanceResult || empty($lastBalanceResult['LastBalanceDate'])) {
+    //         return 'Il n’y a aucun solde enregistré pour cette agence. Veuillez enregistrer un solde initial.';
+    //     }
+
+    //     $lastBalanceDate = $lastBalanceResult['LastBalanceDate'];
+
+    //     // Now, let's check if there have been operations since that date in TbleOperations
+    //     $stmtOperations = $this->dao->prepare("SELECT COUNT(*) as OperationCount FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency = :RefAgency AND Approve2_Time > :LastBalanceDate");
+    //     $stmtOperations->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+    //     $stmtOperations->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
+    //     $stmtOperations->execute();
+    //     $operationsResult = $stmtOperations->fetch();
+
+    //     // Now, let's check if there have been operations since that date in TbleRemittance
+    //     $stmtRemittance = $this->dao->prepare("SELECT COUNT(*) as OperationCount FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency = :RefAgency AND Insert_time > :LastBalanceDate");
+    //     $stmtRemittance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+    //     $stmtRemittance->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
+    //     $stmtRemittance->execute();
+    //     $remittanceResult = $stmtRemittance->fetch();
+
+    //     // If there have been operations since the last balance, we need to warn the user
+    //     if ($operationsResult && $operationsResult['OperationCount'] > 0 || $remittanceResult && $remittanceResult['OperationCount'] > 0) {
+    //         return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée.';
+    //     }
+
+    //     // If no operations have occurred since the last balance, we are clear to proceed
+    //     return false;
+    // }
+
     public function HasOperationsSinceLastBalance($RefAgency)
     {
-        // Fetch the date of the last balance from TbleCompte
-        $stmtLastBalance = $this->dao->prepare("SELECT MAX(DateSolde) as LastBalanceDate FROM TbleCompte WHERE RefAgency = :RefAgency");
+        // Récupération de la date du dernier solde pour l'agence
+        $stmtLastBalance = $this->dao->prepare("
+        SELECT MAX(DateSolde) as LastBalanceDate
+        FROM TbleCompte
+        WHERE RefAgency = :RefAgency
+    ");
         $stmtLastBalance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
         $stmtLastBalance->execute();
         $lastBalanceResult = $stmtLastBalance->fetch();
 
-        // If there's no balance at all, we return an error or false to indicate an initial balance is needed
         if (!$lastBalanceResult || empty($lastBalanceResult['LastBalanceDate'])) {
             return 'Il n’y a aucun solde enregistré pour cette agence. Veuillez enregistrer un solde initial.';
         }
 
-        $lastBalanceDate = $lastBalanceResult['LastBalanceDate'];
+        $lastBalanceDate = new \DateTime($lastBalanceResult['LastBalanceDate']);
+        $currentDate = new \DateTime(); // Date d'aujourd'hui
 
-        // Now, let's check if there have been operations since that date in TbleOperations
-        $stmtOperations = $this->dao->prepare("SELECT COUNT(*) as OperationCount FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency = :RefAgency AND Approve2_Time > :LastBalanceDate");
+        // Vérifiez si le dernier solde est bien antérieur à la date actuelle
+        $interval = $currentDate->diff($lastBalanceDate);
+        if (
+            $interval->days > 1
+        ) { // Si la différence est de plus d'un jour
+            return "Le dernier solde de l'agence date de plus de {$interval->days} jours. Veuillez vérifier et procéder à la clôture si nécessaire.";
+        }
+
+        // Vérification des opérations depuis la date du dernier solde
+        $stmtOperations = $this->dao->prepare("
+        SELECT COUNT(*) as OperationCount
+        FROM TbleOperations
+        INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse = TbleOperations.RefCaisse
+        WHERE TbleCaisse.RefAgency = :RefAgency AND TbleOperations.Approve2_Time > :LastBalanceDate
+    ");
         $stmtOperations->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
-        $stmtOperations->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
+        $stmtOperations->bindValue(':LastBalanceDate', $lastBalanceDate->format('Y-m-d H:i:s'), \PDO::PARAM_STR);
         $stmtOperations->execute();
         $operationsResult = $stmtOperations->fetch();
 
-        // Now, let's check if there have been operations since that date in TbleRemittance
-        $stmtRemittance = $this->dao->prepare("SELECT COUNT(*) as OperationCount FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency = :RefAgency AND Insert_time > :LastBalanceDate");
-        $stmtRemittance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
-        $stmtRemittance->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
-        $stmtRemittance->execute();
-        $remittanceResult = $stmtRemittance->fetch();
-
-
-
-
-
-
-        // If there have been operations since the last balance, we need to warn the user
-        if ($operationsResult && $operationsResult['OperationCount'] > 0 || $remittanceResult && $remittanceResult['OperationCount'] > 0) {
+        // Si des opérations ont été enregistrées depuis le dernier solde, retournez un message d'avertissement
+        if ($operationsResult && $operationsResult['OperationCount'] > 0) {
             return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée.';
         }
 
-        // If no operations have occurred since the last balance, we are clear to proceed
+        // Si aucune opération n'a eu lieu depuis le dernier solde, aucun message d'erreur n'est retourné
         return false;
     }
+
 
 
     public function GetLastBalanceDate($RefAgency)

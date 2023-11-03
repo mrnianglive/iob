@@ -127,7 +127,6 @@ class BielletageController extends \Library\BackController
 
         );
     }
-
     private function checkAgencyBalanceStatus($RefAgency)
     {
         // Vous devrez passer la date actuelle, vous pouvez la formater selon les besoins de votre application
@@ -138,15 +137,21 @@ class BielletageController extends \Library\BackController
             'success_message' => ''
         ];
 
-        if ($result !== false) {
+        if (is_string($result)) {
+            // Si le résultat est une chaîne de caractères, cela signifie qu'il n'y a pas d'opérations ou une erreur
+            // Utilisez le message tel quel comme message d'erreur
             $data['error_message'] = $result;
+        } elseif ($result === true) {
+            // Des opérations ont été trouvées
+            $data['success_message'] = "Des opérations ont été enregistrées depuis la dernière balance pour l'agence.";
         } else {
-            // Message de succès si nécessaire
+            // Aucune opération n'a été trouvée, et tout est en ordre
             $data['success_message'] = "Tout est en ordre avec le solde de l'agence.";
         }
 
         return $data;
     }
+
 
 
 

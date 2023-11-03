@@ -628,17 +628,34 @@ class BielletageManagerPDO extends BielletageManager
 
     public function HasOperationsSinceLastBalance($RefAgency, $currentDate)
     {
-        // Fetch the date of the last balance from TbleCompte
-        $stmtLastBalance = $this->dao->prepare("SELECT MAX(DateSolde) as LastBalanceDate FROM TbleCompte WHERE RefAgency = :RefAgency");
+        // Fetch the date of the last balance and the name of the agency from TbleCompte and TbleAgency
+        $stmtLastBalance = $this->dao->prepare("
+        SELECT 
+            MAX(TbleCompte.DateSolde) as LastBalanceDate,
+            TbleAgency.NameAgency as AgencyName
+        FROM 
+            TbleCompte
+        INNER JOIN TbleAgency ON TbleAgency.RefAgency = TbleCompte.RefAgency
+        WHERE 
+            TbleCompte.RefAgency = :RefAgency
+        GROUP BY 
+            TbleAgency.NameAgency
+    ");
         $stmtLastBalance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
         $stmtLastBalance->execute();
         $lastBalanceResult = $stmtLastBalance->fetch();
 
-        // Check if there's no last balance date
+        // Check if there's no last balance date or agency name
         if (!$lastBalanceResult || empty($lastBalanceResult['LastBalanceDate'])) {
             return 'Il n’y a aucun solde enregistré pour cette agence. Veuillez enregistrer un solde initial.';
         }
 
+        // If there's no agency name, you can decide to return a default name or an error
+        if (empty($lastBalanceResult['AgencyName'])) {
+            return "Le nom de l'agence est introuvable pour l'agence référencée par {$RefAgency}.";
+        }
+
+        $agencyName = $lastBalanceResult['AgencyName']; // Storing the agency name
         $lastBalanceDate = new \DateTime($lastBalanceResult['LastBalanceDate']);
         $currentDateTime = new \DateTime($currentDate);
         $yesterdayDateTime = clone $currentDateTime;
@@ -649,10 +666,10 @@ class BielletageManagerPDO extends BielletageManager
             // Check for operations after last balance date
             $hasOperations = $this->checkForOperationsSince($RefAgency, $lastBalanceDate->format('Y-m-d'));
             if ($hasOperations) {
-                return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée.';
+                return "Des opérations ont été enregistrées depuis le dernier solde pour l'agence {$agencyName}. Veuillez procéder à la clôture de la journée concernée.";
             } else {
                 // No operations since last balance, and it's not yesterday's date
-                return 'L’agence n’a pas été approvisionnée aujourd’hui ou le solde d’hier ne correspond pas.';
+                return "L’agence {$agencyName} n’a pas été approvisionnée aujourd’hui ou le solde d’hier ne correspond pas.";
             }
         }
 
@@ -660,28 +677,57 @@ class BielletageManagerPDO extends BielletageManager
         return false;
     }
 
+
     private function checkForOperationsSince($RefAgency, $lastBalanceDate)
     {
-        // Combining both operations and remittance checks in a single function
-        $stmt = $this->dao->prepare(
-            "SELECT COUNT(*) as OperationCount 
-        FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency
-        WHERE TbleAgency.RefAgency = :RefAgency AND Approve1_Time > :LastBalanceDate
-        UNION ALL
-        SELECT COUNT(*) 
-        FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency
-        WHERE TbleAgency.RefAgency = :RefAgency AND Insert_time > :LastBalanceDate"
-        );
-        $stmt->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
-        $stmt->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
-        $stmt->execute();
-        $results = $stmt->fetchAll();
+        try {
+            // Combining both operations and remittance checks in a single function
+            $stmt = $this->dao->prepare(
+                "SELECT COUNT(*) as OperationCount 
+            FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse 
+            INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency
+            WHERE TbleAgency.RefAgency = :RefAgency AND Approve1_Time > :LastBalanceDate
+            UNION ALL
+            SELECT COUNT(*)
+            FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse 
+            INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency
+            WHERE TbleAgency.RefAgency = :RefAgency AND Insert_time > :LastBalanceDate"
+            );
+            $stmt->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+            $stmt->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
+            $stmt->execute();
+            $results = $stmt->fetchAll();
 
-        foreach ($results as $result) {
-            if ($result['OperationCount'] > 0) {
+            // Check if operations have been found
+            $operationsFound = false;
+            foreach ($results as $result) {
+                if ((int)$result['OperationCount'] > 0) {
+                    $operationsFound = true;
+                    break;
+                }
+            }
+
+            // If operations have been found, return true
+            if ($operationsFound) {
                 return true;
             }
+
+            // If no operations are found, get the agency name for the error message
+            $stmt = $this->dao->prepare("SELECT NameAgency FROM TbleAgency WHERE RefAgency = :RefAgency");
+            $stmt->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+            $stmt->execute();
+            $agencyName = $stmt->fetchColumn();
+
+            // If agency name is not false, return the name
+            if ($agencyName !== false) {
+                return $agencyName;
+            } else {
+                // If the agency name cannot be retrieved, return a generic error message
+                return "Erreur : Le nom de l'agence n'a pas pu être récupéré.";
+            }
+        } catch (\PDOException $e) {
+            // You may want to log this error to a file or a logging system
+            return "Erreur de base de données : " . $e->getMessage();
         }
-        return false;
     }
 }

@@ -1,6 +1,8 @@
 <?php
 require("db.php");
 
+require("db.php");
+
 $response = ['message' => '']; // Structure de réponse initiale
 
 if (isset($_GET['NumCompte'], $_GET['MontantVersement'])) {
@@ -22,9 +24,9 @@ if (isset($_GET['NumCompte'], $_GET['MontantVersement'])) {
     $moyenne = $resultat ? $resultat['moyenne'] : 0; // Vérifier si le résultat est non nul avant d'accéder à la clé
 
     if ($montant > $moyenne) {
-        $response['message'] = "Alerte: Le client a effectué une transaction qui est considérablement plus élevée que ses 5 dernières transactions.";
+        $response['message'] = "Alerte: Changement soudain du comportement de transaction! Le client qui avait généralement des transactions de faible valeur est sur le point de faire un versement de $montant, ce qui est considérablement plus élevé que la moyenne de ses 5 dernières transactions ($moyenne). Veuillez vérifier demander auprès du Deposant plus d'informations.";
     } else {
-        $response['message'] = "Le montant est inférieur à la moyenne, pas d'alerte.";
+        $response['message'] = "Le montant est inférieur ou égal à la moyenne, pas d'alerte.";
     }
 } else {
     $response['message'] = "Erreur: Les données nécessaires ne sont pas fournies.";
@@ -32,5 +34,6 @@ if (isset($_GET['NumCompte'], $_GET['MontantVersement'])) {
 
 // Encoder la réponse en JSON
 echo json_encode($response);
+
 
 // Fermer la connexion à la base de données

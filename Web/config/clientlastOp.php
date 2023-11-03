@@ -31,4 +31,4 @@ if (isset($_GET['NumCompte']) && isset($_GET['MontantVersement'])) {
 }
 
 
-echo "TEST TEST TEST";
+echo  $_GET['NumCompte'] . " " . $_GET['MontantVersement'];

@@ -566,7 +566,7 @@ class JournalManagerPDO extends JournalManager
         $lastBalanceDate = $lastBalanceResult['LastBalanceDate'];
 
         // Now, let's check if there have been operations since that date in TbleOperations
-        $stmtOperations = $this->dao->prepare("SELECT COUNT(*) as OperationCount FROM TbleOperations WHERE RefAgency = :RefAgency AND Approve2_Time > :LastBalanceDate");
+        $stmtOperations = $this->dao->prepare("SELECT COUNT(*) as OperationCount FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency = :RefAgency AND Approve2_Time > :LastBalanceDate");
         $stmtOperations->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
         $stmtOperations->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
         $stmtOperations->execute();

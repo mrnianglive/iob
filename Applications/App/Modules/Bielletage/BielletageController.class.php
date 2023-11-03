@@ -245,7 +245,7 @@ class BielletageController extends \Library\BackController
         // Valider le solde de la veille
         $balanceError = $this->ValidYesterdaySold($RefAgency, $Today);
         if ($balanceError) {
-            $redirectWithMessage('error', $balanceError, 10, $RefType); // Utilisez le nu)méro d'erreur approprié
+            $redirectWithMessage('error', $balanceError, 5, $RefType); // Utilisez le nu)méro d'erreur approprié
             return;
         }
 

@@ -88,15 +88,14 @@ class BielletageController extends \Library\BackController
             // $agence[$key]['YesterdayReserve'] = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
 
             $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
+            if (is_array($reserveData)) {
+                // Assigning the balance to 'YesterdayReserve'
+                $agence[$key]['YesterdayReserve'] = $reserveData['SoldeCompte'];
+                // If you want to store the date of the last recorded balance
+                $agence[$key]['LastDate'] = $reserveData['DateSolde'] ?? null; // Assuming 'null' is returned when no date is found
+            }
 
-            // Assigning the balance to 'YesterdayReserve'
-            $Agence[$key]['YesterdayReserve'] = $reserveData['SoldeCompte'];
-
-            // Additionally, if you want to store the date of the last recorded balance
-            $Agence[$key]['LastDate'] = $reserveData['DateSolde'] ?? null; // Assuming 'null' is returned when no date is found
-
-            $Agency[$key]['CheckAgencyBalance'] = $this->checkAgencyBalanceStatus($value['RefAgency']);
-
+            $agence[$key]['CheckAgencyBalance'] = $this->checkAgencyBalanceStatus($value['RefAgency']);
 
             // Ajouter le résultat de la vérification du solde à la page qui sera rendue.
 

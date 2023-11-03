@@ -1,6 +1,6 @@
 $(function () {
     var $NumCompte = $('#NumCompte');
-    var $MontantVersement = $('#MontantVersement'); // Assurez-vous d'avoir un champ pour entrer le montant du versement
+    var $MontantVersement = $('#total'); // Assurez-vous d'avoir un champ pour entrer le montant du versement
     var $alertContainer = $('#alertContainer'); // Cet élément HTML affichera l'alerte
 
     // Cette fonction sera appelée lorsque la valeur du champ NumCompte changera

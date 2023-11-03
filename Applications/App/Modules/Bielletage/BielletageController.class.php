@@ -24,6 +24,11 @@ class BielletageController extends \Library\BackController
         $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
         $data = $this->getHomeData($Country, $Agency, $Caisse);
 
+        $balanceStatus = $this->checkAgencyBalanceStatus($Agency);
+
+        // Ajouter le résultat de la vérification du solde à la page qui sera rendue.
+        $this->page->addVar('balanceStatus', $balanceStatus);
+
 
         // Ajout des données à la vue
         $this->page->addVar("CheckOuverture", $data['checkOuverture']);
@@ -120,6 +125,26 @@ class BielletageController extends \Library\BackController
             'Agency' => $Agency,
             'Caisse' => $Caisse
         );
+    }
+
+    private function checkAgencyBalanceStatus($RefAgency)
+    {
+        // Vous devrez passer la date actuelle, vous pouvez la formater selon les besoins de votre application
+        $currentDate = date('Y-m-d');
+        $result = $this->managers->getManagerOf("Bielletage")->HasOperationsSinceLastBalance($RefAgency, $currentDate);
+        $data = [
+            'error_message' => '',
+            'success_message' => ''
+        ];
+
+        if ($result !== false) {
+            $data['error_message'] = $result;
+        } else {
+            // Message de succès si nécessaire
+            $data['success_message'] = "Tout est en ordre avec le solde de l'agence.";
+        }
+
+        return $data;
     }
 
 

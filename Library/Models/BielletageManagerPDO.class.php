@@ -624,4 +624,64 @@ class BielletageManagerPDO extends BielletageManager
         $requetteBilletage->bindValue(':m2', $_POST['m2'], \PDO::PARAM_STR);
         $requetteBilletage->execute();
     }
+
+
+    public function HasOperationsSinceLastBalance($RefAgency, $currentDate)
+    {
+        // Fetch the date of the last balance from TbleCompte
+        $stmtLastBalance = $this->dao->prepare("SELECT MAX(DateSolde) as LastBalanceDate FROM TbleCompte WHERE RefAgency = :RefAgency");
+        $stmtLastBalance->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+        $stmtLastBalance->execute();
+        $lastBalanceResult = $stmtLastBalance->fetch();
+
+        // Check if there's no last balance date
+        if (!$lastBalanceResult || empty($lastBalanceResult['LastBalanceDate'])) {
+            return 'Il n’y a aucun solde enregistré pour cette agence. Veuillez enregistrer un solde initial.';
+        }
+
+        $lastBalanceDate = new \DateTime($lastBalanceResult['LastBalanceDate']);
+        $currentDateTime = new \DateTime($currentDate);
+        $yesterdayDateTime = clone $currentDateTime;
+        $yesterdayDateTime->modify('-1 day');
+
+        // Check if last balance date is not yesterday
+        if ($lastBalanceDate->format('Y-m-d') != $yesterdayDateTime->format('Y-m-d')) {
+            // Check for operations after last balance date
+            $hasOperations = $this->checkForOperationsSince($RefAgency, $lastBalanceDate->format('Y-m-d'));
+            if ($hasOperations) {
+                return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée.';
+            } else {
+                // No operations since last balance, and it's not yesterday's date
+                return 'L’agence n’a pas été approvisionnée aujourd’hui ou le solde d’hier ne correspond pas.';
+            }
+        }
+
+        // Last balance was from yesterday and no operations today
+        return false;
+    }
+
+    private function checkForOperationsSince($RefAgency, $lastBalanceDate)
+    {
+        // Combining both operations and remittance checks in a single function
+        $stmt = $this->dao->prepare(
+            "SELECT COUNT(*) as OperationCount 
+        FROM TbleOperations 
+        WHERE RefAgency = :RefAgency AND DateOperation > :LastBalanceDate
+        UNION ALL
+        SELECT COUNT(*) 
+        FROM TbleRemittance 
+        WHERE RefAgency = :RefAgency AND Insert_time > :LastBalanceDate"
+        );
+        $stmt->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+        $stmt->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
+
+        foreach ($results as $result) {
+            if ($result['OperationCount'] > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -54,6 +54,17 @@
     <?php endif; ?>
     <?php endforeach; ?>
 </div>
+
+<?php if (!empty($balanceStatus['error_message'])) : ?>
+<div class="alert alert-danger" role="alert">
+    <span><?= htmlspecialchars($balanceStatus['error_message']) ?></span>
+</div>
+<?php elseif (!empty($balanceStatus['success_message'])) : ?>
+<div class="alert alert-success" role="alert">
+    <span><?= htmlspecialchars($balanceStatus['success_message']) ?></span>
+</div>
+<?php endif; ?>
+
 <?php } ?>
 <div class="row justify-content-center">
     <div class="col-lg-3 col-sm-6 col-xs-12">

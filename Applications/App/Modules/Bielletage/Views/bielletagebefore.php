@@ -648,7 +648,10 @@
                     <?php } ?>
                 </div>
                 <div class="row">
-                    TEST LUTTE CONTRE LE BLANCHIMENT D'ARGENT
+                    <div id="alert-container" class="alert alert-warning" style="display: none;">
+                        <!-- Le message d'alerte s'affichera ici -->
+                    </div>
+
                 </div>
                 <?php } ?>
 

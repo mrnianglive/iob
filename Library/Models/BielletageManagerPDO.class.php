@@ -627,9 +627,9 @@ class BielletageManagerPDO extends BielletageManager
 
     public function HasOperationsSinceLastBalance($RefAgency)
     {
-        // Récupération de la date du dernier solde pour l'agence
+        // Récupération de la date et du montant du dernier solde pour l'agence
         $stmtLastBalance = $this->dao->prepare("
-        SELECT MAX(DateSolde) as LastBalanceDate
+        SELECT MAX(DateSolde) as LastBalanceDate, Solde
         FROM TbleCompte
         WHERE RefAgency = :RefAgency
     ");
@@ -642,12 +642,13 @@ class BielletageManagerPDO extends BielletageManager
         }
 
         $lastBalanceDate = new \DateTime($lastBalanceResult['LastBalanceDate']);
+        $lastBalanceAmount = $lastBalanceResult['Solde']; // Assurez-vous que la colonne Solde est bien présente dans la table TbleCompte et contient le solde correspondant à la date du dernier solde
         $currentDate = new \DateTime(); // Date d'aujourd'hui
 
         // Vérifiez si le dernier solde est bien antérieur à la date actuelle
         $interval = $currentDate->diff($lastBalanceDate);
         if ($interval->days > 1) { // Si la différence est de plus d'un jour
-            return "Le dernier solde de l'agence date de plus de {$interval->days} jours. Veuillez vérifier et procéder à la clôture si nécessaire.";
+            return "Le dernier solde de l'agence date de plus de {$interval->days} jours avec un montant de {$lastBalanceAmount}. Veuillez vérifier et procéder à la clôture si nécessaire.";
         }
 
         // Vérification des opérations depuis la date du dernier solde

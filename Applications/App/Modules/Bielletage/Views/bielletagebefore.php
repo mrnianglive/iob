@@ -507,6 +507,7 @@
                                 </div>
                             <?php   } else { ?>
                                 <div class="col-md-6">
+                                    <div id="alertContainer" style="display: none; color: red;"></div>
                                     <div class="form-group has-error">
                                         <label class="control-label">Montant</label>
                                         <input type="int" id="total" class="form-control" name="MontantVersement" readonly="" required>
@@ -599,11 +600,7 @@
 
                                 <?php } ?>
                             </div>
-                            <div class="row">
-                                <div id="alertContainer" style="display: none; color: red;"></div>
 
-
-                            </div>
                         <?php } ?>
 
 

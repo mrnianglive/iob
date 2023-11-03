@@ -516,22 +516,16 @@ class JournalManagerPDO extends JournalManager
         return $result['SoldeRemittance'];
     }
 
+
+
     public function YesterdayReserve($Agence, $date)
     {
-        // Adjust the SELECT statement to include DateSolde
-        $requeteSoldeInittial = $this->dao->prepare(
-            "SELECT SoldeCompte, MAX(DateSolde) AS LastDate 
-        FROM TbleCompte 
-        WHERE RefAgency=:RefAgency AND DateSolde <:today"
-        );
+        $requeteSoldeInittial = $this->dao->prepare("SELECT SoldeCompte,DateSolde FROM TbleCompte WHERE DateSolde=(SELECT MAX(DateSolde) FROM TbleCompte WHERE RefAgency=:RefAgency AND DateSolde <:today)");
         $requeteSoldeInittial->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSoldeInittial->bindValue(':today', $date, \PDO::PARAM_STR);
         $requeteSoldeInittial->execute();
         $result = $requeteSoldeInittial->fetch();
-
-        // Check if there's a result and that the 'SoldeCompte' is not empty
         if (!empty($result) && !empty($result['SoldeCompte'])) {
-            // Return both the balance and the date
             return [
                 'SoldeCompte' => $result['SoldeCompte'],
                 'LastDate' => $result['LastDate'] // This will be the date of the last recorded balance
@@ -544,6 +538,35 @@ class JournalManagerPDO extends JournalManager
             ];
         }
     }
+
+    // public function YesterdayReserve($Agence, $date)
+    // {
+    //     // Adjust the SELECT statement to include DateSolde
+    //     $requeteSoldeInittial = $this->dao->prepare(
+    //         "SELECT SoldeCompte, MAX(DateSolde) AS LastDate 
+    //     FROM TbleCompte 
+    //     WHERE RefAgency=:RefAgency AND DateSolde <:today"
+    //     );
+    //     $requeteSoldeInittial->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+    //     $requeteSoldeInittial->bindValue(':today', $date, \PDO::PARAM_STR);
+    //     $requeteSoldeInittial->execute();
+    //     $result = $requeteSoldeInittial->fetch();
+
+    //     // Check if there's a result and that the 'SoldeCompte' is not empty
+    //     if (!empty($result) && !empty($result['SoldeCompte'])) {
+    //         // Return both the balance and the date
+    //         return [
+    //             'SoldeCompte' => $result['SoldeCompte'],
+    //             'LastDate' => $result['LastDate'] // This will be the date of the last recorded balance
+    //         ];
+    //     } else {
+    //         // Return both as zero or null if there's no previous balance
+    //         return [
+    //             'SoldeCompte' => 0,
+    //             'LastDate' => null // Or you can return a default date or indicate no previous date
+    //         ];
+    //     }
+    // }
 
     public function SommeDepotAgence($Date, $Agence)
     {

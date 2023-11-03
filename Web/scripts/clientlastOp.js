@@ -10,7 +10,7 @@ $(function () {
         if (numCompteVal) {
             $.ajax({
                 url: '/config/clientlastOp.php',
-                type: 'GET',
+                type: 'post',
                 data: {
                     NumCompte: numCompteVal,
                     MontantVersement: montantVal

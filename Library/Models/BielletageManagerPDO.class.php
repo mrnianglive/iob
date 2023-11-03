@@ -665,12 +665,12 @@ class BielletageManagerPDO extends BielletageManager
         // Combining both operations and remittance checks in a single function
         $stmt = $this->dao->prepare(
             "SELECT COUNT(*) as OperationCount 
-        FROM TbleOperations 
-        WHERE RefAgency = :RefAgency AND DateOperation > :LastBalanceDate
+        FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency
+        WHERE TbleAgency.RefAgency = :RefAgency AND DateOperation > :LastBalanceDate
         UNION ALL
         SELECT COUNT(*) 
-        FROM TbleRemittance 
-        WHERE RefAgency = :RefAgency AND Insert_time > :LastBalanceDate"
+        FROM TbleRemittance  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency
+        WHERE TbleAgency.RefAgency = :RefAgency AND Insert_time > :LastBalanceDate"
         );
         $stmt->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
         $stmt->bindValue(':LastBalanceDate', $lastBalanceDate, \PDO::PARAM_STR);

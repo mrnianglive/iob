@@ -1,7 +1,6 @@
 <?php
 require("db.php");
-
-require("db.php");
+session_start();
 
 $response = ['message' => '']; // Structure de réponse initiale
 
@@ -24,8 +23,16 @@ if (isset($_GET['NumCompte'], $_GET['MontantVersement'])) {
     $moyenne = $resultat ? $resultat['moyenne'] : 0; // Vérifier si le résultat est non nul avant d'accéder à la clé
 
     if ($montant > $moyenne) {
+        $_SESSION['message']['type'] = 'warning';
+        $_SESSION['message']['text'] = "Alerte: Transaction inhabituelle! Versement de $montant, supérieur à la moyenne de $moyenne. Vérifiez avec le déposant.";
+        $_SESSION['message']['number'] = 1;
+
         $response['message'] = "Alerte: Transaction inhabituelle! Versement de $montant, supérieur à la moyenne de $moyenne. Vérifiez avec le déposant.";
     } else {
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = "Le montant est inférieur ou égal à la moyenne, pas d'alerte.";
+        $_SESSION['message']['number'] = 1;
+
         $response['message'] = "Le montant est inférieur ou égal à la moyenne, pas d'alerte.";
     }
 } else {

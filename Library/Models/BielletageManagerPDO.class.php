@@ -671,7 +671,7 @@ class BielletageManagerPDO extends BielletageManager
         $lastBalanceAmount = $yesterdayReserve['SoldeCompte']; // Montant du dernier solde
         $interval = $currentDate->diff($lastBalanceDate);
 
-        if ($interval->days > 1) { // Si la différence est de plus d'un jour
+        if ($interval->days > 2) { // Si la différence est de plus d'un jour
             return "Le dernier solde de l'agence date de plus de {$interval->days} jours avec un montant de {$lastBalanceAmount}. Veuillez vérifier et procéder à la clôture.";
         }
 

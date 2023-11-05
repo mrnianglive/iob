@@ -672,7 +672,7 @@ class BielletageManagerPDO extends BielletageManager
         $interval = $currentDate->diff($lastBalanceDate);
 
         if ($interval->days > 1) { // Si la différence est de plus d'un jour
-            return "Le dernier solde de l'agence date de plus de {$interval->days} jours avec un montant de {$lastBalanceAmount}. Veuillez vérifier et procéder à la clôture si nécessaire.";
+            return "Le dernier solde de l'agence date de plus de {$interval->days} jours avec un montant de {$lastBalanceAmount}. Veuillez vérifier et procéder à la clôture.";
         }
 
         // Définir le début de la journée actuelle

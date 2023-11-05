@@ -672,7 +672,7 @@ class BielletageManagerPDO extends BielletageManager
         $interval = $currentDate->diff($lastBalanceDate);
 
         if ($interval->days > 2) { // Si la différence est de plus de deux jours, retournez un message d'erreur
-            return "Le dernier solde de l'agence date de plus de {$interval->days} jours avec un montant de {$lastBalanceAmount}. Veuillez vérifier et procéder à la clôture.";
+            return " Le dernier Arrêté de caisse de l'agence date de plus de {$interval->days} jours avec un montant de {$lastBalanceAmount}. Veuillez vérifier et procéder à la clôture.";
         }
 
         // Définir le début de la journée actuelle
@@ -695,7 +695,7 @@ class BielletageManagerPDO extends BielletageManager
 
         // Si des opérations ont été enregistrées depuis le dernier solde et avant le début de la journée actuelle, retournez un message d'avertissement
         if ($operationsResult && $operationsResult['OperationCount'] > 0) {
-            return 'Des opérations ont été enregistrées depuis le dernier solde et avant le début de la journée actuelle. Veuillez procéder à la clôture de la journée concernée.';
+            return 'Des opérations ont été enregistrées depuis le dernier Arrêté de caisse et avant le début de la journée actuelle. Veuillez procéder à la clôture de la journée concernée.';
         }
 
         // Si aucune opération n'a eu lieu depuis le dernier solde ou que les opérations du jour ont été clôturées, aucun message d'erreur n'est retourné

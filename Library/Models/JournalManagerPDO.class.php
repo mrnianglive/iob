@@ -607,24 +607,34 @@ class JournalManagerPDO extends JournalManager
             return "Le dernier solde de l'agence date de plus de {$interval->days} jours avec un montant de {$lastBalanceAmount}. Veuillez vérifier et procéder à la clôture si nécessaire.";
         }
 
-        // Vérification des opérations depuis la date du dernier solde
+        // Définir le début de la journée actuelle
+        $startOfCurrentDay = $currentDate->format('Y-m-d 00:00:00');
+
+        // Vérification des opérations depuis la date du dernier solde jusqu'au début de la journée actuelle
         $stmtOperations = $this->dao->prepare("
-        SELECT COUNT(*) as OperationCount
-        FROM TbleOperations
-        INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse = TbleOperations.RefCaisse
-        WHERE TbleCaisse.RefAgency = :RefAgency AND TbleOperations.Approve2_Time > :LastBalanceDate
+    SELECT COUNT(*) as OperationCount
+    FROM TbleOperations
+    INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse = TbleOperations.RefCaisse
+    WHERE TbleCaisse.RefAgency = :RefAgency 
+    AND TbleOperations.Approve2_Time > :LastBalanceDate
+    AND TbleOperations.Approve2_Time < :StartOfCurrentDay
     ");
-        $stmtOperations->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
+        $stmtOperations->bindValue(
+            ':RefAgency',
+            $RefAgency,
+            \PDO::PARAM_INT
+        );
         $stmtOperations->bindValue(':LastBalanceDate', $lastBalanceDate->format('Y-m-d H:i:s'), \PDO::PARAM_STR);
+        $stmtOperations->bindValue(':StartOfCurrentDay', $startOfCurrentDay, \PDO::PARAM_STR);
         $stmtOperations->execute();
         $operationsResult = $stmtOperations->fetch();
 
-        // Si des opérations ont été enregistrées depuis le dernier solde, retournez un message d'avertissement
+        // Si des opérations ont été enregistrées depuis le dernier solde et avant le début de la journée actuelle, retournez un message d'avertissement
         if ($operationsResult && $operationsResult['OperationCount'] > 0) {
-            return 'Des opérations ont été enregistrées depuis le dernier solde. Veuillez procéder à la clôture de la journée concernée.';
+            return 'Des opérations ont été enregistrées depuis le dernier solde et avant le début de la journée actuelle. Veuillez procéder à la clôture de la journée concernée.';
         }
 
-        // Si aucune opération n'a eu lieu depuis le dernier solde, aucun message d'erreur n'est retourné
+        // Si aucune opération n'a eu lieu depuis le dernier solde ou que les opérations du jour ont été clôturées, aucun message d'erreur n'est retourné
         return false;
     }
 

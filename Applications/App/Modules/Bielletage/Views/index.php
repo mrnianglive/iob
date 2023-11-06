@@ -155,8 +155,11 @@
                             <td> <?= $value['NameCaisse']; ?></td>
                             <td><?= $value['NameType']; ?></td>
                             <td><?= $value['NameClient']; ?></td>
-                            <td class="account" data-account="<?= $value['NumCompte']; ?>"><?= $value['NumCompte']; ?>
+                            <td class="account" data-account="<?= $value['NumCompte']; ?>" data-toggle="popover"
+                                data-content="" data-placement="top" data-trigger="hover">
+                                <?= $value['NumCompte']; ?>
                             </td>
+
                             <td class="counter text-danger">
                                 <?= number_format($value['MontantVersement'], 0, '.', '.'); ?></td>
                             <td><?= $value['Remarque']; ?></td>

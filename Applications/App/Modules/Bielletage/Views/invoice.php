@@ -279,6 +279,7 @@
          </div>
          <h5 style="text-align:right;">
              À très bientôt !
+             <br>
              <?php if ($GetInvoice['RefPays'] == 1) { ?>MALI CREANCES - Intermédiation en opérations
              bancaires et recouvrement |www.malicreances-sa.com
              <?php } else { ?>MALI CREANCES- Intermédiation en opérations

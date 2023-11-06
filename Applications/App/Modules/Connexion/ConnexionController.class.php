@@ -4,14 +4,57 @@ namespace Applications\App\Modules\Connexion;
 
 class ConnexionController extends \Library\BackController
 {
+    // public function executeIndex(\Library\HTTPRequest $request)
+    // {
+    //     $this->page->addVar("titles", "Page de Connexion"); // Titre de la page
+    //     $this->page->setTemplate('login');
+    //     if ($request->method() == 'POST' && !empty($request->postData('login')) && !empty($request->postData('password'))) {
+    //         $User = $this->managers->getManagerOf('User')->login($request->postData('login'), $request->postData('password'));
+    //         if (!empty($User)) {
+    //             if (!empty($User['secret'])) {
+    //                 $this->app()->user()->setAuthenticated();
+    //                 if (!empty($User['RefPays']) && $User['RefPays'] != 0) {
+    //                     $getPaysName = $this->managers->getManagerOf('Pannel')->getPaysName($User['RefPays']);
+    //                     $_SESSION['RefPays'] = $User['RefPays'];
+    //                     $_SESSION['nomPays'] = $getPaysName['nomPays'];
+    //                     $_SESSION['logoPays'] = $getPaysName['logo'];
+    //                 }
+    //                 $_SESSION['RefUsers'] = $User['RefUsers'];
+    //                 $_SESSION['login'] = $User['login'];
+    //                 $_SESSION['NomUsers'] = $User['NomUsers'];
+    //                 $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
+    //                 $_SESSION['statut'] = $User['Name'];
+    //                 $_SESSION['secret'] = true;
+    //                 $this->app()->httpResponse()->redirect('/connexion/doubleauth');
+    //             } else {
+    //                 $this->app()->user()->setAuthenticated();
+    //                 if (!empty($User['RefPays']) && $User['RefPays'] != 0) {
+    //                     $getPaysName = $this->managers->getManagerOf('Pannel')->getPaysName($User['RefPays']);
+    //                     $_SESSION['RefPays'] = $User['RefPays'];
+    //                     $_SESSION['nomPays'] = $getPaysName['nomPays'];
+    //                     $_SESSION['logoPays'] = $getPaysName['logo'];
+    //                 }
+    //                 $_SESSION['login'] = $User['login'];
+    //                 $_SESSION['NomUsers'] = $User['NomUsers'];
+    //                 $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
+    //                 $_SESSION['statut'] = $User['Name'];
+    //                 $_SESSION['RefUsers'] = $User['RefUsers'];
+    //                 $this->app()->httpResponse()->redirect('/');
+    //             }
+    //         }
+    //     }
+    // }
+
     public function executeIndex(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Page de Connexion"); // Titre de la page
         $this->page->setTemplate('login');
+
         if ($request->method() == 'POST' && !empty($request->postData('login')) && !empty($request->postData('password'))) {
             $User = $this->managers->getManagerOf('User')->login($request->postData('login'), $request->postData('password'));
             if (!empty($User)) {
                 if (!empty($User['secret'])) {
+                    $_SESSION['first_login'] = !isset($_SESSION['first_login']);
                     $this->app()->user()->setAuthenticated();
                     if (!empty($User['RefPays']) && $User['RefPays'] != 0) {
                         $getPaysName = $this->managers->getManagerOf('Pannel')->getPaysName($User['RefPays']);
@@ -25,8 +68,9 @@ class ConnexionController extends \Library\BackController
                     $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
                     $_SESSION['statut'] = $User['Name'];
                     $_SESSION['secret'] = true;
-                    $this->app()->httpResponse()->redirect('/connexion/doubleauth');
+                    $redirectPath = '/connexion/doubleauth';
                 } else {
+                    $_SESSION['first_login'] = !isset($_SESSION['first_login']);
                     $this->app()->user()->setAuthenticated();
                     if (!empty($User['RefPays']) && $User['RefPays'] != 0) {
                         $getPaysName = $this->managers->getManagerOf('Pannel')->getPaysName($User['RefPays']);
@@ -39,11 +83,13 @@ class ConnexionController extends \Library\BackController
                     $_SESSION['PrenomUsers'] = $User['PrenomUsers'];
                     $_SESSION['statut'] = $User['Name'];
                     $_SESSION['RefUsers'] = $User['RefUsers'];
-                    $this->app()->httpResponse()->redirect('/');
+                    $redirectPath = '/';
                 }
+                $this->app()->httpResponse()->redirect($redirectPath);
             }
         }
     }
+
     public function executeLogout(\Library\HTTPRequest $request)
     {
         $this->page->addVar('titles', 'Logout');

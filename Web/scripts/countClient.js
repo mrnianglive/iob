@@ -3,13 +3,15 @@ $(document).ready(function () {
         var accountNumber = $(this).data('account');
         var $this = $(this);
 
+        // Fermer les popovers précédents
+        $('.account').not($this).popover('hide');
+
         $.ajax({
             url: '/config/clientCount.php',
-            type: 'GET',
+            type: 'POST',
             data: { 'NumCompte': accountNumber },
             success: function (data) {
                 // Vérifiez la réponse en console pour le débogage
-                console.log(data);
 
                 // Assurez-vous que la réponse est au format JSON
                 try {

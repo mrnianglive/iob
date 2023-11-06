@@ -1,17 +1,27 @@
 $(document).ready(function () {
     $('.account').hover(function () {
         var accountNumber = $(this).data('account');
-        var $this = $(this); // Stockez une référence à l'élément "account" survolé
+        var $this = $(this);
 
         $.ajax({
             url: '/config/clientCount.php',
             type: 'POST',
             data: { 'NumCompte': accountNumber },
             success: function (data) {
-                // Mettez à jour le contenu du popover
-                $this.attr('data-content', data);
-                $this.popover('show');
+                // Vérifiez la réponse en console pour le débogage
                 console.log(data);
+
+                // Assurez-vous que la réponse est au format JSON
+                try {
+                    var response = JSON.parse(data);
+                    $this.attr('data-content', response.message);
+                    $this.popover('show');
+                } catch (e) {
+                    console.error("Erreur d'analyse JSON : " + e);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Erreur AJAX : " + error);
             }
         });
     });

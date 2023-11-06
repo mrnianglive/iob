@@ -50,6 +50,8 @@ class ConnexionController extends \Library\BackController
         $this->page->addVar("titles", "Page de Connexion"); // Titre de la page
         $this->page->setTemplate('login');
 
+        $IP = $this->managers->getManagerOf('User')->getIPAddress();
+
         if ($request->method() == 'POST' && !empty($request->postData('login')) && !empty($request->postData('password'))) {
             $User = $this->managers->getManagerOf('User')->login($request->postData('login'), $request->postData('password'));
             if (!empty($User)) {
@@ -85,6 +87,9 @@ class ConnexionController extends \Library\BackController
                     $_SESSION['RefUsers'] = $User['RefUsers'];
                     $redirectPath = '/';
                 }
+                //add to log LogConnexion  using User and IP getIPAddress()
+
+                $this->managers->getManagerOf('User')->LogConnexion($User['RefUsers'], $IP);
                 $this->app()->httpResponse()->redirect($redirectPath);
             }
         }

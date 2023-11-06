@@ -238,6 +238,7 @@ class UserManagerPDO extends UserManager
         $requete->bindValue(':hour', gmdate("H:i:s"), \PDO::PARAM_STR);
         $requete->execute();
     }
+
     public function LogConnexion($Users, $IP)
     {
         $requete = $this->dao->prepare("INSERT INTO LogConnexion(RefUsers,IP,LogH) VALUES(:RefUsers,:IP,:LogH)");

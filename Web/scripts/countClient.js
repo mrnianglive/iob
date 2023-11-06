@@ -11,6 +11,7 @@ $(document).ready(function () {
                 // Mettez à jour le contenu du popover
                 $this.attr('data-content', data);
                 $this.popover('show');
+                console.log(data);
             }
         });
     });

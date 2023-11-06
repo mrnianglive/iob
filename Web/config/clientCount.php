@@ -1,7 +1,7 @@
 <?php
 require("db.php");
-if (isset($_POST['NumCompte'])) {
-    $Nucompte = $_POST['NumCompte'];
+if (isset($_GET['NumCompte'])) {
+    $Nucompte = $_GET['NumCompte'];
     $query = $baseDeDonnee->prepare("SELECT COUNT(*) as count FROM TbleOperations WHERE MONTH(Approve2_Time) = MONTH(CURRENT_DATE()) AND YEAR(Approve2_Time) = YEAR(CURRENT_DATE()) AND NumCompte = :NumCompte");
     $query->bindValue(':NumCompte', $Nucompte, \PDO::PARAM_INT);
     $query->execute();

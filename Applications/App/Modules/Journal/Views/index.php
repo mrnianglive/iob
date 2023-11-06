@@ -98,7 +98,9 @@
                               <td><?= $value['NameProduit']; ?></td>
                               <td><?= $value['NameType']; ?></td>
                               <td><?= $value['NameClient']; ?></td>
-                              <td><?= $value['NumCompte']; ?></td>
+                              <td class="account" data-account="<?= $value['NumCompte']; ?>">
+                                  <?= $value['NumCompte']; ?>
+                              </td>
                               <td><?= $value['MontantVersement']; ?></td>
                               <td><?= $value['Remarque']; ?></td>
                               <td><?= date('d/m/Y', strtotime($value['Approve2_Time'])); ?></td>

@@ -260,7 +260,7 @@ class BielletageManagerPDO extends BielletageManager
         $timeIntervalStart = date('Y-m-d H:i:s', strtotime('-5 minutes', strtotime($currentTime))); // Début de l'intervalle de temps de 5 minutes avant.
 
         // Préparez et exécutez la requête.
-        $checkOperationQuery = $this->dao->prepare("SELECT * FROM TbleOperations WHERE NumCompte = :NumCompte AND MontantVersement = :MontantVersement AND Insert_Time BETWEEN :StartTime AND :EndTime");
+        $checkOperationQuery = $this->dao->prepare("SELECT * FROM TbleOperations WHERE NumCompte = :NumCompte AND MontantVersement = :MontantVersement AND datePayement BETWEEN :StartTime AND :EndTime");
         $checkOperationQuery->execute([
             ':NumCompte' => $numCompte,
             ':MontantVersement' => $montantVersement,

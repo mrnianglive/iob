@@ -618,6 +618,8 @@ class JournalManagerPDO extends JournalManager
     WHERE TbleCaisse.RefAgency = :RefAgency 
     AND TbleOperations.Approve2_Time > :LastBalanceDate
     AND TbleOperations.Approve2_Time < :StartOfCurrentDay
+    AND TbleOperations.Reset_Id IS NULL AND TbleOperations.Approve2_Id IS NOT NULL
+
     ");
         $stmtOperations->bindValue(
             ':RefAgency',

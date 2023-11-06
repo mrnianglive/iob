@@ -686,6 +686,7 @@ class BielletageManagerPDO extends BielletageManager
     WHERE TbleCaisse.RefAgency = :RefAgency 
     AND TbleOperations.Approve2_Time > :LastBalanceDate
     AND TbleOperations.Approve2_Time < :StartOfCurrentDay
+    AND TbleOperations.Reset_Id IS NULL AND TbleOperations.Approve2_Id IS NOT NULL
     ");
         $stmtOperations->bindValue(':RefAgency', $RefAgency, \PDO::PARAM_INT);
         $stmtOperations->bindValue(':LastBalanceDate', $lastBalanceDate->format('Y-m-d H:i:s'), \PDO::PARAM_STR);

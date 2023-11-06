@@ -1367,4 +1367,26 @@ class JournalManagerPDO extends JournalManager
         }
         return $data['TotalVersment'];
     }
+
+
+    //SELECT SUM(TbleOperations.MontantVersement) AS Somme FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.RefType=1 AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND TbleOperations.RefProduit=1 AND date(TbleOperations.Approve2_Time) BETWEEN '2020-09-01' AND '2020-09-30' AND TbleAgency.RefAgency=1
+    public function getLastFiveOperations()
+    {
+        $query = $this->dao->prepare("SELECT * FROM TbleOperations ORDER BY Approve2_Time DESC LIMIT 5");
+        $query->execute();
+        $results = $query->fetchAll();
+        return $results;
+    }
+
+    public function checkMultipleOperations($Nucompte)
+    {
+        $query = $this->dao->prepare("SELECT COUNT(*) as count FROM TbleOperations WHERE MONTH(Approve2_Time) = MONTH(CURRENT_DATE()) AND YEAR(Approve2_Time) = YEAR(CURRENT_DATE()) AND Nucompte = :Nucompte");
+        $query->bindValue(':Nucompte', $Nucompte, \PDO::PARAM_INT);
+        $query->execute();
+        $result = $query->fetch();
+        if ($result['count'] > 1) {
+            return "Multiple operations detected for the same account in the current month.";
+        }
+        return null;
+    }
 }

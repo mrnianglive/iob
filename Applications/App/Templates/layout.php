@@ -304,6 +304,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="/scripts/Checklogin.js"></script>
     <script src="/scripts/clientName.js"></script>
     <script src="/scripts/clientlastOp.js"></script>
+    <script src="/scripts/countClient.js"></script>
+
 
     <script src="/scripts/produitlistbefore.js"></script>
 

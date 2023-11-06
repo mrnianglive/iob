@@ -55,9 +55,6 @@
 <?php endforeach; ?>
 <?php endif; ?>
 <?php endif; ?>
-
-
-
 <div class="row justify-content-center">
     <div class="col-lg-3 col-sm-6 col-xs-12">
         <div class="white-box analytics-info">
@@ -90,7 +87,7 @@
                     </span>
                 </li>
             </ul>
-            <span>CAISSE</span>
+            <span>CAISSE</span> <i class="ti-arrow-up text-success"></i>
         </div>
     </div>
     <div class="col-lg-3 col-sm-6 col-xs-12">

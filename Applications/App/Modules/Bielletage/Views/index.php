@@ -155,8 +155,7 @@
                             <td> <?= $value['NameCaisse']; ?></td>
                             <td><?= $value['NameType']; ?></td>
                             <td><?= $value['NameClient']; ?></td>
-                            <td class="account" data-account="<?= $value['NumCompte']; ?>" data-toggle="popover"
-                                data-content="" data-placement="top" data-trigger="hover">
+                            <td class="account" data-account="<?= $value['NumCompte']; ?>">
                                 <?= $value['NumCompte']; ?>
                             </td>
 

@@ -7,10 +7,6 @@ if (isset($_GET['NumCompte'])) {
     $query->execute();
     $result = $query->fetch();
 
-    if ($result['count'] > 1) {
-        // Utilisez la fonction json_encode pour renvoyer une réponse JSON
-        echo json_encode(['message' => 'Vous avez déjà effectué une opération ce mois-ci.']);
-    } else {
-        echo json_encode(['message' => 'C\'est votre première opération ce mois-ci.']);
-    }
+    // Utilisez la fonction json_encode pour renvoyer une réponse JSON
+    echo json_encode(['count' => $result['count']]);
 }

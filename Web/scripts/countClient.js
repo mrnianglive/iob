@@ -8,7 +8,7 @@ $(document).ready(function () {
 
         $.ajax({
             url: '/config/clientCount.php',
-            type: 'POST',
+            type: 'GET',
             data: { 'NumCompte': accountNumber },
             success: function (data) {
                 // Vérifiez la réponse en console pour le débogage

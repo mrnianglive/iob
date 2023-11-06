@@ -4,7 +4,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/config/clientCount.php',
             type: 'POST',
-            data: { 'Nucompte': accountNumber },
+            data: { 'NumCompte': accountNumber },
             success: function (data) {
                 alert(data);
             }

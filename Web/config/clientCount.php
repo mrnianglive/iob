@@ -1,9 +1,9 @@
 <?php
 require("db.php");
-if (isset($_POST['Nucompte'])) {
-    $Nucompte = $_POST['Nucompte'];
-    $query = $baseDeDonnee->prepare("SELECT COUNT(*) as count FROM TbleOperations WHERE MONTH(Approve2_Time) = MONTH(CURRENT_DATE()) AND YEAR(Approve2_Time) = YEAR(CURRENT_DATE()) AND Nucompte = :Nucompte");
-    $query->bindValue(':Nucompte', $Nucompte, \PDO::PARAM_INT);
+if (isset($_POST['NumCompte'])) {
+    $Nucompte = $_POST['NumCompte'];
+    $query = $baseDeDonnee->prepare("SELECT COUNT(*) as count FROM TbleOperations WHERE MONTH(Approve2_Time) = MONTH(CURRENT_DATE()) AND YEAR(Approve2_Time) = YEAR(CURRENT_DATE()) AND NumCompte = :NumCompte");
+    $query->bindValue(':NumCompte', $Nucompte, \PDO::PARAM_INT);
     $query->execute();
     $result = $query->fetch();
     if ($result['count'] > 1) {

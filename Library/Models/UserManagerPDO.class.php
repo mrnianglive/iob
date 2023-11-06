@@ -224,20 +224,22 @@ class UserManagerPDO extends UserManager
         }
     }
 
-    public function UpdateLog($Users, $value, $LastLog = NULL)
+    //check if it's user first login of the day
+    public function FirstLogin()
     {
-        $requete = $this->dao->prepare("UPDATE TbleUsers SET log='$value',LastLogID= '$LastLog'  WHERE RefUsers=:RefUsers");
-        $requete->bindValue(':RefUsers', $Users, \PDO::PARAM_INT);
+        $requete = $this->dao->prepare("SELECT * FROM LogConnexion WHERE RefUsers=:RefUsers AND LogH BETWEEN :start AND :end");
+        $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->bindValue(':start', date('Y-m-d') . ' 00:00:00', \PDO::PARAM_STR);
+        $requete->bindValue(':end', date('Y-m-d') . ' 23:59:59', \PDO::PARAM_STR);
         $requete->execute();
+        $resultat = $requete->fetch();
+        if (empty($resultat)) {
+            return true;
+        }
+        return false;
     }
 
-    public function LastConnexionUpdate($Last)
-    {
-        $requete = $this->dao->prepare("UPDATE  LogConnexion SET LogoutH=:hour WHERE RefLog=:RefLog");
-        $requete->bindValue(':RefLog', $Last, \PDO::PARAM_INT);
-        $requete->bindValue(':hour', gmdate("H:i:s"), \PDO::PARAM_STR);
-        $requete->execute();
-    }
+
 
     public function LogConnexion($Users, $IP)
     {
@@ -249,15 +251,6 @@ class UserManagerPDO extends UserManager
         $last = $this->dao->lastInsertId();
         $_SESSION['LogID'] = $last;
         return $last;
-    }
-
-    public function getLastConnexionTime($LastLogID)
-    {
-        $requete = $this->dao->prepare("SELECT * FROM LogConnexion WHERE RefLog=:RefLog");
-        $requete->bindValue(':RefLog', $LastLogID, \PDO::PARAM_INT);
-        $requete->execute();
-        $display = $requete->fetch();
-        return $display;
     }
 
     public function getIPAddress()

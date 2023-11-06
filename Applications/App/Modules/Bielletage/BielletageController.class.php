@@ -24,6 +24,9 @@ class BielletageController extends \Library\BackController
         $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
         $data = $this->getHomeData($Country, $Agency, $Caisse);
 
+        $FirstLogin = $this->managers->getManagerOf('User')->FirstLogin();
+        $this->page->addVar('FirstLogin', $FirstLogin);
+
 
 
 

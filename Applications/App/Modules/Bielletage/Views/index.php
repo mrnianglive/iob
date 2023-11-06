@@ -87,7 +87,7 @@
                     </span>
                 </li>
             </ul>
-            <span>CAISSE</span> <i class="ti-arrow-up text-success"></i>
+            <span>CAISSE</span>
         </div>
     </div>
     <div class="col-lg-3 col-sm-6 col-xs-12">

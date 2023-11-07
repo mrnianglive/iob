@@ -21,30 +21,93 @@ class RemittanceManagerPDO extends RemittanceManager
         $requete->execute();
     }
 
-    public function Add()
+    public function add()
     {
-        if (isset($_SESSION['RefPays'])) {
-            $pays = $_SESSION['RefPays'];
-        } else {
-            $pays = $_POST['RefPays'];
+        $refCaisse = $_POST['RefCaisse'];
+        $refProduit = $_POST['RefProduit'];
+        $refType = $_POST['RefType'];
+        $numPhone = $_POST['NumPhone'];
+        $montantTransaction = $_POST['MontantTransaction'];
+
+        // Check for duplicate operations within the last 5 minutes
+        if ($this->hasDuplicateTransaction($refCaisse, $refProduit, $refType, $numPhone, $montantTransaction)) {
+            return false; // Duplicate found, handle accordingly
         }
 
-        $requete = $this->dao->prepare("INSERT INTO TbleRemittance(RefCaisse,RefProduit,RefType,NumPhone,NomComplet,MontantTransaction,Insert_id,RefPays) VALUES(:RefCaisse,:RefProduit,:RefType,:NumPhone,:NomComplet,:MontantTransaction,:Insert_id,:RefPays)");
-        $requete->bindValue(':RefCaisse', $_POST['RefCaisse'], \PDO::PARAM_INT);
-        $requete->bindValue(':RefProduit', $_POST['RefProduit'], \PDO::PARAM_INT);
-        $requete->bindValue(':RefType', $_POST['RefType'], \PDO::PARAM_INT);
-        $requete->bindValue(':NumPhone', $_POST['NumPhone'], \PDO::PARAM_STR);
-        $requete->bindValue(':NomComplet', $_POST['NomComplet'], \PDO::PARAM_STR);
-        $requete->bindValue(':MontantTransaction', $_POST['MontantTransaction'], \PDO::PARAM_STR);
-        $requete->bindValue(':Insert_id', $_SESSION['RefUsers'], \PDO::PARAM_INT);
-        $requete->bindValue(':RefPays', $pays, \PDO::PARAM_INT);
-        $requete->execute();
-        $id = $this->dao->lastInsertId();
-        if (!empty($_POST['Antidate'])) {
-            $time = $_POST['Antidate'] . ' ' . date('H:i:s');
-            $this->Update($time, $id);
+        $refPays = isset($_SESSION['RefPays']) ? $_SESSION['RefPays'] : $_POST['RefPays'];
+        $nomComplet = $_POST['NomComplet'];
+        $insertId = $_SESSION['RefUsers'];
+        $antidate = $_POST['Antidate'] ?? '';
+
+        $sql = "INSERT INTO TbleRemittance (RefCaisse, RefProduit, RefType, NumPhone, NomComplet, MontantTransaction, Insert_id, RefPays)
+            VALUES (:RefCaisse, :RefProduit, :RefType, :NumPhone, :NomComplet, :MontantTransaction, :Insert_id, :RefPays)";
+
+        try {
+            $stmt = $this->dao->prepare($sql);
+            $stmt->bindValue(':RefCaisse', $refCaisse, \PDO::PARAM_INT);
+            $stmt->bindValue(':RefProduit', $refProduit, \PDO::PARAM_INT);
+            $stmt->bindValue(':RefType', $refType, \PDO::PARAM_INT);
+            $stmt->bindValue(':NumPhone', $numPhone, \PDO::PARAM_STR);
+            $stmt->bindValue(':NomComplet', $nomComplet, \PDO::PARAM_STR);
+            $stmt->bindValue(':MontantTransaction', $montantTransaction, \PDO::PARAM_STR);
+            $stmt->bindValue(':Insert_id', $insertId, \PDO::PARAM_INT);
+            $stmt->bindValue(':RefPays', $refPays, \PDO::PARAM_INT);
+
+            $stmt->execute();
+            $id = $this->dao->lastInsertId();
+
+            if (!empty($antidate)) {
+                $timestamp = $antidate . ' ' . date('H:i:s');
+                $this->updateTransactionTimestamp($id, $timestamp);
+            }
+        } catch (\PDOException $e) {
+            // Handle database errors (e.g., log, display a message, or roll back the transaction)
+            // Don't forget to replace this with proper error handling
+            error_log('Database Error: ' . $e->getMessage());
+            return false;
         }
+
+        return true; // Transaction added successfully
     }
+
+    private function hasDuplicateTransaction($refCaisse, $refProduit, $refType, $numPhone, $montantTransaction)
+    {
+        $fiveMinutesAgo = date('Y-m-d H:i:s', strtotime('-5 minutes'));
+        $sql = "SELECT * FROM TbleRemittance 
+            WHERE RefCaisse = :RefCaisse 
+            AND RefProduit = :RefProduit 
+            AND RefType = :RefType 
+            AND NumPhone = :NumPhone 
+            AND MontantTransaction = :MontantTransaction 
+            AND Insert_time > :fiveMinutesAgo";
+
+        $stmt = $this->dao->prepare($sql);
+        $stmt->bindValue(':RefCaisse', $refCaisse, \PDO::PARAM_INT);
+        $stmt->bindValue(':RefProduit', $refProduit, \PDO::PARAM_INT);
+        $stmt->bindValue(':RefType', $refType, \PDO::PARAM_INT);
+        $stmt->bindValue(':NumPhone', $numPhone, \PDO::PARAM_STR);
+        $stmt->bindValue(':MontantTransaction', $montantTransaction, \PDO::PARAM_STR);
+        $stmt->bindValue(':fiveMinutesAgo', $fiveMinutesAgo, \PDO::PARAM_STR);
+        $stmt->execute();
+
+        return !empty($stmt->fetchAll());
+    }
+
+    private function updateTransactionTimestamp($transactionId, $timestamp)
+    {
+        $sql = "UPDATE TbleRemittance SET Insert_time = :timestamp WHERE RefRemittance = :RefRemittance";
+        $stmt = $this->dao->prepare($sql);
+        $stmt->bindValue(':timestamp', $timestamp, \PDO::PARAM_STR);
+        $stmt->bindValue(':RefRemittance', $transactionId, \PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+
+
+
+
+
+
 
     public function ListeOperations($date)
     {

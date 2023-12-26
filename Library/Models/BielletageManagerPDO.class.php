@@ -126,6 +126,11 @@ class BielletageManagerPDO extends BielletageManager
     }
     public function Add()
     {
+
+        var_dump($_POST);
+
+
+
         if (!empty($_POST['Antidate'])) {
             $date = $_POST['Antidate'];
         } else {

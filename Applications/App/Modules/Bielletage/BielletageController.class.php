@@ -312,8 +312,7 @@ class BielletageController extends \Library\BackController
         }
 
         // Si toutes les vérifications sont passées, ajouter l'opération
-        print_r($_POST);
-        // $this->managers->getManagerOf("Bielletage")->Add();
+        $this->managers->getManagerOf("Bielletage")->Add();
     }
 
     // Les fonctions auxiliaires telles que isRequiredApprovisionnement(), isValidMontantVersement(), et isValidSoldeCaisse()

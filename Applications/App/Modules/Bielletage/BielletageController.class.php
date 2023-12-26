@@ -263,59 +263,56 @@ class BielletageController extends \Library\BackController
 
     public function executeAdd(\Library\HTTPRequest $request)
     {
+        $RefCaisse = $request->postData('RefCaisse');
+        $RefType = $request->postData('RefType');
+        $TypeAppro = $request->postData('TypeAppro');
+        $MontantVersement = $request->postData('MontantVersement');
+        $Antidate = $request->postData('Antidate');
 
+        $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($RefCaisse);
+        $RefAgency = $GetAgencyUsingCaisseID['RefAgency'];
+        $Today = date('Y-m-d');
 
-        var_dump($_POST);
-        // $RefCaisse = $request->postData('RefCaisse');
-        // $RefType = $request->postData('RefType');
-        // $TypeAppro = $request->postData('TypeAppro');
-        // $MontantVersement = $request->postData('MontantVersement');
-        // $Antidate = $request->postData('Antidate');
+        // Redirection avec message
+        $redirectWithMessage = function ($type, $text, $number, $RefType) {
+            $_SESSION['message'] = compact('type', 'text', 'number');
+            $this->app()->httpResponse()->redirect('/bielletage/' . $RefType);
+        };
 
-        // $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($RefCaisse);
-        // $RefAgency = $GetAgencyUsingCaisseID['RefAgency'];
-        // $Today = date('Y-m-d');
+        // Valider le solde de la veille
+        $balanceError = $this->ValidYesterdaySold($RefAgency, $Today);
+        if ($balanceError) {
+            $redirectWithMessage('error', $balanceError, 5, $RefType); // Utilisez le nu)méro d'erreur approprié
+            return;
+        }
 
-        // // Redirection avec message
-        // $redirectWithMessage = function ($type, $text, $number, $RefType) {
-        //     $_SESSION['message'] = compact('type', 'text', 'number');
-        //     $this->app()->httpResponse()->redirect('/bielletage/' . $RefType);
-        // };
+        // Vérifier pour antidate
+        if (!empty($Antidate)) {
+            // Traitement spécifique pour les transactions antidatées
+            $this->managers->getManagerOf("Bielletage")->Add();
+            return;
+        }
 
-        // // Valider le solde de la veille
-        // $balanceError = $this->ValidYesterdaySold($RefAgency, $Today);
-        // if ($balanceError) {
-        //     $redirectWithMessage('error', $balanceError, 5, $RefType); // Utilisez le nu)méro d'erreur approprié
-        //     return;
-        // }
+        // Vérifier si l'approvisionnement est requis
+        if ($this->isRequiredApprovisionnement($RefType, $RefAgency, $Today)) {
+            $redirectWithMessage('warning', 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération', 2, $RefType);
+            return;
+        }
 
-        // // Vérifier pour antidate
-        // if (!empty($Antidate)) {
-        //     // Traitement spécifique pour les transactions antidatées
-        //     $this->managers->getManagerOf("Bielletage")->Add();
-        //     return;
-        // }
+        // Vérifier le montant du versement par rapport à la réserve de la veille
+        if ($RefType == 3 && $TypeAppro == 1 && !$this->isValidMontantVersement($MontantVersement, $RefAgency, $Today)) {
+            $redirectWithMessage('warning', 'Le montant de la transaction est supérieur au solde de la réserve.', 2, $RefType);
+            return;
+        }
 
-        // // Vérifier si l'approvisionnement est requis
-        // if ($this->isRequiredApprovisionnement($RefType, $RefAgency, $Today)) {
-        //     $redirectWithMessage('warning', 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération', 2, $RefType);
-        //     return;
-        // }
+        // Vérifier le montant du versement par rapport au solde actuel de la caisse
+        if (in_array($RefType, [2, 4, 5]) && !$this->isValidSoldeCaisse($MontantVersement, $RefCaisse, $Today)) {
+            $redirectWithMessage('warning', 'Le montant de la transaction est supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou contactez votre administrateur.', 2, $RefType);
+            return;
+        }
 
-        // // Vérifier le montant du versement par rapport à la réserve de la veille
-        // if ($RefType == 3 && $TypeAppro == 1 && !$this->isValidMontantVersement($MontantVersement, $RefAgency, $Today)) {
-        //     $redirectWithMessage('warning', 'Le montant de la transaction est supérieur au solde de la réserve.', 2, $RefType);
-        //     return;
-        // }
-
-        // // Vérifier le montant du versement par rapport au solde actuel de la caisse
-        // if (in_array($RefType, [2, 4, 5]) && !$this->isValidSoldeCaisse($MontantVersement, $RefCaisse, $Today)) {
-        //     $redirectWithMessage('warning', 'Le montant de la transaction est supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou contactez votre administrateur.', 2, $RefType);
-        //     return;
-        // }
-
-        // // Si toutes les vérifications sont passées, ajouter l'opération
-        // $this->managers->getManagerOf("Bielletage")->Add();
+        // Si toutes les vérifications sont passées, ajouter l'opération
+        $this->managers->getManagerOf("Bielletage")->Add();
     }
 
     // Les fonctions auxiliaires telles que isRequiredApprovisionnement(), isValidMontantVersement(), et isValidSoldeCaisse()

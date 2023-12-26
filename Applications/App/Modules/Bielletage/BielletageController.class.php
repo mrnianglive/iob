@@ -275,13 +275,7 @@ class BielletageController extends \Library\BackController
         $Today = date('Y-m-d');
 
         var_dump($GetAgencyUsingCaisseID);
-        var_dump($RefAgency);
-        var_dump($Today);
-        var_dump($RefType);
-        var_dump($TypeAppro);
-        var_dump($MontantVersement);
-        var_dump($Antidate);
-        var_dump($RefCaisse);
+
 
 
         // // Redirection avec message

@@ -274,6 +274,16 @@ class BielletageController extends \Library\BackController
         $RefAgency = $GetAgencyUsingCaisseID['RefAgency'];
         $Today = date('Y-m-d');
 
+        var_dump($GetAgencyUsingCaisseID);
+        var_dump($RefAgency);
+        var_dump($Today);
+        var_dump($RefType);
+        var_dump($TypeAppro);
+        var_dump($MontantVersement);
+        var_dump($Antidate);
+        var_dump($RefCaisse);
+
+
         // Redirection avec message
         $redirectWithMessage = function ($type, $text, $number, $RefType) {
             $_SESSION['message'] = compact('type', 'text', 'number');

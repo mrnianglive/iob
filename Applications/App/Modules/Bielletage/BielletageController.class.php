@@ -274,22 +274,22 @@ class BielletageController extends \Library\BackController
         $RefAgency = $GetAgencyUsingCaisseID['RefAgency'];
         $Today = date('Y-m-d');
 
-        var_dump($GetAgencyUsingCaisseID);
 
 
 
-        // // Redirection avec message
-        // $redirectWithMessage = function ($type, $text, $number, $RefType) {
-        //     $_SESSION['message'] = compact('type', 'text', 'number');
-        //     $this->app()->httpResponse()->redirect('/bielletage/' . $RefType);
-        // };
 
-        // // Valider le solde de la veille
-        // $balanceError = $this->ValidYesterdaySold($RefAgency, $Today);
-        // if ($balanceError) {
-        //     $redirectWithMessage('error', $balanceError, 5, $RefType); // Utilisez le nu)méro d'erreur approprié
-        //     return;
-        // }
+        // Redirection avec message
+        $redirectWithMessage = function ($type, $text, $number, $RefType) {
+            $_SESSION['message'] = compact('type', 'text', 'number');
+            $this->app()->httpResponse()->redirect('/bielletage/' . $RefType);
+        };
+
+        // Valider le solde de la veille
+        $balanceError = $this->ValidYesterdaySold($RefAgency, $Today);
+        if ($balanceError) {
+            $redirectWithMessage('error', $balanceError, 5, $RefType); // Utilisez le nu)méro d'erreur approprié
+            return;
+        }
 
         // // Vérifier pour antidate
         // if (!empty($Antidate)) {

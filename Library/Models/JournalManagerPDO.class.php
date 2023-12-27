@@ -1389,4 +1389,13 @@ class JournalManagerPDO extends JournalManager
         }
         return null;
     }
+
+    public function getSingleOperation($RefOperations)
+    {
+        $query = $this->dao->prepare("SELECT * FROM TbleOperations WHERE RefOperations = :RefOperations");
+        $query->bindValue(':RefOperations', $RefOperations, \PDO::PARAM_INT);
+        $query->execute();
+        $result = $query->fetch();
+        return $result;
+    }
 }

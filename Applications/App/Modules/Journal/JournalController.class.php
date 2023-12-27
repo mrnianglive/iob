@@ -99,12 +99,29 @@ class JournalController extends \Library\BackController
 
     public function executeDelete(\Library\HTTPRequest $request)
     {
-        $this->page->addVar("titles", "Suppresion "); // Titre de la page
-        $this->managers->getManagerOf("Journal")->DeleteOperations($request->getData('id'));
-        $_SESSION['message']['type'] = 'success';
-        $_SESSION['message']['text'] = 'Opération supprimée avec succès';
-        $_SESSION['message']['number'] = 2;
-        $this->app()->httpResponse()->redirect('/Journal/index'); //Retour en arriere
+        $this->page->addVar("titles", "Suppression ");
+
+        if ($this->isOperationClosed($request->getData('id'))) {
+            $this->setMessageAndRedirect('error', 'Impossible de supprimer une opération d\'un jour fermé');
+        } else {
+            $this->managers->getManagerOf("Journal")->DeleteOperations($request->getData('id'));
+            $this->setMessageAndRedirect('success', 'Opération supprimée avec succès');
+        }
+    }
+
+    private function isOperationClosed($id)
+    {
+        $operation = $this->managers->getManagerOf("Journal")->getSingleOperation($id);
+        $day = $operation['Approve2_Time'];
+        $agency = $operation['RefAgency'];
+
+        return $this->managers->getManagerOf("Journal")->CheckDailyClose($agency, $day);
+    }
+
+    private function setMessageAndRedirect($type, $text)
+    {
+        $_SESSION['message'] = ['type' => $type, 'text' => $text, 'number' => 2];
+        $this->app()->httpResponse()->redirect('/Journal/index');
     }
 
     public function executePetitecaisse(\Library\HTTPRequest $request)

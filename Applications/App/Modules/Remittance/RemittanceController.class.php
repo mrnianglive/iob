@@ -146,12 +146,26 @@ class RemittanceController extends \Library\BackController
     }
 
 
+    private function isOperationClosed($id)
+    {
+        $operation = $this->managers->getManagerOf("Remittance")->getSingleOperation($id);
+        $day = $operation['Insert_time'];
+        $agency = $operation['RefAgency'];
 
+        return $this->managers->getManagerOf("Journal")->CheckDailyClose($agency, $day);
+    }
 
     public function executeDelete(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Suppresion "); // Titre de la page
-        $this->managers->getManagerOf("Remittance")->DeleteOperations($request->getData('id'));
+        if ($this->isOperationClosed($request->getData('id'))) {
+            $_SESSION['message']['type'] = 'warning';
+            $_SESSION['message']['text'] = 'Impossible de supprimer une opération d\'un jour fermé';
+            $_SESSION['message']['number'] = 2;
+            $this->app()->httpResponse()->redirect('/remittances/index');
+        } else {
+            $this->managers->getManagerOf("Remittance")->DeleteOperations($request->getData('id'));
+        }
         $_SESSION['message']['type'] = 'success';
         $_SESSION['message']['text'] = 'Suppression réussie !';
         $_SESSION['message']['number'] = 2;

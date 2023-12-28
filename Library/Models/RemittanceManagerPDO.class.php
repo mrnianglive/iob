@@ -196,4 +196,13 @@ class RemittanceManagerPDO extends RemittanceManager
         }
         return $result['SoldeRemittance'];
     }
+
+    public function getSingleOperation($id)
+    {
+        $requete = $this->dao->prepare('SELECT *  FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE RefRemittance=:RefRemittance ');  //AND RefCaisse=:RefCaisse  
+        $requete->bindValue(':RefRemittance', $id, \PDO::PARAM_INT);
+        $requete->execute();
+        $result = $requete->fetch();
+        return $result;
+    }
 }

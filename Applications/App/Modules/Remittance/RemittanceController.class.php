@@ -26,6 +26,7 @@ class RemittanceController extends \Library\BackController
         $this->page->addVar('Value', $request->postData('RefAgency'));
         $SoldeRemittanceVersement = 0;
         $SoldeRemittanceRetrait = 0;
+        $Antidate = $_POST['Antidate'];
 
         if ($request->method() == 'POST' && $request->postData('RefCaisse')) {
             $RefCaisse = $request->postData('RefCaisse');
@@ -44,6 +45,12 @@ class RemittanceController extends \Library\BackController
             $SoldeActuelleCaisse = $this->managers->getManagerOf("Journal")->SoldeActuelleCaisse($Today, $RefCaisse);
             $MontantTransaction = $request->postData('MontantTransaction');
             $RefType = $request->postData('RefType');
+
+
+            if (!empty($Antidate)) {
+                $this->managers->getManagerOf("Remittance")->Add($request);
+                return;
+            }
 
             if ($RefType == 2 && $MontantTransaction > $SoldeActuelleCaisse) {
                 $this->addFlash('warning', 'Le montant de la transaction est supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou contactez votre administrateur.');

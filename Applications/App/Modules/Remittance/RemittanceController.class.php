@@ -134,7 +134,7 @@ class RemittanceController extends \Library\BackController
         $currentDateDateTime = new DateTime($date);
 
         // Check if last known balance is not from yesterday
-        if ($lastBalanceDateTime->format('Y-m-d') != $currentDateDateTime->modify('-1 day')->format('Y-m-d')) {
+        if ($lastBalanceDateTime->format('Y-m-d') != $currentDateDateTime->modify('-3 day')->format('Y-m-d')) {
             // Check if there were operations since the last known balance
             if ($this->managers->getManagerOf("Journal")->HasOperationsSinceLastBalance($RefAgency, $YesterdayReserveDate)) {
                 // Prompt user to close the books for the last operational day

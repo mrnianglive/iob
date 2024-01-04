@@ -213,15 +213,15 @@ class BielletageController extends \Library\BackController
         //Check if user has permission to view invoice Using CaisseID and UserID
 
 
-        $Invoice  = $this->managers->getManagerOf("Bielletage")->GetInvoice($reference); //Recuperation de la liste
 
-        $userHasPermission = $this->managers->getManagerOf("Pannel")->VerifCaisse($Invoice['RefCaisse'], $_SESSION['RefUsers']);
-        if (!$userHasPermission) {
-            $_SESSION['message']['type'] = 'warning';
-            $_SESSION['message']['text'] = 'Vous n\'avez pas la permission de voir cette facture';
-            $_SESSION['message']['number'] = 2;
-            $this->app()->httpResponse()->redirect('/'); // Redirection avec message
-        }
+        // $userHasPermission = $this->managers->getManagerOf("Pannel")->VerifCaisse($Invoice['RefCaisse'], $_SESSION['RefUsers']);
+        // if (!$userHasPermission) {
+        //     $_SESSION['message']['type'] = 'warning';
+        //     $_SESSION['message']['text'] = 'Vous n\'avez pas la permission de voir cette facture';
+        //     $_SESSION['message']['number'] = 2;
+        //     $this->app()->httpResponse()->redirect('/'); // Redirection avec message
+        // }
+        $Invoice  = $this->managers->getManagerOf("Bielletage")->GetInvoice($reference); //Recuperation de la liste
 
         $this->page->addVar("GetInvoice", $Invoice); // Creation de la variable, ajout d'une variable a la vue
         $getResetStatus = $this->managers->getManagerOf("Bielletage")->getResetStatus($reference);

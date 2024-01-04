@@ -199,23 +199,36 @@ class BielletageController extends \Library\BackController
     }
 
 
-    public function executeInvoice(\Library\HTTPRequest $request)
-    {
+    // public function executeInvoice(\Library\HTTPRequest $request)
+    // {
 
-        $this->page->addVar("titles", "Bordereau"); // Titre de la page
-        $this->page->setTemplate('bordereau');
-        if ($request->method() == 'POST') {
-            $reference  = $request->postData('id');
-        } else {
-            $reference = $request->getData('id');
-        }
-        $Invoice  = $this->managers->getManagerOf("Bielletage")->GetInvoice($reference); //Recuperation de la liste
-        $this->page->addVar("GetInvoice", $Invoice); // Creation de la variable, ajout d'une variable a la vue
-        $getResetStatus = $this->managers->getManagerOf("Bielletage")->getResetStatus($reference);
-        $this->page->addVar("getResetStatus", $getResetStatus); // Creation de la variable, ajout d'une variable a la vue
-        $numberToLetter = $this->managers->getManagerOf('Arreter')->NumberToLetter(intval($Invoice['MontantVersement']));
-        $this->page->addVar("numberToLetter", $numberToLetter); // Creation de la variable, ajout d'une variable a la vue
-    }
+    //     $this->page->addVar("titles", "Bordereau"); // Titre de la page
+    //     $this->page->setTemplate('bordereau');
+    //     if ($request->method() == 'POST') {
+    //         $reference  = $request->postData('id');
+    //     } else {
+    //         $reference = $request->getData('id');
+    //     }
+
+    //     //Check if user has permission to view invoice Using CaisseID and UserID
+
+
+    //     $Invoice  = $this->managers->getManagerOf("Bielletage")->GetInvoice($reference); //Recuperation de la liste
+
+    //     $userHasPermission = $this->managers->getManagerOf("Pannel")->VerifCaisse($Invoice['RefCaisse'], $_SESSION['RefUsers']);
+    //     if (!$userHasPermission) {
+    //         $_SESSION['message']['type'] = 'warning';
+    //         $_SESSION['message']['text'] = 'Vous n\'avez pas la permission de voir cette facture';
+    //         $_SESSION['message']['number'] = 2;
+    //         $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
+    //     }
+
+    //     $this->page->addVar("GetInvoice", $Invoice); // Creation de la variable, ajout d'une variable a la vue
+    //     $getResetStatus = $this->managers->getManagerOf("Bielletage")->getResetStatus($reference);
+    //     $this->page->addVar("getResetStatus", $getResetStatus); // Creation de la variable, ajout d'une variable a la vue
+    //     $numberToLetter = $this->managers->getManagerOf('Arreter')->NumberToLetter(intval($Invoice['MontantVersement']));
+    //     $this->page->addVar("numberToLetter", $numberToLetter); // Creation de la variable, ajout d'une variable a la vue
+    // }
     // public function executeAdd(\Library\HTTPRequest $request)
     // {
     //     //old  CODE 
@@ -262,6 +275,65 @@ class BielletageController extends \Library\BackController
     //         }
     //     }
     // }
+
+
+
+    public function executeInvoice(\Library\HTTPRequest $request)
+    {
+        $this->configurePage();
+
+        $reference = $this->getReferenceFromRequest($request);
+
+        $invoice = $this->managers->getManagerOf("Bielletage")->getInvoice($reference);
+
+        $this->checkInvoicePermission($invoice);
+
+        $this->setTemplateVariables($invoice);
+    }
+
+    private function configurePage()
+    {
+        $this->page->addVar("titles", "Bordereau");
+        $this->page->setTemplate('bordereau');
+    }
+
+    private function getReferenceFromRequest(\Library\HTTPRequest $request)
+    {
+        return $request->method() == 'POST' ? $request->postData('id') : $request->getData('id');
+    }
+
+    private function checkInvoicePermission($invoice)
+    {
+        $userHasPermission = $this->managers->getManagerOf("Users")->VerifCaisse(
+            $invoice['RefCaisse'],
+            $_SESSION['RefUsers']
+        );
+
+        if (!$userHasPermission) {
+            $this->handlePermissionDenied();
+        }
+    }
+
+    private function handlePermissionDenied()
+    {
+        $_SESSION['message'] = [
+            'type'   => 'warning',
+            'text'   => 'Vous n\'avez pas la permission de voir cette facture',
+            'number' => 2
+        ];
+
+        $this->app()->httpResponse()->redirect('/');
+    }
+
+    private function setTemplateVariables($invoice)
+    {
+        $this->page->addVar("GetInvoice", $invoice);
+        $resetStatus = $this->managers->getManagerOf("Bielletage")->getResetStatus($invoice['RefInvoice']);
+        $this->page->addVar("getResetStatus", $resetStatus);
+
+        $amountInWords = $this->managers->getManagerOf('Arreter')->convertAmountToWords(intval($invoice['MontantVersement']));
+        $this->page->addVar("amountInWords", $amountInWords);
+    }
 
 
     public function executeAdd(\Library\HTTPRequest $request)

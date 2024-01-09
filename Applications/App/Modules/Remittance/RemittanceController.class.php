@@ -33,6 +33,13 @@ class RemittanceController extends \Library\BackController
             $RefAgency = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($RefCaisse)['RefAgency'];
             $Today = date('Y-m-d');
 
+
+
+            if (!empty($Antidate)) {
+                $this->managers->getManagerOf("Remittance")->Add($request);
+                return;
+            }
+
             // Validation du solde de la veille
             $balanceError = $this->ValidYesterdaySold($RefAgency, $Today);
             if ($balanceError) {
@@ -47,10 +54,6 @@ class RemittanceController extends \Library\BackController
             $RefType = $request->postData('RefType');
 
 
-            if (!empty($Antidate)) {
-                $this->managers->getManagerOf("Remittance")->Add($request);
-                return;
-            }
 
             if ($RefType == 2 && $MontantTransaction > $SoldeActuelleCaisse) {
                 $this->addFlash('warning', 'Le montant de la transaction est supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou contactez votre administrateur.');
@@ -59,8 +62,6 @@ class RemittanceController extends \Library\BackController
             }
 
             // D'autres vérifications nécessaires...
-
-
 
             // Si toutes les vérifications sont bonnes, on peut ajouter l'opération
             $this->managers->getManagerOf("Remittance")->Add($request);

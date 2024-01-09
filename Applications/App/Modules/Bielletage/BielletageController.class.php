@@ -289,17 +289,17 @@ class BielletageController extends \Library\BackController
             $this->app()->httpResponse()->redirect('/bielletage/' . $RefType);
         };
 
-        // Valider le solde de la veille
-        $balanceError = $this->ValidYesterdaySold($RefAgency, $Today);
-        if ($balanceError) {
-            $redirectWithMessage('error', $balanceError, 5, $RefType); // Utilisez le nu)méro d'erreur approprié
-            return;
-        }
-
         // Vérifier pour antidate
         if (!empty($Antidate)) {
             // Traitement spécifique pour les transactions antidatées
             $this->managers->getManagerOf("Bielletage")->Add();
+            return;
+        }
+
+        // Valider le solde de la veille
+        $balanceError = $this->ValidYesterdaySold($RefAgency, $Today);
+        if ($balanceError) {
+            $redirectWithMessage('error', $balanceError, 5, $RefType); // Utilisez le nu)méro d'erreur approprié
             return;
         }
 
@@ -327,8 +327,6 @@ class BielletageController extends \Library\BackController
 
     // Les fonctions auxiliaires telles que isRequiredApprovisionnement(), isValidMontantVersement(), et isValidSoldeCaisse()
     // seraient définies en dehors de cette fonction avec leur logique respective.
-
-
 
     private function isRequiredApprovisionnement($RefType, $RefAgency, $Today)
     {
@@ -372,11 +370,6 @@ class BielletageController extends \Library\BackController
         // If the balance is up-to-date or no operations since last balance, return null indicating no error
         return null;
     }
-
-
-
-
-
 
     public function executeDashboard(\Library\HTTPRequest $request)
     {

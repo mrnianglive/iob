@@ -193,6 +193,10 @@ class JournalController extends \Library\BackController
         $pageTitle = "Journal de Caisse des opérations non vérifiées";
         $this->page->addVar("titles", $pageTitle);
 
+        $pannelManager = $this->managers->getManagerOf("Pannel");
+        $ListeAgence = $pannelManager->ListeAgence();
+        $this->page->addVar("ListeAgence", $ListeAgence);
+
         $JournalManager = $this->managers->getManagerOf("Journal");
 
         $Operations = $JournalManager->GetOperationsNonVerifiees();

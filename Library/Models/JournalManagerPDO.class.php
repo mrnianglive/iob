@@ -1398,4 +1398,32 @@ class JournalManagerPDO extends JournalManager
         $result = $query->fetch();
         return $result;
     }
+
+
+    public function GetOperationsNonVerifiees()
+    {
+        $requete = $this->dao->prepare(
+            '
+        SELECT *
+        FROM operations
+        INNER JOIN TbleChmod ON TbleChmod.RefCaisse = operations.RefCaisse
+        WHERE
+            operations.Approve2_Id IS NOT NULL
+            AND operations.Reset_Id IS NULL
+            AND Approve2_Time = :jour
+            AND TbleChmod.RefUsers = :RefUsers
+            AND (operations.RefType = 1 OR operations.RefType = 2)
+            AND operations.Validate != 2
+            AND operations.datePayement > DATE_ADD(:jour, INTERVAL 3 DAY)
+        ORDER BY operations.datePayement ASC'
+        );
+
+        $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
+        $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->execute();
+
+        $data = $requete->fetchAll();
+
+        return $data;
+    }
 }

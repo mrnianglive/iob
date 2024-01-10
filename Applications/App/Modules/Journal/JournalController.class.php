@@ -185,4 +185,25 @@ class JournalController extends \Library\BackController
         $_SESSION['message']['number'] = 3;
         $this->app()->httpResponse()->redirect("/Journal/petite_caisse"); //Retour en arriere
     }
+
+
+
+    public function executeNoverified(\Library\HTTPRequest $request)
+    {
+        $pageTitle = "Journal de Caisse des opérations non vérifiées";
+        $this->page->addVar("titles", $pageTitle);
+
+        $JournalManager = $this->managers->getManagerOf("Journal");
+
+        $Operations = $JournalManager->GetOperationsNonVerifiees();
+
+        $pannelManager = $this->managers->getManagerOf("Pannel");
+        $permissions = [];
+        $AllPermissions = $pannelManager->UserPermission();
+        foreach ($AllPermissions as $key => $value) {
+            $permissions[] = $value['access'];
+        }
+        $this->page->addVar('permission', $permissions);
+        $this->page->addVar('Operations', $Operations);
+    }
 }

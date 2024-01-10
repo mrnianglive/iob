@@ -29,6 +29,12 @@ class BielletageController extends \Library\BackController
 
 
 
+        $CountOperationsNonVerifiees
+            = $this->managers->getManagerOf("Journal")->CountOperationsNonVerifiees();
+        $this->page->addVar('CountOperationsNonVerifiees', $CountOperationsNonVerifiees);
+
+
+
 
         // Ajout des données à la vue
         $this->page->addVar("CheckOuverture", $data['checkOuverture']);

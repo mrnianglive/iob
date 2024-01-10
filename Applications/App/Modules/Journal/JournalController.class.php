@@ -197,6 +197,10 @@ class JournalController extends \Library\BackController
 
         $Operations = $JournalManager->GetOperationsNonVerifiees();
 
+        $CountOperationsNonVerifiees
+            = $this->managers->getManagerOf("Journal")->CountOperationsNonVerifiees();
+        $this->page->addVar('CountOperationsNonVerifiees', $CountOperationsNonVerifiees);
+
         $pannelManager = $this->managers->getManagerOf("Pannel");
         $permissions = [];
         $AllPermissions = $pannelManager->UserPermission();

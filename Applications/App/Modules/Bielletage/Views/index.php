@@ -1,67 +1,74 @@
 <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin') { ?>
-<form method="POST" id="formulaire">
-    <div class="input-group">
-        <div class="">
-            <select class="form-control" name="RefPays" tabindex="1" id="RefPays">
-                <option value="0">Pays</option>
-                <?php foreach ($Pays as $key => $Pays) { ?>
-                <option value="<?= $Pays['RefPays']; ?>"
-                    <?= (isset($_POST['RefPays']) and $_POST['RefPays'] == $Pays['RefPays']) ? 'selected' : '' ?>>
-                    <?= $Pays['nomPays']; ?>
-                </option>
-                <?php } ?>
-            </select>
+    <form method="POST" id="formulaire">
+        <div class="input-group">
+            <div class="">
+                <select class="form-control" name="RefPays" tabindex="1" id="RefPays">
+                    <option value="0">Pays</option>
+                    <?php foreach ($Pays as $key => $Pays) { ?>
+                        <option value="<?= $Pays['RefPays']; ?>" <?= (isset($_POST['RefPays']) and $_POST['RefPays'] == $Pays['RefPays']) ? 'selected' : '' ?>>
+                            <?= $Pays['nomPays']; ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+            &nbsp;
+            <div class="">
+                <select class="form-control" name="RefAgency" tabindex="1" id="RefAgency">
+                    <option value="" data-desired-agency="<?= (isset($Agence)) ? $Agence : 'Agence' ?>">
+                        Agence
+                    </option>
+                </select>
+            </div>
+            &nbsp;
+            <div class="">
+                <select class="form-control" name="RefCaisse" tabindex="1" id="RefCaisse">
+                    <option value="" data-desired-caisse="<?= (isset($Caisse)) ? $Caisse : 'Caisse' ?>">
+                        Caisse
+                    </option>
+                </select>
+            </div>
+            &nbsp;
+            <div class="">
+                <button type="submit" class="btn btn-primary" data-toggle="tooltip" title="Cliquez ici pour lancer la recherche">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
         </div>
-        &nbsp;
-        <div class="">
-            <select class="form-control" name="RefAgency" tabindex="1" id="RefAgency">
-                <option value="" data-desired-agency="<?= (isset($Agence)) ? $Agence : 'Agence' ?>">
-                    Agence
-                </option>
-            </select>
-        </div>
-        &nbsp;
-        <div class="">
-            <select class="form-control" name="RefCaisse" tabindex="1" id="RefCaisse">
-                <option value="" data-desired-caisse="<?= (isset($Caisse)) ? $Caisse : 'Caisse' ?>">
-                    Caisse
-                </option>
-            </select>
-        </div>
-        &nbsp;
-        <div class="">
-            <button type="submit" class="btn btn-primary" data-toggle="tooltip"
-                title="Cliquez ici pour lancer la recherche">
-                <i class="fas fa-search"></i>
-            </button>
-        </div>
-    </div>
-</form>
-&nbsp;
+    </form>
+    &nbsp;
 <?php } ?>
 
 <?php if ($FirstLogin === true) : ?>
-<?php if ($_SESSION['statut'] == 'ChefCaisse' || $_SESSION['statut'] == 'Caissier' || $_SESSION['statut'] == 'admin' || $_SESSION['statut'] == 'superadmin') : ?>
-<?php foreach ($Agence as $value) : ?>
-<?php if (!empty($value['CheckAgencyBalance']['error_message'])) : ?>
-<div class="alert alert-danger" role="alert">
-    <span><?= htmlspecialchars($value['CheckAgencyBalance']['error_message']) ?></span>
-</div>
-<?php elseif (!empty($value['CheckAgencyBalance']['success_message'])) : ?>
-<div class "alert alert-success" role="alert">
-    <span><?= htmlspecialchars($value['CheckAgencyBalance']['success_message']) ?></span>
-</div>
+    <?php if ($_SESSION['statut'] == 'ChefCaisse' || $_SESSION['statut'] == 'Caissier' || $_SESSION['statut'] == 'admin' || $_SESSION['statut'] == 'superadmin') : ?>
+        <?php foreach ($Agence as $value) : ?>
+            <?php if (!empty($value['CheckAgencyBalance']['error_message'])) : ?>
+                <div class="alert alert-danger" role="alert">
+                    <span><?= htmlspecialchars($value['CheckAgencyBalance']['error_message']) ?></span>
+                </div>
+            <?php elseif (!empty($value['CheckAgencyBalance']['success_message'])) : ?>
+                <div class "alert alert-success" role="alert">
+                    <span><?= htmlspecialchars($value['CheckAgencyBalance']['success_message']) ?></span>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <?php
+        if ($CountOperationsNonVerifiees > 0) {
+            echo '<div class="alert alert-danger" role="alert">
+            <span>Il y a ' . $CountOperationsNonVerifiees . ' opérations non vérifiées.</span>
+        </div>';
+        }
+        ?>
+    <?php endif; ?>
 <?php endif; ?>
-<?php endforeach; ?>
-<?php endif; ?>
-<?php endif; ?>
+
+
+
 <div class="row justify-content-center">
     <div class="col-lg-3 col-sm-6 col-xs-12">
         <div class="white-box analytics-info">
             <h3 class="box-title">DEPOT</h3>
             <ul class="list-inline two-part d-flex align-items-center mb-0">
-                <li class="ml-auto"><span
-                        class="counter text-danger"><?= number_format($SommeVersementGlobal, 0, '.', '.'); ?></span>
+                <li class="ml-auto"><span class="counter text-danger"><?= number_format($SommeVersementGlobal, 0, '.', '.'); ?></span>
                 </li>
             </ul>
             <span>CAISSE</span>
@@ -71,8 +78,7 @@
         <div class="white-box analytics-info">
             <h3 class="box-title">RETRAIT</h3>
             <ul class="list-inline two-part d-flex align-items-center mb-0">
-                <li class="ml-auto"><span
-                        class="counter text-purple"><?= number_format($SommeRetraitGlobal, 0, '.', '.'); ?></span>
+                <li class="ml-auto"><span class="counter text-purple"><?= number_format($SommeRetraitGlobal, 0, '.', '.'); ?></span>
                 </li>
             </ul>
             <span>CAISSE</span>
@@ -92,19 +98,16 @@
     </div>
     <div class="col-lg-3 col-sm-6 col-xs-12">
         <div class="white-box analytics-info">
-            <iframe
-                src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=fr&size=small&timezone=Africa%2FBamako"
-                width="100%" height="90" frameborder="0" seamless></iframe>
+            <iframe src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=fr&size=small&timezone=Africa%2FBamako" width="100%" height="90" frameborder="0" seamless></iframe>
         </div>
     </div>
 </div>
 <?php if (in_array($_SESSION['statut'], ['ChefCaisse', 'Caissier', 'admin'])) : ?>
-<?php foreach ($links as $name) : ?>
-<a href="<?= htmlspecialchars($name['url']); ?>" <?= $name['target'] == 1 ? 'target="_blank"' : ''; ?>
-    class="btn btn-<?= htmlspecialchars($name['btn']); ?> mt-1">
-    <i class="fa-solid fa-link"></i> <?= htmlspecialchars($name['url_name']); ?>
-</a>
-<?php endforeach; ?>
+    <?php foreach ($links as $name) : ?>
+        <a href="<?= htmlspecialchars($name['url']); ?>" <?= $name['target'] == 1 ? 'target="_blank"' : ''; ?> class="btn btn-<?= htmlspecialchars($name['btn']); ?> mt-1">
+            <i class="fa-solid fa-link"></i> <?= htmlspecialchars($name['url_name']); ?>
+        </a>
+    <?php endforeach; ?>
 <?php endif; ?>
 &nbsp;
 
@@ -123,7 +126,7 @@
 
                             <th class="border-top-0">RECU</th>
                             <?php if (in_array(1, $permission) || $_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
-                            <th class="border-top-0">Action</th>
+                                <th class="border-top-0">Action</th>
                             <?php } ?>
                             <th class="border-top-0">REF</th>
                             <th class="border-top-0">AGENCE</th>
@@ -139,30 +142,26 @@
                     </thead>
                     <tbody>
                         <?php foreach ($Operation as $key => $value) { ?>
-                        <tr class="advance-table-row">
-                            <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
-                                    class="btn btn-primary" data-toggle="tooltip"
-                                    title="Cliquez ici pour imprimer le bordereau"><i class="fa fa-print"></i> </td>
-                            <?php if (in_array(1, $permission) || $_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
-                            <td><a href="/Journal/delete/<?= $value['RefOperations']; ?>" class="btn btn-xs btn-danger"
-                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i
-                                        class="fa fa-trash"></i></a>
-                            </td>
-                            <?php } ?>
-                            <td> <?= $value['RefOperations']; ?></td>
-                            <td> <?= $value['NameAgency']; ?></td>
-                            <td> <?= $value['NameProduit']; ?></td>
-                            <td> <?= $value['NameCaisse']; ?></td>
-                            <td><?= $value['NameType']; ?></td>
-                            <td><?= $value['NameClient']; ?></td>
-                            <td class="account" data-account="<?= $value['NumCompte']; ?>">
-                                <?= $value['NumCompte']; ?>
-                            </td>
+                            <tr class="advance-table-row">
+                                <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank" class="btn btn-primary" data-toggle="tooltip" title="Cliquez ici pour imprimer le bordereau"><i class="fa fa-print"></i> </td>
+                                <?php if (in_array(1, $permission) || $_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
+                                    <td><a href="/Journal/delete/<?= $value['RefOperations']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                <?php } ?>
+                                <td> <?= $value['RefOperations']; ?></td>
+                                <td> <?= $value['NameAgency']; ?></td>
+                                <td> <?= $value['NameProduit']; ?></td>
+                                <td> <?= $value['NameCaisse']; ?></td>
+                                <td><?= $value['NameType']; ?></td>
+                                <td><?= $value['NameClient']; ?></td>
+                                <td class="account" data-account="<?= $value['NumCompte']; ?>">
+                                    <?= $value['NumCompte']; ?>
+                                </td>
 
-                            <td class="counter text-danger">
-                                <?= number_format($value['MontantVersement'], 0, '.', '.'); ?></td>
-                            <td><?= $value['Remarque']; ?></td>
-                        </tr>
+                                <td class="counter text-danger">
+                                    <?= number_format($value['MontantVersement'], 0, '.', '.'); ?></td>
+                                <td><?= $value['Remarque']; ?></td>
+                            </tr>
                         <?php } ?>
                     </tbody>
                 </table>
@@ -170,5 +169,4 @@
         </div>
     </div>
 </div>
-<a href="/dashboard" target="_blank" class="btn btn-secondary" data-toggle="tooltip"
-    title="Cliquez ici pour voir les stats">Dashboard</a>
+<a href="/dashboard" target="_blank" class="btn btn-secondary" data-toggle="tooltip" title="Cliquez ici pour voir les stats">Dashboard</a>

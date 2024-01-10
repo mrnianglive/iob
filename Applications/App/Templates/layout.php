@@ -141,16 +141,16 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/bielletage/1" aria-expanded="false"><i class="fa fa-plus" aria-hidden="true"></i><span class="hide-menu">Versement</span></a></li>
                             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/bielletage/2" aria-expanded="false"><i class="fa fa-minus" aria-hidden="true"></i><span class="hide-menu">Retrait</span></a></li>
                         <?php } ?>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/remittances/index" aria-expanded="false"><i class="fas fa-exchange" aria-hidden="true"></i><span class="hide-menu">Remittance</span> <span class="badge badge-danger"> Nouveau ! </span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/remittances/index" aria-expanded="false"><i class="fas fa-exchange" aria-hidden="true"></i><span class="hide-menu">Remittance</span></a></li>
 
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Journal/noverified" aria-expanded="false"><i class="fas fa-exchange" aria-hidden="true"></i><span class="hide-menu">Non Verifiée</span> <span class="badge badge-danger"> Nouveau ! </span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Journal/noverified" aria-expanded="false"><i class="fas fa-exchange" aria-hidden="true"></i><span class="hide-menu">Non Verifiées</span> <span class="badge badge-danger"> Important ! </span></a></li>
 
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Journal/petite_caisse" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Petite Caisse</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Journal/index" aria-expanded="false"><i class="fa fa-table" aria-hidden="true"></i><span class="hide-menu">Journal de Caisse</span></a></li>
 
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Caisse/transfertfond" aria-expanded="false"><i class="fa fa-share" aria-hidden="true"></i><span class="hide-menu">Sortie de Fond</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Caisse/ApproCaisse" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Appro Caisse</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Analytics/performance" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Performance</span> <span class="badge badge-danger"> Nouveau ! </span></a></li></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Analytics/performance" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Performance</span></a></li></a></li>
                         <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Niveau1' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'Control') { ?>
                             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Analytics/chart" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Chart</span></a></li>
 

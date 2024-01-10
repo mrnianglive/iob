@@ -1417,7 +1417,6 @@ class JournalManagerPDO extends JournalManager
         ORDER BY operations.datePayement ASC'
         );
 
-        $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
         $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
         $requete->execute();
 

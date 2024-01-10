@@ -1404,17 +1404,18 @@ class JournalManagerPDO extends JournalManager
     {
         $requete = $this->dao->prepare(
             '
-        SELECT *
-        FROM operations
-        INNER JOIN TbleChmod ON TbleChmod.RefCaisse = operations.RefCaisse
-        WHERE
-            operations.Approve2_Id IS NOT NULL
-            AND operations.Reset_Id IS NULL
-            AND TbleChmod.RefUsers = :RefUsers
-            AND (operations.RefType = 1 OR operations.RefType = 2)
-            AND operations.Validate =1
-            
-        ORDER BY operations.datePayement ASC'
+    SELECT *
+    FROM operations
+    INNER JOIN TbleChmod ON TbleChmod.RefCaisse = operations.RefCaisse
+    WHERE
+        operations.Approve2_Id IS NOT NULL
+        AND operations.Reset_Id IS NULL
+        AND TbleChmod.RefUsers = :RefUsers
+        AND (operations.RefType =:RefUSers OR operations.RefType = 2)
+        AND operations.Validate = 1
+        AND DATEDIFF(NOW(), operations.datePayement) > 3
+        AND YEAR(operations.datePayement) = YEAR(NOW())
+    ORDER BY operations.datePayement ASC'
         );
 
         $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);

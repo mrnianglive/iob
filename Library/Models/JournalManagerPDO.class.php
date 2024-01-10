@@ -1410,11 +1410,10 @@ class JournalManagerPDO extends JournalManager
         WHERE
             operations.Approve2_Id IS NOT NULL
             AND operations.Reset_Id IS NULL
-            AND Approve2_Time = :jour
             AND TbleChmod.RefUsers = :RefUsers
             AND (operations.RefType = 1 OR operations.RefType = 2)
-            AND operations.Validate != 2
-            AND operations.datePayement > DATE_ADD(:jour, INTERVAL 3 DAY)
+            AND operations.Validate =1
+            
         ORDER BY operations.datePayement ASC'
         );
 

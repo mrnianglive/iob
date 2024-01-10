@@ -51,13 +51,7 @@
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
-        <?php
-        if ($CountOperationsNonVerifiees > 0) {
-            echo '<div class="alert alert-danger" role="alert">
-            <span>Il y a ' . $CountOperationsNonVerifiees . ' opérations non vérifiées.</span>
-        </div>';
-        }
-        ?>
+
     <?php endif; ?>
 <?php endif; ?>
 

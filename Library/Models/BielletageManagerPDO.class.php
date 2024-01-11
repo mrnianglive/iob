@@ -96,6 +96,7 @@ class BielletageManagerPDO extends BielletageManager
             $params[':RefUsers'] = $_SESSION['RefUsers'];
         }
         //Group By RefOperations
+        $query .= ' LIMIT 10';
         $query .= ' GROUP BY operations.RefOperations ';
         $query .= ' ORDER BY operations.RefOperations DESC ';
 

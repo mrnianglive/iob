@@ -95,8 +95,9 @@ class BielletageManagerPDO extends BielletageManager
             $query .= ' AND TbleChmod.RefUsers=:RefUsers';
             $params[':RefUsers'] = $_SESSION['RefUsers'];
         }
+        //LIMIT 0, 100
+        $query .= ' LIMIT 0, 10';
         //Group By RefOperations
-        $query .= ' LIMIT 10';
         $query .= ' GROUP BY operations.RefOperations ';
         $query .= ' ORDER BY operations.RefOperations DESC ';
 

@@ -39,15 +39,15 @@ class BielletageController extends \Library\BackController
         $this->page->addVar("CheckOuverture", $data['checkOuverture']);
         $this->page->addVar('Operation', $data['operations']);
         $this->page->addVar('Agence', $data['agence']);
-        // $this->page->addVar('Solde', $data['solde']);
-        // $this->page->addVar('SoldeGlobal', $data['soldeGlobal']);
-        // $this->page->addVar('SommeVersement', $data['sommeVersement']);
-        // $this->page->addVar('SommeRetrait', $data['sommeRetrait']);
-        // $this->page->addVar('SommeVersementGlobal', $data['sommeVersementGlobal']);
-        // $this->page->addVar('SommeRetraitGlobal', $data['sommeRetraitGlobal']);
-        // $this->page->addVar('SommeRemittanceDepot', $data['sommeRemittanceDepot']);
-        // $this->page->addVar('SommeRemittanceRetrait', $data['sommeRemittanceRetrait']);
-        // $this->page->addVar('SoldeRemittance', $data['soldeRemittance']);
+        $this->page->addVar('Solde', $data['solde']);
+        $this->page->addVar('SoldeGlobal', $data['soldeGlobal']);
+        $this->page->addVar('SommeVersement', $data['sommeVersement']);
+        $this->page->addVar('SommeRetrait', $data['sommeRetrait']);
+        $this->page->addVar('SommeVersementGlobal', $data['sommeVersementGlobal']);
+        $this->page->addVar('SommeRetraitGlobal', $data['sommeRetraitGlobal']);
+        $this->page->addVar('SommeRemittanceDepot', $data['sommeRemittanceDepot']);
+        $this->page->addVar('SommeRemittanceRetrait', $data['sommeRemittanceRetrait']);
+        $this->page->addVar('SoldeRemittance', $data['soldeRemittance']);
         $this->page->addVar('links', $data['links']);
         $this->page->addVar('Pays', $data['Pays']);
         $this->page->addVar('ListeAgence', $data['ListeAgence']);
@@ -79,13 +79,13 @@ class BielletageController extends \Library\BackController
         $sommeRemittanceRetrait = 0;
         $soldeRemittance = 0;
         foreach ($usersCaisse as $user) {
-            // $solde += $user['SoldeDisponible'];
-            // $soldeGlobal += $user['SoldeDisponibleGlobal'];
-            // $sommeVersement += $user['TotalVersement'];
-            // $sommeRetrait += $user['TotalRetrait'];
-            // $sommeRemittanceDepot += $user['SommeVersementRemittance'];
-            // $sommeRemittanceRetrait += $user['SommeRetraitRemittance'];
-            // $soldeRemittance += $user['SoldeRemittance'];
+            $solde += $user['SoldeDisponible'];
+            $soldeGlobal += $user['SoldeDisponibleGlobal'];
+            $sommeVersement += $user['TotalVersement'];
+            $sommeRetrait += $user['TotalRetrait'];
+            $sommeRemittanceDepot += $user['SommeVersementRemittance'];
+            $sommeRemittanceRetrait += $user['SommeRetraitRemittance'];
+            $soldeRemittance += $user['SoldeRemittance'];
         }
         $sommeVersementGlobal = $sommeVersement + $sommeRemittanceDepot;
         $sommeRetraitGlobal = $sommeRetrait + $sommeRemittanceRetrait;
@@ -116,15 +116,15 @@ class BielletageController extends \Library\BackController
             'checkOuverture' => $checkOuverture,
             'operations' => $operations,
             'agence' => $agence,
-            // 'solde' => $solde,
-            // 'soldeGlobal' => $soldeGlobal,
-            // 'sommeVersement' => $sommeVersement,
-            // 'sommeRetrait' => $sommeRetrait,
-            // 'sommeVersementGlobal' => $sommeVersementGlobal,
-            // 'sommeRetraitGlobal' => $sommeRetraitGlobal,
-            // 'sommeRemittanceDepot' => $sommeRemittanceDepot,
-            // 'sommeRemittanceRetrait' => $sommeRemittanceRetrait,
-            // 'soldeRemittance' => $soldeRemittance,
+            'solde' => $solde,
+            'soldeGlobal' => $soldeGlobal,
+            'sommeVersement' => $sommeVersement,
+            'sommeRetrait' => $sommeRetrait,
+            'sommeVersementGlobal' => $sommeVersementGlobal,
+            'sommeRetraitGlobal' => $sommeRetraitGlobal,
+            'sommeRemittanceDepot' => $sommeRemittanceDepot,
+            'sommeRemittanceRetrait' => $sommeRemittanceRetrait,
+            'soldeRemittance' => $soldeRemittance,
             'links' => $links,
             'Pays' => $Pays,
             'ListeAgence' => $ListeAgence,
@@ -159,12 +159,6 @@ class BielletageController extends \Library\BackController
 
         return $data;
     }
-
-
-
-
-
-
 
     public function executeStopcaisse(\Library\HTTPRequest $request)
     {

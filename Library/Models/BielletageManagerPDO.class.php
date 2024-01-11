@@ -100,8 +100,6 @@ class BielletageManagerPDO extends BielletageManager
         $query .= ' GROUP BY operations.RefOperations ';
         $query .= ' ORDER BY operations.RefOperations DESC ';
         $query .= ' LIMIT 10 ';
-
-
         $requeteCaisse = $this->dao->prepare($query);
         $requeteCaisse->execute($params);
         $GetCaisse = $requeteCaisse->fetchAll();

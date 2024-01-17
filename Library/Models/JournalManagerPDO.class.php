@@ -1453,16 +1453,33 @@ class JournalManagerPDO extends JournalManager
     }
 
 
-    public function GetCanceledOperations($debut, $fin, $Agence)
+    public function GetCanceledOperations($debut = null, $fin = null, $Agence = null)
     {
-        $requete = $this->dao->prepare(" SELECT * FROM operations WHERE operations.Approve2_Id IS NOT NULL AND operations.Reset_Id IS NULL AND  date(operations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND operations.RefAgency=:Agence  AND (operations.RefType=1 OR operations.RefType=2 OR operations.RefType=3 OR operations.RefType=4  ) ORDER BY operations.datePayement ASC");
-        $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
-        $requete->execute();
-        $data = $requete->fetchAll();
-        foreach ($data as $key => $value) {
-            $data[$key]['Debut'] = $debut;
-            $data[$key]['Debut'] = $fin;
+        // Use date formatting function for consistency and readability
+        $debut = $debut ?? date('Y-m-d');
+        $fin = $fin ?? date('Y-m-d');
+
+        // Prepare the base query with placeholders
+        $sql = "SELECT *, :debut AS Debut, :fin AS Fin
+            FROM operations
+            WHERE Approve2_Id IS NOT NULL
+              AND Reset_Id IS NOT NULL
+              AND date(Approve2_Time) BETWEEN :debut AND :fin
+              AND (RefType IN (1, 2, 3, 4))
+            ORDER BY datePayement ASC";
+
+        // Bind parameters for efficiency and security
+        $requete = $this->dao->prepare($sql);
+        $requete->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $requete->bindValue(':fin', $fin, \PDO::PARAM_STR);
+
+        // Add agency filter conditionally
+        if ($Agence !== null) {
+            $sql .= " AND RefAgency = :Agence";
+            $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
         }
-        return $data;
+
+        $requete->execute();
+        return $requete->fetchAll();
     }
 }

@@ -253,7 +253,7 @@ class JournalController extends \Library\BackController
             $this->page->addVar('Fin', $Fin);
             $this->page->addVar('Value', $Value);
         } else {
-            $Operations = [];
+            $Operations = $journalManager->CanceledOperations();
         }
         $this->page->addVar('Operations', $Operations);
 

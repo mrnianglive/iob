@@ -1452,47 +1452,6 @@ class JournalManagerPDO extends JournalManager
         return $result;
     }
 
-    // public function GetCanceledOperations($debut = null, $fin = null, $Agence = null)
-    // {
-    //     // Définit $debut à la première journée du mois en cours
-    //     $debut = $debut ?? date('Y-m-01');
-
-    //     // Définit $fin à la dernière journée du mois en cours
-    //     $fin = $fin ?? date('Y-m-t');
-
-    //     // Construisez la requête en fonction de la présence de l'agence
-    //     $sql = "SELECT * FROM operations 
-    //         WHERE operations.Approve2_Id IS NOT NULL 
-    //         AND operations.Reset_Id IS NOT NULL 
-    //         AND date(operations.Approve2_Time) BETWEEN :debut AND :fin";
-
-    //     if ($Agence !== null) {
-    //         $sql .= " AND operations.RefAgency = :Agence";
-    //     }
-
-    //     $sql .= " AND (operations.RefType = 1 OR operations.RefType = 2 OR operations.RefType = 3 OR operations.RefType = 4) 
-    //           ORDER BY operations.datePayement ASC";
-
-    //     $requete = $this->dao->prepare($sql);
-    //     $requete->bindValue(':debut', $debut, \PDO::PARAM_STR);
-    //     $requete->bindValue(':fin', $fin, \PDO::PARAM_STR);
-
-    //     if ($Agence !== null) {
-    //         $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
-    //     }
-
-    //     $requete->execute();
-
-    //     $data = $requete->fetchAll(\PDO::FETCH_ASSOC);
-
-    //     foreach ($data as &$operation) {
-    //         $operation['Debut'] = $debut;
-    //         $operation['Fin'] = $fin;
-    //     }
-
-    //     return $data;
-    // }
-
     public function GetCanceledOperations($debut = null, $fin = null, $Agence = null)
     {
         // Définit $debut à la première journée du mois en cours
@@ -1501,7 +1460,7 @@ class JournalManagerPDO extends JournalManager
         // Définit $fin à la dernière journée du mois en cours
         $fin = $fin ?? date('Y-m-t');
 
-        // Construisez la requête principale en fonction de la présence de l'agence
+        // Construisez la requête en fonction de la présence de l'agence
         $sql = "SELECT * FROM operations 
             WHERE operations.Approve2_Id IS NOT NULL 
             AND operations.Reset_Id IS NOT NULL 
@@ -1529,33 +1488,11 @@ class JournalManagerPDO extends JournalManager
         foreach ($data as &$operation) {
             $operation['Debut'] = $debut;
             $operation['Fin'] = $fin;
+
+            $operation['Afficher'] = $this->CaisseAgencePerformance($operation['RefAgency'], $debut, $fin);
+            $operation['NbreOP'] = $this->NbreOperationAgencePerformance($operation['RefAgency'], $debut, $fin);
         }
 
-        // Requête pour obtenir le nombre d'opérations annulées par agence
-        $countSql = "SELECT RefAgency, COUNT(*) as OperationCount FROM operations 
-                 WHERE Approve2_Id IS NOT NULL 
-                 AND Reset_Id IS NOT NULL 
-                 AND date(Approve2_Time) BETWEEN :debut AND :fin";
-
-        if ($Agence !== null) {
-            $countSql .= " AND RefAgency = :Agence";
-        }
-
-        $countSql .= " AND (RefType = 1 OR RefType = 2 OR RefType = 3 OR RefType = 4) 
-                   GROUP BY RefAgency";
-
-        $countRequete = $this->dao->prepare($countSql);
-        $countRequete->bindValue(':debut', $debut, \PDO::PARAM_STR);
-        $countRequete->bindValue(':fin', $fin, \PDO::PARAM_STR);
-
-        if ($Agence !== null) {
-            $countRequete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
-        }
-
-        $countRequete->execute();
-
-        $counts = $countRequete->fetchAll(\PDO::FETCH_ASSOC);
-
-        return ['operations' => $data, 'counts' => $counts];
+        return $data;
     }
 }

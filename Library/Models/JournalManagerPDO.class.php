@@ -1044,6 +1044,8 @@ class JournalManagerPDO extends JournalManager
             $ListeCaisse[$key]['SommeRetraitProduitCaisse'] =  $this->SommeRetraitProduitCaisse($debut, $fin, $value['RefCaisse']);
             $ListeCaisse[$key]['TotalVersement'] =  $this->SomnmeVersementCaissePerfomance($debut, $fin, $value['RefCaisse']);
             $ListeCaisse[$key]['TotalRetrait'] =  $this->SommeRetraitCaissePerformance($debut, $fin, $value['RefCaisse']);
+
+            $ListeCaisse[$key]['NbreAnnulation'] =  $this->NbreOperationCaissierPerformanceCanceled($debut, $fin, $value['RefCaisse']);
         }
         if (empty($ListeCaisse)) {
             return 0;
@@ -1451,6 +1453,26 @@ class JournalManagerPDO extends JournalManager
 
         return $result;
     }
+
+
+
+    public function NbreOperationCaissierPerformanceCanceled($debut, $fin, $Caisse)
+    {
+        $requeteRemittance = $this->dao->prepare("SELECT COUNT(RefRemittance) AS Nbre FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse WHERE TbleRemittance.Reset_Id IS NOT NULL AND date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin' AND TbleRemittance.RefCaisse=:RefCaisse");
+        $requeteRemittance->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requeteRemittance->execute();
+        $dataRemittance = $requeteRemittance->fetch();
+
+        $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse   WHERE (TbleOperations.Reftype=1 OR TbleOperations.Reftype=2 )  AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NOT NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleOperations.RefCaisse=:RefCaisse ");
+        $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        $requete->execute();
+        $result = $requete->fetch();
+        if (empty($result['Nbre']) && empty($dataRemittance['Nbre'])) {
+            return 0;
+        }
+        return $result['Nbre'] + $dataRemittance['Nbre'];
+    }
+
 
     public function GetCanceledOperations($debut = null, $fin = null, $Agence = null)
     {

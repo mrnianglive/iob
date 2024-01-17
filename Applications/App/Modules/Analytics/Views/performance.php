@@ -29,6 +29,7 @@
                             <th class="border-top-0">NB|OP</th>
                             <th class="border-top-0">NB|OP</th>
                             <th class="border-top-0">NB|OP</th>
+                            <th class="border-top-0">NB|OP annulée </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -122,6 +123,14 @@
                                 </ul>
                             </td>
                             <td><?= $value['NbreOP']; ?></td>
+                            <td>
+                                <ul>
+                                    <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                    <li><?= $afficher['NbreAnnulation']; ?></li>
+                                    <?php } ?>
+                                </ul>
+                            </td>
+
 
                         </tr>
                         <?php } ?>

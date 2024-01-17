@@ -248,12 +248,12 @@ class JournalController extends \Library\BackController
             $Fin = $_GET['fin'] ?? $Fin;
             $Value = $_GET['value'] ?? $Value;
 
-            $Operations = $journalManager->GetCanceledOperations($Debut, $Fin, $Value);
+            $Operations = $journalManager->GetCanceledOperationsWithCount($Debut, $Fin, $Value);
             $this->page->addVar('Debut', $Debut);
             $this->page->addVar('Fin', $Fin);
             $this->page->addVar('Value', $Value);
         } else {
-            $Operations = $journalManager->GetCanceledOperations();
+            $Operations = $journalManager->GetCanceledOperationsWithCount();
         }
         $this->page->addVar('Operations', $Operations);
 

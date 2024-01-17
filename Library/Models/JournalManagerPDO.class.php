@@ -1452,34 +1452,42 @@ class JournalManagerPDO extends JournalManager
         return $result;
     }
 
-
     public function GetCanceledOperations($debut = null, $fin = null, $Agence = null)
     {
-        // Use date formatting function for consistency and readability
+        // Si les paramètres ne sont pas fournis, utilisez la date actuelle
         $debut = $debut ?? date('Y-m-d');
         $fin = $fin ?? date('Y-m-d');
 
-        // Prepare the base query with placeholders
-        $sql = "SELECT *, :debut AS Debut, :fin AS Fin
-            FROM operations
-            WHERE Approve2_Id IS NOT NULL
-              AND Reset_Id IS NOT NULL
-              AND date(Approve2_Time) BETWEEN :debut AND :fin
-              AND (RefType IN (1, 2, 3, 4))
-            ORDER BY datePayement ASC";
+        // Construisez la requête en fonction de la présence de l'agence
+        $sql = "SELECT * FROM operations 
+            WHERE operations.Approve2_Id IS NOT NULL 
+            AND operations.Reset_Id IS NOT NULL 
+            AND date(operations.Approve2_Time) BETWEEN :debut AND :fin";
 
-        // Bind parameters for efficiency and security
+        if ($Agence !== null) {
+            $sql .= " AND operations.RefAgency = :Agence";
+        }
+
+        $sql .= " AND (operations.RefType = 1 OR operations.RefType = 2 OR operations.RefType = 3 OR operations.RefType = 4) 
+              ORDER BY operations.datePayement ASC";
+
         $requete = $this->dao->prepare($sql);
         $requete->bindValue(':debut', $debut, \PDO::PARAM_STR);
         $requete->bindValue(':fin', $fin, \PDO::PARAM_STR);
 
-        // Add agency filter conditionally
         if ($Agence !== null) {
-            $sql .= " AND RefAgency = :Agence";
             $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
         }
 
         $requete->execute();
-        return $requete->fetchAll();
+
+        $data = $requete->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($data as &$operation) {
+            $operation['Debut'] = $debut;
+            $operation['Fin'] = $fin;
+        }
+
+        return $data;
     }
 }

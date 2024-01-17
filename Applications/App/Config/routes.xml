@@ -15,9 +15,6 @@
 
 
 	<route url="/Journal/canceled" module="Journal" action="canceled"/>
-	<route url="/Journal/canceled/([0-9]{4}-[0-9]{2}-[0-9]{2})/([0-9]{4}-[0-9]{2}-[0-9]{2})/([0-9]+)" vars="debut,fin,value" module="Journal" action="canceled"/>
-
-
 
 	<route url="/Journal/delete/([0-9]+)" module="Journal" vars="id" action="delete"/>
 	<route url="/Journal/validate" module="Journal" action="validate"/>

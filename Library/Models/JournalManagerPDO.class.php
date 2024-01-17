@@ -1463,7 +1463,7 @@ class JournalManagerPDO extends JournalManager
         $requeteRemittance->execute();
         $dataRemittance = $requeteRemittance->fetch();
 
-        $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse   WHERE (TbleOperations.Reftype=1 OR TbleOperations.Reftype=2 )  AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NOT NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleOperations.RefCaisse=:RefCaisse ");
+        $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse   WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NOT NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleOperations.RefCaisse=:RefCaisse ");
         $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();
@@ -1482,7 +1482,7 @@ class JournalManagerPDO extends JournalManager
         $requeteRemittance->execute();
         $dataRemittance = $requeteRemittance->fetch();
 
-        $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE (TbleOperations.Reftype=1 OR TbleOperations.Reftype=2 )  AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS  NOT NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin' AND TbleCaisse.RefAgency=:agence");
+        $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE  TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS  NOT NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin' AND TbleCaisse.RefAgency=:agence");
         $requete->bindValue(':agence', $Agence, \PDO::PARAM_INT);
         $requete->execute();
         $result = $requete->fetch();

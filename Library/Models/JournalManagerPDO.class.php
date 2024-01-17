@@ -1474,6 +1474,25 @@ class JournalManagerPDO extends JournalManager
     }
 
 
+    public function NbreOperationAgencePerformanceCanceled($Agence, $debut, $fin)
+    {
+
+        $requeteRemittance = $this->dao->prepare("SELECT COUNT(RefRemittance) AS Nbre FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse WHERE TbleRemittance.Reset_Id IS NOT NULL AND date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin' AND TbleCaisse.RefAgency=:agence");
+        $requeteRemittance->bindValue(':agence', $Agence, \PDO::PARAM_INT);
+        $requeteRemittance->execute();
+        $dataRemittance = $requeteRemittance->fetch();
+
+        $requete = $this->dao->prepare("SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE (TbleOperations.Reftype=1 OR TbleOperations.Reftype=2 )  AND TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS  NOT NULL AND date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin' AND TbleCaisse.RefAgency=:agence");
+        $requete->bindValue(':agence', $Agence, \PDO::PARAM_INT);
+        $requete->execute();
+        $result = $requete->fetch();
+        if (empty($result['Nbre']) && empty($dataRemittance['Nbre'])) {
+            return 0;
+        }
+        return $result['Nbre'] + $dataRemittance['Nbre'];
+    }
+
+
     public function GetCanceledOperations($debut = null, $fin = null, $Agence = null)
     {
         // Définit $debut à la première journée du mois en cours

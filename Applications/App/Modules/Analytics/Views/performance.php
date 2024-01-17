@@ -29,7 +29,8 @@
                             <th class="border-top-0">NB|OP</th>
                             <th class="border-top-0">NB|OP</th>
                             <th class="border-top-0">NB|OP</th>
-                            <th class="border-top-0">NB|OP annulée </th>
+                            <th class="border-top-0">ANNULATION|CAISSE </th>
+                            <th class="border-top-0">ANNULATION|AGENCE </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -131,6 +132,7 @@
                                 </ul>
                             </td>
 
+                            <td><?= $value['NbreOPCanceled']; ?></td>
 
                         </tr>
                         <?php } ?>

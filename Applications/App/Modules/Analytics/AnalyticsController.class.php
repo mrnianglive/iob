@@ -107,6 +107,7 @@ class AnalyticsController extends \Library\BackController
             }
             $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgencePerformance($value['RefAgency'], $debut, $fin);
             $Agence[$key]['NbreOP'] = $this->managers->getManagerOf("Journal")->NbreOperationAgencePerformance($value['RefAgency'], $debut, $fin);
+            $Agence[$key]['NbreOPCanceled'] = $this->managers->getManagerOf("Journal")->NbreOperationAgencePerformanceCanceled($value['RefAgency'], $debut, $fin);
         }
         $this->page->addVar('Agence', $Agence);
 

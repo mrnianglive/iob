@@ -1454,9 +1454,11 @@ class JournalManagerPDO extends JournalManager
 
     public function GetCanceledOperations($debut = null, $fin = null, $Agence = null)
     {
-        // Si les paramètres ne sont pas fournis, utilisez la date actuelle
-        $debut = $debut ?? date('Y-m-d');
-        $fin = $fin ?? date('Y-m-d');
+        // Définit $debut à la première journée du mois en cours
+        $debut = $debut ?? date('Y-m-01');
+
+        // Définit $fin à la dernière journée du mois en cours
+        $fin = $fin ?? date('Y-m-t');
 
         // Construisez la requête en fonction de la présence de l'agence
         $sql = "SELECT * FROM operations 

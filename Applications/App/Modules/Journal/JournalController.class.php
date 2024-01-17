@@ -214,4 +214,54 @@ class JournalController extends \Library\BackController
         $this->page->addVar('permission', $permissions);
         $this->page->addVar('Operations', $Operations);
     }
+
+
+    public function executeCanceled(\Library\HTTPRequest $request)
+    {
+        $pageTitle = "Journal de Caissse des opérations annulées";
+        $this->page->addVar("titles", $pageTitle);
+
+        $bielletageManager = $this->managers->getManagerOf("Bielletage");
+        $Chmod = $bielletageManager->CheckOuverture();
+        $this->page->addVar("CheckOuverture", $Chmod);
+
+        $pannelManager = $this->managers->getManagerOf("Pannel");
+        $Agence = $pannelManager->UserAgence();
+        $this->page->addVar('UserAgence', $Agence);
+
+        $Debut = $request->postData('Debut');
+        $Fin = $request->postData('Fin');
+        $Value = $request->postData('RefAgency');
+
+        $this->page->addVar('Debut', $Debut);
+        $this->page->addVar('Fin', $Fin);
+        $this->page->addVar('Value', $Value);
+
+        $ListeAgence = $pannelManager->ListeAgence();
+        $this->page->addVar("ListeAgence", $ListeAgence);
+
+        $journalManager = $this->managers->getManagerOf('Journal');
+        $Operations = [];
+
+        if (!empty($Value) || isset($_GET['value'])) {
+            $Debut = $_GET['debut'] ?? $Debut;
+            $Fin = $_GET['fin'] ?? $Fin;
+            $Value = $_GET['value'] ?? $Value;
+
+            $Operations = $journalManager->GetCanceledOperations($Debut, $Fin, $Value);
+            $this->page->addVar('Debut', $Debut);
+            $this->page->addVar('Fin', $Fin);
+            $this->page->addVar('Value', $Value);
+        } else {
+            $Operations = [];
+        }
+        $this->page->addVar('Operations', $Operations);
+
+        $permissions = [];
+        $AllPermissions = $pannelManager->UserPermission();
+        foreach ($AllPermissions as $key => $value) {
+            $permissions[] = $value['access'];
+        }
+        $this->page->addVar('permission', $permissions);
+    }
 }

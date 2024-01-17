@@ -1451,4 +1451,18 @@ class JournalManagerPDO extends JournalManager
 
         return $result;
     }
+
+
+    public function GetCanceledOperations($debut, $fin, $Agence)
+    {
+        $requete = $this->dao->prepare(" SELECT * FROM operations WHERE operations.Approve2_Id IS NOT NULL AND operations.Reset_Id IS NULL AND  date(operations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND operations.RefAgency=:Agence  AND (operations.RefType=1 OR operations.RefType=2 OR operations.RefType=3 OR operations.RefType=4  ) ORDER BY operations.datePayement ASC");
+        $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
+        $requete->execute();
+        $data = $requete->fetchAll();
+        foreach ($data as $key => $value) {
+            $data[$key]['Debut'] = $debut;
+            $data[$key]['Debut'] = $fin;
+        }
+        return $data;
+    }
 }

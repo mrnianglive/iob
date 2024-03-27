@@ -62,15 +62,15 @@ class BielletageController extends \Library\BackController
         $sommeRemittanceDepot = 0;
         $sommeRemittanceRetrait = 0;
         $soldeRemittance = 0;
-        // foreach ($usersCaisse as $user) {
-        //     $solde += $user['SoldeDisponible'];
-        //     $soldeGlobal += $user['SoldeDisponibleGlobal'];
-        //     $sommeVersement += $user['TotalVersement'];
-        //     $sommeRetrait += $user['TotalRetrait'];
-        //     $sommeRemittanceDepot += $user['SommeVersementRemittance'];
-        //     $sommeRemittanceRetrait += $user['SommeRetraitRemittance'];
-        //     $soldeRemittance += $user['SoldeRemittance'];
-        // }
+        foreach ($usersCaisse as $user) {
+            $solde += $user['SoldeDisponible'];
+            $soldeGlobal += $user['SoldeDisponibleGlobal'];
+            $sommeVersement += $user['TotalVersement'];
+            $sommeRetrait += $user['TotalRetrait'];
+            $sommeRemittanceDepot += $user['SommeVersementRemittance'];
+            $sommeRemittanceRetrait += $user['SommeRetraitRemittance'];
+            $soldeRemittance += $user['SoldeRemittance'];
+        }
         $sommeVersementGlobal = $sommeVersement + $sommeRemittanceDepot;
         $sommeRetraitGlobal = $sommeRetrait + $sommeRemittanceRetrait;
 
@@ -93,15 +93,15 @@ class BielletageController extends \Library\BackController
             'checkOuverture' => $checkOuverture,
             'operations' => $operations,
             'agence' => $agence,
-            // 'solde' => $solde,
-            // 'soldeGlobal' => $soldeGlobal,
-            // 'sommeVersement' => $sommeVersement,
-            // 'sommeRetrait' => $sommeRetrait,
-            // 'sommeVersementGlobal' => $sommeVersementGlobal,
-            // 'sommeRetraitGlobal' => $sommeRetraitGlobal,
-            // 'sommeRemittanceDepot' => $sommeRemittanceDepot,
-            // 'sommeRemittanceRetrait' => $sommeRemittanceRetrait,
-            // 'soldeRemittance' => $soldeRemittance,
+            'solde' => $solde,
+            'soldeGlobal' => $soldeGlobal,
+            'sommeVersement' => $sommeVersement,
+            'sommeRetrait' => $sommeRetrait,
+            'sommeVersementGlobal' => $sommeVersementGlobal,
+            'sommeRetraitGlobal' => $sommeRetraitGlobal,
+            'sommeRemittanceDepot' => $sommeRemittanceDepot,
+            'sommeRemittanceRetrait' => $sommeRemittanceRetrait,
+            'soldeRemittance' => $soldeRemittance,
             'links' => $links,
             'Pays' => $Pays,
             'ListeAgence' => $ListeAgence,

@@ -69,51 +69,45 @@ class BielletageManagerPDO extends BielletageManager
         return null;
     }
 
-    public function GetCaisse($Date = null, $Country = null, $Agency = null, $Caisse = null)
+    public  function GetCaisse($Date, $Country = NULL, $Agence = NULL, $Caisse = NULL)
     {
-        $query = "SELECT * FROM operations
-              INNER JOIN TbleChmod ON TbleChmod.RefCaisse = operations.RefCaisse
-              INNER JOIN TbleAgency ON TbleAgency.RefAgency = operations.RefAgency
-              WHERE operations.Reset_Id IS NULL ";
+        // Old Query befpre VIEW ON SQL $requeteCaisse = $this->dao->prepare('SELECT * FROM TbleOperations LEFT JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency  LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit  INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse  WHERE TbleOperations.Reset_Id IS NULL AND TbleOperations.Insert_Time=:today AND TbleChmod.RefUsers=:RefUsers ORDER BY TbleOperations.RefOperations DESC ');
+        $query = "SELECT * FROM operations INNER JOIN TbleChmod ON TbleChmod.RefCaisse=operations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=operations.RefAgency   WHERE operations.Reset_Id IS NULL ";
         $params = array();
 
-        if ($Date !== null) {
-            $query .= ' AND operations.Insert_Time = :today';
+        if ($Date != NULL) {
+            $query .= ' AND operations.Insert_Time=:today';
             $params[':today'] = $Date;
         }
-        if ($Country !== null) {
-            $query .= " AND TbleAgency.RefPays = :RefPays";
+        if ($Country != NULL) {
+            $query .= " AND TbleAgency.RefPays=:RefPays";
             $params[':RefPays'] = $Country;
         }
-        if ($Agency !== null) {
-            $query .= ' AND operations.RefAgency = :RefAgency';
-            $params[':RefAgency'] = $Agency;
+        if ($Agence != NULL) {
+            $query .= ' AND operations.RefAgency=:RefAgency';
+            $params[':RefAgency'] = $Agence;
         }
-        if ($Caisse !== null) {
-            $query .= ' AND operations.RefCaisse = :RefCaisse';
+        if ($Caisse != NULL) {
+            $query .= ' AND operations.RefCaisse=:RefCaisse';
             $params[':RefCaisse'] = $Caisse;
         }
-        if ($Country === null && $Agency === null && $Caisse === null) {
-            $query .= ' AND TbleChmod.RefUsers = :RefUsers';
+        if ($Country == NULL && $Agence == NULL && $Caisse == NULL) {
+            $query .= ' AND TbleChmod.RefUsers=:RefUsers';
             $params[':RefUsers'] = $_SESSION['RefUsers'];
         }
 
-        // Group By RefOperations
+        //Group By RefOperations
         $query .= ' GROUP BY operations.RefOperations ';
         $query .= ' ORDER BY operations.RefOperations DESC ';
-
-        if (!$requeteCaisse = $this->dao->prepare($query)) {
-            // Handle error for prepare statement
-            return [];
+        // $query .= ' LIMIT 10 ';
+        $requeteCaisse = $this->dao->prepare($query);
+        $requeteCaisse->execute($params);
+        $GetCaisse = $requeteCaisse->fetchAll();
+        if (!empty($GetCaisse) && isset($GetCaisse)) {
+            return $GetCaisse;
         }
-        if (!$requeteCaisse->execute($params)) {
-            // Handle error for execute statement
-            return [];
-        }
-
-        return $requeteCaisse->fetchAll();
+        return [];
     }
-
     public function GetInvoice($id)
     {
         $requeteGetInvoice = $this->dao->prepare("SELECT TbleBilletage.*, TbleOperations.*, TbleUsers.NomUsers,TbleUsers.PrenomUsers, TbleCaisse.*, TbleAgency.*, TbleProduit.*, TbleBanque.NameBanque FROM TbleBilletage INNER JOIN TbleOperations ON TbleOperations.RefOperations=TbleBilletage.RefOperations INNER JOIN TbleUsers ON TbleUsers.RefUsers=TbleOperations.Insert_Id INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit LEFT JOIN TbleBanque ON TbleBanque.RefBanque=TbleProduit.RefBanque  WHERE  TbleBilletage.RefOperations=:RefOperations");

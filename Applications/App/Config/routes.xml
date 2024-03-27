@@ -2,6 +2,10 @@
 <routes>
 	<route url="/" module="Bielletage" action="index"/>
 
+	<route url="/calculate-solde" module="Bielletage" action="calculateSolde"/>
+
+
+
 	<route url="/dashboard" module="Bielletage" action="dashboard"/>
 	<route url="/logout" module="Connexion" action="Logout"/>
 	<route url="/bielletage/([0-9]+)" vars="id" module="Bielletage" action="bielletagebefore"/>

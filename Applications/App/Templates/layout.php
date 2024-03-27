@@ -423,10 +423,9 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
             const Caisse = $('#RefCaisse').val();
 
             $.ajax({
-                url: '/',
+                url: '/calculate-solde',
                 type: 'POST',
                 data: {
-                    action: 'calculateSolde',
                     Country: Country,
                     Agency: Agency,
                     Caisse: Caisse

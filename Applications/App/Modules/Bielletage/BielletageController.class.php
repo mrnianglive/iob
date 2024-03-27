@@ -112,7 +112,7 @@ class BielletageController extends \Library\BackController
         );
     }
 
-    public function calculateSolde(\Library\HTTPRequest $request)
+    public function executeCalculateSolde(\Library\HTTPRequest $request)
     {
         $Country = $request->postData('Country');
         $Agency = $request->postData('Agency');
@@ -152,7 +152,6 @@ class BielletageController extends \Library\BackController
         header('Content-Type: application/json');
         echo json_encode($response);
     }
-
     private function checkAgencyBalanceStatus($RefAgency)
     {
         $currentDate = date('Y-m-d');

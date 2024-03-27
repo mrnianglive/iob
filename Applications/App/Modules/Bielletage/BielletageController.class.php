@@ -27,43 +27,27 @@ class BielletageController extends \Library\BackController
         $FirstLogin = $this->managers->getManagerOf('User')->FirstLogin();
         $this->page->addVar('FirstLogin', $FirstLogin);
 
-
-
-        $CountOperationsNonVerifiees  = $this->managers->getManagerOf('Journal')->CountOperationsNonVerifiees();
+        $CountOperationsNonVerifiees = $this->managers->getManagerOf('Journal')->CountOperationsNonVerifiees();
         $this->page->addVar('CountOperationsNonVerifiees', $CountOperationsNonVerifiees);
-
-
-
 
         // Ajout des données à la vue
         $this->page->addVar("CheckOuverture", $data['checkOuverture']);
         $this->page->addVar('Operation', $data['operations']);
         $this->page->addVar('Agence', $data['agence']);
-        $this->page->addVar('Solde', $data['solde']);
-        $this->page->addVar('SoldeGlobal', $data['soldeGlobal']);
-        $this->page->addVar('SommeVersement', $data['sommeVersement']);
-        $this->page->addVar('SommeRetrait', $data['sommeRetrait']);
-        $this->page->addVar('SommeVersementGlobal', $data['sommeVersementGlobal']);
-        $this->page->addVar('SommeRetraitGlobal', $data['sommeRetraitGlobal']);
-        $this->page->addVar('SommeRemittanceDepot', $data['sommeRemittanceDepot']);
-        $this->page->addVar('SommeRemittanceRetrait', $data['sommeRemittanceRetrait']);
-        $this->page->addVar('SoldeRemittance', $data['soldeRemittance']);
-        $this->page->addVar('links', $data['links']);
         $this->page->addVar('Pays', $data['Pays']);
         $this->page->addVar('ListeAgence', $data['ListeAgence']);
         $this->page->addVar('ListeCaisse', $data['ListeCaisse']);
         $this->page->addVar('Country', $data['Country']);
         $this->page->addVar('Agency', $data['Agency']);
         $this->page->addVar('Caisse', $data['Caisse']);
+        $this->page->addVar('links', $data['links']);
     }
 
     private function getHomeData($Country = NULL, $Agency = NULL, $Caisse = NULL)
     {
-
         $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
-        $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
-        $ListeCaisse  = $this->managers->getManagerOf("Pannel")->ListeCaisse();
-
+        $ListeAgence = $this->managers->getManagerOf("Pannel")->ListeAgence();
+        $ListeCaisse = $this->managers->getManagerOf("Pannel")->ListeCaisse();
 
         // Récupération des données pour l'affichage de l'accueil
         $checkOuverture = $this->managers->getManagerOf("Bielletage")->CheckOuverture();
@@ -89,24 +73,17 @@ class BielletageController extends \Library\BackController
         }
         $sommeVersementGlobal = $sommeVersement + $sommeRemittanceDepot;
         $sommeRetraitGlobal = $sommeRetrait + $sommeRemittanceRetrait;
+
         // Récupération des données pour les agences
-        $agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
+        $agence = $this->managers->getManagerOf("Pannel")->UserAgence();
         foreach ($agence as $key => $value) {
             $agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialAgence(date('Y-m-d'), $value['RefAgency']);
-            // $agence[$key]['YesterdayReserve'] = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
-
             $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
             if (is_array($reserveData)) {
-                // Assigning the balance to 'YesterdayReserve'
                 $agence[$key]['YesterdayReserve'] = $reserveData['SoldeCompte'];
-                // If you want to store the date of the last recorded balance
-                $agence[$key]['LastDate'] = $reserveData['DateSolde'] ?? null; // Assuming 'null' is returned when no date is found
+                $agence[$key]['LastDate'] = $reserveData['DateSolde'] ?? null;
             }
-
             $agence[$key]['CheckAgencyBalance'] = $this->checkAgencyBalanceStatus($value['RefAgency']);
-
-            // Ajouter le résultat de la vérification du solde à la page qui sera rendue.
-
         }
 
         // Récupération des liens pour le menu
@@ -132,16 +109,56 @@ class BielletageController extends \Library\BackController
             'Country' => $Country,
             'Agency' => $Agency,
             'Caisse' => $Caisse,
-
         );
     }
+
+    public function calculateSolde(\Library\HTTPRequest $request)
+    {
+        $Country = $request->postData('Country');
+        $Agency = $request->postData('Agency');
+        $Caisse = $request->postData('Caisse');
+
+        $soldeData = $this->getHomeData($Country, $Agency, $Caisse);
+
+        $solde = 0;
+        $soldeGlobal = 0;
+        $sommeVersement = 0;
+        $sommeRetrait = 0;
+        $sommeRemittanceDepot = 0;
+        $sommeRemittanceRetrait = 0;
+        $soldeRemittance = 0;
+        foreach ($soldeData['usersCaisse'] as $user) {
+            $solde += $user['SoldeDisponible'];
+            $soldeGlobal += $user['SoldeDisponibleGlobal'];
+            $sommeVersement += $user['TotalVersement'];
+            $sommeRetrait += $user['TotalRetrait'];
+            $sommeRemittanceDepot += $user['SommeVersementRemittance'];
+            $sommeRemittanceRetrait += $user['SommeRetraitRemittance'];
+            $soldeRemittance += $user['SoldeRemittance'];
+        }
+        $sommeVersementGlobal = $sommeVersement + $sommeRemittanceDepot;
+        $sommeRetraitGlobal = $sommeRetrait + $sommeRemittanceRetrait;
+
+        $response = [
+            'solde' => $solde,
+            'soldeGlobal' => $soldeGlobal,
+            'sommeVersement' => $sommeVersement,
+            'sommeRetrait' => $sommeRetrait,
+            'sommeVersementGlobal' => $sommeVersementGlobal,
+            'sommeRetraitGlobal' => $sommeRetraitGlobal,
+            'soldeRemittance' => $soldeRemittance,
+        ];
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
     private function checkAgencyBalanceStatus($RefAgency)
     {
         $currentDate = date('Y-m-d');
         $result = $this->managers->getManagerOf("Bielletage")->HasOperationsSinceLastBalance($RefAgency, $currentDate);
         $agencyData = $this->managers->getManagerOf("Pannel")->GetAgency($RefAgency);
 
-        // Assurez-vous que le nom de l'agence est une chaîne
         $agencyName = is_array($agencyData) ? $agencyData['NameAgency'] ?? 'Inconnue' : $agencyData;
 
         $data = [
@@ -150,10 +167,8 @@ class BielletageController extends \Library\BackController
         ];
 
         if ($result !== false) {
-            // Si result contient un message d'erreur spécifique, ajoutez le nom de l'agence ici aussi
             $data['error_message'] = "{$agencyName}: {$result}";
         } else {
-            // Message de succès incluant le nom de l'agence
             $data['success_message'] = "Tout est en ordre avec le solde de l'agence '{$agencyName}'.";
         }
 

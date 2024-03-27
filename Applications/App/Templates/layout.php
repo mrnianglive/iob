@@ -414,6 +414,46 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     </script>
 
 
+
+    <script>
+    $(document).ready(function() {
+        function getSoldeData() {
+            const Country = $('#RefPays').val();
+            const Agency = $('#RefAgency').val();
+            const Caisse = $('#RefCaisse').val();
+
+            $.ajax({
+                url: '/',
+                type: 'POST',
+                data: {
+                    action: 'calculateSolde',
+                    Country: Country,
+                    Agency: Agency,
+                    Caisse: Caisse
+                },
+                success: function(response) {
+                    updateSoldeDisplay(response);
+                }
+            });
+        }
+
+        function updateSoldeDisplay(data) {
+            $('#solde-depot').text(data.sommeVersementGlobal.toLocaleString());
+            $('#solde-retrait').text(data.sommeRetraitGlobal.toLocaleString());
+            $('#solde-espece').text(data.soldeGlobal.toLocaleString());
+        }
+
+        // Appeler la fonction getSoldeData() lors du chargement de la page
+        getSoldeData();
+
+        // Appeler la fonction getSoldeData() lors du changement de valeur des sélecteurs
+        $('#RefPays, #RefAgency, #RefCaisse').change(function() {
+            getSoldeData();
+        });
+    });
+    </script>
+
+
 </body>
 
 </html>

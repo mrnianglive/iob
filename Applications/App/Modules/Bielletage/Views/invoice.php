@@ -64,8 +64,9 @@
                      <?= $numberToLetter; ?> (<?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>)
                      XOF
                      </p>
-
-                     <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
+                     <? //= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); 
+                        ?>
+                     <p>DATE DE VALEUR : </p>
                      <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
                      <p class="text-uppercase">CAISSIER(E) :
                          <?= $GetInvoice['PrenomUsers'] . ' ' . $GetInvoice['NomUsers']; ?></p>
@@ -205,8 +206,9 @@
                      <?= $numberToLetter; ?> (<?= number_format($GetInvoice['MontantVersement'], 0, ".", ","); ?>)
                      XOF
                      </p>
-
-                     <p>DATE DE VALEUR : <?= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); ?></p>
+                     <? //= date('d-M-Y', strtotime($GetInvoice['Insert_Time'])); 
+                        ?>
+                     <p>DATE DE VALEUR : </p>
                      <p class="text-uppercase">REMARQUES : <?= $GetInvoice['Remarque']; ?></p>
                      <p class="text-uppercase">CAISSIER(E) :
                          <?= $GetInvoice['PrenomUsers'] . ' ' . $GetInvoice['NomUsers']; ?></p>

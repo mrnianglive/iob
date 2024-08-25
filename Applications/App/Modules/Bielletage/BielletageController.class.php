@@ -221,58 +221,6 @@ class BielletageController extends \Library\BackController
         $numberToLetter = $this->managers->getManagerOf('Arreter')->NumberToLetter(intval($Invoice['MontantVersement']));
         $this->page->addVar("numberToLetter", $numberToLetter); // Creation de la variable, ajout d'une variable a la vue
     }
-    // public function executeAdd(\Library\HTTPRequest $request)
-    // {
-    //     //old  CODE 
-
-
-    //     $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($request->postData('RefCaisse'));
-    //     $YesterdayReserve = $this->managers->getManagerOf("Journal")->YesterdayReserve($GetAgencyUsingCaisseID['RefAgency'], date('Y-m-d'));
-    //     $VerifAppro  = $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal(date('Y-m-d'), $GetAgencyUsingCaisseID['RefAgency']);
-
-    //     if (!empty($request->postData('Antidate'))) {
-    //         //Antidate Operation
-    //         $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
-    //     } else {
-
-    //         if ($VerifAppro == 0 && ($request->postData('RefType') == 1 || $request->postData('RefType') == 2)) {
-    //             $_SESSION['message']['type'] = 'warning';
-    //             $_SESSION['message']['text'] = 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération';
-    //             $_SESSION['message']['number'] = 2;
-    //             $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
-    //         } else {
-
-    //             if ($request->postData('RefType') == 3 && $request->postData('TypeAppro') == 1) {
-    //                 if ($request->postData('MontantVersement') <= $YesterdayReserve) {
-    //                     $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
-    //                 } else {
-    //                     $_SESSION['message']['type'] = 'warning';
-    //                     $_SESSION['message']['text'] = 'Le Montant de la transaction est supérieur au solde de la reserve.';
-    //                     $_SESSION['message']['number'] = 2;
-    //                     $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
-    //                 }
-    //             } elseif ($request->postData('RefType') == 4 or $request->postData('RefType') == 2 or $request->postData('RefType') == 5) {
-    //                 $SoldeActuelleCaisse = $this->managers->getManagerOf("Journal")->SoldeActuelleCaisse(date('Y-m-d'), $request->postData('RefCaisse'));
-    //                 if ($request->postData('MontantVersement') <= $SoldeActuelleCaisse) {
-    //                     $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
-    //                 } else {
-    //                     $_SESSION['message']['type'] = 'warning';
-    //                     $_SESSION['message']['text'] = 'Le Montant de la transaction supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou Contactez votre administrateur .';
-    //                     $_SESSION['message']['number'] = 2;
-    //                     $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
-    //                 }
-    //             } else {
-    //                 $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
-    //             }
-    //         }
-    //     }
-    // }
-
-
-
-
-
-
     public function executeAdd(\Library\HTTPRequest $request)
     {
         $RefCaisse = $request->postData('RefCaisse');
@@ -425,23 +373,24 @@ class BielletageController extends \Library\BackController
     // Ajoutez cette nouvelle méthode pour l'API
     public function executeGetSums(\Library\HTTPRequest $request)
     {
-        $Country = $request->getData('Country');
-        $Agency = $request->getData('Agency');
-        $Caisse = $request->getData('Caisse');
+        try {
+            $Country = $request->getData('Country');
+            $Agency = $request->getData('Agency');
+            $Caisse = $request->getData('Caisse');
 
-        $sums = $this->getSums($Country, $Agency, $Caisse);
+            $sums = $this->getSums($Country, $Agency, $Caisse);
 
-        header('Content-Type: application/json');
-        echo json_encode($sums);
-        exit;
+            $this->JsonResponse($sums);
+        } catch (\Exception $e) {
+            $this->JsonResponse(['message' => $e->getMessage()], false, 500);
+        }
     }
 
     private function getSums($Country, $Agency, $Caisse)
     {
-        // Utiliser une date spécifique pour le test
-        $testDate = '2024-08-24';
+        $currentDate = date('Y-m-d');
         
-        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse($testDate, $Country, $Agency, $Caisse);
+        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse($currentDate, $Country, $Agency, $Caisse);
         
         $sommeVersementGlobal = 0;
         $sommeRetraitGlobal = 0;
@@ -457,7 +406,21 @@ class BielletageController extends \Library\BackController
             'SommeVersementGlobal' => $sommeVersementGlobal,
             'SommeRetraitGlobal' => $sommeRetraitGlobal,
             'SoldeGlobal' => $soldeGlobal,
-            'DateTest' => $testDate, // Ajouté pour confirmer la date utilisée
+            'Date' => $currentDate,
         ];
+    }
+
+    private function JsonResponse($data, $success = true, $statusCode = 200)
+    {
+        if (!headers_sent()) {
+            header('Content-Type: application/json');
+            http_response_code($statusCode);
+        }
+        
+        echo json_encode([
+            'success' => $success,
+            'data' => $data
+        ]);
+        exit;
     }
 }

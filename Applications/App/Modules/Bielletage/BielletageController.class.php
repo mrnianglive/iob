@@ -438,7 +438,10 @@ class BielletageController extends \Library\BackController
 
     private function getSums($Country, $Agency, $Caisse)
     {
-        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'), $Country, $Agency, $Caisse);
+        // Utiliser une date spécifique pour le test
+        $testDate = '2024-08-24';
+        
+        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse($testDate, $Country, $Agency, $Caisse);
         
         $sommeVersementGlobal = 0;
         $sommeRetraitGlobal = 0;
@@ -454,6 +457,7 @@ class BielletageController extends \Library\BackController
             'SommeVersementGlobal' => $sommeVersementGlobal,
             'SommeRetraitGlobal' => $sommeRetraitGlobal,
             'SoldeGlobal' => $soldeGlobal,
+            'DateTest' => $testDate, // Ajouté pour confirmer la date utilisée
         ];
     }
 }

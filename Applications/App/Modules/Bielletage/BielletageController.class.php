@@ -6,7 +6,6 @@ use DateTime;
 
 class BielletageController extends \Library\BackController
 {
-
     public function executeIndex(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Accueil");
@@ -18,18 +17,14 @@ class BielletageController extends \Library\BackController
         $Agency = $request->postData('RefAgency', '');
         $Caisse = $request->postData('RefCaisse', '');
         
-        // Charger uniquement les données essentielles
         $essentialData = $this->getEssentialHomeData($Country, $Agency, $Caisse);
 
         $this->page->addVar('FirstLogin', $this->managers->getManagerOf('User')->FirstLogin());
         $this->page->addVar('CountOperationsNonVerifiees', $this->managers->getManagerOf('Journal')->CountOperationsNonVerifiees());
 
-        // Ajouter les données essentielles à la vue
         foreach ($essentialData as $key => $value) {
             $this->page->addVar($key, $value);
         }
-
-        // Indiquer que les sommes seront chargées de manière asynchrone
         $this->page->addVar('loadSumsAsynchronously', true);
     }
 
@@ -48,7 +43,6 @@ class BielletageController extends \Library\BackController
         ];
     }
 
-    // Modifions la méthode executeGetSums pour inclure toutes les données nécessaires
     public function executeGetSums(\Library\HTTPRequest $request)
     {
         try {
@@ -59,10 +53,10 @@ class BielletageController extends \Library\BackController
 
             $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse($date, $Country, $Agency, $Caisse);
             
-            $sums = $this->calculateSums($usersCaisse);
-            $agenceData = $this->getAgenceData();
-
-            $response = array_merge($sums, ['agence' => $agenceData]);
+            $response = array_merge(
+                $this->calculateSums($usersCaisse),
+                ['agence' => $this->getAgenceData()]
+            );
 
             $this->JsonResponse($response);
         } catch (\Exception $e) {
@@ -73,15 +67,9 @@ class BielletageController extends \Library\BackController
     private function calculateSums($usersCaisse)
     {
         $sums = [
-            'SommeVersementGlobal' => 0,
-            'SommeRetraitGlobal' => 0,
-            'SoldeGlobal' => 0,
-            'Solde' => 0,
-            'SommeVersement' => 0,
-            'SommeRetrait' => 0,
-            'SommeRemittanceDepot' => 0,
-            'SommeRemittanceRetrait' => 0,
-            'SoldeRemittance' => 0,
+            'SommeVersementGlobal' => 0, 'SommeRetraitGlobal' => 0, 'SoldeGlobal' => 0,
+            'Solde' => 0, 'SommeVersement' => 0, 'SommeRetrait' => 0,
+            'SommeRemittanceDepot' => 0, 'SommeRemittanceRetrait' => 0, 'SoldeRemittance' => 0,
         ];
 
         foreach ($usersCaisse as $user) {
@@ -96,7 +84,6 @@ class BielletageController extends \Library\BackController
 
         $sums['SommeVersementGlobal'] = $sums['SommeVersement'] + $sums['SommeRemittanceDepot'];
         $sums['SommeRetraitGlobal'] = $sums['SommeRetrait'] + $sums['SommeRemittanceRetrait'];
-
         $sums['Date'] = date('Y-m-d');
 
         return $sums;
@@ -105,9 +92,11 @@ class BielletageController extends \Library\BackController
     private function getAgenceData()
     {
         $agence = $this->managers->getManagerOf("Pannel")->UserAgence();
+        $currentDate = date('Y-m-d');
+        
         foreach ($agence as &$value) {
-            $value['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialAgence(date('Y-m-d'), $value['RefAgency']);
-            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
+            $value['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialAgence($currentDate, $value['RefAgency']);
+            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], $currentDate);
             $value['YesterdayReserve'] = $reserveData['SoldeCompte'] ?? null;
             $value['LastDate'] = $reserveData['DateSolde'] ?? null;
             $value['CheckAgencyBalance'] = $this->checkAgencyBalanceStatus($value['RefAgency']);
@@ -121,7 +110,6 @@ class BielletageController extends \Library\BackController
         $result = $this->managers->getManagerOf("Bielletage")->HasOperationsSinceLastBalance($RefAgency, $currentDate);
         $agencyData = $this->managers->getManagerOf("Pannel")->GetAgency($RefAgency);
 
-        // Assurez-vous que le nom de l'agence est une chaîne
         $agencyName = is_array($agencyData) ? $agencyData['NameAgency'] ?? 'Inconnue' : $agencyData;
 
         $data = [
@@ -130,10 +118,8 @@ class BielletageController extends \Library\BackController
         ];
 
         if ($result !== false) {
-            // Si result contient un message d'erreur spécifique, ajoutez le nom de l'agence ici aussi
             $data['error_message'] = "{$agencyName}: {$result}";
         } else {
-            // Message de succès incluant le nom de l'agence
             $data['success_message'] = "Tout est en ordre avec le solde de l'agence '{$agencyName}'.";
         }
 
@@ -142,17 +128,13 @@ class BielletageController extends \Library\BackController
 
     public function executeStopcaisse(\Library\HTTPRequest $request)
     {
-        // Get manager objects
         $managerArreter = $this->managers->getManagerOf('Arreter');
 
-        // Calculate Solde
         $Solde = $this->managers->getManagerOf('Journal')->ArreterSingleCaisse($id = $request->getData('id'), date('Y-m-d'));
 
-        // StopCaisse
         $Date = date('Y-m-d H:i:s');
         $managerArreter->StopCaisse($id, $Solde, $Date);
 
-        // Redirect
         $this->app()->httpResponse()->redirect('/Arreter/index');
     }
 
@@ -177,11 +159,9 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('permission', $permissions);
     }
 
-
     public function executeInvoice(\Library\HTTPRequest $request)
     {
-
-        $this->page->addVar("titles", "Bordereau"); // Titre de la page
+        $this->page->addVar("titles", "Bordereau");
         $this->page->setTemplate('bordereau');
         if ($request->method() == 'POST') {
             $reference  = $request->postData('id');
@@ -189,71 +169,74 @@ class BielletageController extends \Library\BackController
             $reference = $request->getData('id');
         }
 
-        //Check if user has permission to view invoice Using CaisseID and UserID
-        $Invoice  = $this->managers->getManagerOf("Bielletage")->GetInvoice($reference); //Recuperation de la liste
-        $this->page->addVar("GetInvoice", $Invoice); // Creation de la variable, ajout d'une variable a la vue
+        $Invoice  = $this->managers->getManagerOf("Bielletage")->GetInvoice($reference);
+        $this->page->addVar("GetInvoice", $Invoice);
 
         $getResetStatus = $this->managers->getManagerOf("Bielletage")->getResetStatus($reference);
-        $this->page->addVar("getResetStatus", $getResetStatus); // Creation de la variable, ajout d'une variable a la vue
+        $this->page->addVar("getResetStatus", $getResetStatus);
         $numberToLetter = $this->managers->getManagerOf('Arreter')->NumberToLetter(intval($Invoice['MontantVersement']));
-        $this->page->addVar("numberToLetter", $numberToLetter); // Creation de la variable, ajout d'une variable a la vue
+        $this->page->addVar("numberToLetter", $numberToLetter);
     }
+
     public function executeAdd(\Library\HTTPRequest $request)
     {
-        $RefCaisse = $request->postData('RefCaisse');
-        $RefType = $request->postData('RefType');
-        $TypeAppro = $request->postData('TypeAppro');
-        $MontantVersement = $request->postData('MontantVersement');
-        $Antidate = $request->postData('Antidate');
+        $data = $this->extractRequestData($request);
+        $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($data['RefCaisse']);
+        $data['RefAgency'] = $GetAgencyUsingCaisseID['RefAgency'];
+        $data['Today'] = date('Y-m-d');
 
-        $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($RefCaisse);
-        $RefAgency = $GetAgencyUsingCaisseID['RefAgency'];
-        $Today = date('Y-m-d');
-
-        // Redirection avec message
-        $redirectWithMessage = function ($type, $text, $number, $RefType) {
-            $_SESSION['message'] = compact('type', 'text', 'number');
-            $this->app()->httpResponse()->redirect('/bielletage/' . $RefType);
-        };
-
-        // Vérifier pour antidate
-        if (!empty($Antidate)) {
-            // Traitement spécifique pour les transactions antidatées
+        if (!empty($data['Antidate'])) {
             $this->managers->getManagerOf("Bielletage")->Add();
             return;
         }
 
-        // Valider le solde de la veille
-        $balanceError = $this->ValidYesterdaySold($RefAgency, $Today);
-        if ($balanceError) {
-            $redirectWithMessage('error', $balanceError, 5, $RefType); // Utilisez le nu)méro d'erreur approprié
+        $validationResult = $this->validateTransaction($data);
+        if ($validationResult !== true) {
+            $this->redirectWithMessage($validationResult['type'], $validationResult['message'], $validationResult['number'], $data['RefType']);
             return;
         }
 
-        // Vérifier si l'approvisionnement est requis
-        if ($this->isRequiredApprovisionnement($RefType, $RefAgency, $Today)) {
-            $redirectWithMessage('warning', 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération', 2, $RefType);
-            return;
-        }
-
-        // Vérifier le montant du versement par rapport à la réserve de la veille
-        if ($RefType == 3 && $TypeAppro == 1 && !$this->isValidMontantVersement($MontantVersement, $RefAgency, $Today)) {
-            $redirectWithMessage('warning', 'Le montant de la transaction est supérieur au solde de la réserve.', 2, $RefType);
-            return;
-        }
-
-        // Vérifier le montant du versement par rapport au solde actuel de la caisse
-        if (in_array($RefType, [2, 4, 5]) && !$this->isValidSoldeCaisse($MontantVersement, $RefCaisse, $Today)) {
-            $redirectWithMessage('warning', 'Le montant de la transaction est supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou contactez votre administrateur.', 2, $RefType);
-            return;
-        }
-
-        // Si toutes les vérifications sont passées, ajouter l'opération
         $this->managers->getManagerOf("Bielletage")->Add();
     }
 
-    // Les fonctions auxiliaires telles que isRequiredApprovisionnement(), isValidMontantVersement(), et isValidSoldeCaisse()
-    // seraient définies en dehors de cette fonction avec leur logique respective.
+    private function extractRequestData($request)
+    {
+        return [
+            'RefCaisse' => $request->postData('RefCaisse'),
+            'RefType' => $request->postData('RefType'),
+            'TypeAppro' => $request->postData('TypeAppro'),
+            'MontantVersement' => $request->postData('MontantVersement'),
+            'Antidate' => $request->postData('Antidate'),
+        ];
+    }
+
+    private function validateTransaction($data)
+    {
+        $balanceError = $this->ValidYesterdaySold($data['RefAgency'], $data['Today']);
+        if ($balanceError) {
+            return ['type' => 'error', 'message' => $balanceError, 'number' => 5];
+        }
+
+        if ($this->isRequiredApprovisionnement($data['RefType'], $data['RefAgency'], $data['Today'])) {
+            return ['type' => 'warning', 'message' => 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération', 'number' => 2];
+        }
+
+        if ($data['RefType'] == 3 && $data['TypeAppro'] == 1 && !$this->isValidMontantVersement($data['MontantVersement'], $data['RefAgency'], $data['Today'])) {
+            return ['type' => 'warning', 'message' => 'Le montant de la transaction est supérieur au solde de la réserve.', 'number' => 2];
+        }
+
+        if (in_array($data['RefType'], [2, 4, 5]) && !$this->isValidSoldeCaisse($data['MontantVersement'], $data['RefCaisse'], $data['Today'])) {
+            return ['type' => 'warning', 'message' => 'Le montant de la transaction est supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou contactez votre administrateur.', 'number' => 2];
+        }
+
+        return true;
+    }
+
+    private function redirectWithMessage($type, $text, $number, $RefType)
+    {
+        $_SESSION['message'] = compact('type', 'text', 'number');
+        $this->app()->httpResponse()->redirect('/bielletage/' . $RefType);
+    }
 
     private function isRequiredApprovisionnement($RefType, $RefAgency, $Today)
     {
@@ -275,32 +258,25 @@ class BielletageController extends \Library\BackController
 
     private function ValidYesterdaySold($RefAgency, $date)
     {
-        // Get the date of the last known balance
         $YesterdayReserveDate = $this->managers->getManagerOf("Journal")->GetLastBalanceDate($RefAgency);
 
-        // Convert to DateTime objects for comparison
         $lastBalanceDateTime = new \DateTime($YesterdayReserveDate);
         $currentDateDateTime = new \DateTime($date);
 
-        // Check if last known balance is not from yesterday
         if ($lastBalanceDateTime->format('Y-m-d') != $currentDateDateTime->modify('-3 day')->format('Y-m-d')) {
-            // Check if there were operations since the last known balance
             $operationsSinceLastBalance = $this->managers->getManagerOf("Journal")->HasOperationsSinceLastBalance($RefAgency);
 
-            // If HasOperationsSinceLastBalance returns a string, it's an error message
             if (is_string($operationsSinceLastBalance)) {
-                // Prompt user to close the books for the last operational day
                 return $operationsSinceLastBalance;
             }
         }
 
-        // If the balance is up-to-date or no operations since last balance, return null indicating no error
         return null;
     }
 
     public function executeDashboard(\Library\HTTPRequest $request)
     {
-        $this->page->addVar("titles", "Dashboard"); // Titre de la page
+        $this->page->addVar("titles", "Dashboard");
         $Biellet = $this->managers->getManagerOf('Arreter')->GetDailyBielletage(date('Y-m-d'));
         $this->page->addVar('Biellet', $Biellet);
         $DailyVersement = $this->managers->getManagerOf('Bielletage')->DailyVersement();
@@ -323,17 +299,12 @@ class BielletageController extends \Library\BackController
             $SoldeRemittance += $value['SoldeRemittance'];
         }
 
-        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
+        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
         foreach ($Agence as $key => $value) {
             $Agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialCaisse(date('Y-m-d'), $value['RefAgency']);
-            // $Agence[$key]['YesterdayReserve'] = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
             $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
-
-            // Assigning the balance to 'YesterdayReserve'
             $Agence[$key]['YesterdayReserve'] = $reserveData['SoldeCompte'];
-
-            // Additionally, if you want to store the date of the last recorded balance
-            $Agence[$key]['LastDate'] = $reserveData['DateSolde'] ?? null; // Ass
+            $Agence[$key]['LastDate'] = $reserveData['DateSolde'] ?? null;
         }
         $this->page->addVar('Agence', $Agence);
         $this->page->addVar('Solde', $Solde);

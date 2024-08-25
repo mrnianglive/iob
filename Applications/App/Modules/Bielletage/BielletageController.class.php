@@ -55,6 +55,9 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('Country', $data['Country']);
         $this->page->addVar('Agency', $data['Agency']);
         $this->page->addVar('Caisse', $data['Caisse']);
+
+        // Ajoutez ces lignes pour indiquer que les sommes seront chargées en JS
+        $this->page->addVar('loadSumsAsynchronously', true);
     }
 
     private function getHomeData($Country = NULL, $Agency = NULL, $Caisse = NULL)
@@ -417,5 +420,40 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('SommeRemittanceDepot', $SommeRemittanceDepot);
         $this->page->addVar('SommeRemittanceRetrait', $SommeRemittanceRetrait);
         $this->page->addVar('SoldeRemittance', $SoldeRemittance);
+    }
+
+    // Ajoutez cette nouvelle méthode pour l'API
+    public function executeGetSums(\Library\HTTPRequest $request)
+    {
+        $Country = $request->getData('Country');
+        $Agency = $request->getData('Agency');
+        $Caisse = $request->getData('Caisse');
+
+        $sums = $this->getSums($Country, $Agency, $Caisse);
+
+        header('Content-Type: application/json');
+        echo json_encode($sums);
+        exit;
+    }
+
+    private function getSums($Country, $Agency, $Caisse)
+    {
+        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'), $Country, $Agency, $Caisse);
+        
+        $sommeVersementGlobal = 0;
+        $sommeRetraitGlobal = 0;
+        $soldeGlobal = 0;
+
+        foreach ($usersCaisse as $user) {
+            $sommeVersementGlobal += $user['TotalVersement'] + $user['SommeVersementRemittance'];
+            $sommeRetraitGlobal += $user['TotalRetrait'] + $user['SommeRetraitRemittance'];
+            $soldeGlobal += $user['SoldeDisponibleGlobal'];
+        }
+
+        return [
+            'SommeVersementGlobal' => $sommeVersementGlobal,
+            'SommeRetraitGlobal' => $sommeRetraitGlobal,
+            'SoldeGlobal' => $soldeGlobal,
+        ];
     }
 }

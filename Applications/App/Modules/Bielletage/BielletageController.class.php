@@ -374,7 +374,7 @@ class BielletageController extends \Library\BackController
     public function executeGetSums(\Library\HTTPRequest $request)
     {
         try {
-            $date = $request->getData('date') ?? date('Y-m-d');
+            $date = date('Y-m-d'); // Toujours utiliser la date du jour
 
             $sums = $this->getSums($date);
 

@@ -60,8 +60,7 @@
 <?php if (isset($loadSumsAsynchronously) && $loadSumsAsynchronously): ?>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const currentDate = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
-    fetch(`/api/get-sums?date=${currentDate}`)
+    fetch('/api/get-sums')
         .then(response => response.json())
         .then(data => {
             if (data.success) {

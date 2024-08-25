@@ -72,5 +72,5 @@
 
 	<route url="/authMicrosoft" module="Connexion" action="authMicrosoft"/>
 	<route url="/authMicrosoft/callback" module="Connexion" action="authMicrosoftCallback"/>
-	<route url="/api/get-sums/([0-9]+)" module="Bielletage" action="getSums" />
+	<route url="/api/get-sums" module="Bielletage" action="getSums" />
 </routes>

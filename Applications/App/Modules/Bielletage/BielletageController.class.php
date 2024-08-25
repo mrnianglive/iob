@@ -374,11 +374,9 @@ class BielletageController extends \Library\BackController
     public function executeGetSums(\Library\HTTPRequest $request)
     {
         try {
-            $Country = $request->getData('Country');
-            $Agency = $request->getData('Agency');
-            $Caisse = $request->getData('Caisse');
+            $date = $request->getData('date') ?? date('Y-m-d');
 
-            $sums = $this->getSums($Country, $Agency, $Caisse);
+            $sums = $this->getSums($date);
 
             $this->JsonResponse($sums);
         } catch (\Exception $e) {
@@ -386,11 +384,9 @@ class BielletageController extends \Library\BackController
         }
     }
 
-    private function getSums($Country, $Agency, $Caisse)
+    private function getSums($date)
     {
-        $currentDate = date('Y-m-d');
-        
-        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse($currentDate, $Country, $Agency, $Caisse);
+        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse($date);
         
         $sommeVersementGlobal = 0;
         $sommeRetraitGlobal = 0;
@@ -406,7 +402,7 @@ class BielletageController extends \Library\BackController
             'SommeVersementGlobal' => $sommeVersementGlobal,
             'SommeRetraitGlobal' => $sommeRetraitGlobal,
             'SoldeGlobal' => $soldeGlobal,
-            'Date' => $currentDate,
+            'Date' => $date,
         ];
     }
 

@@ -60,15 +60,21 @@
 <?php if (isset($loadSumsAsynchronously) && $loadSumsAsynchronously): ?>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/get-sums?Country=<?= $Country ?>&Agency=<?= $Agency ?>&Caisse=<?= $Caisse ?>')
+    const currentDate = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+    fetch(`/api/get-sums?date=${currentDate}`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById('SommeVersementGlobal').textContent = formatNumber(data
-                .SommeVersementGlobal);
-            document.getElementById('SommeRetraitGlobal').textContent = formatNumber(data
-                .SommeRetraitGlobal);
-            document.getElementById('SoldeGlobal').textContent = formatNumber(data.SoldeGlobal);
-        });
+            if (data.success) {
+                document.getElementById('SommeVersementGlobal').textContent = formatNumber(data.data
+                    .SommeVersementGlobal);
+                document.getElementById('SommeRetraitGlobal').textContent = formatNumber(data.data
+                    .SommeRetraitGlobal);
+                document.getElementById('SoldeGlobal').textContent = formatNumber(data.data.SoldeGlobal);
+            } else {
+                console.error('Erreur lors de la récupération des données:', data.message);
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
 });
 
 function formatNumber(number) {

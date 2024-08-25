@@ -9,135 +9,112 @@ class BielletageController extends \Library\BackController
 
     public function executeIndex(\Library\HTTPRequest $request)
     {
-        $this->page->addVar("titles", "Accueil"); // Titre de la page
+        $this->page->addVar("titles", "Accueil");
 
-        $permissions = array();
-        $AllPermissions = $this->managers->getManagerOf('Pannel')->UserPermission();
-        foreach ($AllPermissions as $key => $value) {
-            $permissions[] = $value['access'];
-        }
+        $permissions = array_column($this->managers->getManagerOf('Pannel')->UserPermission(), 'access');
         $this->page->addVar('permission', $permissions);
 
-        // Récupération des données pour l'affichage de l'accueil
-        $Country = isset($_POST['RefPays']) ? $_POST['RefPays'] : '';
-        $Agency = isset($_POST['RefAgency']) ? $_POST['RefAgency'] : '';
-        $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
-        $data = $this->getHomeData($Country, $Agency, $Caisse);
+        $Country = $request->postData('RefPays', '');
+        $Agency = $request->postData('RefAgency', '');
+        $Caisse = $request->postData('RefCaisse', '');
+        
+        // Charger uniquement les données essentielles
+        $essentialData = $this->getEssentialHomeData($Country, $Agency, $Caisse);
 
-        $FirstLogin = $this->managers->getManagerOf('User')->FirstLogin();
-        $this->page->addVar('FirstLogin', $FirstLogin);
+        $this->page->addVar('FirstLogin', $this->managers->getManagerOf('User')->FirstLogin());
+        $this->page->addVar('CountOperationsNonVerifiees', $this->managers->getManagerOf('Journal')->CountOperationsNonVerifiees());
 
+        // Ajouter les données essentielles à la vue
+        foreach ($essentialData as $key => $value) {
+            $this->page->addVar($key, $value);
+        }
 
-
-        $CountOperationsNonVerifiees  = $this->managers->getManagerOf('Journal')->CountOperationsNonVerifiees();
-        $this->page->addVar('CountOperationsNonVerifiees', $CountOperationsNonVerifiees);
-
-
-
-
-        // Ajout des données à la vue
-        $this->page->addVar("CheckOuverture", $data['checkOuverture']);
-        $this->page->addVar('Operation', $data['operations']);
-        $this->page->addVar('Agence', $data['agence']);
-        $this->page->addVar('Solde', $data['solde']);
-        $this->page->addVar('SoldeGlobal', $data['soldeGlobal']);
-        $this->page->addVar('SommeVersement', $data['sommeVersement']);
-        $this->page->addVar('SommeRetrait', $data['sommeRetrait']);
-        $this->page->addVar('SommeVersementGlobal', $data['sommeVersementGlobal']);
-        $this->page->addVar('SommeRetraitGlobal', $data['sommeRetraitGlobal']);
-        $this->page->addVar('SommeRemittanceDepot', $data['sommeRemittanceDepot']);
-        $this->page->addVar('SommeRemittanceRetrait', $data['sommeRemittanceRetrait']);
-        $this->page->addVar('SoldeRemittance', $data['soldeRemittance']);
-        $this->page->addVar('links', $data['links']);
-        $this->page->addVar('Pays', $data['Pays']);
-        $this->page->addVar('ListeAgence', $data['ListeAgence']);
-        $this->page->addVar('ListeCaisse', $data['ListeCaisse']);
-        $this->page->addVar('Country', $data['Country']);
-        $this->page->addVar('Agency', $data['Agency']);
-        $this->page->addVar('Caisse', $data['Caisse']);
-
-        // Ajoutez ces lignes pour indiquer que les sommes seront chargées en JS
+        // Indiquer que les sommes seront chargées de manière asynchrone
         $this->page->addVar('loadSumsAsynchronously', true);
     }
 
-    private function getHomeData($Country = NULL, $Agency = NULL, $Caisse = NULL)
+    private function getEssentialHomeData($Country, $Agency, $Caisse)
     {
-
-        $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
-        $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
-        $ListeCaisse  = $this->managers->getManagerOf("Pannel")->ListeCaisse();
-
-
-        // Récupération des données pour l'affichage de l'accueil
-        $checkOuverture = $this->managers->getManagerOf("Bielletage")->CheckOuverture();
-        $operations = $this->managers->getManagerOf('Bielletage')->GetCaisse(date('Y-m-d'), $Country, $Agency, $Caisse);
-        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'), $Country, $Agency, $Caisse);
-
-        // Calcul des totaux
-        $solde = 0;
-        $soldeGlobal = 0;
-        $sommeVersement = 0;
-        $sommeRetrait = 0;
-        $sommeRemittanceDepot = 0;
-        $sommeRemittanceRetrait = 0;
-        $soldeRemittance = 0;
-        foreach ($usersCaisse as $user) {
-            $solde += $user['SoldeDisponible'];
-            $soldeGlobal += $user['SoldeDisponibleGlobal'];
-            $sommeVersement += $user['TotalVersement'];
-            $sommeRetrait += $user['TotalRetrait'];
-            $sommeRemittanceDepot += $user['SommeVersementRemittance'];
-            $sommeRemittanceRetrait += $user['SommeRetraitRemittance'];
-            $soldeRemittance += $user['SoldeRemittance'];
-        }
-        $sommeVersementGlobal = $sommeVersement + $sommeRemittanceDepot;
-        $sommeRetraitGlobal = $sommeRetrait + $sommeRemittanceRetrait;
-        // Récupération des données pour les agences
-        $agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
-        foreach ($agence as $key => $value) {
-            $agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialAgence(date('Y-m-d'), $value['RefAgency']);
-            // $agence[$key]['YesterdayReserve'] = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
-
-            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
-            if (is_array($reserveData)) {
-                // Assigning the balance to 'YesterdayReserve'
-                $agence[$key]['YesterdayReserve'] = $reserveData['SoldeCompte'];
-                // If you want to store the date of the last recorded balance
-                $agence[$key]['LastDate'] = $reserveData['DateSolde'] ?? null; // Assuming 'null' is returned when no date is found
-            }
-
-            $agence[$key]['CheckAgencyBalance'] = $this->checkAgencyBalanceStatus($value['RefAgency']);
-
-            // Ajouter le résultat de la vérification du solde à la page qui sera rendue.
-
-        }
-
-        // Récupération des liens pour le menu
-        $links = $this->managers->getManagerOf('Pannel')->GetLinks();
-
-        return array(
-            'checkOuverture' => $checkOuverture,
-            'operations' => $operations,
-            'agence' => $agence,
-            'solde' => $solde,
-            'soldeGlobal' => $soldeGlobal,
-            'sommeVersement' => $sommeVersement,
-            'sommeRetrait' => $sommeRetrait,
-            'sommeVersementGlobal' => $sommeVersementGlobal,
-            'sommeRetraitGlobal' => $sommeRetraitGlobal,
-            'sommeRemittanceDepot' => $sommeRemittanceDepot,
-            'sommeRemittanceRetrait' => $sommeRemittanceRetrait,
-            'soldeRemittance' => $soldeRemittance,
-            'links' => $links,
-            'Pays' => $Pays,
-            'ListeAgence' => $ListeAgence,
-            'ListeCaisse' => $ListeCaisse,
+        return [
+            'CheckOuverture' => $this->managers->getManagerOf("Bielletage")->CheckOuverture(),
+            'Operation' => $this->managers->getManagerOf('Bielletage')->GetCaisse(date('Y-m-d'), $Country, $Agency, $Caisse),
+            'Pays' => $this->managers->getManagerOf("Pannel")->ListePays(),
+            'ListeAgence' => $this->managers->getManagerOf("Pannel")->ListeAgence(),
+            'ListeCaisse' => $this->managers->getManagerOf("Pannel")->ListeCaisse(),
+            'links' => $this->managers->getManagerOf('Pannel')->GetLinks(),
             'Country' => $Country,
             'Agency' => $Agency,
             'Caisse' => $Caisse,
-
-        );
+        ];
     }
+
+    // Modifions la méthode executeGetSums pour inclure toutes les données nécessaires
+    public function executeGetSums(\Library\HTTPRequest $request)
+    {
+        try {
+            $date = date('Y-m-d');
+            $Country = $request->getData('Country', '');
+            $Agency = $request->getData('Agency', '');
+            $Caisse = $request->getData('Caisse', '');
+
+            $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse($date, $Country, $Agency, $Caisse);
+            
+            $sums = $this->calculateSums($usersCaisse);
+            $agenceData = $this->getAgenceData();
+
+            $response = array_merge($sums, ['agence' => $agenceData]);
+
+            $this->JsonResponse($response);
+        } catch (\Exception $e) {
+            $this->JsonResponse(['message' => $e->getMessage()], false, 500);
+        }
+    }
+
+    private function calculateSums($usersCaisse)
+    {
+        $sums = [
+            'SommeVersementGlobal' => 0,
+            'SommeRetraitGlobal' => 0,
+            'SoldeGlobal' => 0,
+            'Solde' => 0,
+            'SommeVersement' => 0,
+            'SommeRetrait' => 0,
+            'SommeRemittanceDepot' => 0,
+            'SommeRemittanceRetrait' => 0,
+            'SoldeRemittance' => 0,
+        ];
+
+        foreach ($usersCaisse as $user) {
+            $sums['Solde'] += $user['SoldeDisponible'];
+            $sums['SoldeGlobal'] += $user['SoldeDisponibleGlobal'];
+            $sums['SommeVersement'] += $user['TotalVersement'];
+            $sums['SommeRetrait'] += $user['TotalRetrait'];
+            $sums['SommeRemittanceDepot'] += $user['SommeVersementRemittance'];
+            $sums['SommeRemittanceRetrait'] += $user['SommeRetraitRemittance'];
+            $sums['SoldeRemittance'] += $user['SoldeRemittance'];
+        }
+
+        $sums['SommeVersementGlobal'] = $sums['SommeVersement'] + $sums['SommeRemittanceDepot'];
+        $sums['SommeRetraitGlobal'] = $sums['SommeRetrait'] + $sums['SommeRemittanceRetrait'];
+
+        $sums['Date'] = date('Y-m-d');
+
+        return $sums;
+    }
+
+    private function getAgenceData()
+    {
+        $agence = $this->managers->getManagerOf("Pannel")->UserAgence();
+        foreach ($agence as &$value) {
+            $value['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialAgence(date('Y-m-d'), $value['RefAgency']);
+            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
+            $value['YesterdayReserve'] = $reserveData['SoldeCompte'] ?? null;
+            $value['LastDate'] = $reserveData['DateSolde'] ?? null;
+            $value['CheckAgencyBalance'] = $this->checkAgencyBalanceStatus($value['RefAgency']);
+        }
+        return $agence;
+    }
+
     private function checkAgencyBalanceStatus($RefAgency)
     {
         $currentDate = date('Y-m-d');
@@ -368,42 +345,6 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('SommeRemittanceDepot', $SommeRemittanceDepot);
         $this->page->addVar('SommeRemittanceRetrait', $SommeRemittanceRetrait);
         $this->page->addVar('SoldeRemittance', $SoldeRemittance);
-    }
-
-    // Ajoutez cette nouvelle méthode pour l'API
-    public function executeGetSums(\Library\HTTPRequest $request)
-    {
-        try {
-            $date = date('Y-m-d'); // Toujours utiliser la date du jour
-
-            $sums = $this->getSums($date);
-
-            $this->JsonResponse($sums);
-        } catch (\Exception $e) {
-            $this->JsonResponse(['message' => $e->getMessage()], false, 500);
-        }
-    }
-
-    private function getSums($date)
-    {
-        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse($date);
-        
-        $sommeVersementGlobal = 0;
-        $sommeRetraitGlobal = 0;
-        $soldeGlobal = 0;
-
-        foreach ($usersCaisse as $user) {
-            $sommeVersementGlobal += $user['TotalVersement'] + $user['SommeVersementRemittance'];
-            $sommeRetraitGlobal += $user['TotalRetrait'] + $user['SommeRetraitRemittance'];
-            $soldeGlobal += $user['SoldeDisponibleGlobal'];
-        }
-
-        return [
-            'SommeVersementGlobal' => $sommeVersementGlobal,
-            'SommeRetraitGlobal' => $sommeRetraitGlobal,
-            'SoldeGlobal' => $soldeGlobal,
-            'Date' => $date,
-        ];
     }
 
     private function JsonResponse($data, $success = true, $statusCode = 200)

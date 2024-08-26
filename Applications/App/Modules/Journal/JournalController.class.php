@@ -115,60 +115,67 @@ class JournalController extends \Library\BackController
         $this->app()->httpResponse()->redirect('/Journal/index');
     }
 
-      public function executePetitecaisse(\Library\HTTPRequest $request)
+    public function executePetitecaisse(\Library\HTTPRequest $request)
     {
-        $this->page->addVar("titles", "Petite Caisse"); // Titre de la page
-        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
+        $this->page->addVar("titles", "Petite Caisse");
+        
+        if ($request->getExists('ajax')) {
+            $date = $request->getData('jour') ?: date('Y-m-d');
+            $agenceData = $this->getPetiteCaisseData($date);
+            $this->jsonResponse($agenceData);
+        } else {
+            $this->page->addVar('day', date('Y-m-d'));
+        }
+    }
+
+    private function getPetiteCaisseData($date)
+    {
+        $Agence = $this->managers->getManagerOf("Pannel")->UserAgence();
+        $journalManager = $this->managers->getManagerOf("Journal");
+
         foreach ($Agence as $key => $value) {
-            if (!empty($request->postData('jour'))) {
-                $date = $request->postData('jour');
-                $this->page->addVar('day', $request->postData('jour'));
-            } else {
-                $date = date('Y-m-d');
-                $this->page->addVar('day', $date);
-            }
-            $Agence[$key]['SommeDepotRemittance'] = $this->managers->getManagerOf("Journal")->SoldeRemittanceVersementAgence($date, $value['RefAgency']);
-            $Agence[$key]['SommeRetraitRemittance'] = $this->managers->getManagerOf("Journal")->SoldeRemittanceRetraitAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeDepotRemittance'] = $journalManager->SoldeRemittanceVersementAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeRetraitRemittance'] = $journalManager->SoldeRemittanceRetraitAgence($date, $value['RefAgency']);
 
             $Agence[$key]['SoldeRemittanceAgence'] = $Agence[$key]['SommeDepotRemittance'] - $Agence[$key]['SommeRetraitRemittance'];
-            $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], $date);
-            $Agence[$key]['validate'] = $this->managers->getManagerOf("Journal")->CheckDailyClose($value['RefAgency'], $date);
+            $Agence[$key]['Afficher'] = $journalManager->CaisseAgence($value['RefAgency'], $date);
+            $Agence[$key]['validate'] = $journalManager->CheckDailyClose($value['RefAgency'], $date);
 
-            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], $date);
+            $reserveData = $journalManager->YesterdayReserve($value['RefAgency'], $date);
 
-            // Assigning the balance to 'YesterdayReserve'
             $Agence[$key]['YesterdayReserve'] = $reserveData['SoldeCompte'];
+            $Agence[$key]['LastDate'] = $journalManager->displayDaysSinceLastDate($reserveData['DateSolde']);
 
-            // Additionally, if you want to store the date of the last recorded balance
-            $Agence[$key]['LastDate'] = $this->managers->getManagerOf("Journal")->displayDaysSinceLastDate($reserveData['DateSolde']);
+            $Agence[$key]['SommeDepot'] = $journalManager->SommeDepotAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeSortie'] = $journalManager->SommeRetraitAgence($date, $value['RefAgency']);
 
+            $Agence[$key]['SommeDepotWithRemittance'] = $journalManager->SommeDepotAgence($date, $value['RefAgency']) + $Agence[$key]['SommeDepotRemittance'];
+            $Agence[$key]['SommeSortieWithRemittance'] = $journalManager->SommeRetraitAgence($date, $value['RefAgency']) + $Agence[$key]['SommeRetraitRemittance'];
 
+            $Agence[$key]['TotalAppoAgenceSansApproInitial'] = $journalManager->TotalApproAgenceSansApproInitial($date, $value['RefAgency']);
+            $Agence[$key]['TotalSortieAgence'] = $journalManager->TotalSortieAgence($date, $value['RefAgency']);
 
-            $Agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SommeDepotAgence($date, $value['RefAgency']);
-            $Agence[$key]['SommeSortie'] = $this->managers->getManagerOf("Journal")->SommeRetraitAgence($date, $value['RefAgency']);
-
-            $Agence[$key]['SommeDepotWithRemittance'] = $this->managers->getManagerOf("Journal")->SommeDepotAgence($date, $value['RefAgency']) + $Agence[$key]['SommeDepotRemittance'];
-            $Agence[$key]['SommeSortieWithRemittance'] = $this->managers->getManagerOf("Journal")->SommeRetraitAgence($date, $value['RefAgency']) + $Agence[$key]['SommeRetraitRemittance'];
-
-            $Agence[$key]['TotalAppoAgenceSansApproInitial'] = $this->managers->getManagerOf("Journal")->TotalApproAgenceSansApproInitial($date, $value['RefAgency']);
-            $Agence[$key]['TotalSortieAgence'] = $this->managers->getManagerOf("Journal")->TotalSortieAgence($date, $value['RefAgency']);
-
-            $Agence[$key]['SommeTimbre'] =
-                $this->managers->getManagerOf("Journal")->SommeFraisTimbreAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeTimbre'] = $journalManager->SommeFraisTimbreAgence($date, $value['RefAgency']);
 
             $Agence[$key]['ReserveActuelle'] = $Agence[$key]['YesterdayReserve'] + $Agence[$key]['SommeDepot'] - $Agence[$key]['SommeSortie'] +
                 $Agence[$key]['TotalAppoAgenceSansApproInitial'] - $Agence[$key]['TotalSortieAgence'] + $Agence[$key]['SoldeRemittanceAgence'] + $Agence[$key]['SommeTimbre'];
 
+            $Agence[$key]['DayReserve'] =  $Agence[$key]['YesterdayReserve'] - $journalManager->TotalApproAgenceAvecApproInitial($date, $value['RefAgency']);
 
-            $Agence[$key]['DayReserve'] =  $Agence[$key]['YesterdayReserve'] - $this->managers->getManagerOf("Journal")->TotalApproAgenceAvecApproInitial($date, $value['RefAgency']);
-
-            $Agence[$key]['SommeDepotProduit'] = $this->managers->getManagerOf("Journal")->SommeDepotProduitAgence($date, $value['RefAgency']);
-            $Agence[$key]['SommeSortieProduit'] = $this->managers->getManagerOf("Journal")->SommeRetraitProduitAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeDepotProduit'] = $journalManager->SommeDepotProduitAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeSortieProduit'] = $journalManager->SommeRetraitProduitAgence($date, $value['RefAgency']);
         }
-        $this->page->addVar('Agence', $Agence);
+
+        return $Agence;
     }
 
-  
+    protected function jsonResponse($data, $statusCode = 200)
+    {
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+        echo json_encode($data);
+        exit;
+    }
 
     public function executeCancelFermeture(\Library\HTTPRequest $request)
     {
@@ -178,8 +185,6 @@ class JournalController extends \Library\BackController
         $_SESSION['message']['number'] = 3;
         $this->app()->httpResponse()->redirect("/Journal/petite_caisse"); //Retour en arriere
     }
-
-
 
     public function executeNoverified(\Library\HTTPRequest $request)
     {
@@ -207,7 +212,6 @@ class JournalController extends \Library\BackController
         $this->page->addVar('permission', $permissions);
         $this->page->addVar('Operations', $Operations);
     }
-
 
     public function executeCanceled(\Library\HTTPRequest $request)
     {
@@ -273,13 +277,5 @@ class JournalController extends \Library\BackController
             'totalDepot' => $totalDepot,
             'totalRetrait' => $totalRetrait
         ]);
-    }
-
-    protected function jsonResponse($data, $statusCode = 200)
-    {
-        header('Content-Type: application/json');
-        http_response_code($statusCode);
-        echo json_encode($data);
-        exit;
     }
 }

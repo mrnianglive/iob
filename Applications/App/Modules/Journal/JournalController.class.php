@@ -168,16 +168,7 @@ class JournalController extends \Library\BackController
         $this->page->addVar('Agence', $Agence);
     }
 
-    public function executeGetAgencyDetails(\Library\HTTPRequest $request)
-    {
-        $agencyId = $request->getData('agencyId');
-        $date = $request->getData('date');
-        
-        $journalManager = $this->managers->getManagerOf('Journal');
-        $details = $journalManager->getAgencyDetails($agencyId, $date);
-        
-        $this->jsonResponse($details);
-    }
+  
 
     public function executeCancelFermeture(\Library\HTTPRequest $request)
     {

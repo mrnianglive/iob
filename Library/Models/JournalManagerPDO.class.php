@@ -606,30 +606,67 @@ public function GetOperations($debut, $fin, $Agence, $produit)
         }
         return $result['Nbre'];
     }
+    // public function CaisseAgence($Agence, $Date)
+    // {
+    //     $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency=:RefAgency');
+    //     $requeteAgence->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+    //     $requeteAgence->execute();
+    //     $ListeCaisse = $requeteAgence->fetchAll();
+    //     foreach ($ListeCaisse as $key => $value) {
+
+    //         $ListeCaisse[$key]['SoldeRemittanceVersement'] = $this->SoldeRemittanceVersement($Date, $value['RefCaisse']);
+    //         $ListeCaisse[$key]['SoldeRemittanceRetrait'] = $this->SoldeRemittanceRetrait($Date, $value['RefCaisse']);
+    //         $ListeCaisse[$key]['NbreOperation'] =  $this->NbreOperationCaissier($Date, $value['RefCaisse']);
+    //         $ListeCaisse[$key]['SoldeInitial'] =  $this->SoldeInitialCaisse($Date, $value['RefCaisse']);
+    //         $ListeCaisse[$key]['SoldeInitialGlobal'] =  $this->SoldeInitialCaisseGlobal($Date, $value['RefCaisse']);
+    //         $ListeCaisse[$key]['TotalAppro'] =  $this->TotalApproCaisse($Date, $value['RefCaisse']);
+    //         $ListeCaisse[$key]['TotalVersement'] =  $this->SomnmeVersementCaisse($Date, $value['RefCaisse']);
+    //         $ListeCaisse[$key]['TotalRetrait'] =  $this->SommeRetraitCaisse($Date, $value['RefCaisse']);
+    //         $ListeCaisse[$key]['TotalSortieCaisse'] = $this->TotalSortieCaisse($Date, $value['RefCaisse']);
+    //         $ListeCaisse[$key]['TotalFraisTimbre'] = $this->TotalFraisTimbreCaisse($Date, $value['RefCaisse']);
+
+    //         $ListeCaisse[$key]['SoldeRemittance'] = $ListeCaisse[$key]['SoldeRemittanceVersement'] - $ListeCaisse[$key]['SoldeRemittanceRetrait'];
+    //         $ListeCaisse[$key]['SoldeDisponible'] =   $ListeCaisse[$key]['SoldeInitialGlobal']  + $ListeCaisse[$key]['TotalVersement'] - $ListeCaisse[$key]['TotalRetrait'] - $ListeCaisse[$key]['TotalSortieCaisse'] + $ListeCaisse[$key]['SoldeRemittance'] + $ListeCaisse[$key]['TotalFraisTimbre'];
+    //     }
+    //     return $ListeCaisse;
+    // }
+
+
     public function CaisseAgence($Agence, $Date)
-    {
-        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency=:RefAgency');
-        $requeteAgence->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-        $requeteAgence->execute();
-        $ListeCaisse = $requeteAgence->fetchAll();
-        foreach ($ListeCaisse as $key => $value) {
+{
+    $sql = "SELECT c.*, a.*,
+        COALESCE(SUM(CASE WHEN r.RefType = 1 THEN r.MontantTransaction ELSE 0 END), 0) AS SoldeRemittanceVersement,
+        COALESCE(SUM(CASE WHEN r.RefType = 2 THEN r.MontantTransaction ELSE 0 END), 0) AS SoldeRemittanceRetrait,
+        COUNT(o.RefOperations) AS NbreOperation,
+        COALESCE(SUM(CASE WHEN o.RefType = 3 AND o.TypeAppro = 1 THEN o.MontantVersement ELSE 0 END), 0) AS SoldeInitial,
+        COALESCE(SUM(CASE WHEN o.RefType = 3 THEN o.MontantVersement ELSE 0 END), 0) AS SoldeInitialGlobal,
+        COALESCE(SUM(CASE WHEN o.RefType = 3 AND o.TypeAppro = 2 THEN o.MontantVersement ELSE 0 END), 0) AS TotalAppro,
+        COALESCE(SUM(CASE WHEN o.RefType = 1 THEN o.MontantVersement ELSE 0 END), 0) AS TotalVersement,
+        COALESCE(SUM(CASE WHEN o.RefType = 2 THEN o.MontantVersement ELSE 0 END), 0) AS TotalRetrait,
+        COALESCE(SUM(CASE WHEN o.RefType = 4 THEN o.MontantVersement ELSE 0 END), 0) AS TotalSortieCaisse,
+        COALESCE(SUM(CASE WHEN o.RefType = 5 THEN o.MontantVersement ELSE 0 END), 0) AS TotalFraisTimbre
+    FROM TbleCaisse c
+    INNER JOIN TbleAgency a ON a.RefAgency = c.RefAgency
+    LEFT JOIN TbleRemittance r ON r.RefCaisse = c.RefCaisse AND DATE(r.Insert_time) = :Date AND r.Reset_Id IS NULL
+    LEFT JOIN TbleOperations o ON o.RefCaisse = c.RefCaisse AND DATE(o.Approve2_Time) = :Date AND o.Approve2_Id IS NOT NULL AND o.Reset_Id IS NULL
+    WHERE c.RefAgency = :RefAgency
+    GROUP BY c.RefCaisse";
 
-            $ListeCaisse[$key]['SoldeRemittanceVersement'] = $this->SoldeRemittanceVersement($Date, $value['RefCaisse']);
-            $ListeCaisse[$key]['SoldeRemittanceRetrait'] = $this->SoldeRemittanceRetrait($Date, $value['RefCaisse']);
-            $ListeCaisse[$key]['NbreOperation'] =  $this->NbreOperationCaissier($Date, $value['RefCaisse']);
-            $ListeCaisse[$key]['SoldeInitial'] =  $this->SoldeInitialCaisse($Date, $value['RefCaisse']);
-            $ListeCaisse[$key]['SoldeInitialGlobal'] =  $this->SoldeInitialCaisseGlobal($Date, $value['RefCaisse']);
-            $ListeCaisse[$key]['TotalAppro'] =  $this->TotalApproCaisse($Date, $value['RefCaisse']);
-            $ListeCaisse[$key]['TotalVersement'] =  $this->SomnmeVersementCaisse($Date, $value['RefCaisse']);
-            $ListeCaisse[$key]['TotalRetrait'] =  $this->SommeRetraitCaisse($Date, $value['RefCaisse']);
-            $ListeCaisse[$key]['TotalSortieCaisse'] = $this->TotalSortieCaisse($Date, $value['RefCaisse']);
-            $ListeCaisse[$key]['TotalFraisTimbre'] = $this->TotalFraisTimbreCaisse($Date, $value['RefCaisse']);
+    $stmt = $this->dao->prepare($sql);
+    $stmt->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+    $stmt->bindValue(':Date', $Date, \PDO::PARAM_STR);
+    $stmt->execute();
 
-            $ListeCaisse[$key]['SoldeRemittance'] = $ListeCaisse[$key]['SoldeRemittanceVersement'] - $ListeCaisse[$key]['SoldeRemittanceRetrait'];
-            $ListeCaisse[$key]['SoldeDisponible'] =   $ListeCaisse[$key]['SoldeInitialGlobal']  + $ListeCaisse[$key]['TotalVersement'] - $ListeCaisse[$key]['TotalRetrait'] - $ListeCaisse[$key]['TotalSortieCaisse'] + $ListeCaisse[$key]['SoldeRemittance'] + $ListeCaisse[$key]['TotalFraisTimbre'];
-        }
-        return $ListeCaisse;
+    $ListeCaisse = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+    foreach ($ListeCaisse as &$caisse) {
+        $caisse['SoldeRemittance'] = $caisse['SoldeRemittanceVersement'] - $caisse['SoldeRemittanceRetrait'];
+        $caisse['SoldeDisponible'] = $caisse['SoldeInitialGlobal'] + $caisse['TotalVersement'] 
+            - $caisse['TotalRetrait'] - $caisse['TotalSortieCaisse'] + $caisse['SoldeRemittance'] + $caisse['TotalFraisTimbre'];
     }
+
+    return $ListeCaisse;
+}
 
     public function SoldeRemittanceVersement($Date, $Caisse)
     {

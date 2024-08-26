@@ -294,6 +294,3 @@ function formatNumber(number) {
     return new Intl.NumberFormat('fr-FR').format(parseFloat(number) || 0);
 }
   </script>
-  }
-  }
-  </script>

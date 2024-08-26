@@ -22,50 +22,50 @@ class JournalManagerPDO extends JournalManager
     // }
 
 
-    public function Operations()
-    {
-        $query = 'SELECT o.*, c.RefUsers
-              FROM operations AS o
-              INNER JOIN (
-                  SELECT DISTINCT RefCaisse, RefUsers
-                  FROM TbleChmod
-                  WHERE RefUsers = :RefUsers
-              ) AS c ON c.RefCaisse = o.RefCaisse
-              WHERE o.Approve2_Id IS NOT NULL
-                AND o.Reset_Id IS NULL
-                AND o.Approve2_Time = :jour
-                AND o.RefType IN (1, 2,3,4)
-              ORDER BY o.datePayement ASC';
+    // public function Operations()
+    // {
+    //     $query = 'SELECT o.*, c.RefUsers
+    //           FROM operations AS o
+    //           INNER JOIN (
+    //               SELECT DISTINCT RefCaisse, RefUsers
+    //               FROM TbleChmod
+    //               WHERE RefUsers = :RefUsers
+    //           ) AS c ON c.RefCaisse = o.RefCaisse
+    //           WHERE o.Approve2_Id IS NOT NULL
+    //             AND o.Reset_Id IS NULL
+    //             AND o.Approve2_Time = :jour
+    //             AND o.RefType IN (1, 2,3,4)
+    //           ORDER BY o.datePayement ASC';
 
-        $requete = $this->dao->prepare($query);
-        $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
-        $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
-        $requete->execute();
+    //     $requete = $this->dao->prepare($query);
+    //     $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
+    //     $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+    //     $requete->execute();
 
-        $data = $requete->fetchAll();
+    //     $data = $requete->fetchAll();
 
-        foreach ($data as $key => $value) {
-            $data[$key]['SentFromAgency'] = $this->SentFromAgency($value['SentFromAgency']);
-        }
+    //     foreach ($data as $key => $value) {
+    //         $data[$key]['SentFromAgency'] = $this->SentFromAgency($value['SentFromAgency']);
+    //     }
 
-        return $data;
-    }
+    //     return $data;
+    // }
 
-    public function GetOperations($debut, $fin, $Agence, $produit)
-    {
-        //Old Query before View on SQL $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit INNER JOIN TbleUsers ON TbleUsers.Refusers=TbleOperations.Insert_Id    WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleAgency.RefAgency=:Agence AND  (TbleOperations.RefType=1 OR TbleOperations.RefType=2 OR TbleOperations.RefType=4  ) ORDER BY TbleOperations.datePayement ASC");
-        $requete = $this->dao->prepare("SELECT * FROM operations WHERE operations.Approve2_Id IS NOT NULL AND operations.Reset_Id IS NULL AND date(operations.Approve2_Time) BETWEEN '$debut' AND '$fin' AND operations.RefAgency=:Agence AND (operations.RefProduit IS NULL OR operations.RefProduit = :produit) ORDER BY operations.datePayement DESC");
-        $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
-        $requete->bindValue(':produit', $produit, \PDO::PARAM_INT);
-        $requete->execute();
-        $data = $requete->fetchAll();
-        foreach ($data as $key => $value) {
-            $data[$key]['Debut'] = $debut;
-            $data[$key]['Debut'] = $fin;
-            $data[$key]['RefProduit'] = $produit;
-        }
-        return $data;
-    }
+    // public function GetOperations($debut, $fin, $Agence, $produit)
+    // {
+    //     //Old Query before View on SQL $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit INNER JOIN TbleUsers ON TbleUsers.Refusers=TbleOperations.Insert_Id    WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleAgency.RefAgency=:Agence AND  (TbleOperations.RefType=1 OR TbleOperations.RefType=2 OR TbleOperations.RefType=4  ) ORDER BY TbleOperations.datePayement ASC");
+    //     $requete = $this->dao->prepare("SELECT * FROM operations WHERE operations.Approve2_Id IS NOT NULL AND operations.Reset_Id IS NULL AND date(operations.Approve2_Time) BETWEEN '$debut' AND '$fin' AND operations.RefAgency=:Agence AND (operations.RefProduit IS NULL OR operations.RefProduit = :produit) ORDER BY operations.datePayement DESC");
+    //     $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
+    //     $requete->bindValue(':produit', $produit, \PDO::PARAM_INT);
+    //     $requete->execute();
+    //     $data = $requete->fetchAll();
+    //     foreach ($data as $key => $value) {
+    //         $data[$key]['Debut'] = $debut;
+    //         $data[$key]['Debut'] = $fin;
+    //         $data[$key]['RefProduit'] = $produit;
+    //     }
+    //     return $data;
+    // }
     // public function  UserCaisse($Date, $Pays = NULL, $Agence = NULL, $Caisse = NULL)
     // {
     //     if ($Pays != NULL && $Agence == NULL && $Caisse == NULL) {
@@ -121,6 +121,72 @@ class JournalManagerPDO extends JournalManager
     //     }
     //     return $listeCaisse;
     // }
+
+
+    public function Operations()
+{
+    $query = 'SELECT o.*, c.RefUsers, a.NameAgency, p.NameProduit, t.NameType, u.login
+              FROM operations AS o
+              INNER JOIN (
+                  SELECT DISTINCT RefCaisse, RefUsers
+                  FROM TbleChmod
+                  WHERE RefUsers = :RefUsers
+              ) AS c ON c.RefCaisse = o.RefCaisse
+              INNER JOIN TbleAgency a ON a.RefAgency = o.RefAgency
+              LEFT JOIN TbleProduit p ON p.RefProduit = o.RefProduit
+              INNER JOIN TbleType t ON t.RefType = o.RefType
+              INNER JOIN TbleUsers u ON u.Refusers = o.Insert_Id
+              WHERE o.Approve2_Id IS NOT NULL
+                AND o.Reset_Id IS NULL
+                AND o.Approve2_Time = :jour
+                AND o.RefType IN (1, 2, 3, 4)
+              ORDER BY o.datePayement ASC';
+
+    $requete = $this->dao->prepare($query);
+    $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
+    $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+    $requete->execute();
+
+    $data = $requete->fetchAll(\PDO::FETCH_ASSOC);
+
+    foreach ($data as &$value) {
+        $value['SentFromAgency'] = $this->SentFromAgency($value['SentFromAgency']);
+    }
+
+    return $data;
+}
+
+    public function GetOperations($debut, $fin, $Agence, $produit)
+{
+    $sql = "SELECT o.*, a.NameAgency, p.NameProduit, t.NameType, u.login
+            FROM operations o
+            INNER JOIN TbleAgency a ON a.RefAgency = o.RefAgency
+            LEFT JOIN TbleProduit p ON p.RefProduit = o.RefProduit
+            INNER JOIN TbleType t ON t.RefType = o.RefType
+            INNER JOIN TbleUsers u ON u.Refusers = o.Insert_Id
+            WHERE o.Approve2_Id IS NOT NULL 
+            AND o.Reset_Id IS NULL 
+            AND DATE(o.Approve2_Time) BETWEEN :debut AND :fin 
+            AND o.RefAgency = :Agence";
+
+    if ($produit) {
+        $sql .= " AND o.RefProduit = :produit";
+    }
+
+    $sql .= " ORDER BY o.datePayement DESC";
+
+    $requete = $this->dao->prepare($sql);
+    $requete->bindValue(':debut', $debut, \PDO::PARAM_STR);
+    $requete->bindValue(':fin', $fin, \PDO::PARAM_STR);
+    $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
+    
+    if ($produit) {
+        $requete->bindValue(':produit', $produit, \PDO::PARAM_INT);
+    }
+
+    $requete->execute();
+    return $requete->fetchAll(\PDO::FETCH_ASSOC);
+}
 
     public function UserCaisse($Date, $Pays = NULL, $Agence = NULL, $Caisse = NULL)
 {

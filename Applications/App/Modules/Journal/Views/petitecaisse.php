@@ -208,3 +208,57 @@
           </div>
       </div>
   </div>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const date = document.getElementById('jour').value;
+    const agencies = <?php echo json_encode($Agence); ?>;
+
+    agencies.forEach(agency => {
+        fetch(`/Journal/petite_caisse/data?date=${date}&refAgency=${agency.RefAgency}`)
+            .then(response => response.json())
+            .then(data => {
+                // Mettez à jour les éléments HTML avec les données reçues
+                document.querySelector(`#depotModal-${agency.RefAgency} .YesterdayReserve`)
+                    .textContent = formatNumber(data.YesterdayReserve);
+                document.querySelector(`#depotModal-${agency.RefAgency} .DayReserve`).textContent =
+                    formatNumber(data.TotalApproAgenceAvecApproInitial);
+                document.querySelector(`#depotModal-${agency.RefAgency} .SommeDepotWithRemittance`)
+                    .textContent = formatNumber(data.SommeDepot + data.SommeDepotRemittance);
+                document.querySelector(`#depotModal-${agency.RefAgency} .SommeSortieWithRemittance`)
+                    .textContent = formatNumber(data.SommeSortie + data.SommeRetraitRemittance);
+                document.querySelector(`#depotModal-${agency.RefAgency} .SommeTimbre`).textContent =
+                    formatNumber(data.SommeTimbre);
+
+                const reserveActuelle = data.YesterdayReserve + data.SommeDepot + data
+                    .SommeDepotRemittance - data.SommeSortie - data.SommeRetraitRemittance;
+                document.querySelector(`#depotModal-${agency.RefAgency} .ReserveActuelle`)
+                    .textContent = formatNumber(reserveActuelle);
+
+                // Mettez à jour les données de dépôt et retrait par produit
+                updateProductData(agency.RefAgency, data.SommeDepotProduit, data
+                    .SommeSortieProduit);
+            });
+    });
+});
+
+function formatNumber(number) {
+    return new Intl.NumberFormat('fr-FR').format(number);
+}
+
+function updateProductData(agencyId, depositData, withdrawalData) {
+    const modal = document.querySelector(`#depotModal-${agencyId}`);
+    const depositList = modal.querySelector('.deposit-list');
+    const withdrawalList = modal.querySelector('.withdrawal-list');
+
+    depositList.innerHTML = '';
+    withdrawalList.innerHTML = '';
+
+    for (const [product, amount] of Object.entries(depositData)) {
+        depositList.innerHTML += `<li>${product}: ${formatNumber(amount)}</li>`;
+    }
+
+    for (const [product, amount] of Object.entries(withdrawalData)) {
+        withdrawalList.innerHTML += `<li>${product}: ${formatNumber(amount)}</li>`;
+    }
+}
+  </script>

@@ -259,19 +259,25 @@ class JournalController extends \Library\BackController
     public function executeGetTotals(\Library\HTTPRequest $request)
     {
         $journalManager = $this->managers->getManagerOf('Journal');
-        $Debut = $request->getData('debut');
-        $Fin = $request->getData('fin');
-        $Value = $request->getData('value');
-        $RefProduit = $request->getData('produit');
+        $Debut = $request->getData('Debut');
+        $Fin = $request->getData('Fin');
+        $Value = $request->getData('RefAgency');
+        $RefProduit = $request->getData('RefProduit');
 
-        $sommeVersementPeriode = $journalManager->sommeVersementPeriode($Debut, $Fin, $Value, $RefProduit);
-        $sommeRetraitPeriode = $journalManager->sommeRetraitPeriode($Debut, $Fin, $Value, $RefProduit);
+        $totalDepot = $journalManager->sommeVersementPeriode($Debut, $Fin, $Value, $RefProduit);
+        $totalRetrait = $journalManager->sommeRetraitPeriode($Debut, $Fin, $Value, $RefProduit);
 
-        header('Content-Type: application/json');
-        echo json_encode([
-            'sommeVersementPeriode' => $sommeVersementPeriode,
-            'sommeRetraitPeriode' => $sommeRetraitPeriode
+        $this->jsonResponse([
+            'totalDepot' => $totalDepot,
+            'totalRetrait' => $totalRetrait
         ]);
+    }
+
+    protected function jsonResponse($data, $statusCode = 200)
+    {
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+        echo json_encode($data);
         exit;
     }
 }

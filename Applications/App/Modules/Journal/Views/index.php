@@ -165,26 +165,27 @@
   </div>
   <script>
 document.addEventListener('DOMContentLoaded', function() {
-    calculateTotals();
+    showLoadingSpinners();
+    fetchTotals();
 });
 
-function calculateTotals() {
-    let totalDepot = 0;
-    let totalRetrait = 0;
+function showLoadingSpinners() {
+    document.getElementById('totalDepot').value = 'Chargement...';
+    document.getElementById('totalRetrait').value = 'Chargement...';
+}
 
-    document.querySelectorAll('#dataTable tbody tr').forEach(row => {
-        const operation = row.querySelector('td:nth-child(5)').textContent;
-        const montant = parseFloat(row.querySelector('td:nth-child(8)').textContent.replace(/[^0-9.-]+/g, ""));
-
-        if (operation === 'Dépôt') {
-            totalDepot += montant;
-        } else if (operation === 'Retrait') {
-            totalRetrait += montant;
-        }
-    });
-
-    document.getElementById('totalDepot').value = formatNumber(totalDepot);
-    document.getElementById('totalRetrait').value = formatNumber(totalRetrait);
+function fetchTotals() {
+    fetch('/Journal/getTotals') // Assurez-vous que cette route existe côté serveur
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('totalDepot').value = formatNumber(data.totalDepot);
+            document.getElementById('totalRetrait').value = formatNumber(data.totalRetrait);
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des totaux:', error);
+            document.getElementById('totalDepot').value = 'Erreur';
+            document.getElementById('totalRetrait').value = 'Erreur';
+        });
 }
 
 function formatNumber(number) {

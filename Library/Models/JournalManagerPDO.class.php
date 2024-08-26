@@ -144,37 +144,45 @@ public function Operations()
     return $requete->fetchAll(\PDO::FETCH_ASSOC);
 }
 
-    public function GetOperations($debut, $fin, $Agence, $produit)
+
+public function GetOperations($debut, $fin, $Agence, $produit)
 {
-    $sql = "SELECT o.*, a.NameAgency, p.NameProduit, t.NameType, u.login
-            FROM operations o
-            INNER JOIN TbleAgency a ON a.RefAgency = o.RefAgency
-            LEFT JOIN TbleProduit p ON p.RefProduit = o.RefProduit
-            INNER JOIN TbleType t ON t.RefType = o.RefType
-            INNER JOIN TbleUsers u ON u.Refusers = o.Insert_Id
-            WHERE o.Approve2_Id IS NOT NULL 
-            AND o.Reset_Id IS NULL 
-            AND DATE(o.Approve2_Time) BETWEEN :debut AND :fin 
-            AND o.RefAgency = :Agence";
+    $sql = "SELECT * FROM operations 
+            WHERE Approve2_Id IS NOT NULL 
+            AND Reset_Id IS NULL 
+            AND DATE(Approve2_Time) BETWEEN :debut AND :fin 
+            AND RefAgency = :Agence";
+
+    $params = [
+        ':debut' => $debut,
+        ':fin' => $fin,
+        ':Agence' => $Agence
+    ];
 
     if ($produit) {
-        $sql .= " AND o.RefProduit = :produit";
+        $sql .= " AND RefProduit = :produit";
+        $params[':produit'] = $produit;
+    } else {
+        $sql .= " AND RefProduit IS NULL";
     }
 
-    $sql .= " ORDER BY o.datePayement DESC";
+    $sql .= " ORDER BY datePayement DESC";
 
     $requete = $this->dao->prepare($sql);
-    $requete->bindValue(':debut', $debut, \PDO::PARAM_STR);
-    $requete->bindValue(':fin', $fin, \PDO::PARAM_STR);
-    $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
-    
-    if ($produit) {
-        $requete->bindValue(':produit', $produit, \PDO::PARAM_INT);
+    $requete->execute($params);
+
+    $data = $requete->fetchAll(\PDO::FETCH_ASSOC);
+
+    foreach ($data as &$row) {
+        $row['Debut'] = $debut;
+        $row['Fin'] = $fin;
+        $row['RefProduit'] = $produit;
     }
 
-    $requete->execute();
-    return $requete->fetchAll(\PDO::FETCH_ASSOC);
+    return $data;
 }
+
+
 
     public function UserCaisse($Date, $Pays = NULL, $Agence = NULL, $Caisse = NULL)
 {

@@ -123,7 +123,7 @@ class JournalManagerPDO extends JournalManager
     // }
 
 
-    public function Operations()
+public function Operations()
 {
     $query = 'SELECT o.*, c.RefUsers, a.NameAgency, p.NameProduit, t.NameType, u.login
               FROM operations AS o
@@ -135,7 +135,7 @@ class JournalManagerPDO extends JournalManager
               INNER JOIN TbleAgency a ON a.RefAgency = o.RefAgency
               LEFT JOIN TbleProduit p ON p.RefProduit = o.RefProduit
               INNER JOIN TbleType t ON t.RefType = o.RefType
-              INNER JOIN TbleUsers u ON u.Refusers = o.Insert_Id
+              INNER JOIN TbleUsers u ON u.Refusers = o.Refusers
               WHERE o.Approve2_Id IS NOT NULL
                 AND o.Reset_Id IS NULL
                 AND o.Approve2_Time = :jour

@@ -30,12 +30,10 @@
                   </div>
 
                   <div class="col-md-2 ">Total Depot
-                      <input type="text" value="<?= number_format($sommeVersementPeriode, 0, '.', '.'); ?>"
-                          class="form-control" readonly>
+                      <input type="text" id="totalDepot" class="form-control" readonly>
                   </div>
                   <div class="col-md-2">Total Retrait
-                      <input type="text" value="<?= number_format($sommeRetraitPeriode, 0, '.', '.'); ?>"
-                          class="form-control" readonly>
+                      <input type="text" id="totalRetrait" class="form-control" readonly>
                   </div>
                   <!-- <div class="col-md-2">Solde Especes
                       <input type="text" value="<? //= number_format($Solde, 0, '.', '.');  
@@ -165,3 +163,34 @@
           </div>
       </div>
   </div>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    calculateTotals();
+});
+
+function calculateTotals() {
+    let totalDepot = 0;
+    let totalRetrait = 0;
+
+    document.querySelectorAll('#dataTable tbody tr').forEach(row => {
+        const operation = row.querySelector('td:nth-child(5)').textContent;
+        const montant = parseFloat(row.querySelector('td:nth-child(8)').textContent.replace(/[^0-9.-]+/g, ""));
+
+        if (operation === 'Dépôt') {
+            totalDepot += montant;
+        } else if (operation === 'Retrait') {
+            totalRetrait += montant;
+        }
+    });
+
+    document.getElementById('totalDepot').value = formatNumber(totalDepot);
+    document.getElementById('totalRetrait').value = formatNumber(totalRetrait);
+}
+
+function formatNumber(number) {
+    return number.toLocaleString('fr-FR', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+}
+  </script>

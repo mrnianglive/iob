@@ -22,8 +22,6 @@ class JournalController extends \Library\BackController
         $Value = $request->postData('RefAgency');
         $RefProduit = $request->postData('RefProduit');
 
-        // $this->page->addVars(compact('Debut', 'Fin', 'Value', 'RefProduit'));
-
         $this->page->addVar('Debut', $Debut);
         $this->page->addVar('Fin', $Fin);
         $this->page->addVar('Value', $Value);
@@ -43,7 +41,6 @@ class JournalController extends \Library\BackController
             $RefProduit = $_GET['produit'] ?? $RefProduit;
 
             $Operations = $journalManager->GetOperations($Debut, $Fin, $Value, $RefProduit);
-            // $this->page->addVars(compact('Debut', 'Fin', 'Value', 'RefProduit'));
             $this->page->addVar('Debut', $Debut);
             $this->page->addVar('Fin', $Fin);
             $this->page->addVar('Value', $Value);
@@ -52,12 +49,6 @@ class JournalController extends \Library\BackController
             $Operations = $journalManager->Operations();
         }
         $this->page->addVar('Operations', $Operations);
-
-        $sommeVersementPeriode = $journalManager->sommeVersementPeriode($Debut, $Fin, $Value, $RefProduit);
-        $this->page->addVar('sommeVersementPeriode', $sommeVersementPeriode);
-
-        $sommeRetraitPeriode = $journalManager->sommeRetraitPeriode($Debut, $Fin, $Value, $RefProduit);
-        $this->page->addVar('sommeRetraitPeriode', $sommeRetraitPeriode);
 
         $UsersCaisse = $journalManager->UserCaisse(date('Y-m-d'));
         $SoldeGlobal = 0;
@@ -263,5 +254,24 @@ class JournalController extends \Library\BackController
             $permissions[] = $value['access'];
         }
         $this->page->addVar('permission', $permissions);
+    }
+
+    public function executeGetTotals(\Library\HTTPRequest $request)
+    {
+        $journalManager = $this->managers->getManagerOf('Journal');
+        $Debut = $request->getData('debut');
+        $Fin = $request->getData('fin');
+        $Value = $request->getData('value');
+        $RefProduit = $request->getData('produit');
+
+        $sommeVersementPeriode = $journalManager->sommeVersementPeriode($Debut, $Fin, $Value, $RefProduit);
+        $sommeRetraitPeriode = $journalManager->sommeRetraitPeriode($Debut, $Fin, $Value, $RefProduit);
+
+        header('Content-Type: application/json');
+        echo json_encode([
+            'sommeVersementPeriode' => $sommeVersementPeriode,
+            'sommeRetraitPeriode' => $sommeRetraitPeriode
+        ]);
+        exit;
     }
 }

@@ -32,72 +32,7 @@
                       </thead>
                   </table>
 
-                  <script>
-                  $(document).ready(function() {
-                      $('#dataTable').DataTable({
-                          processing: true,
-                          serverSide: true,
-                          ajax: {
-                              url: '/Journal/petite_caisse/data',
-                              type: 'POST',
-                              data: function(d) {
-                                  d.jour = $('#jour').val();
-                              },
-                              dataSrc: function(json) {
-                                  return json.Afficher;
-                              }
-                          },
-                          columns: [{
-                                  data: 'NameAgency'
-                              },
-                              {
-                                  data: 'NameCaisse'
-                              },
-                              {
-                                  data: 'SoldeInitial',
-                                  render: formatNumber
-                              },
-                              {
-                                  data: 'TotalAppro',
-                                  render: formatNumber
-                              },
-                              {
-                                  data: 'TotalSortieCaisse',
-                                  render: formatNumber
-                              },
-                              {
-                                  data: null,
-                                  render: function(data) {
-                                      return formatNumber(parseFloat(data.TotalVersement) +
-                                          parseFloat(data.SoldeRemittanceVersement));
-                                  }
-                              },
-                              {
-                                  data: null,
-                                  render: function(data) {
-                                      return formatNumber(parseFloat(data.TotalRetrait) +
-                                          parseFloat(data.SoldeRemittanceRetrait));
-                                  }
-                              },
-                              <?php if ($_SESSION['RefPays'] != 1) : ?> {
-                                  data: 'TotalFraisTimbre',
-                                  render: formatNumber
-                              },
-                              <?php endif; ?> {
-                                  data: 'SoldeDisponible',
-                                  render: formatNumber
-                              }
-                          ],
-                          language: {
-                              url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/French.json'
-                          }
-                      });
-                  });
 
-                  function formatNumber(number) {
-                      return new Intl.NumberFormat('fr-FR').format(parseFloat(number) || 0);
-                  }
-                  </script>
               </div>
           </div>
       </div>
@@ -213,83 +148,130 @@ document.addEventListener('DOMContentLoaded', function() {
     const date = document.getElementById('jour').value;
     const agencies = <?php echo json_encode($Agence); ?>;
 
+    // Fonction pour mettre à jour les données de l'agence
+    function updateAgencyData(agencyId, data) {
+        const row = document.querySelector(`tr[data-agency-id="${agencyId}"]`);
+        if (!row) return;
+
+        row.querySelector('.YesterdayReserve').innerHTML =
+            `${formatNumber(data.YesterdayReserve)}<br><small>${data.LastDate}</small>`;
+        row.querySelector('.DayReserve').textContent = formatNumber(data.TotalAppoAgenceSansApproInitial);
+        row.querySelector('.SommeDepotWithRemittance').textContent = formatNumber(data
+            .SommeDepotWithRemittance);
+        row.querySelector('.SommeSortieWithRemittance').textContent = formatNumber(data
+            .SommeSortieWithRemittance);
+        if (row.querySelector('.SommeTimbre')) {
+            row.querySelector('.SommeTimbre').textContent = formatNumber(data.SommeTimbre);
+        }
+        row.querySelector('.ReserveActuelle').textContent = formatNumber(data.ReserveActuelle);
+
+        updateModalContent(agencyId, data);
+    }
+
+    // Fonction pour mettre à jour le contenu du modal
+    function updateModalContent(agencyId, data) {
+        const modal = document.querySelector(`#depotModal-${agencyId}`);
+        if (!modal) return;
+
+        const modalBody = modal.querySelector('.modal-body');
+        modalBody.innerHTML = `
+            <h5>Résumé de l'agence</h5>
+            <p>Solde Reserve (J-1): ${formatNumber(data.YesterdayReserve)}</p>
+            <p>Solde Reserve: ${formatNumber(data.TotalAppoAgenceSansApproInitial)}</p>
+            <p>Total Dépôt: ${formatNumber(data.SommeDepotWithRemittance)}</p>
+            <p>Total Retrait: ${formatNumber(data.SommeSortieWithRemittance)}</p>
+            <hr>
+        `;
+
+        ['Dépôt', 'Retrait'].forEach((type, index) => {
+            const productData = index === 0 ? data.SommeDepotProduit : data.SommeSortieProduit;
+            modalBody.innerHTML += `<h5>${type} par produit</h5><ul>`;
+            for (const [product, amount] of Object.entries(productData)) {
+                if (amount !== null) {
+                    modalBody.innerHTML += `<li>${product}: ${formatNumber(amount)}</li>`;
+                }
+            }
+            modalBody.innerHTML += '</ul><hr>';
+        });
+    }
+
+    // Fonction pour formater les nombres
+    function formatNumber(number) {
+        return new Intl.NumberFormat('fr-FR').format(parseFloat(number) || 0);
+    }
+
+    // Mise à jour des données pour chaque agence
     agencies.forEach(agency => {
         fetch('/Journal/petite_caisse/data', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: `date=${encodeURIComponent(date)}&refAgency=${encodeURIComponent(agency.RefAgency)}`
             })
             .then(response => response.json())
-            .then(data => {
-                updateAgencyData(agency.RefAgency, data);
-            })
+            .then(data => updateAgencyData(agency.RefAgency, data))
             .catch(error => console.error('Error:', error));
     });
-});
 
-function updateAgencyData(agencyId, data) {
-    const row = document.querySelector(`tr[data-agency-id="${agencyId}"]`);
-    if (!row) return;
-
-    // Update YesterdayReserve
-    row.querySelector('.YesterdayReserve').innerHTML =
-        `${formatNumber(data.YesterdayReserve)}<br><small>${data.LastDate}</small>`;
-
-    // Update DayReserve
-    row.querySelector('.DayReserve').textContent = formatNumber(data.TotalAppoAgenceSansApproInitial);
-
-    // Update SommeDepotWithRemittance
-    row.querySelector('.SommeDepotWithRemittance').textContent = formatNumber(data.SommeDepotWithRemittance);
-
-    // Update SommeSortieWithRemittance
-    row.querySelector('.SommeSortieWithRemittance').textContent = formatNumber(data.SommeSortieWithRemittance);
-
-    // Update SommeTimbre
-    if (row.querySelector('.SommeTimbre')) {
-        row.querySelector('.SommeTimbre').textContent = formatNumber(data.SommeTimbre);
-    }
-
-    // Update ReserveActuelle
-    row.querySelector('.ReserveActuelle').textContent = formatNumber(data.ReserveActuelle);
-
-    // Update modal content
-    updateModalContent(agencyId, data);
-}
-
-function updateModalContent(agencyId, data) {
-    const modal = document.querySelector(`#depotModal-${agencyId}`);
-    if (!modal) return;
-
-    const modalBody = modal.querySelector('.modal-body');
-    modalBody.innerHTML = '';
-
-    // Add agency summary
-    modalBody.innerHTML += `
-        <h5>Résumé de l'agence</h5>
-        <p>Solde Reserve (J-1): ${formatNumber(data.YesterdayReserve)}</p>
-        <p>Solde Reserve: ${formatNumber(data.TotalAppoAgenceSansApproInitial)}</p>
-        <p>Total Dépôt: ${formatNumber(data.SommeDepotWithRemittance)}</p>
-        <p>Total Retrait: ${formatNumber(data.SommeSortieWithRemittance)}</p>
-        <hr>
-    `;
-
-    // Add deposit and withdrawal details
-    ['Dépôt', 'Retrait'].forEach((type, index) => {
-        const productData = index === 0 ? data.SommeDepotProduit : data.SommeSortieProduit;
-
-        modalBody.innerHTML += `<h5>${type} par produit</h5><ul>`;
-        for (const [product, amount] of Object.entries(productData)) {
-            if (amount !== null) {
-                modalBody.innerHTML += `<li>${product}: ${formatNumber(amount)}</li>`;
+    // Initialisation de DataTables
+    $('#dataTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/Journal/petite_caisse/data',
+            type: 'POST',
+            data: function(d) {
+                d.jour = $('#jour').val();
+            },
+            dataSrc: function(json) {
+                return json.Afficher;
             }
+        },
+        columns: [{
+                data: 'NameAgency'
+            },
+            {
+                data: 'NameCaisse'
+            },
+            {
+                data: 'SoldeInitial',
+                render: formatNumber
+            },
+            {
+                data: 'TotalAppro',
+                render: formatNumber
+            },
+            {
+                data: 'TotalSortieCaisse',
+                render: formatNumber
+            },
+            {
+                data: null,
+                render: function(data) {
+                    return formatNumber(parseFloat(data.TotalVersement) + parseFloat(data
+                        .SoldeRemittanceVersement));
+                }
+            },
+            {
+                data: null,
+                render: function(data) {
+                    return formatNumber(parseFloat(data.TotalRetrait) + parseFloat(data
+                        .SoldeRemittanceRetrait));
+                }
+            },
+            <?php if ($_SESSION['RefPays'] != 1) : ?> {
+                data: 'TotalFraisTimbre',
+                render: formatNumber
+            },
+            <?php endif; ?> {
+                data: 'SoldeDisponible',
+                render: formatNumber
+            }
+        ],
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/French.json'
         }
-        modalBody.innerHTML += '</ul><hr>';
     });
-}
-
-function formatNumber(number) {
-    return new Intl.NumberFormat('fr-FR').format(parseFloat(number) || 0);
-}
+});
   </script>

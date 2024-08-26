@@ -109,101 +109,101 @@
           <div class="white-box">
               <h3 class="box-title">Solde Reserve</h3>
               <div class="table-responsive">
-                  <table id="dataTable1" class="display nowrap" cellspacing="0" width="100%">
-                      <thead>
-                          <tr>
-                              <th class="border-top-0">Agence</th>
-                              <th class="border-top-0">Solde Reserve(J-1)</th>
-                              <th class="border-top-0">Solde Reserve</th>
-                              <th class="border-top-0">Depot</th>
-                              <th class="border-top-0">Retrait</th>
-                              <?php if ($_SESSION['RefPays'] != 1) { ?>
-                              <th class="border-top-0">Frais Timbre</th>
-                              <?php } ?>
-                              <th class="border-top-0">Solde Agence</th>
-                              <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
-                              <th class="border-top-0">Action</th>
-                              <?php } ?>
+                  <!-- Remplacez le contenu de la table par ceci -->
+                  <tbody id="agencyTableBody">
+                      <?php foreach ($Agence as $value) : ?>
+                      <tr data-agency-id="<?= $value['RefAgency']; ?>">
+                          <td><?= $value['NameAgency']; ?></td>
+                          <td class="caisse-list"></td>
+                          <td class="appro-caisse"></td>
+                          <td class="appro-c2c"></td>
+                          <td class="sortie-fond"></td>
+                          <td class="depot"></td>
+                          <td class="retrait"></td>
+                          <?php if ($_SESSION['RefPays'] != 1) : ?>
+                          <td class="frais-timbre"></td>
+                          <?php endif; ?>
+                          <td class="solde-caisse"></td>
+                      </tr>
+                      <?php endforeach; ?>
+                  </tbody>
 
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <?php foreach ($Agence as $value) { ?>
-                          <tr>
-                              <td><span class="btn btn-primary" data-toggle="modal"
-                                      data-target="#depotModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
-                                      title="Cliquer pour voir les details">
-                                      <?= $value['NameAgency']; ?>
-                                  </span> </td>
-                              <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?><br>
-                                  <small>
-                                      <?= $value['LastDate']; ?>
-                                  </small>
-                              </td>
-                              <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
-                              <td><?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?></td>
-                              <td> <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
-                              </td>
-                              <?php if ($_SESSION['RefPays'] != 1) { ?>
-                              <td><?= number_format($value['SommeTimbre'], 0, '.', '.'); ?></td>
-                              <?php } ?>
-                              <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
-                              <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
-                              <td> <?php if (!empty($value['validate'])) { ?><a
-                                      <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
-                                      href="/Arreter/cancel/<?= $value['validate']['RefCompte']; ?>/<?= $value['RefAgency']; ?>/<?= $day; ?>"
-                                      <?php } ?> class="btn btn-success" data-toggle="tooltip"
-                                      title="Cliquez ici pour reouvrir l'agence"><i class="fa  fa-lock"></i></a>
-                                  <?php } else { ?>
-                                  <form method="POST" action="/Arreter/reserve">
-                                      <input type="hidden" value="<?= $value['ReserveActuelle']; ?>"
-                                          name="ReserveActuelle">
-                                      <input type="hidden" value="<?= $day; ?>" name="daycloture">
-                                      <input type="hidden" value="<?= $value['RefAgency']; ?>" name="RefAgency">
-                                      <button type="submit" class="btn btn-danger" data-toggle="tooltip"
-                                          title="Cliquez ici pour fermer les caisses de l'agence"><i
-                                              class="fa fa-unlock"></i></button>
-                                  </form>
-                                  <?php } ?>
-                              </td>
-                              <?php } ?>
-                              <div class='modal fade' id='depotModal-<?= $value['RefAgency']; ?>' tabindex='-1'
-                                  role='dialog' aria-labelledby='AddCaisse'>
-                                  <div class='modal-dialog' role='document'>
-                                      <div class='modal-content'>
-                                          <div class='modal-header'>Volume Dépôt - Retrait Par Produit
-                                              -<?= $value['NameAgency']; ?>
-                                              <button type='button' class='close' data-dismiss='modal'
-                                                  aria-label='Close'>
-                                                  <span aria-hidden='true'>&times;</span>
-                                              </button>
-                                          </div>
-                                          <div class='modal-body'>
-                                              <ul>
-                                                  <?php foreach ([$value['SommeDepotProduit'], $value['SommeSortieProduit']] as $index => $products) : ?>
-                                                  <h5><?= $index === 0 ? 'Dépôt' : 'Retrait' ?></h5>
-                                                  <?php foreach ($products as $product => $total) : ?>
-                                                  <li><?= $product ?> :
-                                                      <?= is_numeric($total) ? number_format($total, 0, '.', '.') : ($total ?? '0') ?>
-                                                  </li>
-                                                  <?php endforeach; ?>
-                                                  <hr>
-                                                  <?php endforeach; ?>
-                                              </ul>
-                                          </div>
-                                          <div class='modal-footer'>
-                                              <button type='button' class='btn btn-danger'
-                                                  data-dismiss='modal'>Fermer</button>
-                                          </div>
-                                      </div>
-                                  </div>
+                  <!-- Ajoutez ce modal une seule fois à la fin du fichier -->
+                  <div class="modal fade" id="depotModal" tabindex="-1" role="dialog" aria-labelledby="AddCaisse">
+                      <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  Volume Dépôt - Retrait Par Produit <span id="modalAgencyName"></span>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                  </button>
                               </div>
+                              <div class="modal-body" id="modalContent">
+                                  <!-- Le contenu sera injecté ici par JavaScript -->
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
 
-                          </tr>
+                  <!-- Ajoutez ce script à la fin du fichier -->
+                  <script>
+                  document.addEventListener('DOMContentLoaded', function() {
+                      const tableBody = document.getElementById('agencyTableBody');
+                      const date = '<?= $day; ?>';
 
-                          <?php } ?>
-                      </tbody>
-                  </table>
+                      function loadAgencyDetails(agencyId) {
+                          fetch(`/api/agency-details?agencyId=${agencyId}&date=${date}`)
+                              .then(response => response.json())
+                              .then(data => {
+                                  const row = tableBody.querySelector(`tr[data-agency-id="${agencyId}"]`);
+                                  row.querySelector('.caisse-list').innerHTML = data.caisseList;
+                                  row.querySelector('.appro-caisse').innerHTML = data.approCaisse;
+                                  row.querySelector('.appro-c2c').innerHTML = data.approC2C;
+                                  row.querySelector('.sortie-fond').innerHTML = data.sortieFond;
+                                  row.querySelector('.depot').innerHTML = data.depot;
+                                  row.querySelector('.retrait').innerHTML = data.retrait;
+                                  if (data.fraisTimbre !== undefined) {
+                                      row.querySelector('.frais-timbre').innerHTML = data.fraisTimbre;
+                                  }
+                                  row.querySelector('.solde-caisse').innerHTML = data.soldeCaisse;
+                              });
+                      }
+
+                      tableBody.querySelectorAll('tr').forEach(row => {
+                          const agencyId = row.dataset.agencyId;
+                          loadAgencyDetails(agencyId);
+                      });
+
+                      // Gestionnaire d'événements pour le modal
+                      $('#depotModal').on('show.bs.modal', function(event) {
+                          const button = $(event.relatedTarget);
+                          const agencyId = button.closest('tr').data('agency-id');
+                          const modal = $(this);
+
+                          fetch(`/api/agency-details?agencyId=${agencyId}&date=${date}`)
+                              .then(response => response.json())
+                              .then(data => {
+                                  modal.find('#modalAgencyName').text(data.agencyName);
+                                  let content = '<ul>';
+                                  content += '<h5>Dépôt</h5>';
+                                  for (const [product, total] of Object.entries(data
+                                          .depotProduit)) {
+                                      content += `<li>${product} : ${total}</li>`;
+                                  }
+                                  content += '<hr><h5>Retrait</h5>';
+                                  for (const [product, total] of Object.entries(data
+                                          .retraitProduit)) {
+                                      content += `<li>${product} : ${total}</li>`;
+                                  }
+                                  content += '</ul>';
+                                  modal.find('#modalContent').html(content);
+                              });
+                      });
+                  });
+                  </script>
               </div>
           </div>
       </div>

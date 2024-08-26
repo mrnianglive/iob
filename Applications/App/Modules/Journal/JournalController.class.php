@@ -134,7 +134,7 @@ class JournalController extends \Library\BackController
   public function executeGetPetiteCaisseData(\Library\HTTPRequest $request)
 {
     $date = $request->postData('date') ?? date('Y-m-d');
-    $refAgency = $request->postData('refAgency') ?? 1;
+    $refAgency = $request->postData('refAgency') ?? null;
 
     if (!$refAgency) {
         $this->jsonResponse(['error' => 'RefAgency is required'], 400);
@@ -144,18 +144,43 @@ class JournalController extends \Library\BackController
     $journalManager = $this->managers->getManagerOf("Journal");
 
     try {
+        $sommeDepotRemittance = $journalManager->SoldeRemittanceVersementAgence($date, $refAgency);
+        $sommeRetraitRemittance = $journalManager->SoldeRemittanceRetraitAgence($date, $refAgency);
+        $soldeRemittanceAgence = $sommeDepotRemittance - $sommeRetraitRemittance;
+
+        $reserveData = $journalManager->YesterdayReserve($refAgency, $date);
+        $yesterdayReserve = $reserveData['SoldeCompte'];
+        $lastDate = $journalManager->displayDaysSinceLastDate($reserveData['DateSolde']);
+
+        $sommeDepot = $journalManager->SommeDepotAgence($date, $refAgency);
+        $sommeSortie = $journalManager->SommeRetraitAgence($date, $refAgency);
+
+        $totalAppoAgenceSansApproInitial = $journalManager->TotalApproAgenceSansApproInitial($date, $refAgency);
+        $totalSortieAgence = $journalManager->TotalSortieAgence($date, $refAgency);
+        $sommeTimbre = $journalManager->SommeFraisTimbreAgence($date, $refAgency);
+
+        $totalApproAgenceAvecApproInitial = $journalManager->TotalApproAgenceAvecApproInitial($date, $refAgency);
+
+        $sommeDepotProduit = $journalManager->SommeDepotProduitAgence($date, $refAgency);
+        $sommeSortieProduit = $journalManager->SommeRetraitProduitAgence($date, $refAgency);
+
         $data = [
-            'SommeDepotRemittance' => $journalManager->SoldeRemittanceVersementAgence($date, $refAgency),
-            'SommeRetraitRemittance' => $journalManager->SoldeRemittanceRetraitAgence($date, $refAgency),
-            'YesterdayReserve' => $journalManager->YesterdayReserve($refAgency, $date),
-            'SommeDepot' => $journalManager->SommeDepotAgence($date, $refAgency),
-            'SommeSortie' => $journalManager->SommeRetraitAgence($date, $refAgency),
-            'TotalAppoAgenceSansApproInitial' => $journalManager->TotalApproAgenceSansApproInitial($date, $refAgency),
-            'TotalSortieAgence' => $journalManager->TotalSortieAgence($date, $refAgency),
-            'SommeTimbre' => $journalManager->SommeFraisTimbreAgence($date, $refAgency),
-            'TotalApproAgenceAvecApproInitial' => $journalManager->TotalApproAgenceAvecApproInitial($date, $refAgency),
-            'SommeDepotProduit' => $journalManager->SommeDepotProduitAgence($date, $refAgency),
-            'SommeSortieProduit' => $journalManager->SommeRetraitProduitAgence($date, $refAgency),
+            'SommeDepotRemittance' => $sommeDepotRemittance,
+            'SommeRetraitRemittance' => $sommeRetraitRemittance,
+            'SoldeRemittanceAgence' => $soldeRemittanceAgence,
+            'YesterdayReserve' => $yesterdayReserve,
+            'LastDate' => $lastDate,
+            'SommeDepot' => $sommeDepot,
+            'SommeSortie' => $sommeSortie,
+            'SommeDepotWithRemittance' => $sommeDepot + $sommeDepotRemittance,
+            'SommeSortieWithRemittance' => $sommeSortie + $sommeRetraitRemittance,
+            'TotalAppoAgenceSansApproInitial' => $totalAppoAgenceSansApproInitial,
+            'TotalSortieAgence' => $totalSortieAgence,
+            'SommeTimbre' => $sommeTimbre,
+            'ReserveActuelle' => $yesterdayReserve + $sommeDepot - $sommeSortie + $totalAppoAgenceSansApproInitial - $totalSortieAgence + $soldeRemittanceAgence + $sommeTimbre,
+            'DayReserve' => $yesterdayReserve - $totalApproAgenceAvecApproInitial,
+            'SommeDepotProduit' => $sommeDepotProduit,
+            'SommeSortieProduit' => $sommeSortieProduit,
         ];
 
         $this->jsonResponse($data);

@@ -24,84 +24,80 @@
                               <th class="border-top-0">Sortie de Fond</th>
                               <th class="border-top-0">Depot</th>
                               <th class="border-top-0">Retrait</th>
-                              <?php if ($_SESSION['RefPays'] != 1) { ?>
+                              <?php if ($_SESSION['RefPays'] != 1) : ?>
                               <th class="border-top-0">Frais Timbre</th>
-                              <?php } ?>
-
+                              <?php endif; ?>
                               <th class="border-top-0">Solde Caisse</th>
                           </tr>
                       </thead>
-                      <tbody>
-                          <?php foreach ($Agence as $value) { ?>
-                          <tr>
-                              <td><?= $value['NameAgency']; ?></td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $print) { ?>
-                                      <li><?= $print['NameCaisse']; ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['SoldeInitial'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-
-
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['TotalAppro'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['TotalSortieCaisse'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['TotalVersement'] + $afficher['SoldeRemittanceVersement'], 0, '.', '.'); ?>
-                                      </li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['TotalRetrait'] + $afficher['SoldeRemittanceRetrait'], 0, '.', '.'); ?>
-                                      </li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <?php if ($_SESSION['RefPays'] != 1) { ?>
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['TotalFraisTimbre'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                              <?php } ?>
-
-                              <td>
-                                  <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
-                                      <li><?= number_format($afficher['SoldeDisponible'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
-                                  </ul>
-                              </td>
-                          </tr>
-                          <?php } ?>
-                      </tbody>
                   </table>
+
+                  <script>
+                  $(document).ready(function() {
+                      $('#dataTable').DataTable({
+                          processing: true,
+                          serverSide: true,
+                          ajax: {
+                              url: '/Journal/petite_caisse/data',
+                              type: 'POST',
+                              data: function(d) {
+                                  d.jour = $('#jour').val();
+                              },
+                              dataSrc: function(json) {
+                                  return json.Afficher;
+                              }
+                          },
+                          columns: [{
+                                  data: 'NameAgency'
+                              },
+                              {
+                                  data: 'NameCaisse'
+                              },
+                              {
+                                  data: 'SoldeInitial',
+                                  render: formatNumber
+                              },
+                              {
+                                  data: 'TotalAppro',
+                                  render: formatNumber
+                              },
+                              {
+                                  data: 'TotalSortieCaisse',
+                                  render: formatNumber
+                              },
+                              {
+                                  data: null,
+                                  render: function(data) {
+                                      return formatNumber(parseFloat(data.TotalVersement) +
+                                          parseFloat(data.SoldeRemittanceVersement));
+                                  }
+                              },
+                              {
+                                  data: null,
+                                  render: function(data) {
+                                      return formatNumber(parseFloat(data.TotalRetrait) +
+                                          parseFloat(data.SoldeRemittanceRetrait));
+                                  }
+                              },
+                              <?php if ($_SESSION['RefPays'] != 1) : ?> {
+                                  data: 'TotalFraisTimbre',
+                                  render: formatNumber
+                              },
+                              <?php endif; ?> {
+                                  data: 'SoldeDisponible',
+                                  render: formatNumber
+                              }
+                          ],
+                          language: {
+                              url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/French.json'
+                          }
+                      });
+                  });
+
+                  function formatNumber(number) {
+                      return new Intl.NumberFormat('fr-FR').format(parseFloat(number) || 0);
+                  }
+                  </script>
               </div>
           </div>
       </div>

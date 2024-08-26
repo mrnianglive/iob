@@ -132,10 +132,10 @@ public function Operations()
                   FROM TbleChmod
                   WHERE RefUsers = :RefUsers
               ) AS c ON c.RefCaisse = o.RefCaisse
-              INNER JOIN TbleAgency a ON a.RefAgency = o.RefAgency
+              LEFT JOIN TbleAgency a ON a.RefAgency = o.RefAgency
               LEFT JOIN TbleProduit p ON p.RefProduit = o.RefProduit
-              INNER JOIN TbleType t ON t.RefType = o.RefType
-              INNER JOIN TbleUsers u ON u.Refusers = o.Refusers
+              LEFT JOIN TbleType t ON t.RefType = o.RefType
+              LEFT JOIN TbleUsers u ON u.Refusers = o.Refusers
               WHERE o.Approve2_Id IS NOT NULL
                 AND o.Reset_Id IS NULL
                 AND o.Approve2_Time = :jour

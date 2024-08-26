@@ -129,25 +129,29 @@
                       </thead>
                       <tbody>
                           <?php foreach ($Agence as $value) { ?>
-                          <tr>
+                          <tr data-agency-id="<?= $value['RefAgency']; ?>">
                               <td><span class="btn btn-primary" data-toggle="modal"
                                       data-target="#depotModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
                                       title="Cliquer pour voir les details">
                                       <?= $value['NameAgency']; ?>
                                   </span> </td>
-                              <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?><br>
-                                  <small>
+                              <td class="YesterdayReserve">
+                                  <?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?><br>
+                                  <small class="LastDate">
                                       <?= $value['LastDate']; ?>
                                   </small>
                               </td>
-                              <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
-                              <td><?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?></td>
-                              <td> <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
+                              <td class="DayReserve"><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
+                              <td class="SommeDepotWithRemittance">
+                                  <?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?></td>
+                              <td class="SommeSortieWithRemittance">
+                                  <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
                               </td>
                               <?php if ($_SESSION['RefPays'] != 1) { ?>
-                              <td><?= number_format($value['SommeTimbre'], 0, '.', '.'); ?></td>
+                              <td class="SommeTimbre"><?= number_format($value['SommeTimbre'], 0, '.', '.'); ?></td>
                               <?php } ?>
-                              <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
+                              <td class="ReserveActuelle"><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?>
+                              </td>
                               <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
                               <td> <?php if (!empty($value['validate'])) { ?><a
                                       <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
@@ -217,48 +221,79 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`/Journal/petite_caisse/data?date=${date}&refAgency=${agency.RefAgency}`)
             .then(response => response.json())
             .then(data => {
-                // Mettez à jour les éléments HTML avec les données reçues
-                document.querySelector(`#depotModal-${agency.RefAgency} .YesterdayReserve`)
-                    .textContent = formatNumber(data.YesterdayReserve);
-                document.querySelector(`#depotModal-${agency.RefAgency} .DayReserve`).textContent =
-                    formatNumber(data.TotalApproAgenceAvecApproInitial);
-                document.querySelector(`#depotModal-${agency.RefAgency} .SommeDepotWithRemittance`)
-                    .textContent = formatNumber(data.SommeDepot + data.SommeDepotRemittance);
-                document.querySelector(`#depotModal-${agency.RefAgency} .SommeSortieWithRemittance`)
-                    .textContent = formatNumber(data.SommeSortie + data.SommeRetraitRemittance);
-                document.querySelector(`#depotModal-${agency.RefAgency} .SommeTimbre`).textContent =
-                    formatNumber(data.SommeTimbre);
-
-                const reserveActuelle = data.YesterdayReserve + data.SommeDepot + data
-                    .SommeDepotRemittance - data.SommeSortie - data.SommeRetraitRemittance;
-                document.querySelector(`#depotModal-${agency.RefAgency} .ReserveActuelle`)
-                    .textContent = formatNumber(reserveActuelle);
-
-                // Mettez à jour les données de dépôt et retrait par produit
-                updateProductData(agency.RefAgency, data.SommeDepotProduit, data
-                    .SommeSortieProduit);
-            });
+                updateAgencyData(agency.RefAgency, data);
+            })
+            .catch(error => console.error('Error:', error));
     });
 });
 
-function formatNumber(number) {
-    return new Intl.NumberFormat('fr-FR').format(number);
+function updateAgencyData(agencyId, data) {
+    const row = document.querySelector(`tr[data-agency-id="${agencyId}"]`);
+    if (!row) return;
+
+    // Update YesterdayReserve
+    row.querySelector('.YesterdayReserve').textContent = formatNumber(data.YesterdayReserve.SoldeCompte);
+    row.querySelector('.LastDate').textContent = data.YesterdayReserve.DateSolde;
+
+    // Update DayReserve (TotalApproAgenceAvecApproInitial)
+    row.querySelector('.DayReserve').textContent = formatNumber(data.TotalApproAgenceAvecApproInitial);
+
+    // Update SommeDepotWithRemittance
+    const totalDeposit = parseFloat(data.SommeDepot) + parseFloat(data.SommeDepotRemittance);
+    row.querySelector('.SommeDepotWithRemittance').textContent = formatNumber(totalDeposit);
+
+    // Update SommeSortieWithRemittance
+    const totalWithdrawal = parseFloat(data.SommeSortie) + parseFloat(data.SommeRetraitRemittance);
+    row.querySelector('.SommeSortieWithRemittance').textContent = formatNumber(totalWithdrawal);
+
+    // Update SommeTimbre
+    if (row.querySelector('.SommeTimbre')) {
+        row.querySelector('.SommeTimbre').textContent = formatNumber(data.SommeTimbre);
+    }
+
+    // Calculate and update ReserveActuelle
+    const reserveActuelle = parseFloat(data.YesterdayReserve.SoldeCompte) + totalDeposit - totalWithdrawal;
+    row.querySelector('.ReserveActuelle').textContent = formatNumber(reserveActuelle);
+
+    // Update modal content
+    updateModalContent(agencyId, data);
 }
 
-function updateProductData(agencyId, depositData, withdrawalData) {
+function updateModalContent(agencyId, data) {
     const modal = document.querySelector(`#depotModal-${agencyId}`);
-    const depositList = modal.querySelector('.deposit-list');
-    const withdrawalList = modal.querySelector('.withdrawal-list');
+    if (!modal) return;
 
-    depositList.innerHTML = '';
-    withdrawalList.innerHTML = '';
+    const modalBody = modal.querySelector('.modal-body');
+    modalBody.innerHTML = '';
 
-    for (const [product, amount] of Object.entries(depositData)) {
-        depositList.innerHTML += `<li>${product}: ${formatNumber(amount)}</li>`;
-    }
+    // Add agency summary
+    modalBody.innerHTML += `
+        <h5>Résumé de l'agence</h5>
+        <p>Solde Reserve (J-1): ${formatNumber(data.YesterdayReserve.SoldeCompte)}</p>
+        <p>Solde Reserve: ${formatNumber(data.TotalApproAgenceAvecApproInitial)}</p>
+        <p>Total Dépôt: ${formatNumber(parseFloat(data.SommeDepot) + parseFloat(data.SommeDepotRemittance))}</p>
+        <p>Total Retrait: ${formatNumber(parseFloat(data.SommeSortie) + parseFloat(data.SommeRetraitRemittance))}</p>
+        <hr>
+    `;
 
-    for (const [product, amount] of Object.entries(withdrawalData)) {
-        withdrawalList.innerHTML += `<li>${product}: ${formatNumber(amount)}</li>`;
-    }
+    // Add deposit and withdrawal details
+    ['Dépôt', 'Retrait'].forEach((type, index) => {
+        const productData = index === 0 ? data.SommeDepotProduit : data.SommeSortieProduit;
+
+        modalBody.innerHTML += `<h5>${type} par produit</h5><ul>`;
+        for (const [product, amount] of Object.entries(productData)) {
+            if (amount !== null) {
+                modalBody.innerHTML += `<li>${product}: ${formatNumber(amount)}</li>`;
+            }
+        }
+        modalBody.innerHTML += '</ul><hr>';
+    });
 }
+
+function formatNumber(number) {
+    return new Intl.NumberFormat('fr-FR').format(parseFloat(number) || 0);
+}
+  </script>
+  }
+  }
   </script>

@@ -238,11 +238,11 @@ function updateAgencyData(agencyId, data) {
     if (!row) return;
 
     // Update YesterdayReserve
-    row.querySelector('.YesterdayReserve').textContent = formatNumber(data.YesterdayReserve);
-    row.querySelector('.LastDate').innerHTML = data.LastDate;
+    row.querySelector('.YesterdayReserve').innerHTML =
+        `${formatNumber(data.YesterdayReserve)}<br><small>${data.LastDate}</small>`;
 
-    // Update DayReserve (using DayReserve from API)
-    row.querySelector('.DayReserve').textContent = formatNumber(data.DayReserve);
+    // Update DayReserve
+    row.querySelector('.DayReserve').textContent = formatNumber(data.TotalAppoAgenceSansApproInitial);
 
     // Update SommeDepotWithRemittance
     row.querySelector('.SommeDepotWithRemittance').textContent = formatNumber(data.SommeDepotWithRemittance);
@@ -273,7 +273,7 @@ function updateModalContent(agencyId, data) {
     modalBody.innerHTML += `
         <h5>Résumé de l'agence</h5>
         <p>Solde Reserve (J-1): ${formatNumber(data.YesterdayReserve)}</p>
-        <p>Solde Reserve: ${formatNumber(data.DayReserve)}</p>
+        <p>Solde Reserve: ${formatNumber(data.TotalAppoAgenceSansApproInitial)}</p>
         <p>Total Dépôt: ${formatNumber(data.SommeDepotWithRemittance)}</p>
         <p>Total Retrait: ${formatNumber(data.SommeSortieWithRemittance)}</p>
         <hr>

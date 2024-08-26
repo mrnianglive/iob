@@ -218,7 +218,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const agencies = <?php echo json_encode($Agence); ?>;
 
     agencies.forEach(agency => {
-        fetch(`/Journal/petite_caisse/data?date=${date}&refAgency=${agency.RefAgency}`)
+        fetch('/Journal/petite_caisse/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `date=${encodeURIComponent(date)}&refAgency=${encodeURIComponent(agency.RefAgency)}`
+            })
             .then(response => response.json())
             .then(data => {
                 updateAgencyData(agency.RefAgency, data);

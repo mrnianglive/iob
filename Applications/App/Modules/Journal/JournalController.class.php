@@ -131,18 +131,19 @@ class JournalController extends \Library\BackController
         $this->page->addVar('Agence', $Agence);
     }
 
-    public function executeGetPetiteCaisseData(\Library\HTTPRequest $request)
-    {
-        $date = $request->getData('date') ?? date('Y-m-d');
-        $refAgency = $request->getData('refAgency') ?? 1;
-        
-        if (!$refAgency) {
-            $this->jsonResponse(['error' => 'RefAgency is required'], 400);
-            return;
-        }
-        
-        $journalManager = $this->managers->getManagerOf("Journal");
-        
+  public function executeGetPetiteCaisseData(\Library\HTTPRequest $request)
+{
+    $date = $request->getData('date') ?? date('Y-m-d');
+    $refAgency = $request->getData('refAgency');
+
+    if (!$refAgency) {
+        $this->jsonResponse(['error' => 'RefAgency is required'], 400);
+        return;
+    }
+
+    $journalManager = $this->managers->getManagerOf("Journal");
+
+    try {
         $data = [
             'SommeDepotRemittance' => $journalManager->SoldeRemittanceVersementAgence($date, $refAgency),
             'SommeRetraitRemittance' => $journalManager->SoldeRemittanceRetraitAgence($date, $refAgency),
@@ -156,9 +157,12 @@ class JournalController extends \Library\BackController
             'SommeDepotProduit' => $journalManager->SommeDepotProduitAgence($date, $refAgency),
             'SommeSortieProduit' => $journalManager->SommeRetraitProduitAgence($date, $refAgency),
         ];
-        
+
         $this->jsonResponse($data);
+    } catch (\Exception $e) {
+        $this->jsonResponse(['error' => $e->getMessage()], 500);
     }
+}
 
     public function executeCancelFermeture(\Library\HTTPRequest $request)
     {

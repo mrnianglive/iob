@@ -74,5 +74,5 @@
 	<route url="/authMicrosoft/callback" module="Connexion" action="authMicrosoftCallback"/>
 	<route url="/api/get-sums" module="Bielletage" action="getSums" />
 	<route url="/Journal/getTotals" module="Journal" action="getTotals"/>
-	<route url="/api/agency-details" module="Journal" action="getAgencyDetails"/>
+	<route url="/api/agency-details" module="Journal" action="getAgencyDetails" method="post"/>
 </routes>

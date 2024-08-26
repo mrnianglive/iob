@@ -32,74 +32,95 @@
                           </tr>
                       </thead>
                       <tbody>
-                          <?php foreach ($Agence as $value) { ?>
+                          <?php if (is_array($Agence) && !empty($Agence)) : ?>
+                          <?php foreach ($Agence as $value) : ?>
                           <tr>
                               <td><?= $value['NameAgency']; ?></td>
                               <td>
                                   <ul>
-                                      <?php foreach ($value['Afficher'] as $print) { ?>
+                                      <?php if (isset($value['Afficher']) && is_array($value['Afficher'])) : ?>
+                                      <?php foreach ($value['Afficher'] as $print) : ?>
                                       <li><?= $print['NameCaisse']; ?></li>
-                                      <?php } ?>
+                                      <?php endforeach; ?>
+                                      <?php endif; ?>
                                   </ul>
                               </td>
                               <td>
                                   <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <?php if (isset($value['Afficher']) && is_array($value['Afficher'])) : ?>
+                                      <?php foreach ($value['Afficher'] as $afficher) : ?>
                                       <li><?= number_format($afficher['SoldeInitial'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
+                                      <?php endforeach; ?>
+                                      <?php endif; ?>
                                   </ul>
                               </td>
 
-
                               <td>
                                   <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <?php if (isset($value['Afficher']) && is_array($value['Afficher'])) : ?>
+                                      <?php foreach ($value['Afficher'] as $afficher) : ?>
                                       <li><?= number_format($afficher['TotalAppro'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
+                                      <?php endforeach; ?>
+                                      <?php endif; ?>
                                   </ul>
                               </td>
                               <td>
                                   <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <?php if (isset($value['Afficher']) && is_array($value['Afficher'])) : ?>
+                                      <?php foreach ($value['Afficher'] as $afficher) : ?>
                                       <li><?= number_format($afficher['TotalSortieCaisse'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
+                                      <?php endforeach; ?>
+                                      <?php endif; ?>
                                   </ul>
                               </td>
                               <td>
                                   <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <?php if (isset($value['Afficher']) && is_array($value['Afficher'])) : ?>
+                                      <?php foreach ($value['Afficher'] as $afficher) : ?>
                                       <li><?= number_format($afficher['TotalVersement'] + $afficher['SoldeRemittanceVersement'], 0, '.', '.'); ?>
                                       </li>
-                                      <?php } ?>
+                                      <?php endforeach; ?>
+                                      <?php endif; ?>
                                   </ul>
                               </td>
                               <td>
                                   <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <?php if (isset($value['Afficher']) && is_array($value['Afficher'])) : ?>
+                                      <?php foreach ($value['Afficher'] as $afficher) : ?>
                                       <li><?= number_format($afficher['TotalRetrait'] + $afficher['SoldeRemittanceRetrait'], 0, '.', '.'); ?>
                                       </li>
-                                      <?php } ?>
+                                      <?php endforeach; ?>
+                                      <?php endif; ?>
                                   </ul>
                               </td>
-                              <?php if ($_SESSION['RefPays'] != 1) { ?>
+                              <?php if ($_SESSION['RefPays'] != 1) : ?>
                               <td>
                                   <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <?php if (isset($value['Afficher']) && is_array($value['Afficher'])) : ?>
+                                      <?php foreach ($value['Afficher'] as $afficher) : ?>
                                       <li><?= number_format($afficher['TotalFraisTimbre'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
+                                      <?php endforeach; ?>
+                                      <?php endif; ?>
                                   </ul>
                               </td>
-                              <?php } ?>
+                              <?php endif; ?>
 
                               <td>
                                   <ul>
-                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <?php if (isset($value['Afficher']) && is_array($value['Afficher'])) : ?>
+                                      <?php foreach ($value['Afficher'] as $afficher) : ?>
                                       <li><?= number_format($afficher['SoldeDisponible'], 0, '.', '.'); ?></li>
-                                      <?php } ?>
+                                      <?php endforeach; ?>
+                                      <?php endif; ?>
                                   </ul>
                               </td>
                           </tr>
-                          <?php } ?>
+                          <?php endforeach; ?>
+                          <?php else : ?>
+                          <tr>
+                              <td colspan="9">Aucune donnée disponible</td>
+                          </tr>
+                          <?php endif; ?>
                       </tbody>
                   </table>
               </div>
@@ -155,7 +176,17 @@
                       const date = '<?= $day; ?>';
 
                       function loadAgencyDetails(agencyId) {
-                          fetch(`/api/agency-details?agencyId=${agencyId}&date=${date}`)
+                          fetch('/api/agency-details', {
+                                  method: 'POST',
+                                  headers: {
+                                      'Content-Type': 'application/json',
+                                      'X-Requested-With': 'XMLHttpRequest'
+                                  },
+                                  body: JSON.stringify({
+                                      agencyId: agencyId,
+                                      date: date
+                                  })
+                              })
                               .then(response => response.json())
                               .then(data => {
                                   const row = tableBody.querySelector(`tr[data-agency-id="${agencyId}"]`);
@@ -183,7 +214,17 @@
                           const agencyId = button.closest('tr').data('agency-id');
                           const modal = $(this);
 
-                          fetch(`/api/agency-details?agencyId=${agencyId}&date=${date}`)
+                          fetch('/api/agency-details', {
+                                  method: 'POST',
+                                  headers: {
+                                      'Content-Type': 'application/json',
+                                      'X-Requested-With': 'XMLHttpRequest'
+                                  },
+                                  body: JSON.stringify({
+                                      agencyId: agencyId,
+                                      date: date
+                                  })
+                              })
                               .then(response => response.json())
                               .then(data => {
                                   modal.find('#modalAgencyName').text(data.agencyName);

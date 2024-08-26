@@ -238,28 +238,25 @@ function updateAgencyData(agencyId, data) {
     if (!row) return;
 
     // Update YesterdayReserve
-    row.querySelector('.YesterdayReserve').textContent = formatNumber(data.YesterdayReserve.SoldeCompte);
-    row.querySelector('.LastDate').textContent = data.YesterdayReserve.DateSolde;
+    row.querySelector('.YesterdayReserve').textContent = formatNumber(data.YesterdayReserve);
+    row.querySelector('.LastDate').innerHTML = data.LastDate;
 
-    // Update DayReserve (TotalApproAgenceAvecApproInitial)
-    row.querySelector('.DayReserve').textContent = formatNumber(data.TotalApproAgenceAvecApproInitial);
+    // Update DayReserve (using DayReserve from API)
+    row.querySelector('.DayReserve').textContent = formatNumber(data.DayReserve);
 
     // Update SommeDepotWithRemittance
-    const totalDeposit = parseFloat(data.SommeDepot) + parseFloat(data.SommeDepotRemittance);
-    row.querySelector('.SommeDepotWithRemittance').textContent = formatNumber(totalDeposit);
+    row.querySelector('.SommeDepotWithRemittance').textContent = formatNumber(data.SommeDepotWithRemittance);
 
     // Update SommeSortieWithRemittance
-    const totalWithdrawal = parseFloat(data.SommeSortie) + parseFloat(data.SommeRetraitRemittance);
-    row.querySelector('.SommeSortieWithRemittance').textContent = formatNumber(totalWithdrawal);
+    row.querySelector('.SommeSortieWithRemittance').textContent = formatNumber(data.SommeSortieWithRemittance);
 
     // Update SommeTimbre
     if (row.querySelector('.SommeTimbre')) {
         row.querySelector('.SommeTimbre').textContent = formatNumber(data.SommeTimbre);
     }
 
-    // Calculate and update ReserveActuelle
-    const reserveActuelle = parseFloat(data.YesterdayReserve.SoldeCompte) + totalDeposit - totalWithdrawal;
-    row.querySelector('.ReserveActuelle').textContent = formatNumber(reserveActuelle);
+    // Update ReserveActuelle
+    row.querySelector('.ReserveActuelle').textContent = formatNumber(data.ReserveActuelle);
 
     // Update modal content
     updateModalContent(agencyId, data);
@@ -275,10 +272,10 @@ function updateModalContent(agencyId, data) {
     // Add agency summary
     modalBody.innerHTML += `
         <h5>Résumé de l'agence</h5>
-        <p>Solde Reserve (J-1): ${formatNumber(data.YesterdayReserve.SoldeCompte)}</p>
-        <p>Solde Reserve: ${formatNumber(data.TotalApproAgenceAvecApproInitial)}</p>
-        <p>Total Dépôt: ${formatNumber(parseFloat(data.SommeDepot) + parseFloat(data.SommeDepotRemittance))}</p>
-        <p>Total Retrait: ${formatNumber(parseFloat(data.SommeSortie) + parseFloat(data.SommeRetraitRemittance))}</p>
+        <p>Solde Reserve (J-1): ${formatNumber(data.YesterdayReserve)}</p>
+        <p>Solde Reserve: ${formatNumber(data.DayReserve)}</p>
+        <p>Total Dépôt: ${formatNumber(data.SommeDepotWithRemittance)}</p>
+        <p>Total Retrait: ${formatNumber(data.SommeSortieWithRemittance)}</p>
         <hr>
     `;
 

@@ -181,6 +181,8 @@ class JournalController extends \Library\BackController
             'DayReserve' => $yesterdayReserve - $totalApproAgenceAvecApproInitial,
             'SommeDepotProduit' => $sommeDepotProduit,
             'SommeSortieProduit' => $sommeSortieProduit,
+            'Afficher' => $journalManager->CaisseAgence($refAgency, $date),
+            'validate' => $journalManager->CheckDailyClose($refAgency, $date),
         ];
 
         $this->jsonResponse($data);

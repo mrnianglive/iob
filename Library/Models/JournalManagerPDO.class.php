@@ -125,21 +125,15 @@ class JournalManagerPDO extends JournalManager
 
 public function Operations()
 {
-    $query = 'SELECT o.*, c.RefUsers, a.NameAgency, p.NameProduit, t.NameType, u.login
+    $query = 'SELECT o.*, c.RefUsers, a.NameAgency AS SentFromAgency
               FROM operations AS o
-              INNER JOIN (
-                  SELECT DISTINCT RefCaisse, RefUsers
-                  FROM TbleChmod
-                  WHERE RefUsers = :RefUsers
-              ) AS c ON c.RefCaisse = o.RefCaisse
-              LEFT JOIN TbleAgency a ON a.RefAgency = o.RefAgency
-              LEFT JOIN TbleProduit p ON p.RefProduit = o.RefProduit
-              LEFT JOIN TbleType t ON t.RefType = o.RefType
-              LEFT JOIN TbleUsers u ON u.Refusers = o.Refusers
+              LEFT JOIN TbleChmod AS c ON c.RefCaisse = o.RefCaisse
+              LEFT JOIN TbleAgency AS a ON a.RefAgency = o.SentFromAgency
               WHERE o.Approve2_Id IS NOT NULL
                 AND o.Reset_Id IS NULL
                 AND o.Approve2_Time = :jour
                 AND o.RefType IN (1, 2, 3, 4)
+                AND c.RefUsers = :RefUsers
               ORDER BY o.datePayement ASC';
 
     $requete = $this->dao->prepare($query);
@@ -147,13 +141,7 @@ public function Operations()
     $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
     $requete->execute();
 
-    $data = $requete->fetchAll(\PDO::FETCH_ASSOC);
-
-    foreach ($data as &$value) {
-        $value['SentFromAgency'] = $this->SentFromAgency($value['SentFromAgency']);
-    }
-
-    return $data;
+    return $requete->fetchAll(\PDO::FETCH_ASSOC);
 }
 
     public function GetOperations($debut, $fin, $Agence, $produit)

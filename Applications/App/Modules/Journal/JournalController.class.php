@@ -134,7 +134,7 @@ class JournalController extends \Library\BackController
   public function executeGetPetiteCaisseData(\Library\HTTPRequest $request)
 {
     $date = $request->postData('date') ?? date('Y-m-d');
-    $refAgency = $request->postData('refAgency') ?? null;
+    $refAgency = $request->postData('refAgency') ?? 1;
 
     if (!$refAgency) {
         $this->jsonResponse(['error' => 'RefAgency is required'], 400);

@@ -129,29 +129,25 @@
                       </thead>
                       <tbody>
                           <?php foreach ($Agence as $value) { ?>
-                          <tr data-agency-id="<?= $value['RefAgency']; ?>">
+                          <tr>
                               <td><span class="btn btn-primary" data-toggle="modal"
                                       data-target="#depotModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
                                       title="Cliquer pour voir les details">
                                       <?= $value['NameAgency']; ?>
                                   </span> </td>
-                              <td class="YesterdayReserve">
-                                  <?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?><br>
-                                  <small class="LastDate">
+                              <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?><br>
+                                  <small>
                                       <?= $value['LastDate']; ?>
                                   </small>
                               </td>
-                              <td class="DayReserve"><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
-                              <td class="SommeDepotWithRemittance">
-                                  <?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?></td>
-                              <td class="SommeSortieWithRemittance">
-                                  <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
+                              <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
+                              <td><?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?></td>
+                              <td> <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
                               </td>
                               <?php if ($_SESSION['RefPays'] != 1) { ?>
-                              <td class="SommeTimbre"><?= number_format($value['SommeTimbre'], 0, '.', '.'); ?></td>
+                              <td><?= number_format($value['SommeTimbre'], 0, '.', '.'); ?></td>
                               <?php } ?>
-                              <td class="ReserveActuelle"><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?>
-                              </td>
+                              <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
                               <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
                               <td> <?php if (!empty($value['validate'])) { ?><a
                                       <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
@@ -212,88 +208,3 @@
           </div>
       </div>
   </div>
-  <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const date = document.getElementById('jour').value;
-    const agencies = <?php echo json_encode($Agence); ?>;
-
-    agencies.forEach(agency => {
-        fetch('/Journal/petite_caisse/data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `date=${encodeURIComponent(date)}&refAgency=${encodeURIComponent(agency.RefAgency)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                updateAgencyData(agency.RefAgency, data);
-            })
-            .catch(error => console.error('Error:', error));
-    });
-});
-
-function updateAgencyData(agencyId, data) {
-    const row = document.querySelector(`tr[data-agency-id="${agencyId}"]`);
-    if (!row) return;
-
-    // Update YesterdayReserve
-    row.querySelector('.YesterdayReserve').innerHTML =
-        `${formatNumber(data.YesterdayReserve)}<br><small>${data.LastDate}</small>`;
-
-    // Update DayReserve
-    row.querySelector('.DayReserve').textContent = formatNumber(data.TotalAppoAgenceSansApproInitial);
-
-    // Update SommeDepotWithRemittance
-    row.querySelector('.SommeDepotWithRemittance').textContent = formatNumber(data.SommeDepotWithRemittance);
-
-    // Update SommeSortieWithRemittance
-    row.querySelector('.SommeSortieWithRemittance').textContent = formatNumber(data.SommeSortieWithRemittance);
-
-    // Update SommeTimbre
-    if (row.querySelector('.SommeTimbre')) {
-        row.querySelector('.SommeTimbre').textContent = formatNumber(data.SommeTimbre);
-    }
-
-    // Update ReserveActuelle
-    row.querySelector('.ReserveActuelle').textContent = formatNumber(data.ReserveActuelle);
-
-    // Update modal content
-    updateModalContent(agencyId, data);
-}
-
-function updateModalContent(agencyId, data) {
-    const modal = document.querySelector(`#depotModal-${agencyId}`);
-    if (!modal) return;
-
-    const modalBody = modal.querySelector('.modal-body');
-    modalBody.innerHTML = '';
-
-    // Add agency summary
-    modalBody.innerHTML += `
-        <h5>Résumé de l'agence</h5>
-        <p>Solde Reserve (J-1): ${formatNumber(data.YesterdayReserve)}</p>
-        <p>Solde Reserve: ${formatNumber(data.TotalAppoAgenceSansApproInitial)}</p>
-        <p>Total Dépôt: ${formatNumber(data.SommeDepotWithRemittance)}</p>
-        <p>Total Retrait: ${formatNumber(data.SommeSortieWithRemittance)}</p>
-        <hr>
-    `;
-
-    // Add deposit and withdrawal details
-    ['Dépôt', 'Retrait'].forEach((type, index) => {
-        const productData = index === 0 ? data.SommeDepotProduit : data.SommeSortieProduit;
-
-        modalBody.innerHTML += `<h5>${type} par produit</h5><ul>`;
-        for (const [product, amount] of Object.entries(productData)) {
-            if (amount !== null) {
-                modalBody.innerHTML += `<li>${product}: ${formatNumber(amount)}</li>`;
-            }
-        }
-        modalBody.innerHTML += '</ul><hr>';
-    });
-}
-
-function formatNumber(number) {
-    return new Intl.NumberFormat('fr-FR').format(parseFloat(number) || 0);
-}
-  </script>

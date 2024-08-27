@@ -4,21 +4,19 @@
               <div class="input-group">
                   <div class="">Agence
                       <select class="form-control" name="RefAgency" tabindex="1" required="" id="RefAgency">
-                          <?php foreach ($UserAgence as $Agence) {
+                          <?php foreach ($UserAgence as $key => $Agence) {
                             ?>
-                          <option value="<?= htmlspecialchars($Agence['RefAgency']); ?>"
-                              <?php if ($Agence['RefAgency'] == $Value) { ?> selected="" <?php } ?>>
-                              <?= htmlspecialchars($Agence['NameAgency']); ?></option>
+                          <option value="<?= $Agence['RefAgency']; ?>" <?php if ($Agence['RefAgency'] == $Value) { ?>
+                              selected="" <?php } ?>>
+                              <?= $Agence['NameAgency']; ?></option>
                           <?php }   ?>
                       </select>
                   </div>
                   <div class="col-md-2">Du
-                      <input type="date" id="Debut" name="Debut" value="<?= htmlspecialchars($Debut); ?>"
-                          class="form-control ">
+                      <input type="date" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
                   </div>
                   <div class="col-md-2">Au
-                      <input type="date" id="Fin" name="Fin" value="<?= htmlspecialchars($Fin); ?>"
-                          class="form-control">
+                      <input type="date" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
                   </div>
 
                   <div class="col-md-2">Produit
@@ -32,10 +30,12 @@
                   </div>
 
                   <div class="col-md-2 ">Total Depot
-                      <input type="text" id="totalDepot" class="form-control" readonly>
+                      <input type="text" value="<?= number_format($sommeVersementPeriode, 0, '.', '.'); ?>"
+                          class="form-control" readonly>
                   </div>
                   <div class="col-md-2">Total Retrait
-                      <input type="text" id="totalRetrait" class="form-control" readonly>
+                      <input type="text" value="<?= number_format($sommeRetraitPeriode, 0, '.', '.'); ?>"
+                          class="form-control" readonly>
                   </div>
                   <!-- <div class="col-md-2">Solde Especes
                       <input type="text" value="<? //= number_format($Solde, 0, '.', '.');  
@@ -52,9 +52,9 @@
                       <thead>
                           <tr>
                               <th class="border-top-0">ID</th>
-                              <?php if (in_array($_SESSION['statut'], ['superadmin', 'admin', 'Control'])): ?>
+                              <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
                               <th class="border-top-0">Statut</th>
-                              <?php endif; ?>
+                              <?php } ?>
                               <th class="border-top-0">Agence</th>
                               <th class="border-top-0">Produit</th>
                               <th class="border-top-0">Operation</th>
@@ -66,67 +66,59 @@
                               <th class="border-top-0">Caissier</th>
                               <th class="border-top-0">RECU</th>
                               <th class="border-top-0">From</th>
-                              <?php if (in_array(1, $permission) || in_array($_SESSION['statut'], ['superadmin', 'admin'])): ?>
+                              <?php if (in_array(1, $permission) || $_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
                               <th class="border-top-0">Action</th>
-                              <?php endif; ?>
+                              <?php } ?>
                           </tr>
                       </thead>
                       <tbody>
-                          <?php foreach ($Operations as $value): ?>
+                          <?php foreach ($Operations as $key => $value) { ?>
                           <tr>
+
                               <td
-                                  class="<?= ($_SESSION['statut'] == 'Niveau1') ? ($value['Validate'] == 2 ? 'bg-success' : ($value['Validate'] == 1 ? 'bg-danger' : '')) : '' ?>">
-                                  <?= htmlspecialchars($value['RefOperations']); ?>
-                              </td>
-                              <?php if (in_array($_SESSION['statut'], ['superadmin', 'admin', 'Control'])): ?>
-                              <td>
-                                  <?php if ($value['Validate'] == 1): ?>
-                                  <button class="btn btn-danger" data-toggle="modal" data-target="#modal"
-                                      data-operation-id="<?= htmlspecialchars($value['RefOperations']); ?>"
-                                      data-ref-agency="<?= htmlspecialchars($value['RefAgency']); ?>"
-                                      data-ref-produit="<?= htmlspecialchars($value['RefProduit']); ?>"
+                                  style="<?php if ($value['Validate'] == 2 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color:#7ace4c;  <?php } elseif ($value['Validate'] == 1 && ($_SESSION['statut'] == 'Niveau1')) { ?> background-color: #f33155; <?php   } ?>">
+                                  <?= $value['RefOperations']; ?></td>
+                              <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
+                              <td> <?php if ($value['Validate'] == 1) { ?><button class="btn btn-danger"
+                                      data-toggle="modal" data-target="#modal"
+                                      data-operation-id="<?= $value['RefOperations']; ?>"
+                                      data-ref-agency="<?= $value['RefAgency']; ?>"
+                                      data-ref-produit="<?= $value['RefProduit']; ?>"
                                       title="Cliquez ici pour confirmer l'opération">
                                       Non Vérifiée
-                                  </button>
-                                  <?php else: ?>
-                                  <a href="/Journal/cancelvalidate/<?= htmlspecialchars($value['RefOperations']); ?>"
+                                  </button><?php } else { ?> <a
+                                      href="/Journal/cancelvalidate/<?= $value['RefOperations']; ?>"
                                       class="btn btn-success"
                                       onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vérifcation ?');">
-                                      Verifiée le <span><?= htmlspecialchars($value['DateValidate']); ?></span>
-                                  </a>
-                                  <?php endif; ?>
+                                      Verifiée le <span><?= $value['DateValidate']; ?></span></a>
+                                  <?php   } ?>
                               </td>
-                              <?php endif; ?>
-                              <td><?= htmlspecialchars($value['NameAgency']); ?></td>
-                              <td><?= htmlspecialchars($value['NameProduit']); ?></td>
-                              <td><?= htmlspecialchars($value['NameType']); ?></td>
-                              <td><?= htmlspecialchars($value['NameClient']); ?></td>
-                              <td class="account" data-account="<?= htmlspecialchars($value['NumCompte']); ?>">
-                                  <?= htmlspecialchars($value['NumCompte']); ?>
+                              <?php } ?>
+                              <td><?= $value['NameAgency']; ?></td>
+                              <td><?= $value['NameProduit']; ?></td>
+                              <td><?= $value['NameType']; ?></td>
+                              <td><?= $value['NameClient']; ?></td>
+                              <td class="account" data-account="<?= $value['NumCompte']; ?>">
+                                  <?= $value['NumCompte']; ?>
                               </td>
-                              <td><?= htmlspecialchars($value['MontantVersement']); ?></td>
-                              <td><?= htmlspecialchars($value['Remarque']); ?></td>
+                              <td><?= $value['MontantVersement']; ?></td>
+                              <td><?= $value['Remarque']; ?></td>
                               <td><?= date('d/m/Y', strtotime($value['Approve2_Time'])); ?></td>
-                              <td><?= htmlspecialchars($value['login']); ?></td>
-                              <td>
-                                  <a href="/bordereau/<?= htmlspecialchars($value['RefOperations']); ?>" target="_blank"
+                              <td><?= $value['login']; ?></td>
+                              <td><a href="/bordereau/<?= $value['RefOperations']; ?>" target="_blank"
                                       class="btn btn-secondary" data-toggle="tooltip"
-                                      title="Cliquez ici pour imprimer le bordereau">
-                                      <i class="fa fa-print"> Reçu</i>
-                                  </a>
-                              </td>
-                              <td><?= htmlspecialchars($value['SentFromAgency']); ?></td>
-                              <?php if (in_array(1, $permission) || in_array($_SESSION['statut'], ['superadmin', 'admin'])): ?>
-                              <td>
-                                  <a href="/Journal/delete/<?= htmlspecialchars($value['RefOperations']); ?>"
+                                      title="Cliquez ici pour imprimer le bordereau"><i class="fa fa-print">
+                                          Reçu</i> </td>
+                              <td><?= $value['SentFromAgency']; ?></td>
+                              <?php if (in_array(1, $permission) || $_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
+                              <td><a href="/Journal/delete/<?= $value['RefOperations']; ?>"
                                       class="btn btn-xs btn-danger"
-                                      onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
-                                      <i class="fa fa-trash"></i>
-                                  </a>
+                                      onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"><i
+                                          class="fa fa-trash"></i></a>
                               </td>
-                              <?php endif; ?>
+                              <?php } ?>
                           </tr>
-                          <?php endforeach; ?>
+                          <?php } ?>
                       </tbody>
                   </table>
               </div>
@@ -153,17 +145,15 @@
                               <label for="recipient-name" class="control-label">Agence</label>
                               <select name="SentFromAgency" class="form-control" required>
                                   <option value="">Veuillez Choisir l'agence</option>
-                                  <?php foreach ($ListeAgence as $agence): ?>
-                                  <option value="<?= htmlspecialchars($agence['RefAgency']); ?>">
-                                      <?= htmlspecialchars($agence['NameAgency']); ?></option>
-                                  <?php endforeach; ?>
+                                  <?php foreach ($ListeAgence as $key => $agence) { ?>
+                                  <option value="<?= $agence['RefAgency']; ?>">
+                                      <?= $agence['NameAgency']; ?></option>
+                                  <?php   } ?>
                               </select>
                           </div>
                           <input type="hidden" class="form-control" id="modal-ref-agency" name="RefAgency" readonly>
-                          <input type="hidden" id="Debut" name="Debut" value="<?= htmlspecialchars($Debut); ?>"
-                              class="form-control">
-                          <input type="hidden" id="Fin" name="Fin" value="<?= htmlspecialchars($Fin); ?>"
-                              class="form-control">
+                          <input type="hidden" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control">
+                          <input type="hidden" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
                           <input type="hidden" id="modal-ref-produit" name="RefProduit" class="form-control" readonly>
                       </div>
                   </div>
@@ -175,35 +165,3 @@
           </div>
       </div>
   </div>
-  <script>
-document.addEventListener('DOMContentLoaded', function() {
-    showLoadingSpinners();
-    fetchTotals();
-});
-
-function showLoadingSpinners() {
-    document.getElementById('totalDepot').value = 'Chargement...';
-    document.getElementById('totalRetrait').value = 'Chargement...';
-}
-
-function fetchTotals() {
-    fetch('/Journal/getTotals') // Assurez-vous que cette route existe côté serveur
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('totalDepot').value = formatNumber(data.totalDepot);
-            document.getElementById('totalRetrait').value = formatNumber(data.totalRetrait);
-        })
-        .catch(error => {
-            console.error('Erreur lors de la récupération des totaux:', error);
-            document.getElementById('totalDepot').value = 'Erreur';
-            document.getElementById('totalRetrait').value = 'Erreur';
-        });
-}
-
-function formatNumber(number) {
-    return number.toLocaleString('fr-FR', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    });
-}
-  </script>

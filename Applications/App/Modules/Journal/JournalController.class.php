@@ -136,8 +136,8 @@ class JournalController extends \Library\BackController
                 $date = date('Y-m-d');
                 $this->page->addVar('day', $date);
             }
-            $Agence[$key]['SommeDepotRemittance'] = $this->managers->getManagerOf("Journal")->SoldeRemittanceVersementAgence($date, $value['RefAgency']);
-            $Agence[$key]['SommeRetraitRemittance'] = $this->managers->getManagerOf("Journal")->SoldeRemittanceRetraitAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeDepotRemittance'] = floatval($this->managers->getManagerOf("Journal")->SoldeRemittanceVersementAgence($date, $value['RefAgency']));
+            $Agence[$key]['SommeRetraitRemittance'] = floatval($this->managers->getManagerOf("Journal")->SoldeRemittanceRetraitAgence($date, $value['RefAgency']));
 
             $Agence[$key]['SoldeRemittanceAgence'] = $Agence[$key]['SommeDepotRemittance'] - $Agence[$key]['SommeRetraitRemittance'];
             $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], $date);
@@ -145,31 +145,31 @@ class JournalController extends \Library\BackController
 
             $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], $date);
 
-            // Assigning the balance to 'YesterdayReserve'
-            $Agence[$key]['YesterdayReserve'] = $reserveData['SoldeCompte'];
+            // Ensure numeric value for YesterdayReserve
+            $Agence[$key]['YesterdayReserve'] = floatval($reserveData['SoldeCompte']);
 
             // Additionally, if you want to store the date of the last recorded balance
             $Agence[$key]['LastDate'] = $this->managers->getManagerOf("Journal")->displayDaysSinceLastDate($reserveData['DateSolde']);
 
 
 
-            $Agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SommeDepotAgence($date, $value['RefAgency']);
-            $Agence[$key]['SommeSortie'] = $this->managers->getManagerOf("Journal")->SommeRetraitAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeDepot'] = floatval($this->managers->getManagerOf("Journal")->SommeDepotAgence($date, $value['RefAgency']));
+            $Agence[$key]['SommeSortie'] = floatval($this->managers->getManagerOf("Journal")->SommeRetraitAgence($date, $value['RefAgency']));
 
-            $Agence[$key]['SommeDepotWithRemittance'] = $this->managers->getManagerOf("Journal")->SommeDepotAgence($date, $value['RefAgency']) + $Agence[$key]['SommeDepotRemittance'];
-            $Agence[$key]['SommeSortieWithRemittance'] = $this->managers->getManagerOf("Journal")->SommeRetraitAgence($date, $value['RefAgency']) + $Agence[$key]['SommeRetraitRemittance'];
+            $Agence[$key]['SommeDepotWithRemittance'] = $Agence[$key]['SommeDepot'] + $Agence[$key]['SommeDepotRemittance'];
+            $Agence[$key]['SommeSortieWithRemittance'] = $Agence[$key]['SommeSortie'] + $Agence[$key]['SommeRetraitRemittance'];
 
-            $Agence[$key]['TotalAppoAgenceSansApproInitial'] = $this->managers->getManagerOf("Journal")->TotalApproAgenceSansApproInitial($date, $value['RefAgency']);
-            $Agence[$key]['TotalSortieAgence'] = $this->managers->getManagerOf("Journal")->TotalSortieAgence($date, $value['RefAgency']);
+            $Agence[$key]['TotalAppoAgenceSansApproInitial'] = floatval($this->managers->getManagerOf("Journal")->TotalApproAgenceSansApproInitial($date, $value['RefAgency']));
+            $Agence[$key]['TotalSortieAgence'] = floatval($this->managers->getManagerOf("Journal")->TotalSortieAgence($date, $value['RefAgency']));
 
-            $Agence[$key]['SommeTimbre'] =
-                $this->managers->getManagerOf("Journal")->SommeFraisTimbreAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeTimbre'] = floatval($this->managers->getManagerOf("Journal")->SommeFraisTimbreAgence($date, $value['RefAgency']));
 
+            // Calculate ReserveActuelle using numeric values
             $Agence[$key]['ReserveActuelle'] = $Agence[$key]['YesterdayReserve'] + $Agence[$key]['SommeDepot'] - $Agence[$key]['SommeSortie'] +
                 $Agence[$key]['TotalAppoAgenceSansApproInitial'] - $Agence[$key]['TotalSortieAgence'] + $Agence[$key]['SoldeRemittanceAgence'] + $Agence[$key]['SommeTimbre'];
 
 
-            $Agence[$key]['DayReserve'] =  $Agence[$key]['YesterdayReserve'] - $this->managers->getManagerOf("Journal")->TotalApproAgenceAvecApproInitial($date, $value['RefAgency']);
+            $Agence[$key]['DayReserve'] = $Agence[$key]['YesterdayReserve'] - floatval($this->managers->getManagerOf("Journal")->TotalApproAgenceAvecApproInitial($date, $value['RefAgency']));
 
             $Agence[$key]['SommeDepotProduit'] = $this->managers->getManagerOf("Journal")->SommeDepotProduitAgence($date, $value['RefAgency']);
             $Agence[$key]['SommeSortieProduit'] = $this->managers->getManagerOf("Journal")->SommeRetraitProduitAgence($date, $value['RefAgency']);

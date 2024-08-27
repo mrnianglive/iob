@@ -22,272 +22,106 @@ class JournalManagerPDO extends JournalManager
     // }
 
 
-    // public function Operations()
-    // {
-    //     $query = 'SELECT o.*, c.RefUsers
-    //           FROM operations AS o
-    //           INNER JOIN (
-    //               SELECT DISTINCT RefCaisse, RefUsers
-    //               FROM TbleChmod
-    //               WHERE RefUsers = :RefUsers
-    //           ) AS c ON c.RefCaisse = o.RefCaisse
-    //           WHERE o.Approve2_Id IS NOT NULL
-    //             AND o.Reset_Id IS NULL
-    //             AND o.Approve2_Time = :jour
-    //             AND o.RefType IN (1, 2,3,4)
-    //           ORDER BY o.datePayement ASC';
-
-    //     $requete = $this->dao->prepare($query);
-    //     $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
-    //     $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
-    //     $requete->execute();
-
-    //     $data = $requete->fetchAll();
-
-    //     foreach ($data as $key => $value) {
-    //         $data[$key]['SentFromAgency'] = $this->SentFromAgency($value['SentFromAgency']);
-    //     }
-
-    //     return $data;
-    // }
-
-    // public function GetOperations($debut, $fin, $Agence, $produit)
-    // {
-    //     //Old Query before View on SQL $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit INNER JOIN TbleUsers ON TbleUsers.Refusers=TbleOperations.Insert_Id    WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleAgency.RefAgency=:Agence AND  (TbleOperations.RefType=1 OR TbleOperations.RefType=2 OR TbleOperations.RefType=4  ) ORDER BY TbleOperations.datePayement ASC");
-    //     $requete = $this->dao->prepare("SELECT * FROM operations WHERE operations.Approve2_Id IS NOT NULL AND operations.Reset_Id IS NULL AND date(operations.Approve2_Time) BETWEEN '$debut' AND '$fin' AND operations.RefAgency=:Agence AND (operations.RefProduit IS NULL OR operations.RefProduit = :produit) ORDER BY operations.datePayement DESC");
-    //     $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
-    //     $requete->bindValue(':produit', $produit, \PDO::PARAM_INT);
-    //     $requete->execute();
-    //     $data = $requete->fetchAll();
-    //     foreach ($data as $key => $value) {
-    //         $data[$key]['Debut'] = $debut;
-    //         $data[$key]['Debut'] = $fin;
-    //         $data[$key]['RefProduit'] = $produit;
-    //     }
-    //     return $data;
-    // }
-    // public function  UserCaisse($Date, $Pays = NULL, $Agence = NULL, $Caisse = NULL)
-    // {
-    //     if ($Pays != NULL && $Agence == NULL && $Caisse == NULL) {
-    //         $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
-    //             TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
-    //             TbleChmod.RefUsers=:RefUsers AND TbleAgency.RefPays=:RefPays");
-    //         $requete->bindValue(':RefPays', $Pays, \PDO::PARAM_INT);
-    //     } elseif ($Pays != NULL && $Agence != NULL && $Caisse == NULL) {
-    //         $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
-    //             TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
-    //             TbleChmod.RefUsers=:RefUsers AND TbleAgency.RefPays=:RefPays AND TbleAgency.RefAgency=:RefAgency");
-    //         $requete->bindValue(':RefPays', $Pays, \PDO::PARAM_INT);
-    //         $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-    //     } elseif ($Pays != NULL && $Agence != NULL && $Caisse != NULL) {
-    //         $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
-    //             TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
-    //             TbleChmod.RefUsers=:RefUsers AND TbleAgency.RefPays=:RefPays AND TbleAgency.RefAgency=:RefAgency AND TbleCaisse.RefCaisse=:RefCaisse");
-    //         $requete->bindValue(':RefPays', $Pays, \PDO::PARAM_INT);
-    //         $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-    //         $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
-    //     } else {
-    //         $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
-    //             TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
-    //             TbleChmod.RefUsers=:RefUsers");
-    //     }
-
-    //     $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
-    //     $requete->execute();
-    //     $listeCaisse = $requete->fetchAll();
-
-    //     foreach ($listeCaisse as $key => $value) {
-    //         $listeCaisse[$key]['SoldeInitial'] = $this->SoldeInitialCaisse($Date, $value['RefCaisse']);
-    //         $listeCaisse[$key]['SoldeInitialGlobal'] = $this->SoldeInitialCaisseGlobal($Date, $value['RefCaisse']);
-    //         $listeCaisse[$key]['TotalAppro'] = $this->TotalApproCaisse($Date, $value['RefCaisse']);
-    //         $listeCaisse[$key]['TotalVersement'] = $this->SomnmeVersementCaisse($Date, $value['RefCaisse']);
-    //         $listeCaisse[$key]['TotalRetrait'] = $this->SommeRetraitCaisse($Date, $value['RefCaisse']);
-    //         $listeCaisse[$key]['TotalSortieCaisse'] = $this->TotalSortieCaisse($Date, $value['RefCaisse']);
-    //         $listeCaisse[$key]['SommeVersementRemittance'] = $this->SoldeRemittanceVersement($Date, $value['RefCaisse']);
-    //         $listeCaisse[$key]['SommeRetraitRemittance'] = $this->SoldeRemittanceRetrait($Date, $value['RefCaisse']);
-    //         $listeCaisse[$key]['SoldeRemittance'] = $listeCaisse[$key]['SommeVersementRemittance'] -
-    //             $listeCaisse[$key]['SommeRetraitRemittance'];
-
-    //         $ListeCaisse[$key]['TotalFraisTimbre'] = $this->TotalFraisTimbreCaisse($Date, $value['RefCaisse']);
-
-
-
-    //         $listeCaisse[$key]['SoldeDisponible'] = $listeCaisse[$key]['SoldeInitialGlobal'] + $listeCaisse[$key]['TotalVersement']
-    //             - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'] + $ListeCaisse[$key]['TotalFraisTimbre'];
-
-    //         $listeCaisse[$key]['SoldeDisponibleGlobal'] = $listeCaisse[$key]['SoldeInitialGlobal'] +
-    //             $listeCaisse[$key]['TotalVersement'] - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'] +
-    //             $listeCaisse[$key]['SoldeRemittance'] +   $ListeCaisse[$key]['TotalFraisTimbre'];
-    //     }
-    //     return $listeCaisse;
-    // }
-
-
-public function Operations()
-{
-    $query = 'SELECT o.*, c.RefUsers, a.NameAgency AS SentFromAgency
+    public function Operations()
+    {
+        $query = 'SELECT o.*, c.RefUsers
               FROM operations AS o
-              LEFT JOIN TbleChmod AS c ON c.RefCaisse = o.RefCaisse
-              LEFT JOIN TbleAgency AS a ON a.RefAgency = o.SentFromAgency
+              INNER JOIN (
+                  SELECT DISTINCT RefCaisse, RefUsers
+                  FROM TbleChmod
+                  WHERE RefUsers = :RefUsers
+              ) AS c ON c.RefCaisse = o.RefCaisse
               WHERE o.Approve2_Id IS NOT NULL
                 AND o.Reset_Id IS NULL
                 AND o.Approve2_Time = :jour
-                AND o.RefType IN (1, 2, 3, 4)
-                AND c.RefUsers = :RefUsers
+                AND o.RefType IN (1, 2,3,4)
               ORDER BY o.datePayement ASC';
 
-    $requete = $this->dao->prepare($query);
-    $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
-    $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
-    $requete->execute();
+        $requete = $this->dao->prepare($query);
+        $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
+        $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->execute();
 
-    return $requete->fetchAll(\PDO::FETCH_ASSOC);
-}
+        $data = $requete->fetchAll();
 
+        foreach ($data as $key => $value) {
+            $data[$key]['SentFromAgency'] = $this->SentFromAgency($value['SentFromAgency']);
+        }
 
-public function GetOperations($debut, $fin, $Agence, $produit)
-{
-    $sql = "SELECT * FROM operations 
-            WHERE Approve2_Id IS NOT NULL 
-            AND Reset_Id IS NULL 
-            AND DATE(Approve2_Time) BETWEEN :debut AND :fin 
-            AND RefAgency = :Agence";
-
-    $params = [
-        ':debut' => $debut,
-        ':fin' => $fin,
-        ':Agence' => $Agence
-    ];
-
-    if ($produit) {
-        $sql .= " AND RefProduit = :produit";
-        $params[':produit'] = $produit;
-    } else {
-        $sql .= " AND RefProduit IS NULL";
+        return $data;
     }
 
-    $sql .= " ORDER BY datePayement DESC";
+    public function GetOperations($debut, $fin, $Agence, $produit)
+    {
+        //Old Query before View on SQL $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency LEFT JOIN TbleProduit ON TbleProduit.RefProduit=TbleOperations.RefProduit INNER JOIN TbleUsers ON TbleUsers.Refusers=TbleOperations.Insert_Id    WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN '$debut' AND '$fin'  AND TbleAgency.RefAgency=:Agence AND  (TbleOperations.RefType=1 OR TbleOperations.RefType=2 OR TbleOperations.RefType=4  ) ORDER BY TbleOperations.datePayement ASC");
+        $requete = $this->dao->prepare("SELECT * FROM operations WHERE operations.Approve2_Id IS NOT NULL AND operations.Reset_Id IS NULL AND date(operations.Approve2_Time) BETWEEN '$debut' AND '$fin' AND operations.RefAgency=:Agence AND (operations.RefProduit IS NULL OR operations.RefProduit = :produit) ORDER BY operations.datePayement DESC");
+        $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
+        $requete->bindValue(':produit', $produit, \PDO::PARAM_INT);
+        $requete->execute();
+        $data = $requete->fetchAll();
+        foreach ($data as $key => $value) {
+            $data[$key]['Debut'] = $debut;
+            $data[$key]['Debut'] = $fin;
+            $data[$key]['RefProduit'] = $produit;
+        }
+        return $data;
+    }
+    public function  UserCaisse($Date, $Pays = NULL, $Agence = NULL, $Caisse = NULL)
+    {
+        if ($Pays != NULL && $Agence == NULL && $Caisse == NULL) {
+            $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
+                TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
+                TbleChmod.RefUsers=:RefUsers AND TbleAgency.RefPays=:RefPays");
+            $requete->bindValue(':RefPays', $Pays, \PDO::PARAM_INT);
+        } elseif ($Pays != NULL && $Agence != NULL && $Caisse == NULL) {
+            $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
+                TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
+                TbleChmod.RefUsers=:RefUsers AND TbleAgency.RefPays=:RefPays AND TbleAgency.RefAgency=:RefAgency");
+            $requete->bindValue(':RefPays', $Pays, \PDO::PARAM_INT);
+            $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        } elseif ($Pays != NULL && $Agence != NULL && $Caisse != NULL) {
+            $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
+                TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
+                TbleChmod.RefUsers=:RefUsers AND TbleAgency.RefPays=:RefPays AND TbleAgency.RefAgency=:RefAgency AND TbleCaisse.RefCaisse=:RefCaisse");
+            $requete->bindValue(':RefPays', $Pays, \PDO::PARAM_INT);
+            $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+            $requete->bindValue(':RefCaisse', $Caisse, \PDO::PARAM_INT);
+        } else {
+            $requete = $this->dao->prepare("SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON
+                TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleChmod ON TbleChmod.RefCaisse=TbleCaisse.RefCaisse WHERE
+                TbleChmod.RefUsers=:RefUsers");
+        }
 
-    $requete = $this->dao->prepare($sql);
-    $requete->execute($params);
+        $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->execute();
+        $listeCaisse = $requete->fetchAll();
 
-    $data = $requete->fetchAll(\PDO::FETCH_ASSOC);
+        foreach ($listeCaisse as $key => $value) {
+            $listeCaisse[$key]['SoldeInitial'] = $this->SoldeInitialCaisse($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['SoldeInitialGlobal'] = $this->SoldeInitialCaisseGlobal($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['TotalAppro'] = $this->TotalApproCaisse($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['TotalVersement'] = $this->SomnmeVersementCaisse($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['TotalRetrait'] = $this->SommeRetraitCaisse($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['TotalSortieCaisse'] = $this->TotalSortieCaisse($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['SommeVersementRemittance'] = $this->SoldeRemittanceVersement($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['SommeRetraitRemittance'] = $this->SoldeRemittanceRetrait($Date, $value['RefCaisse']);
+            $listeCaisse[$key]['SoldeRemittance'] = $listeCaisse[$key]['SommeVersementRemittance'] -
+                $listeCaisse[$key]['SommeRetraitRemittance'];
 
-    foreach ($data as &$row) {
-        $row['Debut'] = $debut;
-        $row['Fin'] = $fin;
-        $row['RefProduit'] = $produit;
+            $ListeCaisse[$key]['TotalFraisTimbre'] = $this->TotalFraisTimbreCaisse($Date, $value['RefCaisse']);
+
+
+
+            $listeCaisse[$key]['SoldeDisponible'] = $listeCaisse[$key]['SoldeInitialGlobal'] + $listeCaisse[$key]['TotalVersement']
+                - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'] + $ListeCaisse[$key]['TotalFraisTimbre'];
+
+            $listeCaisse[$key]['SoldeDisponibleGlobal'] = $listeCaisse[$key]['SoldeInitialGlobal'] +
+                $listeCaisse[$key]['TotalVersement'] - $listeCaisse[$key]['TotalRetrait'] - $listeCaisse[$key]['TotalSortieCaisse'] +
+                $listeCaisse[$key]['SoldeRemittance'] +   $ListeCaisse[$key]['TotalFraisTimbre'];
+        }
+        return $listeCaisse;
     }
 
-    return $data;
-}
-
-
-
-    public function UserCaisse($Date, $Pays = NULL, $Agence = NULL, $Caisse = NULL)
-{
-    $sql = "SELECT 
-        c.*, a.*, 
-        COALESCE(si.SoldeInitial, 0) as SoldeInitial,
-        COALESCE(sig.SoldeInitialGlobal, 0) as SoldeInitialGlobal,
-        COALESCE(ta.TotalAppro, 0) as TotalAppro,
-        COALESCE(tv.TotalVersement, 0) as TotalVersement,
-        COALESCE(tr.TotalRetrait, 0) as TotalRetrait,
-        COALESCE(ts.TotalSortieCaisse, 0) as TotalSortieCaisse,
-        COALESCE(srv.SommeVersementRemittance, 0) as SommeVersementRemittance,
-        COALESCE(srr.SommeRetraitRemittance, 0) as SommeRetraitRemittance,
-        COALESCE(ft.TotalFraisTimbre, 0) as TotalFraisTimbre
-    FROM TbleCaisse c
-    INNER JOIN TbleAgency a ON a.RefAgency = c.RefAgency
-    INNER JOIN TbleChmod ch ON ch.RefCaisse = c.RefCaisse
-    LEFT JOIN (
-        SELECT RefCaisse, SUM(MontantVersement) as SoldeInitial 
-        FROM TbleOperations 
-        WHERE Approve2_Id IS NOT NULL AND Reset_Id IS NULL AND Approve2_Time = :Date AND TypeAppro = 1 AND RefType = 3
-        GROUP BY RefCaisse
-    ) si ON si.RefCaisse = c.RefCaisse
-    LEFT JOIN (
-        SELECT RefCaisse, SUM(MontantVersement) as SoldeInitialGlobal 
-        FROM TbleOperations 
-        WHERE Approve2_Id IS NOT NULL AND Reset_Id IS NULL AND Approve2_Time = :Date AND RefType = 3
-        GROUP BY RefCaisse
-    ) sig ON sig.RefCaisse = c.RefCaisse
-    LEFT JOIN (
-        SELECT RefCaisse, SUM(MontantVersement) as TotalAppro 
-        FROM TbleOperations 
-        WHERE Approve2_Id IS NOT NULL AND Reset_Id IS NULL AND Approve2_Time = :Date AND TypeAppro = 2 AND RefType = 3
-        GROUP BY RefCaisse
-    ) ta ON ta.RefCaisse = c.RefCaisse
-    LEFT JOIN (
-        SELECT RefCaisse, SUM(MontantVersement) as TotalVersement 
-        FROM TbleOperations 
-        WHERE Approve2_Id IS NOT NULL AND Reset_Id IS NULL AND Approve2_Time = :Date AND RefType = 1
-        GROUP BY RefCaisse
-    ) tv ON tv.RefCaisse = c.RefCaisse
-    LEFT JOIN (
-        SELECT RefCaisse, SUM(MontantVersement) as TotalRetrait 
-        FROM TbleOperations 
-        WHERE Approve2_Id IS NOT NULL AND Reset_Id IS NULL AND Approve2_Time = :Date AND RefType = 2
-        GROUP BY RefCaisse
-    ) tr ON tr.RefCaisse = c.RefCaisse
-    LEFT JOIN (
-        SELECT RefCaisse, SUM(MontantVersement) as TotalSortieCaisse 
-        FROM TbleOperations 
-        WHERE Approve2_Id IS NOT NULL AND Reset_Id IS NULL AND Approve2_Time = :Date AND RefType = 4
-        GROUP BY RefCaisse
-    ) ts ON ts.RefCaisse = c.RefCaisse
-    LEFT JOIN (
-        SELECT RefCaisse, SUM(MontantTransaction) as SommeVersementRemittance 
-        FROM TbleRemittance 
-        WHERE DATE(Insert_time) = :Date AND RefType = 1 AND Reset_Id IS NULL
-        GROUP BY RefCaisse
-    ) srv ON srv.RefCaisse = c.RefCaisse
-    LEFT JOIN (
-        SELECT RefCaisse, SUM(MontantTransaction) as SommeRetraitRemittance 
-        FROM TbleRemittance 
-        WHERE DATE(Insert_time) = :Date AND RefType = 2 AND Reset_Id IS NULL
-        GROUP BY RefCaisse
-    ) srr ON srr.RefCaisse = c.RefCaisse
-    LEFT JOIN (
-        SELECT RefCaisse, SUM(MontantVersement) as TotalFraisTimbre 
-        FROM TbleOperations 
-        WHERE Approve2_Id IS NOT NULL AND Reset_Id IS NULL AND Approve2_Time = :Date AND RefType = 5
-        GROUP BY RefCaisse
-    ) ft ON ft.RefCaisse = c.RefCaisse
-    WHERE ch.RefUsers = :RefUsers";
-
-    $params = [':Date' => $Date, ':RefUsers' => $_SESSION['RefUsers']];
-
-    if ($Pays !== NULL) {
-        $sql .= " AND a.RefPays = :RefPays";
-        $params[':RefPays'] = $Pays;
-    }
-    if ($Agence !== NULL) {
-        $sql .= " AND a.RefAgency = :RefAgency";
-        $params[':RefAgency'] = $Agence;
-    }
-    if ($Caisse !== NULL) {
-        $sql .= " AND c.RefCaisse = :RefCaisse";
-        $params[':RefCaisse'] = $Caisse;
-    }
-
-    $requete = $this->dao->prepare($sql);
-    foreach ($params as $key => $value) {
-        $requete->bindValue($key, $value, \PDO::PARAM_INT);
-    }
-    $requete->execute();
-    $listeCaisse = $requete->fetchAll();
-
-    foreach ($listeCaisse as &$caisse) {
-        $caisse['SoldeRemittance'] = $caisse['SommeVersementRemittance'] - $caisse['SommeRetraitRemittance'];
-        $caisse['SoldeDisponible'] = $caisse['SoldeInitialGlobal'] + $caisse['TotalVersement'] 
-            - $caisse['TotalRetrait'] - $caisse['TotalSortieCaisse'] + $caisse['TotalFraisTimbre'];
-        $caisse['SoldeDisponibleGlobal'] = $caisse['SoldeInitialGlobal'] + $caisse['TotalVersement'] 
-            - $caisse['TotalRetrait'] - $caisse['TotalSortieCaisse'] + $caisse['SoldeRemittance'] + $caisse['TotalFraisTimbre'];
-    }
-
-    return $listeCaisse;
-}
 
     public function DeleteOperations($id)
     {
@@ -606,67 +440,30 @@ public function GetOperations($debut, $fin, $Agence, $produit)
         }
         return $result['Nbre'];
     }
-    // public function CaisseAgence($Agence, $Date)
-    // {
-    //     $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency=:RefAgency');
-    //     $requeteAgence->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-    //     $requeteAgence->execute();
-    //     $ListeCaisse = $requeteAgence->fetchAll();
-    //     foreach ($ListeCaisse as $key => $value) {
-
-    //         $ListeCaisse[$key]['SoldeRemittanceVersement'] = $this->SoldeRemittanceVersement($Date, $value['RefCaisse']);
-    //         $ListeCaisse[$key]['SoldeRemittanceRetrait'] = $this->SoldeRemittanceRetrait($Date, $value['RefCaisse']);
-    //         $ListeCaisse[$key]['NbreOperation'] =  $this->NbreOperationCaissier($Date, $value['RefCaisse']);
-    //         $ListeCaisse[$key]['SoldeInitial'] =  $this->SoldeInitialCaisse($Date, $value['RefCaisse']);
-    //         $ListeCaisse[$key]['SoldeInitialGlobal'] =  $this->SoldeInitialCaisseGlobal($Date, $value['RefCaisse']);
-    //         $ListeCaisse[$key]['TotalAppro'] =  $this->TotalApproCaisse($Date, $value['RefCaisse']);
-    //         $ListeCaisse[$key]['TotalVersement'] =  $this->SomnmeVersementCaisse($Date, $value['RefCaisse']);
-    //         $ListeCaisse[$key]['TotalRetrait'] =  $this->SommeRetraitCaisse($Date, $value['RefCaisse']);
-    //         $ListeCaisse[$key]['TotalSortieCaisse'] = $this->TotalSortieCaisse($Date, $value['RefCaisse']);
-    //         $ListeCaisse[$key]['TotalFraisTimbre'] = $this->TotalFraisTimbreCaisse($Date, $value['RefCaisse']);
-
-    //         $ListeCaisse[$key]['SoldeRemittance'] = $ListeCaisse[$key]['SoldeRemittanceVersement'] - $ListeCaisse[$key]['SoldeRemittanceRetrait'];
-    //         $ListeCaisse[$key]['SoldeDisponible'] =   $ListeCaisse[$key]['SoldeInitialGlobal']  + $ListeCaisse[$key]['TotalVersement'] - $ListeCaisse[$key]['TotalRetrait'] - $ListeCaisse[$key]['TotalSortieCaisse'] + $ListeCaisse[$key]['SoldeRemittance'] + $ListeCaisse[$key]['TotalFraisTimbre'];
-    //     }
-    //     return $ListeCaisse;
-    // }
-
-
     public function CaisseAgence($Agence, $Date)
-{
-    $sql = "SELECT c.*, a.*,
-        COALESCE(SUM(CASE WHEN r.RefType = 1 THEN r.MontantTransaction ELSE 0 END), 0) AS SoldeRemittanceVersement,
-        COALESCE(SUM(CASE WHEN r.RefType = 2 THEN r.MontantTransaction ELSE 0 END), 0) AS SoldeRemittanceRetrait,
-        COUNT(o.RefOperations) AS NbreOperation,
-        COALESCE(SUM(CASE WHEN o.RefType = 3 AND o.TypeAppro = 1 THEN o.MontantVersement ELSE 0 END), 0) AS SoldeInitial,
-        COALESCE(SUM(CASE WHEN o.RefType = 3 THEN o.MontantVersement ELSE 0 END), 0) AS SoldeInitialGlobal,
-        COALESCE(SUM(CASE WHEN o.RefType = 3 AND o.TypeAppro = 2 THEN o.MontantVersement ELSE 0 END), 0) AS TotalAppro,
-        COALESCE(SUM(CASE WHEN o.RefType = 1 THEN o.MontantVersement ELSE 0 END), 0) AS TotalVersement,
-        COALESCE(SUM(CASE WHEN o.RefType = 2 THEN o.MontantVersement ELSE 0 END), 0) AS TotalRetrait,
-        COALESCE(SUM(CASE WHEN o.RefType = 4 THEN o.MontantVersement ELSE 0 END), 0) AS TotalSortieCaisse,
-        COALESCE(SUM(CASE WHEN o.RefType = 5 THEN o.MontantVersement ELSE 0 END), 0) AS TotalFraisTimbre
-    FROM TbleCaisse c
-    INNER JOIN TbleAgency a ON a.RefAgency = c.RefAgency
-    LEFT JOIN TbleRemittance r ON r.RefCaisse = c.RefCaisse AND DATE(r.Insert_time) = :Date AND r.Reset_Id IS NULL
-    LEFT JOIN TbleOperations o ON o.RefCaisse = c.RefCaisse AND DATE(o.Approve2_Time) = :Date AND o.Approve2_Id IS NOT NULL AND o.Reset_Id IS NULL
-    WHERE c.RefAgency = :RefAgency
-    GROUP BY c.RefCaisse";
+    {
+        $requeteAgence = $this->dao->prepare('SELECT * FROM TbleCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleAgency.RefAgency=:RefAgency');
+        $requeteAgence->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
+        $requeteAgence->execute();
+        $ListeCaisse = $requeteAgence->fetchAll();
+        foreach ($ListeCaisse as $key => $value) {
 
-    $stmt = $this->dao->prepare($sql);
-    $stmt->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
-    $stmt->bindValue(':Date', $Date, \PDO::PARAM_STR);
-    $stmt->execute();
+            $ListeCaisse[$key]['SoldeRemittanceVersement'] = $this->SoldeRemittanceVersement($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['SoldeRemittanceRetrait'] = $this->SoldeRemittanceRetrait($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['NbreOperation'] =  $this->NbreOperationCaissier($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['SoldeInitial'] =  $this->SoldeInitialCaisse($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['SoldeInitialGlobal'] =  $this->SoldeInitialCaisseGlobal($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['TotalAppro'] =  $this->TotalApproCaisse($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['TotalVersement'] =  $this->SomnmeVersementCaisse($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['TotalRetrait'] =  $this->SommeRetraitCaisse($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['TotalSortieCaisse'] = $this->TotalSortieCaisse($Date, $value['RefCaisse']);
+            $ListeCaisse[$key]['TotalFraisTimbre'] = $this->TotalFraisTimbreCaisse($Date, $value['RefCaisse']);
 
-    $ListeCaisse = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-    foreach ($ListeCaisse as &$caisse) {
-        $caisse['SoldeRemittance'] = $caisse['SoldeRemittanceVersement'] - $caisse['SoldeRemittanceRetrait'];
-        $caisse['SoldeDisponible'] = $caisse['SoldeInitialGlobal'] + $caisse['TotalVersement'] 
-            - $caisse['TotalRetrait'] - $caisse['TotalSortieCaisse'] + $caisse['SoldeRemittance'] + $caisse['TotalFraisTimbre'];
+            $ListeCaisse[$key]['SoldeRemittance'] = $ListeCaisse[$key]['SoldeRemittanceVersement'] - $ListeCaisse[$key]['SoldeRemittanceRetrait'];
+            $ListeCaisse[$key]['SoldeDisponible'] =   $ListeCaisse[$key]['SoldeInitialGlobal']  + $ListeCaisse[$key]['TotalVersement'] - $ListeCaisse[$key]['TotalRetrait'] - $ListeCaisse[$key]['TotalSortieCaisse'] + $ListeCaisse[$key]['SoldeRemittance'] + $ListeCaisse[$key]['TotalFraisTimbre'];
+        }
+        return $ListeCaisse;
     }
-
-    return $ListeCaisse;
-}
 
     public function SoldeRemittanceVersement($Date, $Caisse)
     {
@@ -1739,6 +1536,4 @@ public function GetOperations($debut, $fin, $Agence, $produit)
 
         return $data;
     }
-
- 
 }

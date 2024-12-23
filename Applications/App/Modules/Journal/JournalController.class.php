@@ -4,84 +4,83 @@ namespace Applications\App\Modules\Journal;
 
 class JournalController extends \Library\BackController
 {
-   
     public function executeIndex(\Library\HTTPRequest $request)
-{
-    // Set the page title
-    $pageTitle = "Journal de Caisse";
-    $this->page->addVar("titles", $pageTitle);
+    {
+        $pageTitle = "Journal de Caisse";
+        $this->page->addVar("titles", $pageTitle);
 
-    // Bielletage Manager
-    $bielletageManager = $this->managers->getManagerOf("Bielletage");
-    $Chmod = $bielletageManager->CheckOuverture();
-    $this->page->addVar("CheckOuverture", $Chmod);
+        $bielletageManager = $this->managers->getManagerOf("Bielletage");
+        $Chmod = $bielletageManager->CheckOuverture();
+        $this->page->addVar("CheckOuverture", $Chmod);
 
-    // Pannel Manager
-    $pannelManager = $this->managers->getManagerOf("Pannel");
-    $Agence = $pannelManager->UserAgence();
-    $this->page->addVar('UserAgence', $Agence);
+        $pannelManager = $this->managers->getManagerOf("Pannel");
+        $Agence = $pannelManager->UserAgence();
+        $this->page->addVar('UserAgence', $Agence);
 
-    // Retrieve the request parameters
-    $Debut = $request->postData('Debut');
-    $Fin = $request->postData('Fin');
-    $Value = $request->postData('RefAgency');
-    $RefProduit = $request->postData('RefProduit');
+        $Debut = $request->postData('Debut');
+        $Fin = $request->postData('Fin');
+        $Value = $request->postData('RefAgency');
+        $RefProduit = $request->postData('RefProduit');
 
-    $this->page->addVar('Debut', $Debut);
-    $this->page->addVar('Fin', $Fin);
-    $this->page->addVar('Value', $Value);
-    $this->page->addVar('RefProduit', $RefProduit);
+        // $this->page->addVars(compact('Debut', 'Fin', 'Value', 'RefProduit'));
 
-    // Retrieve the list of agencies
-    $ListeAgence = $pannelManager->ListeAgence();
-    $this->page->addVar("ListeAgence", $ListeAgence);
-
-    // Journal Manager
-    $journalManager = $this->managers->getManagerOf('Journal');
-    $Operations = [];
-
-    // Check if any filters are applied and fetch operations accordingly
-    if (!empty($Value) || isset($_GET['value'])) {
-        $Debut = $_GET['debut'] ?? $Debut;
-        $Fin = $_GET['fin'] ?? $Fin;
-        $Value = $_GET['value'] ?? $Value;
-        $RefProduit = $_GET['produit'] ?? $RefProduit;
-
-        $Operations = $journalManager->GetOperations($Debut, $Fin, $Value, $RefProduit);
         $this->page->addVar('Debut', $Debut);
         $this->page->addVar('Fin', $Fin);
         $this->page->addVar('Value', $Value);
+
         $this->page->addVar('RefProduit', $RefProduit);
-    } else {
-        $Operations = $journalManager->Operations();
+
+        $ListeAgence = $pannelManager->ListeAgence();
+        $this->page->addVar("ListeAgence", $ListeAgence);
+
+        $journalManager = $this->managers->getManagerOf('Journal');
+        $Operations = [];
+
+        if (!empty($Value) || isset($_GET['value'])) {
+            $Debut = $_GET['debut'] ?? $Debut;
+            $Fin = $_GET['fin'] ?? $Fin;
+            $Value = $_GET['value'] ?? $Value;
+            $RefProduit = $_GET['produit'] ?? $RefProduit;
+
+            $Operations = $journalManager->GetOperations($Debut, $Fin, $Value, $RefProduit);
+            // $this->page->addVars(compact('Debut', 'Fin', 'Value', 'RefProduit'));
+            $this->page->addVar('Debut', $Debut);
+            $this->page->addVar('Fin', $Fin);
+            $this->page->addVar('Value', $Value);
+            $this->page->addVar('RefProduit', $RefProduit);
+        } else {
+            $Operations = $journalManager->Operations();
+        }
+        $this->page->addVar('Operations', $Operations);
+
+        $sommeVersementPeriode = $journalManager->sommeVersementPeriode($Debut, $Fin, $Value, $RefProduit);
+        $this->page->addVar('sommeVersementPeriode', $sommeVersementPeriode);
+
+        $sommeRetraitPeriode = $journalManager->sommeRetraitPeriode($Debut, $Fin, $Value, $RefProduit);
+        $this->page->addVar('sommeRetraitPeriode', $sommeRetraitPeriode);
+
+        $UsersCaisse = $journalManager->UserCaisse(date('Y-m-d'));
+        $SoldeGlobal = 0;
+        foreach ($UsersCaisse as $key => $value) {
+            $SoldeGlobal += $value['SoldeDisponibleGlobal'];
+        }
+        $this->page->addVar('Solde', $SoldeGlobal);
+
+        $this->page->addVar('match', $journalManager);
+
+        $permissions = [];
+        $AllPermissions = $pannelManager->UserPermission();
+        foreach ($AllPermissions as $key => $value) {
+            $permissions[] = $value['access'];
+        }
+        $this->page->addVar('permission', $permissions);
+
+            header('Content-Type: application/json');
+            echo json_encode([
+                'totalDepot' => (int) $sommeVersementPeriode,
+                'totalRetrait' => (int) $sommeRetraitPeriode
+            ]);
     }
-
-    // Add operations to page
-    $this->page->addVar('Operations', $Operations);
-
-    // Retrieve sum of deposits and withdrawals
-    $sommeVersementPeriode = $journalManager->sommeVersementPeriode($Debut, $Fin, $Value, $RefProduit);
-    $this->page->addVar('sommeVersementPeriode', $sommeVersementPeriode);
-
-    $sommeRetraitPeriode = $journalManager->sommeRetraitPeriode($Debut, $Fin, $Value, $RefProduit);
-    $this->page->addVar('sommeRetraitPeriode', $sommeRetraitPeriode);
-
-    // Calculate global balance
-    $UsersCaisse = $journalManager->UserCaisse(date('Y-m-d'));
-    $SoldeGlobal = array_sum(array_column($UsersCaisse, 'SoldeDisponibleGlobal'));
-    $this->page->addVar('Solde', $SoldeGlobal);
-
-    // User permissions
-    $permissions = array_column($pannelManager->UserPermission(), 'access');
-    $this->page->addVar('permission', $permissions);
-
-    // Send JSON response
-    header('Content-Type: application/json');
-    echo json_encode([
-        'totalDepot' => (int) $sommeVersementPeriode,
-        'totalRetrait' => (int) $sommeRetraitPeriode
-    ]);
-}
 
 
    

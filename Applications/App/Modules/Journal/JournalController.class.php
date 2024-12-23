@@ -74,16 +74,8 @@ class JournalController extends \Library\BackController
             $permissions[] = $value['access'];
         }
         $this->page->addVar('permission', $permissions);
-
-            header('Content-Type: application/json');
-            echo json_encode([
-                'totalDepot' => (int) $sommeVersementPeriode,
-                'totalRetrait' => (int) $sommeRetraitPeriode
-            ]);
     }
 
-
-   
     public function executeValidate(\Library\HTTPRequest $request)
     {
         $this->managers->getManagerOf("Journal")->ValidateOperations($request);

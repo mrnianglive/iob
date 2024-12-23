@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/../vendor/autoload.php'; // Inclure le fichier d'autoload de Composer
 
 // Configuration du logging
 $logFile = __DIR__ . '/../logs/queue.log';
@@ -24,6 +24,7 @@ touch($lockFile);
 try {
     writeLog("Début du traitement des opérations en attente");
     
+    // Assurez-vous que le bon chemin d'accès est utilisé pour JournalManagerPDO
     $manager = new \Library\Models\JournalManagerPDO($dao);
     $count = $manager->processQueuedOperations();
     

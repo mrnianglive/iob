@@ -1602,7 +1602,7 @@ class JournalManagerPDO extends JournalManager
 public function queueDeleteOperation($operationId)
 {
     $requete = $this->dao->prepare("
-        INSERT INTO TbleJobQueue (
+        INSERT INTO TbleJobs (
             operation_type,
             operation_id,
             user_id,
@@ -1708,7 +1708,7 @@ private function updateJobStatus($jobId, $status, $error = null)
 {
     // Préparer la requête pour mettre à jour le statut du job
     $requete = $this->dao->prepare("
-        UPDATE TbleJobQueue 
+        UPDATE TbleJobs 
         SET status = :status,
             error_message = :error,
             updated_at = NOW()

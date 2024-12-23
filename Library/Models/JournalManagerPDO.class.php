@@ -1653,7 +1653,7 @@ public function processQueuedOperations()
     try {
         // Traiter par lots de 50 opérations
         $requete = $this->dao->prepare("
-            SELECT id, operation_type, operation_id, user_id FROM TbleJobQueue 
+            SELECT id, operation_type, operation_id, user_id FROM TbleJobs 
             WHERE status = 'pending'
             ORDER BY created_at ASC 
             LIMIT 50

@@ -13,8 +13,14 @@ function writeLog($message) {
     file_put_contents($logFile, "[$date] $message\n", FILE_APPEND);
 }
 
+// Créer le répertoire tmp s'il n'existe pas
+$tmpDir = __DIR__ . '/../tmp';
+if (!is_dir($tmpDir)) {
+    mkdir($tmpDir, 0755, true);
+}
+
 // Acquérir un verrou
-$lockFile = __DIR__ . '/../tmp/process_queue.lock';
+$lockFile = $tmpDir . '/process_queue.lock';
 if (file_exists($lockFile) && (time() - filemtime($lockFile)) < 300) { // 5 minutes
     writeLog("Un autre processus est en cours d'exécution");
     exit;
@@ -24,7 +30,11 @@ touch($lockFile);
 try {
     writeLog("Début du traitement des opérations en attente");
     
-    // Assurez-vous que le bon chemin d'accès est utilisé pour JournalManagerPDO
+    // Vérifier que la classe existe
+    if (!class_exists('\Library\Models\JournalManagerPDO')) {
+        throw new Exception("La classe JournalManagerPDO n'est pas chargée correctement");
+    }
+    
     $manager = new \Library\Models\JournalManagerPDO($dao);
     $count = $manager->processQueuedOperations();
     

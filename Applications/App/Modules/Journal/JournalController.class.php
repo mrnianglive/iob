@@ -122,96 +122,55 @@ class JournalController extends \Library\BackController
 
     public function executePetitecaisse(\Library\HTTPRequest $request)
     {
-        $this->page->addVar("titles", "Petite Caisse");
-        
-        // Récupération de la date
-        $date = $request->postData('jour') ?: date('Y-m-d');
-        $this->page->addVar('day', $date);
-        
-        // Chargement asynchrone des données
-        $this->loadPetiteCaisseData($date);
-        $this->loadSoldeReserveData($date);
-    }
-
-    private function loadPetiteCaisseData($date)
-    {
-        $journalManager = $this->managers->getManagerOf("Journal");
-        $pannelManager = $this->managers->getManagerOf("Pannel");
-        $agences = $pannelManager->UserAgence();
-        
-        $petiteCaisseData = [];
-        foreach ($agences as $agence) {
-            $caisseData = [
-                'RefAgency' => $agence['RefAgency'],
-                'NameAgency' => $agence['NameAgency'],
-                'Afficher' => $journalManager->CaisseAgence($agence['RefAgency'], $date)
-            ];
-            
-            // Calcul des totaux pour chaque caisse
-            foreach ($caisseData['Afficher'] as &$caisse) {
-                $caisse['SoldeRemittanceVersement'] = floatval($journalManager->SoldeRemittanceVersementAgence($date, $agence['RefAgency']));
-                $caisse['SoldeRemittanceRetrait'] = floatval($journalManager->SoldeRemittanceRetraitAgence($date, $agence['RefAgency']));
+        $this->page->addVar("titles", "Petite Caisse"); // Titre de la page
+        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
+        foreach ($Agence as $key => $value) {
+            if (!empty($request->postData('jour'))) {
+                $date = $request->postData('jour');
+                $this->page->addVar('day', $request->postData('jour'));
+            } else {
+                $date = date('Y-m-d');
+                $this->page->addVar('day', $date);
             }
-            
-            $petiteCaisseData[] = $caisseData;
-        }
-        
-        $this->page->addVar('PetiteCaisseData', $petiteCaisseData);
-    }
+            $Agence[$key]['SommeDepotRemittance'] = floatval($this->managers->getManagerOf("Journal")->SoldeRemittanceVersementAgence($date, $value['RefAgency']));
+            $Agence[$key]['SommeRetraitRemittance'] = floatval($this->managers->getManagerOf("Journal")->SoldeRemittanceRetraitAgence($date, $value['RefAgency']));
 
-    private function loadSoldeReserveData($date)
-    {
-        $journalManager = $this->managers->getManagerOf("Journal");
-        $pannelManager = $this->managers->getManagerOf("Pannel");
-        $agences = $pannelManager->UserAgence();
-        
-        $soldeReserveData = [];
-        foreach ($agences as $agence) {
-            $reserveData = [
-                'RefAgency' => $agence['RefAgency'],
-                'NameAgency' => $agence['NameAgency']
-            ];
-            
-            // Récupération des données de réserve
-            $yesterdayData = $journalManager->YesterdayReserve($agence['RefAgency'], $date);
-            $reserveData['YesterdayReserve'] = floatval($yesterdayData['SoldeCompte']);
-            $reserveData['LastDate'] = $journalManager->displayDaysSinceLastDate($yesterdayData['DateSolde']);
-            
-            // Calcul des mouvements
-            $reserveData['SommeDepot'] = floatval($journalManager->SommeDepotAgence($date, $agence['RefAgency']));
-            $reserveData['SommeSortie'] = floatval($journalManager->SommeRetraitAgence($date, $agence['RefAgency']));
-            $reserveData['SommeDepotRemittance'] = floatval($journalManager->SoldeRemittanceVersementAgence($date, $agence['RefAgency']));
-            $reserveData['SommeRetraitRemittance'] = floatval($journalManager->SoldeRemittanceRetraitAgence($date, $agence['RefAgency']));
-            
-            // Calculs des totaux
-            $reserveData['SommeDepotWithRemittance'] = $reserveData['SommeDepot'] + $reserveData['SommeDepotRemittance'];
-            $reserveData['SommeSortieWithRemittance'] = $reserveData['SommeSortie'] + $reserveData['SommeRetraitRemittance'];
-            $reserveData['TotalAppoAgenceSansApproInitial'] = floatval($journalManager->TotalApproAgenceSansApproInitial($date, $agence['RefAgency']));
-            $reserveData['TotalSortieAgence'] = floatval($journalManager->TotalSortieAgence($date, $agence['RefAgency']));
-            $reserveData['SommeTimbre'] = floatval($journalManager->SommeFraisTimbreAgence($date, $agence['RefAgency']));
-            
-            // Calcul de la réserve actuelle
-            $reserveData['ReserveActuelle'] = $reserveData['YesterdayReserve'] + 
-                $reserveData['SommeDepotWithRemittance'] - 
-                $reserveData['SommeSortieWithRemittance'] +
-                $reserveData['TotalAppoAgenceSansApproInitial'] - 
-                $reserveData['TotalSortieAgence'] + 
-                $reserveData['SommeTimbre'];
-            
-            $reserveData['DayReserve'] = $reserveData['YesterdayReserve'] - 
-                floatval($journalManager->TotalApproAgenceAvecApproInitial($date, $agence['RefAgency']));
-            
-            // Données pour le modal
-            $reserveData['SommeDepotProduit'] = $journalManager->SommeDepotProduitAgence($date, $agence['RefAgency']);
-            $reserveData['SommeSortieProduit'] = $journalManager->SommeRetraitProduitAgence($date, $agence['RefAgency']);
-            
-            // Vérification de la validation
-            $reserveData['validate'] = $journalManager->CheckDailyClose($agence['RefAgency'], $date);
-            
-            $soldeReserveData[] = $reserveData;
+            $Agence[$key]['SoldeRemittanceAgence'] = $Agence[$key]['SommeDepotRemittance'] - $Agence[$key]['SommeRetraitRemittance'];
+            $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], $date);
+            $Agence[$key]['validate'] = $this->managers->getManagerOf("Journal")->CheckDailyClose($value['RefAgency'], $date);
+
+            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], $date);
+
+            // Ensure numeric value for YesterdayReserve
+            $Agence[$key]['YesterdayReserve'] = floatval($reserveData['SoldeCompte']);
+
+            // Additionally, if you want to store the date of the last recorded balance
+            $Agence[$key]['LastDate'] = $this->managers->getManagerOf("Journal")->displayDaysSinceLastDate($reserveData['DateSolde']);
+
+
+
+            $Agence[$key]['SommeDepot'] = floatval($this->managers->getManagerOf("Journal")->SommeDepotAgence($date, $value['RefAgency']));
+            $Agence[$key]['SommeSortie'] = floatval($this->managers->getManagerOf("Journal")->SommeRetraitAgence($date, $value['RefAgency']));
+
+            $Agence[$key]['SommeDepotWithRemittance'] = $Agence[$key]['SommeDepot'] + $Agence[$key]['SommeDepotRemittance'];
+            $Agence[$key]['SommeSortieWithRemittance'] = $Agence[$key]['SommeSortie'] + $Agence[$key]['SommeRetraitRemittance'];
+
+            $Agence[$key]['TotalAppoAgenceSansApproInitial'] = floatval($this->managers->getManagerOf("Journal")->TotalApproAgenceSansApproInitial($date, $value['RefAgency']));
+            $Agence[$key]['TotalSortieAgence'] = floatval($this->managers->getManagerOf("Journal")->TotalSortieAgence($date, $value['RefAgency']));
+
+            $Agence[$key]['SommeTimbre'] = floatval($this->managers->getManagerOf("Journal")->SommeFraisTimbreAgence($date, $value['RefAgency']));
+
+            // Calculate ReserveActuelle using numeric values
+            $Agence[$key]['ReserveActuelle'] = $Agence[$key]['YesterdayReserve'] + $Agence[$key]['SommeDepot'] - $Agence[$key]['SommeSortie'] +
+                $Agence[$key]['TotalAppoAgenceSansApproInitial'] - $Agence[$key]['TotalSortieAgence'] + $Agence[$key]['SoldeRemittanceAgence'] + $Agence[$key]['SommeTimbre'];
+
+
+            $Agence[$key]['DayReserve'] = $Agence[$key]['YesterdayReserve'] - floatval($this->managers->getManagerOf("Journal")->TotalApproAgenceAvecApproInitial($date, $value['RefAgency']));
+
+            $Agence[$key]['SommeDepotProduit'] = $this->managers->getManagerOf("Journal")->SommeDepotProduitAgence($date, $value['RefAgency']);
+            $Agence[$key]['SommeSortieProduit'] = $this->managers->getManagerOf("Journal")->SommeRetraitProduitAgence($date, $value['RefAgency']);
         }
-        
-        $this->page->addVar('SoldeReserveData', $soldeReserveData);
+        $this->page->addVar('Agence', $Agence);
     }
 
     public function executeCancelFermeture(\Library\HTTPRequest $request)

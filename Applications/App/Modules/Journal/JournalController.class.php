@@ -101,10 +101,15 @@ class JournalController extends \Library\BackController
     {
         $id = $request->getData('id');
         
-        // Créer un job et retourner immédiatement
-        $this->managers->getManagerOf("Journal")->queueDeleteOperation($id);
-        
-        $this->setMessageAndRedirect('success', 'Demande de suppression en cours de traitement');
+        try {
+            // Démarrer la suppression en arrière-plan
+            $this->managers->getManagerOf("Journal")->DeleteOperations($id);
+            
+            $this->setMessageAndRedirect('info', 'La suppression est en cours de traitement. Cela peut prendre quelques instants...');
+        } catch (\Exception $e) {
+            // En cas d'erreur, afficher un message d'erreur
+            $this->setMessageAndRedirect('error', 'Erreur lors de la suppression : ' . $e->getMessage());
+        }
     }
 
    

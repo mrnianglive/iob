@@ -27,24 +27,77 @@
                               <?php if ($_SESSION['RefPays'] != 1) { ?>
                               <th class="border-top-0">Frais Timbre</th>
                               <?php } ?>
+
                               <th class="border-top-0">Solde Caisse</th>
                           </tr>
                       </thead>
-                      <tbody id="agencyTableBody">
+                      <tbody>
                           <?php foreach ($Agence as $value) { ?>
-                          <tr id="agency-row-<?= $value['RefAgency']; ?>" class="agency-row"
-                              data-agency="<?= $value['RefAgency']; ?>">
+                          <tr>
                               <td><?= $value['NameAgency']; ?></td>
-                              <td class="loading-placeholder">Chargement...</td>
-                              <td class="loading-placeholder">Chargement...</td>
-                              <td class="loading-placeholder">Chargement...</td>
-                              <td class="loading-placeholder">Chargement...</td>
-                              <td class="loading-placeholder">Chargement...</td>
-                              <td class="loading-placeholder">Chargement...</td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $print) { ?>
+                                      <li><?= $print['NameCaisse']; ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= number_format($afficher['SoldeInitial'], 0, '.', '.'); ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+
+
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= number_format($afficher['TotalAppro'], 0, '.', '.'); ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= number_format($afficher['TotalSortieCaisse'], 0, '.', '.'); ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= number_format($afficher['TotalVersement'] + $afficher['SoldeRemittanceVersement'], 0, '.', '.'); ?>
+                                      </li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= number_format($afficher['TotalRetrait'] + $afficher['SoldeRemittanceRetrait'], 0, '.', '.'); ?>
+                                      </li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
                               <?php if ($_SESSION['RefPays'] != 1) { ?>
-                              <td class="loading-placeholder">Chargement...</td>
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= number_format($afficher['TotalFraisTimbre'], 0, '.', '.'); ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
                               <?php } ?>
-                              <td class="loading-placeholder">Chargement...</td>
+
+                              <td>
+                                  <ul>
+                                      <?php foreach ($value['Afficher'] as $afficher) { ?>
+                                      <li><?= number_format($afficher['SoldeDisponible'], 0, '.', '.'); ?></li>
+                                      <?php } ?>
+                                  </ul>
+                              </td>
                           </tr>
                           <?php } ?>
                       </tbody>
@@ -71,29 +124,83 @@
                               <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
                               <th class="border-top-0">Action</th>
                               <?php } ?>
+
                           </tr>
                       </thead>
-                      <tbody id="reserveTableBody">
+                      <tbody>
                           <?php foreach ($Agence as $value) { ?>
-                          <tr id="reserve-row-<?= $value['RefAgency']; ?>" class="reserve-row"
-                              data-agency="<?= $value['RefAgency']; ?>">
+                          <tr>
                               <td><span class="btn btn-primary" data-toggle="modal"
                                       data-target="#depotModal-<?= $value['RefAgency']; ?>" data-whatever="@mdo"
                                       title="Cliquer pour voir les details">
                                       <?= $value['NameAgency']; ?>
-                                  </span></td>
-                              <td class="loading-placeholder">Chargement...</td>
-                              <td class="loading-placeholder">Chargement...</td>
-                              <td class="loading-placeholder">Chargement...</td>
-                              <td class="loading-placeholder">Chargement...</td>
+                                  </span> </td>
+                              <td><?= number_format($value['YesterdayReserve'], 0, '.', '.'); ?><br>
+                                  <small>
+                                      <?= $value['LastDate']; ?>
+                                  </small>
+                              </td>
+                              <td><?= number_format($value['DayReserve'], 0, '.', '.'); ?></td>
+                              <td><?= number_format($value['SommeDepotWithRemittance'], 0, '.', '.'); ?></td>
+                              <td> <?= number_format($value['SommeSortieWithRemittance'], 0, '.', '.'); ?>
+                              </td>
                               <?php if ($_SESSION['RefPays'] != 1) { ?>
-                              <td class="loading-placeholder">Chargement...</td>
+                              <td><?= number_format($value['SommeTimbre'], 0, '.', '.'); ?></td>
                               <?php } ?>
-                              <td class="loading-placeholder">Chargement...</td>
+                              <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
                               <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
-                              <td class="loading-placeholder">Chargement...</td>
+                              <td> <?php if (!empty($value['validate'])) { ?><a
+                                      <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
+                                      href="/Arreter/cancel/<?= $value['validate']['RefCompte']; ?>/<?= $value['RefAgency']; ?>/<?= $day; ?>"
+                                      <?php } ?> class="btn btn-success" data-toggle="tooltip"
+                                      title="Cliquez ici pour reouvrir l'agence"><i class="fa  fa-lock"></i></a>
+                                  <?php } else { ?>
+                                  <form method="POST" action="/Arreter/reserve">
+                                      <input type="hidden" value="<?= $value['ReserveActuelle']; ?>"
+                                          name="ReserveActuelle">
+                                      <input type="hidden" value="<?= $day; ?>" name="daycloture">
+                                      <input type="hidden" value="<?= $value['RefAgency']; ?>" name="RefAgency">
+                                      <button type="submit" class="btn btn-danger" data-toggle="tooltip"
+                                          title="Cliquez ici pour fermer les caisses de l'agence"><i
+                                              class="fa fa-unlock"></i></button>
+                                  </form>
+                                  <?php } ?>
+                              </td>
                               <?php } ?>
+                              <div class='modal fade' id='depotModal-<?= $value['RefAgency']; ?>' tabindex='-1'
+                                  role='dialog' aria-labelledby='AddCaisse'>
+                                  <div class='modal-dialog' role='document'>
+                                      <div class='modal-content'>
+                                          <div class='modal-header'>Volume Dépôt - Retrait Par Produit
+                                              -<?= $value['NameAgency']; ?>
+                                              <button type='button' class='close' data-dismiss='modal'
+                                                  aria-label='Close'>
+                                                  <span aria-hidden='true'>&times;</span>
+                                              </button>
+                                          </div>
+                                          <div class='modal-body'>
+                                              <ul>
+                                                  <?php foreach ([$value['SommeDepotProduit'], $value['SommeSortieProduit']] as $index => $products) : ?>
+                                                  <h5><?= $index === 0 ? 'Dépôt' : 'Retrait' ?></h5>
+                                                  <?php foreach ($products as $product => $total) : ?>
+                                                  <li><?= $product ?> :
+                                                      <?= is_numeric($total) ? number_format($total, 0, '.', '.') : ($total ?? '0') ?>
+                                                  </li>
+                                                  <?php endforeach; ?>
+                                                  <hr>
+                                                  <?php endforeach; ?>
+                                              </ul>
+                                          </div>
+                                          <div class='modal-footer'>
+                                              <button type='button' class='btn btn-danger'
+                                                  data-dismiss='modal'>Fermer</button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
                           </tr>
+
                           <?php } ?>
                       </tbody>
                   </table>
@@ -101,153 +208,3 @@
           </div>
       </div>
   </div>
-
-  <style>
-.loading-placeholder {
-    color: #ccc;
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        opacity: 0.6;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0.6;
-    }
-}
-
-.error-placeholder {
-    color: #ff0000;
-    font-style: italic;
-}
-  </style>
-
-  <script>
-// Ajouter la variable de session PHP dans le JavaScript
-window._SESSION_RefPays = <?php echo json_encode($_SESSION['RefPays']); ?>;
-
-document.addEventListener('DOMContentLoaded', function() {
-    const day = document.getElementById('jour').value;
-    const agencies = document.querySelectorAll('[data-agency]');
-
-    function formatNumber(number) {
-        return new Intl.NumberFormat('fr-FR').format(number);
-    }
-
-    function showError(agencyId, error) {
-        const agencyRow = document.getElementById(`agency-row-${agencyId}`);
-        const reserveRow = document.getElementById(`reserve-row-${agencyId}`);
-
-        const errorMessage = `<td colspan="8" class="error-placeholder">Erreur: ${error}</td>`;
-
-        if (agencyRow) {
-            agencyRow.innerHTML = errorMessage;
-        }
-        if (reserveRow) {
-            reserveRow.innerHTML = errorMessage;
-        }
-    }
-
-    function updateAgencyRow(agencyId, data) {
-        try {
-            // Update Petite Caisse table
-            const agencyRow = document.getElementById(`agency-row-${agencyId}`);
-            if (agencyRow) {
-                let html = `
-                    <td>${data.Afficher.map(caisse => `<li>${caisse.NameCaisse}</li>`).join('')}</td>
-                    <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.SoldeInitial)}</li>`).join('')}</td>
-                    <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalAppro)}</li>`).join('')}</td>
-                    <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalSortieCaisse)}</li>`).join('')}</td>
-                    <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalVersement + (caisse.SoldeRemittanceVersement || 0))}</li>`).join('')}</td>
-                    <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalRetrait + (caisse.SoldeRemittanceRetrait || 0))}</li>`).join('')}</td>
-                `;
-
-                if (window._SESSION_RefPays !== 1) {
-                    html +=
-                        `<td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalFraisTimbre || 0)}</li>`).join('')}</td>`;
-                }
-
-                html +=
-                    `<td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.SoldeDisponible)}</li>`).join('')}</td>`;
-
-                agencyRow.innerHTML = html;
-            }
-
-            // Update Solde Reserve table
-            const reserveRow = document.getElementById(`reserve-row-${agencyId}`);
-            if (reserveRow) {
-                const cells = reserveRow.getElementsByTagName('td');
-                cells[1].innerHTML =
-                    `${formatNumber(data.YesterdayReserve)}<br><small>${data.LastDate || ''}</small>`;
-                cells[2].innerHTML = formatNumber(data.DayReserve);
-                cells[3].innerHTML = formatNumber(data.SommeDepotWithRemittance);
-                cells[4].innerHTML = formatNumber(data.SommeSortieWithRemittance);
-
-                let currentCell = 5;
-                if (window._SESSION_RefPays !== 1) {
-                    cells[currentCell].innerHTML = formatNumber(data.SommeTimbre);
-                    currentCell++;
-                }
-
-                cells[currentCell].innerHTML = formatNumber(data.ReserveActuelle);
-                currentCell++;
-
-                if (cells[currentCell]) {
-                    if (data.validate) {
-                        cells[currentCell].innerHTML = `
-                            <a href="/Arreter/cancel/${data.validate.RefCompte}/${agencyId}/${day}"
-                               class="btn btn-success" data-toggle="tooltip"
-                               title="Cliquez ici pour reouvrir l'agence">
-                                <i class="fa fa-lock"></i>
-                            </a>`;
-                    } else {
-                        cells[currentCell].innerHTML = `
-                            <form method="POST" action="/Arreter/reserve">
-                                <input type="hidden" value="${data.ReserveActuelle}" name="ReserveActuelle">
-                                <input type="hidden" value="${day}" name="daycloture">
-                                <input type="hidden" value="${agencyId}" name="RefAgency">
-                                <button type="submit" class="btn btn-danger" data-toggle="tooltip"
-                                        title="Cliquez ici pour fermer les caisses de l'agence">
-                                    <i class="fa fa-unlock"></i>
-                                </button>
-                            </form>`;
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Error updating agency row:', error);
-            showError(agencyId, 'Erreur lors de la mise à jour des données');
-        }
-    }
-
-    // Load data for each agency
-    agencies.forEach(agency => {
-        const agencyId = agency.dataset.agency;
-        fetch(
-                `/Journal/getAgencyData?date=${encodeURIComponent(day)}&RefAgency=${encodeURIComponent(agencyId)}`
-                )
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-                updateAgencyRow(agencyId, data);
-            })
-            .catch(error => {
-                console.error('Error loading agency data:', error);
-                showError(agencyId, 'Erreur lors du chargement des données');
-            });
-    });
-});
-  </script>

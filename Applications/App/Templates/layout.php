@@ -417,38 +417,60 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
 
     <script>
     $(document).ready(function() {
-        function getSoldeData() {
-            const Country = $('#RefPays').val();
-            const Agency = $('#RefAgency').val();
-            const Caisse = $('#RefCaisse').val();
+        let lastRequest = null;
 
-            $.ajax({
+        function getSoldeData() {
+            // Annuler la requête précédente si elle existe
+            if (lastRequest) {
+                lastRequest.abort();
+            }
+
+            const filters = {
+                Country: $('#RefPays').val(),
+                Agency: $('#RefAgency').val(),
+                Caisse: $('#RefCaisse').val()
+            };
+
+            // Stocker la nouvelle requête
+            lastRequest = $.ajax({
                 url: '/calculate-solde',
                 type: 'POST',
-                data: {
-                    Country: Country,
-                    Agency: Agency,
-                    Caisse: Caisse
-                },
+                data: filters,
                 success: function(response) {
+                    if (response.error) {
+                        console.error('Erreur:', response.error);
+                        return;
+                    }
                     updateSoldeDisplay(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erreur Ajax:', error);
+                },
+                complete: function() {
+                    lastRequest = null;
                 }
             });
         }
 
         function updateSoldeDisplay(data) {
-            $('#solde-depot').text(data.sommeVersementGlobal.toLocaleString());
-            $('#solde-retrait').text(data.sommeRetraitGlobal.toLocaleString());
-            $('#solde-espece').text(data.soldeGlobal.toLocaleString());
+            $('#solde-depot').text(formatNumber(data.sommeVersementGlobal));
+            $('#solde-retrait').text(formatNumber(data.sommeRetraitGlobal));
+            $('#solde-espece').text(formatNumber(data.soldeGlobal));
         }
 
-        // Appeler la fonction getSoldeData() lors du chargement de la page
-        getSoldeData();
+        function formatNumber(number) {
+            return new Intl.NumberFormat('fr-FR').format(number);
+        }
 
-        // Appeler la fonction getSoldeData() lors du changement de valeur des sélecteurs
+        // Utiliser un debounce pour éviter trop d'appels
+        let debounceTimer;
         $('#RefPays, #RefAgency, #RefCaisse').change(function() {
-            getSoldeData();
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(getSoldeData, 300);
         });
+
+        // Chargement initial
+        getSoldeData();
     });
     </script>
 

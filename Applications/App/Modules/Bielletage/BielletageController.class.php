@@ -318,6 +318,59 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('SoldeRemittance', $SoldeRemittance);
     }
 
+    public function executeCalculateSolde(\Library\HTTPRequest $request)
+    {
+        try {
+            $date = date('Y-m-d');
+            $filters = [
+                'Country' => $request->postData('Country'),
+                'Agency' => $request->postData('Agency'),
+                'Caisse' => $request->postData('Caisse')
+            ];
+
+            // Optimisation du calcul des soldes avec une seule requête SQL
+            $query = "SELECT 
+                SUM(CASE WHEN type_operation IN ('depot', 'remittance_depot') THEN montant ELSE 0 END) as total_versement,
+                SUM(CASE WHEN type_operation IN ('retrait', 'remittance_retrait') THEN montant ELSE 0 END) as total_retrait,
+                SUM(CASE 
+                    WHEN type_operation IN ('depot', 'remittance_depot') THEN montant 
+                    WHEN type_operation IN ('retrait', 'remittance_retrait') THEN -montant 
+                    ELSE 0 
+                END) as solde_global
+                FROM operations 
+                WHERE date = :date";
+
+            // Ajouter les filtres conditionnellement
+            $params = ['date' => $date];
+            if (!empty($filters['Country'])) {
+                $query .= " AND ref_pays = :country";
+                $params['country'] = $filters['Country'];
+            }
+            if (!empty($filters['Agency'])) {
+                $query .= " AND ref_agency = :agency";
+                $params['agency'] = $filters['Agency'];
+            }
+            if (!empty($filters['Caisse'])) {
+                $query .= " AND ref_caisse = :caisse";
+                $params['caisse'] = $filters['Caisse'];
+            }
+
+            // Exécuter la requête optimisée
+            $result = $this->managers->getManagerOf('Journal')->executeQuery($query, $params);
+
+            $this->JsonResponse([
+                'sommeVersementGlobal' => (float)$result['total_versement'] ?? 0,
+                'sommeRetraitGlobal' => (float)$result['total_retrait'] ?? 0,
+                'soldeGlobal' => (float)$result['solde_global'] ?? 0
+            ]);
+
+        } catch (\Exception $e) {
+            $this->JsonResponse([
+                'error' => $e->getMessage()
+            ], false, 500);
+        }
+    }
+
     private function JsonResponse($data, $success = true, $statusCode = 200)
     {
         if (!headers_sent()) {

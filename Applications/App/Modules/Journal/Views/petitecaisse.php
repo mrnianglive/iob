@@ -121,9 +121,17 @@
         opacity: 0.6;
     }
 }
+
+.error-placeholder {
+    color: #ff0000;
+    font-style: italic;
+}
   </style>
 
   <script>
+// Ajouter la variable de session PHP dans le JavaScript
+window._SESSION_RefPays = <?php echo json_encode($_SESSION['RefPays']); ?>;
+
 document.addEventListener('DOMContentLoaded', function() {
     const day = document.getElementById('jour').value;
     const agencies = document.querySelectorAll('[data-agency]');
@@ -132,82 +140,113 @@ document.addEventListener('DOMContentLoaded', function() {
         return new Intl.NumberFormat('fr-FR').format(number);
     }
 
-    function updateAgencyRow(agencyId, data) {
-        // Update Petite Caisse table
+    function showError(agencyId, error) {
         const agencyRow = document.getElementById(`agency-row-${agencyId}`);
-        if (agencyRow) {
-            let html = `
-                <td>${data.Afficher.map(caisse => `<li>${caisse.NameCaisse}</li>`).join('')}</td>
-                <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.SoldeInitial)}</li>`).join('')}</td>
-                <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalAppro)}</li>`).join('')}</td>
-                <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalSortieCaisse)}</li>`).join('')}</td>
-                <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalVersement + caisse.SoldeRemittanceVersement)}</li>`).join('')}</td>
-                <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalRetrait + caisse.SoldeRemittanceRetrait)}</li>`).join('')}</td>
-            `;
-
-            if (window._SESSION_RefPays !== 1) {
-                html +=
-                    `<td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalFraisTimbre)}</li>`).join('')}</td>`;
-            }
-
-            html +=
-                `<td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.SoldeDisponible)}</li>`).join('')}</td>`;
-
-            agencyRow.innerHTML = html;
-        }
-
-        // Update Solde Reserve table
         const reserveRow = document.getElementById(`reserve-row-${agencyId}`);
-        if (reserveRow) {
-            const cells = reserveRow.getElementsByTagName('td');
-            cells[1].innerHTML = `${formatNumber(data.YesterdayReserve)}<br><small>${data.LastDate}</small>`;
-            cells[2].innerHTML = formatNumber(data.DayReserve);
-            cells[3].innerHTML = formatNumber(data.SommeDepotWithRemittance);
-            cells[4].innerHTML = formatNumber(data.SommeSortieWithRemittance);
 
-            let currentCell = 5;
-            if (window._SESSION_RefPays !== 1) {
-                cells[currentCell].innerHTML = formatNumber(data.SommeTimbre);
-                currentCell++;
+        const errorMessage = `<td colspan="8" class="error-placeholder">Erreur: ${error}</td>`;
+
+        if (agencyRow) {
+            agencyRow.innerHTML = errorMessage;
+        }
+        if (reserveRow) {
+            reserveRow.innerHTML = errorMessage;
+        }
+    }
+
+    function updateAgencyRow(agencyId, data) {
+        try {
+            // Update Petite Caisse table
+            const agencyRow = document.getElementById(`agency-row-${agencyId}`);
+            if (agencyRow) {
+                let html = `
+                    <td>${data.Afficher.map(caisse => `<li>${caisse.NameCaisse}</li>`).join('')}</td>
+                    <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.SoldeInitial)}</li>`).join('')}</td>
+                    <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalAppro)}</li>`).join('')}</td>
+                    <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalSortieCaisse)}</li>`).join('')}</td>
+                    <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalVersement + (caisse.SoldeRemittanceVersement || 0))}</li>`).join('')}</td>
+                    <td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalRetrait + (caisse.SoldeRemittanceRetrait || 0))}</li>`).join('')}</td>
+                `;
+
+                if (window._SESSION_RefPays !== 1) {
+                    html +=
+                        `<td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.TotalFraisTimbre || 0)}</li>`).join('')}</td>`;
+                }
+
+                html +=
+                    `<td>${data.Afficher.map(caisse => `<li>${formatNumber(caisse.SoldeDisponible)}</li>`).join('')}</td>`;
+
+                agencyRow.innerHTML = html;
             }
 
-            cells[currentCell].innerHTML = formatNumber(data.ReserveActuelle);
-            currentCell++;
+            // Update Solde Reserve table
+            const reserveRow = document.getElementById(`reserve-row-${agencyId}`);
+            if (reserveRow) {
+                const cells = reserveRow.getElementsByTagName('td');
+                cells[1].innerHTML =
+                    `${formatNumber(data.YesterdayReserve)}<br><small>${data.LastDate || ''}</small>`;
+                cells[2].innerHTML = formatNumber(data.DayReserve);
+                cells[3].innerHTML = formatNumber(data.SommeDepotWithRemittance);
+                cells[4].innerHTML = formatNumber(data.SommeSortieWithRemittance);
 
-            if (cells[currentCell]) {
-                if (data.validate) {
-                    cells[currentCell].innerHTML = `
-                        <a href="/Arreter/cancel/${data.validate.RefCompte}/${agencyId}/${day}"
-                           class="btn btn-success" data-toggle="tooltip"
-                           title="Cliquez ici pour reouvrir l'agence">
-                            <i class="fa fa-lock"></i>
-                        </a>`;
-                } else {
-                    cells[currentCell].innerHTML = `
-                        <form method="POST" action="/Arreter/reserve">
-                            <input type="hidden" value="${data.ReserveActuelle}" name="ReserveActuelle">
-                            <input type="hidden" value="${day}" name="daycloture">
-                            <input type="hidden" value="${agencyId}" name="RefAgency">
-                            <button type="submit" class="btn btn-danger" data-toggle="tooltip"
-                                    title="Cliquez ici pour fermer les caisses de l'agence">
-                                <i class="fa fa-unlock"></i>
-                            </button>
-                        </form>`;
+                let currentCell = 5;
+                if (window._SESSION_RefPays !== 1) {
+                    cells[currentCell].innerHTML = formatNumber(data.SommeTimbre);
+                    currentCell++;
+                }
+
+                cells[currentCell].innerHTML = formatNumber(data.ReserveActuelle);
+                currentCell++;
+
+                if (cells[currentCell]) {
+                    if (data.validate) {
+                        cells[currentCell].innerHTML = `
+                            <a href="/Arreter/cancel/${data.validate.RefCompte}/${agencyId}/${day}"
+                               class="btn btn-success" data-toggle="tooltip"
+                               title="Cliquez ici pour reouvrir l'agence">
+                                <i class="fa fa-lock"></i>
+                            </a>`;
+                    } else {
+                        cells[currentCell].innerHTML = `
+                            <form method="POST" action="/Arreter/reserve">
+                                <input type="hidden" value="${data.ReserveActuelle}" name="ReserveActuelle">
+                                <input type="hidden" value="${day}" name="daycloture">
+                                <input type="hidden" value="${agencyId}" name="RefAgency">
+                                <button type="submit" class="btn btn-danger" data-toggle="tooltip"
+                                        title="Cliquez ici pour fermer les caisses de l'agence">
+                                    <i class="fa fa-unlock"></i>
+                                </button>
+                            </form>`;
+                    }
                 }
             }
+        } catch (error) {
+            console.error('Error updating agency row:', error);
+            showError(agencyId, 'Erreur lors de la mise à jour des données');
         }
     }
 
     // Load data for each agency
     agencies.forEach(agency => {
         const agencyId = agency.dataset.agency;
-        fetch(`/Journal/getAgencyData?date=${day}&RefAgency=${agencyId}`)
-            .then(response => response.json())
+        fetch(
+                `/Journal/getAgencyData?date=${encodeURIComponent(day)}&RefAgency=${encodeURIComponent(agencyId)}`
+                )
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
                 updateAgencyRow(agencyId, data);
             })
             .catch(error => {
                 console.error('Error loading agency data:', error);
+                showError(agencyId, 'Erreur lors du chargement des données');
             });
     });
 });

@@ -142,54 +142,75 @@ class JournalController extends \Library\BackController
     // Nouvelle méthode pour le chargement asynchrone des données
     public function executeGetAgencyData(\Library\HTTPRequest $request)
     {
-        $date = $request->getData('date');
-        $RefAgency = $request->getData('RefAgency');
-        
-        $journalManager = $this->managers->getManagerOf("Journal");
-        
-        // Récupérer toutes les données en une seule requête si possible
-        $data = [
-            'SommeDepotRemittance' => floatval($journalManager->SoldeRemittanceVersementAgence($date, $RefAgency)),
-            'SommeRetraitRemittance' => floatval($journalManager->SoldeRemittanceRetraitAgence($date, $RefAgency)),
-            'Afficher' => $journalManager->CaisseAgence($RefAgency, $date),
-            'validate' => $journalManager->CheckDailyClose($RefAgency, $date)
-        ];
+        try {
+            if (!$request->getData('date') || !$request->getData('RefAgency')) {
+                throw new \Exception('Paramètres manquants');
+            }
 
-        // Récupérer les données de réserve
-        $reserveData = $journalManager->YesterdayReserve($RefAgency, $date);
-        $data['YesterdayReserve'] = floatval($reserveData['SoldeCompte']);
-        $data['LastDate'] = $journalManager->displayDaysSinceLastDate($reserveData['DateSolde']);
+            $date = $request->getData('date');
+            $RefAgency = $request->getData('RefAgency');
+            
+            $journalManager = $this->managers->getManagerOf("Journal");
+            
+            // Récupérer toutes les données en une seule requête si possible
+            $data = [
+                'SommeDepotRemittance' => floatval($journalManager->SoldeRemittanceVersementAgence($date, $RefAgency)),
+                'SommeRetraitRemittance' => floatval($journalManager->SoldeRemittanceRetraitAgence($date, $RefAgency)),
+                'Afficher' => $journalManager->CaisseAgence($RefAgency, $date),
+                'validate' => $journalManager->CheckDailyClose($RefAgency, $date)
+            ];
 
-        // Calculer les sommes
-        $data['SommeDepot'] = floatval($journalManager->SommeDepotAgence($date, $RefAgency));
-        $data['SommeSortie'] = floatval($journalManager->SommeRetraitAgence($date, $RefAgency));
-        
-        // Calculer les totaux
-        $data['SoldeRemittanceAgence'] = $data['SommeDepotRemittance'] - $data['SommeRetraitRemittance'];
-        $data['SommeDepotWithRemittance'] = $data['SommeDepot'] + $data['SommeDepotRemittance'];
-        $data['SommeSortieWithRemittance'] = $data['SommeSortie'] + $data['SommeRetraitRemittance'];
-        
-        // Récupérer les autres données
-        $data['TotalAppoAgenceSansApproInitial'] = floatval($journalManager->TotalApproAgenceSansApproInitial($date, $RefAgency));
-        $data['TotalSortieAgence'] = floatval($journalManager->TotalSortieAgence($date, $RefAgency));
-        $data['SommeTimbre'] = floatval($journalManager->SommeFraisTimbreAgence($date, $RefAgency));
-        
-        // Calculer la réserve actuelle
-        $data['ReserveActuelle'] = $data['YesterdayReserve'] + $data['SommeDepot'] - $data['SommeSortie'] +
-            $data['TotalAppoAgenceSansApproInitial'] - $data['TotalSortieAgence'] + 
-            $data['SoldeRemittanceAgence'] + $data['SommeTimbre'];
-        
-        $data['DayReserve'] = $data['YesterdayReserve'] - 
-            floatval($journalManager->TotalApproAgenceAvecApproInitial($date, $RefAgency));
-        
-        // Récupérer les données par produit
-        $data['SommeDepotProduit'] = $journalManager->SommeDepotProduitAgence($date, $RefAgency);
-        $data['SommeSortieProduit'] = $journalManager->SommeRetraitProduitAgence($date, $RefAgency);
-        
-        // Retourner les données au format JSON
-        header('Content-Type: application/json');
-        echo json_encode($data);
-        exit;
+            // Récupérer les données de réserve
+            $reserveData = $journalManager->YesterdayReserve($RefAgency, $date);
+            $data['YesterdayReserve'] = floatval($reserveData['SoldeCompte'] ?? 0);
+            $data['LastDate'] = $journalManager->displayDaysSinceLastDate($reserveData['DateSolde'] ?? null);
+
+            // Calculer les sommes
+            $data['SommeDepot'] = floatval($journalManager->SommeDepotAgence($date, $RefAgency));
+            $data['SommeSortie'] = floatval($journalManager->SommeRetraitAgence($date, $RefAgency));
+            
+            // Calculer les totaux
+            $data['SoldeRemittanceAgence'] = $data['SommeDepotRemittance'] - $data['SommeRetraitRemittance'];
+            $data['SommeDepotWithRemittance'] = $data['SommeDepot'] + $data['SommeDepotRemittance'];
+            $data['SommeSortieWithRemittance'] = $data['SommeSortie'] + $data['SommeRetraitRemittance'];
+            
+            // Récupérer les autres données
+            $data['TotalAppoAgenceSansApproInitial'] = floatval($journalManager->TotalApproAgenceSansApproInitial($date, $RefAgency));
+            $data['TotalSortieAgence'] = floatval($journalManager->TotalSortieAgence($date, $RefAgency));
+            $data['SommeTimbre'] = floatval($journalManager->SommeFraisTimbreAgence($date, $RefAgency));
+            
+            // Calculer la réserve actuelle
+            $data['ReserveActuelle'] = $data['YesterdayReserve'] + $data['SommeDepot'] - $data['SommeSortie'] +
+                $data['TotalAppoAgenceSansApproInitial'] - $data['TotalSortieAgence'] + 
+                $data['SoldeRemittanceAgence'] + $data['SommeTimbre'];
+            
+            $data['DayReserve'] = $data['YesterdayReserve'] - 
+                floatval($journalManager->TotalApproAgenceAvecApproInitial($date, $RefAgency));
+            
+            // Récupérer les données par produit
+            $data['SommeDepotProduit'] = $journalManager->SommeDepotProduitAgence($date, $RefAgency);
+            $data['SommeSortieProduit'] = $journalManager->SommeRetraitProduitAgence($date, $RefAgency);
+
+            // Désactiver tout output précédent
+            ob_clean();
+            
+            // Envoyer les headers
+            header('Content-Type: application/json');
+            header('Cache-Control: no-cache, must-revalidate');
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            
+            // Retourner les données JSON
+            echo json_encode($data, JSON_NUMERIC_CHECK);
+            exit;
+
+        } catch (\Exception $e) {
+            // En cas d'erreur, retourner une réponse JSON avec l'erreur
+            ob_clean();
+            header('Content-Type: application/json');
+            http_response_code(500);
+            echo json_encode(['error' => $e->getMessage()]);
+            exit;
+        }
     }
 
     public function executeCancelFermeture(\Library\HTTPRequest $request)

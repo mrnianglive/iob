@@ -1721,6 +1721,99 @@ private function updateJobStatus($jobId, $status, $error = null)
     $requete->execute();
 }
 
+public function getOptimizedPetiteCaisseData($date, array $agences)
+{
+    if (empty($agences)) {
+        return [];
+    }
+    $agenceIds = array_column($agences, 'RefAgency');
+    $agenceMap = array_combine($agenceIds, $agences);
 
+    // Step 2: Fetch all caisse-level data in a single, optimized query
+    $sqlCaisses = "
+        SELECT
+            c.RefAgency,
+            c.RefCaisse,
+            c.NameCaisse,
+            COALESCE(s.Solde, 0) AS SoldeInitial,
+            COALESCE(o.TotalVersement, 0) AS TotalVersement,
+            COALESCE(o.TotalRetrait, 0) AS TotalRetrait,
+            COALESCE(o.TotalAppro, 0) AS TotalAppro,
+            COALESCE(o.TotalSortieCaisse, 0) AS TotalSortieCaisse,
+            COALESCE(r.SommeVersementRemittance, 0) AS SoldeRemittanceVersement,
+            COALESCE(r.SommeRetraitRemittance, 0) AS SoldeRemittanceRetrait,
+            COALESCE(o.FraisTimbre, 0) AS FraisTimbre,
+            (
+                COALESCE(s.Solde, 0) +
+                COALESCE(o.TotalVersement, 0) +
+                COALESCE(o.TotalAppro, 0) +
+                COALESCE(r.SommeVersementRemittance, 0)
+            ) - (
+                COALESCE(o.TotalRetrait, 0) +
+                COALESCE(o.TotalSortieCaisse, 0) +
+                COALESCE(r.SommeRetraitRemittance, 0)
+            ) AS SoldeDisponible
+        FROM TbleCaisse c
+        LEFT JOIN (
+            SELECT RefCaisse, Solde FROM TbleSolde WHERE DATE(DateSolde) = :yesterday
+        ) s ON c.RefCaisse = s.RefCaisse
+        LEFT JOIN (
+            SELECT
+                RefCaisse,
+                SUM(CASE WHEN RefType IN (1, 8) THEN MontantVersement ELSE 0 END) as TotalVersement,
+                SUM(CASE WHEN RefType IN (2, 9) THEN MontantVersement ELSE 0 END) as TotalRetrait,
+                SUM(CASE WHEN RefType = 11 THEN MontantVersement ELSE 0 END) as TotalAppro,
+                SUM(CASE WHEN RefType = 12 THEN MontantVersement ELSE 0 END) as TotalSortieCaisse,
+                SUM(Frais) as FraisTimbre
+            FROM TbleOperations
+            WHERE DATE(Insert_Time) = :today AND Reset_Id IS NULL
+            GROUP BY RefCaisse
+        ) o ON c.RefCaisse = o.RefCaisse
+        LEFT JOIN (
+            SELECT
+                RefCaisse,
+                SUM(CASE WHEN RefType = 5 THEN Montant ELSE 0 END) as SommeVersementRemittance,
+                SUM(CASE WHEN RefType = 6 THEN Montant ELSE 0 END) as SommeRetraitRemittance
+            FROM TbleRemittance
+            WHERE DATE(Insert_time) = :today AND Reset_Id IS NULL
+            GROUP BY RefCaisse
+        ) r ON c.RefCaisse = r.RefCaisse
+        WHERE c.RefAgency IN (" . implode(',', $agenceIds) . ")";
+
+    $requeteCaisses = $this->dao->prepare($sqlCaisses);
+    $requeteCaisses->bindValue(':today', $date, \PDO::PARAM_STR);
+    $requeteCaisses->bindValue(':yesterday', date('Y-m-d', strtotime($date . ' -1 day')), \PDO::PARAM_STR);
+    $requeteCaisses->execute();
+    $caisseData = $requeteCaisses->fetchAll(\PDO::FETCH_ASSOC | \PDO::FETCH_GROUP);
+
+    // Step 3: Fetch agency-level data
+    $sqlAgency = "
+        SELECT RefAgency, SoldeCompte FROM TbleSoldeAgence 
+        WHERE RefAgency IN (" . implode(',', $agenceIds) . ") AND DATE(DateSolde) = :yesterday";
+    $reqAgency = $this->dao->prepare($sqlAgency);
+    $reqAgency->bindValue(':yesterday', date('Y-m-d', strtotime($date . ' -1 day')), \PDO::PARAM_STR);
+    $reqAgency->execute();
+    $yesterdayReserves = $reqAgency->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+    // Step 4: Assemble the final data structure
+    foreach ($agenceMap as &$agence) {
+        $id = $agence['RefAgency'];
+        $agence['Afficher'] = $caisseData[$id] ?? [];
+        $agence['validate'] = $this->CheckDailyClose($id, $date);
+        $agence['YesterdayReserve'] = $yesterdayReserves[$id] ?? 0;
+        $agence['LastDate'] = $this->YesterdayReserve($id, $date)['DateSolde'] ?? null;
+
+        $agence['SommeDepot'] = array_sum(array_column($agence['Afficher'], 'TotalVersement'));
+        $agence['SommeSortie'] = array_sum(array_column($agence['Afficher'], 'TotalRetrait'));
+        $agence['SommeTimbre'] = array_sum(array_column($agence['Afficher'], 'FraisTimbre'));
+        $agence['ReserveActuelle'] = $agence['YesterdayReserve'] + $agence['SommeDepot'] - $agence['SommeSortie'];
+
+        // Keep existing calls for modal data to avoid breaking changes
+        $agence['SommeDepotProduit'] = $this->SommeDepotProduitAgence($date, $id);
+        $agence['SommeSortieProduit'] = $this->SommeRetraitProduitAgence($date, $id);
+    }
+
+    return array_values($agenceMap);
+}
 
 }

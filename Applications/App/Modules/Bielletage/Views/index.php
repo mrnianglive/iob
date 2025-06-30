@@ -57,37 +57,14 @@
 <?php endif; ?>
 <?php endif; ?>
 
-<?php if (isset($loadSumsAsynchronously) && $loadSumsAsynchronously): ?>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/get-sums')
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById('SommeVersementGlobal').textContent = formatNumber(data.data
-                    .SommeVersementGlobal);
-                document.getElementById('SommeRetraitGlobal').textContent = formatNumber(data.data
-                    .SommeRetraitGlobal);
-                document.getElementById('SoldeGlobal').textContent = formatNumber(data.data.SoldeGlobal);
-            } else {
-                console.error('Erreur lors de la récupération des données:', data.message);
-            }
-        })
-        .catch(error => console.error('Erreur:', error));
-});
 
-function formatNumber(number) {
-    return new Intl.NumberFormat('fr-FR').format(number);
-}
-</script>
-<?php endif; ?>
 
 <div class="row justify-content-center">
     <div class="col-lg-3 col-sm-6 col-xs-12">
         <div class="white-box analytics-info">
             <h3 class="box-title">DEPOT</h3>
             <ul class="list-inline two-part d-flex align-items-center mb-0">
-                <li class="ml-auto"><span id="SommeVersementGlobal" class="counter text-danger">Chargement...</span>
+                <li class="ml-auto"><span id="solde-depot" class="counter text-danger">Chargement...</span>
                 </li>
             </ul>
             <span>CAISSE</span>
@@ -97,7 +74,7 @@ function formatNumber(number) {
         <div class="white-box analytics-info">
             <h3 class="box-title">RETRAIT</h3>
             <ul class="list-inline two-part d-flex align-items-center mb-0">
-                <li class="ml-auto"><span id="SommeRetraitGlobal" class="counter text-purple">Chargement...</span>
+                <li class="ml-auto"><span id="solde-retrait" class="counter text-success">Chargement...</span>
                 </li>
             </ul>
             <span>CAISSE</span>
@@ -107,7 +84,7 @@ function formatNumber(number) {
         <div class="white-box analytics-info">
             <h5 class="box-title">SOLDE ESPECES</h5>
             <ul class="list-inline two-part d-flex align-items-center mb-0">
-                <li class="ml-auto"><span id="SoldeGlobal" class="counter text-info">
+                <li class="ml-auto"><span id="solde-espece" class="counter text-info">
                         Chargement...
                     </span>
                 </li>

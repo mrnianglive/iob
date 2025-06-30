@@ -43,66 +43,6 @@ class BielletageController extends \Library\BackController
         ];
     }
 
-    public function executeGetSums(\Library\HTTPRequest $request)
-    {
-        try {
-            $date = date('Y-m-d');
-            $Country = $request->getData('Country', '');
-            $Agency = $request->getData('Agency', '');
-            $Caisse = $request->getData('Caisse', '');
-
-            $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse($date, $Country, $Agency, $Caisse);
-            
-            $response = array_merge(
-                $this->calculateSums($usersCaisse),
-                ['agence' => $this->getAgenceData()]
-            );
-
-            $this->JsonResponse($response);
-        } catch (\Exception $e) {
-            $this->JsonResponse(['message' => $e->getMessage()], false, 500);
-        }
-    }
-
-    private function calculateSums($usersCaisse)
-    {
-        $sums = [
-            'SommeVersementGlobal' => 0, 'SommeRetraitGlobal' => 0, 'SoldeGlobal' => 0,
-            'Solde' => 0, 'SommeVersement' => 0, 'SommeRetrait' => 0,
-            'SommeRemittanceDepot' => 0, 'SommeRemittanceRetrait' => 0, 'SoldeRemittance' => 0,
-        ];
-
-        foreach ($usersCaisse as $user) {
-            $sums['Solde'] += $user['SoldeDisponible'];
-            $sums['SoldeGlobal'] += $user['SoldeDisponibleGlobal'];
-            $sums['SommeVersement'] += $user['TotalVersement'];
-            $sums['SommeRetrait'] += $user['TotalRetrait'];
-            $sums['SommeRemittanceDepot'] += $user['SommeVersementRemittance'];
-            $sums['SommeRemittanceRetrait'] += $user['SommeRetraitRemittance'];
-            $sums['SoldeRemittance'] += $user['SoldeRemittance'];
-        }
-
-        $sums['SommeVersementGlobal'] = $sums['SommeVersement'] + $sums['SommeRemittanceDepot'];
-        $sums['SommeRetraitGlobal'] = $sums['SommeRetrait'] + $sums['SommeRemittanceRetrait'];
-        $sums['Date'] = date('Y-m-d');
-
-        return $sums;
-    }
-
-    private function getAgenceData()
-    {
-        $agence = $this->managers->getManagerOf("Pannel")->UserAgence();
-        $currentDate = date('Y-m-d');
-        
-        foreach ($agence as &$value) {
-            $value['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialAgence($currentDate, $value['RefAgency']);
-            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], $currentDate);
-            $value['YesterdayReserve'] = $reserveData['SoldeCompte'] ?? null;
-            $value['LastDate'] = $reserveData['DateSolde'] ?? null;
-            $value['CheckAgencyBalance'] = $this->checkAgencyBalanceStatus($value['RefAgency']);
-        }
-        return $agence;
-    }
 
     private function checkAgencyBalanceStatus($RefAgency)
     {

@@ -8,7 +8,7 @@
 
 	<route url="/dashboard" module="Bielletage" action="dashboard"/>
 	<route url="/logout" module="Connexion" action="Logout"/>
-	<route url="/bielletage/([0-9]+)" vars="id" module="Bielletage" action="bielletagebefore"/>
+	<route url="/bielletage/([0-9]+)" vars="id" module="Bielletage" action="bielletagenew"/>
 	<route url="/bordereau/([0-9]+)" vars="id" module="Bielletage" action="invoice"/>
 	<route url="/bordereau/" module="Bielletage" action="invoice"/>
 	<route url="/bielletage/add" module="Bielletage" action="add"/>

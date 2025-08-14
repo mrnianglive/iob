@@ -1,0 +1,212 @@
+version: '3.8'
+
+services:
+  # Base de données MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: iob_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-iob_root_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-iob_database}
+      MYSQL_USER: ${MYSQL_USER:-iob_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-iob_password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db_structure.sql:/docker-entrypoint-initdb.d/01-structure.sql:ro
+      - ./scripts/seed-data.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    networks:
+      - iob_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Redis pour le cache et les sessions
+  redis:
+    image: redis:7-alpine
+    container_name: iob_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - iob_network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      timeout: 10s
+      retries: 5
+
+  # API Backend Partenaire
+  partner-api:
+    build:
+      context: ./partner-api
+      dockerfile: Dockerfile
+    container_name: iob_partner_api
+    restart: unless-stopped
+    ports:
+      - "${PARTNER_API_PORT:-3001}:3001"
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 3001
+      DATABASE_URL: mysql://${MYSQL_USER:-iob_user}:${MYSQL_PASSWORD:-iob_password}@mysql:3306/${MYSQL_DATABASE:-iob_database}
+      REDIS_URL: redis://redis:6379
+      PARTNER_JWT_SECRET: ${PARTNER_JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
+      REFRESH_TOKEN_EXPIRES_IN: ${REFRESH_TOKEN_EXPIRES_IN:-7d}
+      HMAC_SECRET: ${HMAC_SECRET:-your-hmac-secret-change-in-production}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:8081,https://partner.iob.com}
+      CORS_CREDENTIALS: "true"
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      API_RATE_LIMIT: ${API_RATE_LIMIT:-1000}
+      API_WINDOW_MS: ${API_WINDOW_MS:-900000}
+      SWAGGER_ENABLED: ${SWAGGER_ENABLED:-true}
+      # Email configuration (optionnel)
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      FROM_EMAIL: ${FROM_EMAIL:-noreply@iob.com}
+    volumes:
+      - ./partner-api/logs:/app/logs
+      - ./partner-api/uploads:/app/uploads
+    networks:
+      - iob_network
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # Frontend Partenaire (Vue.js)
+  partner-frontend:
+    build:
+      context: ./partner-frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:3001}
+        VITE_APP_NAME: ${VITE_APP_NAME:-IOB Partner Portal}
+    container_name: iob_partner_frontend
+    restart: unless-stopped
+    ports:
+      - "${PARTNER_FRONTEND_PORT:-8081}:80"
+    networks:
+      - iob_network
+    depends_on:
+      - partner-api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: iob_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/logs:/var/log/nginx
+    networks:
+      - iob_network
+    depends_on:
+      - partner-api
+      - partner-frontend
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      timeout: 10s
+      retries: 3
+
+  # Service de monitoring (optionnel)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: iob_prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - iob_network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    profiles:
+      - monitoring
+
+  # Grafana pour la visualisation (optionnel)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: iob_grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin123}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - iob_network
+    depends_on:
+      - prometheus
+    profiles:
+      - monitoring
+
+  # Service de backup automatique
+  backup:
+    image: mysql:8.0
+    container_name: iob_backup
+    restart: "no"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-iob_database}
+      MYSQL_USER: ${MYSQL_USER:-iob_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-iob_password}
+    volumes:
+      - ./backups:/backups
+      - ./scripts/backup.sh:/backup.sh:ro
+    networks:
+      - iob_network
+    depends_on:
+      - mysql
+    command: /backup.sh
+    profiles:
+      - backup
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  iob_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

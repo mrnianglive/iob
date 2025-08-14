@@ -1,0 +1,199 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ===== PARTENAIRE MODELS =====
+model Partner {
+  RefBanque     Int      @id @map("RefBanque")
+  NameBanque    String   @map("NameBanque")
+  RefPays       Int      @map("RefPays")
+  LogoBanque    String?  @map("LogoBanque")
+  ContactEmail  String?  @map("ContactEmail")
+  ApiKey        String   @unique @map("ApiKey")
+  ApiSecret     String   @map("ApiSecret")
+  IsActive      Boolean  @default(true) @map("IsActive")
+  CreatedAt     DateTime @default(now()) @map("CreatedAt")
+  UpdatedAt     DateTime @updatedAt @map("UpdatedAt")
+  
+  // Configuration partenaire
+  PrimaryColor    String? @map("PrimaryColor")
+  SecondaryColor  String? @map("SecondaryColor")
+  RateLimit       Int     @default(1000) @map("RateLimit") // requêtes par minute
+  
+  // Features activées
+  AnalyticsEnabled Boolean @default(true) @map("AnalyticsEnabled")
+  ExportEnabled    Boolean @default(true) @map("ExportEnabled")
+  WebhooksEnabled  Boolean @default(false) @map("WebhooksEnabled")
+  ApiAccessEnabled Boolean @default(true) @map("ApiAccessEnabled")
+  
+  // Relations
+  country     Country           @relation(fields: [RefPays], references: [RefPays])
+  users       PartnerUser[]
+  operations  Operation[]
+  products    Product[]
+  webhooks    PartnerWebhook[]
+  apiLogs     PartnerApiLog[]
+  
+  @@map("TbleBanque")
+}
+
+model PartnerUser {
+  RefUser     Int      @id @map("RefUser")
+  Login       String   @unique @map("Login")
+  Password    String   @map("Password")
+  Name        String   @map("Name")
+  Email       String   @unique @map("Email")
+  RefBanque   Int      @map("RefBanque")
+  Role        String   @map("Role") // partner_admin, partner_viewer, partner_operator
+  ApiAccess   Boolean  @default(false) @map("ApiAccess")
+  IsActive    Boolean  @default(true) @map("IsActive")
+  LastLogin   DateTime? @map("LastLogin")
+  CreatedAt   DateTime @default(now()) @map("CreatedAt")
+  UpdatedAt   DateTime @updatedAt @map("UpdatedAt")
+  
+  // Permissions spécifiques
+  ViewOperations Boolean @default(true) @map("ViewOperations")
+  ViewAnalytics  Boolean @default(true) @map("ViewAnalytics")
+  ViewAgencies   Boolean @default(true) @map("ViewAgencies")
+  ExportData     Boolean @default(false) @map("ExportData")
+  ManageUsers    Boolean @default(false) @map("ManageUsers")
+  
+  // Relations
+  partner    Partner @relation(fields: [RefBanque], references: [RefBanque])
+  
+  @@map("TbleUsers")
+}
+
+model PartnerWebhook {
+  RefWebhook Int      @id @default(autoincrement()) @map("RefWebhook")
+  RefBanque  Int      @map("RefBanque")
+  Url        String   @map("Url")
+  Events     Json     @map("Events") // Array of event names
+  Secret     String   @map("Secret")
+  IsActive   Boolean  @default(true) @map("IsActive")
+  CreatedAt  DateTime @default(now()) @map("CreatedAt")
+  UpdatedAt  DateTime @updatedAt @map("UpdatedAt")
+  
+  // Relations
+  partner    Partner @relation(fields: [RefBanque], references: [RefBanque])
+  
+  @@map("TblePartnerWebhooks")
+}
+
+model PartnerApiLog {
+  RefLog      Int      @id @default(autoincrement()) @map("RefLog")
+  RefBanque   Int      @map("RefBanque")
+  Endpoint    String   @map("Endpoint")
+  Method      String   @map("Method")
+  StatusCode  Int      @map("StatusCode")
+  ResponseTime Int     @map("ResponseTime") // en millisecondes
+  UserAgent   String?  @map("UserAgent")
+  IpAddress   String   @map("IpAddress")
+  ApiKey      String?  @map("ApiKey")
+  CreatedAt   DateTime @default(now()) @map("CreatedAt")
+  
+  // Relations
+  partner     Partner @relation(fields: [RefBanque], references: [RefBanque])
+  
+  @@map("TblePartnerApiLogs")
+}
+
+// ===== EXISTING MODELS ADAPTED =====
+model Country {
+  RefPays   Int    @id @map("RefPays")
+  NamePays  String @map("NamePays")
+  CodePays  String @map("CodePays")
+  
+  // Relations
+  partners  Partner[]
+  agencies  Agency[]
+  
+  @@map("TblePays")
+}
+
+model Agency {
+  RefAgence   Int     @id @map("RefAgence")
+  NameAgence  String  @map("NameAgence")
+  RefPays     Int     @map("RefPays")
+  Address     String? @map("Address")
+  Phone       String? @map("Phone")
+  Email       String? @map("Email")
+  IsActive    Boolean @default(true) @map("IsActive")
+  
+  // Relations
+  country       Country        @relation(fields: [RefPays], references: [RefPays])
+  cashRegisters CashRegister[]
+  
+  @@map("TbleAgence")
+}
+
+model CashRegister {
+  RefCaisse   Int     @id @map("RefCaisse")
+  RefAgence   Int     @map("RefAgence")
+  NameCaisse  String  @map("NameCaisse")
+  IsActive    Boolean @default(true) @map("IsActive")
+  
+  // Relations
+  agency     Agency      @relation(fields: [RefAgence], references: [RefAgence])
+  operations Operation[]
+  
+  @@map("TbleCaisse")
+}
+
+model Product {
+  RefProduit  Int     @id @map("RefProduit")
+  RefBanque   Int     @map("RefBanque")
+  NameProduit String  @map("NameProduit")
+  Commission  Decimal @map("Commission")
+  IsActive    Boolean @default(true) @map("IsActive")
+  
+  // Relations
+  partner    Partner     @relation(fields: [RefBanque], references: [RefBanque])
+  operations Operation[]
+  
+  @@map("TbleProduit")
+}
+
+model Operation {
+  RefOperation  Int      @id @map("RefOperation")
+  RefBanque     Int      @map("RefBanque") // CLEF ISOLATION PARTENAIRE
+  RefCaisse     Int      @map("RefCaisse")
+  RefUser       Int      @map("RefUser")
+  RefProduit    Int      @map("RefProduit")
+  
+  // Données opération
+  Amount        Decimal  @map("Amount")
+  Commission    Decimal  @map("Commission")
+  Status        String   @map("Status") // pending, approved, rejected, cancelled
+  
+  // Données client
+  ClientName    String   @map("ClientName")
+  ClientPhone   String   @map("ClientPhone")
+  ClientId      String?  @map("ClientId")
+  
+  // Données bénéficiaire
+  BenefName     String?  @map("BenefName")
+  BenefPhone    String?  @map("BenefPhone")
+  BenefCountry  String?  @map("BenefCountry")
+  
+  // Métadonnées
+  Reference     String   @unique @map("Reference")
+  Notes         String?  @map("Notes")
+  Insert_Time   DateTime @default(now()) @map("Insert_Time")
+  Update_Time   DateTime @updatedAt @map("Update_Time")
+  
+  // Relations
+  partner      Partner      @relation(fields: [RefBanque], references: [RefBanque])
+  cashRegister CashRegister @relation(fields: [RefCaisse], references: [RefCaisse])
+  product      Product      @relation(fields: [RefProduit], references: [RefProduit])
+  
+  @@map("TbleOperation")
+}

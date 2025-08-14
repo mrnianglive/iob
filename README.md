@@ -1,431 +1,198 @@
-# 🏦 IOB Partner Interface - Architecture Complète
+# IOB Partner API
 
-Interface dédiée aux partenaires bancaires IOB avec API REST, dashboard web personnalisé, SDK JavaScript et système de webhooks temps réel.
-
-## 🎯 Vue d'ensemble
-
-Cette solution complète permet aux partenaires bancaires de :
-- **Consulter** leurs opérations IOB via une API sécurisée
-- **Analyser** leurs performances avec un dashboard personnalisé
-- **Intégrer** facilement via un SDK JavaScript
-- **Recevoir** des notifications temps réel par webhooks
-- **Exporter** leurs données en PDF/Excel/CSV
+Interface dédiée aux partenaires bancaires IOB avec API REST moderne et dashboard personnalisé.
 
 ## 🏗️ Architecture
 
+### Structure du Projet
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                 Interface Partenaire IOB                   │
-├─────────────────────────────────────────────────────────────┤
-│  Frontend Vue.js 3    │  Backend Node.js + TypeScript     │
-│  + TypeScript         │  + Express.js                     │
-│  + Tailwind CSS       │  + Prisma ORM                     │
-│  + Chart.js           │  + JWT Auth + API Key             │
-├─────────────────────────────────────────────────────────────┤
-│                    MySQL Database                          │
-│              (Isolation par RefBanque)                     │
-├─────────────────────────────────────────────────────────────┤
-│  Redis Cache    │  Nginx Proxy    │  Monitoring           │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## 🚀 Démarrage rapide
-
-### Prérequis
-
-- Docker & Docker Compose
-- Node.js 18+ (pour le développement)
-- MySQL 8.0+
-- Redis (optionnel, pour le cache)
-
-### Installation avec Docker
-
-1. **Cloner le projet**
-```bash
-git clone https://github.com/iob/partner-interface.git
-cd partner-interface
-```
-
-2. **Configurer l'environnement**
-```bash
-cp .env.example .env
-# Éditer .env avec vos paramètres
-```
-
-3. **Lancer les services**
-```bash
-# Services principaux
-docker-compose -f docker-compose.partner.yml up -d
-
-# Avec monitoring (optionnel)
-docker-compose -f docker-compose.partner.yml --profile monitoring up -d
-```
-
-4. **Initialiser la base de données**
-```bash
-# Les migrations Prisma se lancent automatiquement
-# Ou manuellement :
-docker-compose exec partner-api npm run prisma:migrate
-```
-
-### Accès aux services
-
-- **API Partner** : http://localhost:3001
-- **Documentation API** : http://localhost:3001/docs
-- **Dashboard Partner** : http://localhost:8081
-- **Monitoring** : http://localhost:3000 (Grafana)
-
-## 📁 Structure du projet
-
-```
-├── partner-api/              # Backend Node.js + TypeScript
+iob/
+├── partner-api/           # API Backend Node.js + TypeScript
 │   ├── src/
-│   │   ├── controllers/      # Contrôleurs API
-│   │   ├── services/         # Services métier
-│   │   ├── middleware/       # Middlewares (auth, logs, etc.)
-│   │   ├── routes/          # Routes API
-│   │   ├── types/           # Types TypeScript
-│   │   └── utils/           # Utilitaires
-│   ├── prisma/              # Schéma et migrations
-│   └── Dockerfile
-│
-├── partner-frontend/         # Frontend Vue.js 3 (à créer)
-│   ├── src/
-│   │   ├── components/      # Composants Vue
-│   │   ├── views/           # Pages/Vues
-│   │   ├── stores/          # Stores Pinia
-│   │   └── services/        # Services API
-│   └── Dockerfile
-│
-├── partner-sdk/             # SDK JavaScript
-│   ├── src/
-│   │   └── index.ts         # SDK principal
-│   ├── dist/                # Build du SDK
-│   └── README.md
-│
-├── nginx/                   # Configuration Nginx
-├── monitoring/              # Configuration monitoring
-├── scripts/                 # Scripts utilitaires
-└── docker-compose.partner.yml
+│   │   ├── controllers/   # Contrôleurs API
+│   │   ├── middleware/    # Middlewares d'authentification
+│   │   ├── routes/        # Routes API
+│   │   ├── services/      # Services métier
+│   │   ├── types/         # Types TypeScript
+│   │   └── utils/         # Utilitaires
+│   ├── prisma/           # Schéma et migrations Prisma
+│   └── package.json      # Dépendances Node.js
+├── partner-sdk/          # SDK JavaScript pour partenaires
+└── docs/                 # Documentation API
 ```
+
+### Technologies Utilisées
+- **Backend**: Node.js + TypeScript + Express
+- **ORM**: Prisma avec MySQL
+- **Authentification**: JWT + API Keys + HMAC
+- **Documentation**: Swagger/OpenAPI 3.0
+- **Sécurité**: Helmet, CORS, Rate Limiting
+
+## 🚀 Fonctionnalités
+
+### 1. API REST Complète
+- **8 modules API** : Auth, Dashboard, Operations, Agencies, Products, Analytics, Users, Webhooks
+- **Authentification multi-niveau** : JWT Bearer + API Key + HMAC
+- **Isolation des données** par partenaire (RefBanque)
+- **Documentation interactive** Swagger
+
+### 2. Dashboard Partenaire
+- **Statistiques en temps réel** : opérations, volumes, commissions
+- **Graphiques interactifs** : performance par agence
+- **Filtrage avancé** par date, statut, montant
+- **Export PDF/Excel** des données
+
+### 3. Gestion des Opérations
+- **Consultation des transactions** filtrées par partenaire
+- **Détails complets** : client, bénéficiaire, statut
+- **Recherche avancée** et pagination
+- **Suivi en temps réel** des statuts
+
+### 4. Analytics Avancées
+- **Rapports de performance** par période
+- **Calcul des commissions** automatique
+- **Analyse des volumes** par produit/agence
+- **Tendances et comparaisons**
+
+### 5. Webhooks Temps Réel
+- **Notifications automatiques** des événements
+- **Signature HMAC** pour sécurité
+- **Retry automatique** en cas d'échec
+- **Configuration flexible** des événements
 
 ## 🔐 Sécurité
 
 ### Authentification Multi-Niveau
+- **JWT Bearer Tokens** pour interface web
+- **API Keys + HMAC** pour intégrations système
+- **Validation des signatures** avec timestamp
+- **Permissions granulaires** par partenaire
 
-1. **JWT Token** pour les utilisateurs partenaires
-2. **API Key + HMAC** pour les intégrations système
-3. **Permissions granulaires** par utilisateur
-4. **Isolation automatique** par `RefBanque`
+### Isolation des Données
+- **Filtrage automatique** par RefBanque
+- **Accès restreint** aux données du partenaire
+- **Logs d'accès** détaillés
+- **Rate limiting** configurable
 
-### Configuration sécurisée
+## 🌐 API Endpoints
 
-```typescript
-// Exemple de middleware d'authentification
-class PartnerAuthMiddleware {
-  static async validatePartnerToken(req: Request) {
-    const payload = jwt.verify(token, process.env.PARTNER_JWT_SECRET!);
-    
-    // Vérification appartenance au partenaire
-    const user = await prisma.user.findUnique({
-      where: { RefUser: payload.userId },
-      include: { partner: true }
-    });
-    
-    req.partnerContext = {
-      partnerId: user.RefBanque,
-      permissions: payload.permissions
-    };
-  }
-}
+### Authentification
+```
+POST /partner-api/auth/login          # Connexion partenaire
+POST /partner-api/auth/refresh        # Renouvellement token
 ```
 
-## 📊 API REST Complète
-
-### Endpoints principaux
-
-```bash
-# Authentification
-POST   /partner-api/auth/login
-POST   /partner-api/auth/refresh
-GET    /partner-api/auth/me
-
-# Dashboard
-GET    /partner-api/dashboard/stats
-GET    /partner-api/dashboard/operations/recent
-GET    /partner-api/dashboard/agencies
-
-# Opérations
-GET    /partner-api/operations
-GET    /partner-api/operations/:id
-POST   /partner-api/operations/export
-
-# Analytics
-GET    /partner-api/analytics/operations
-GET    /partner-api/analytics/commissions
-GET    /partner-api/analytics/volumes
-
-# Webhooks
-GET    /partner-api/webhooks
-POST   /partner-api/webhooks
-PUT    /partner-api/webhooks/:id
-DELETE /partner-api/webhooks/:id
+### Dashboard
+```
+GET  /partner-api/dashboard/stats     # Statistiques générales
+GET  /partner-api/dashboard/operations # Opérations récentes
+GET  /partner-api/dashboard/agencies  # Performance agences
 ```
 
-### Exemple d'utilisation
-
-```javascript
-// Récupérer les statistiques
-const response = await fetch('/partner-api/dashboard/stats', {
-  headers: {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  }
-});
-
-const stats = await response.json();
-console.log('Opérations:', stats.data.operations_count);
+### Opérations
+```
+GET  /partner-api/operations          # Liste des opérations
+GET  /partner-api/operations/:id      # Détail opération
+GET  /partner-api/operations/export   # Export données
 ```
 
-## 🛠️ SDK JavaScript
+### Analytics
+```
+GET  /partner-api/analytics/operations # Analytics opérations
+GET  /partner-api/analytics/commissions # Calcul commissions
+POST /partner-api/analytics/export    # Export rapports
+```
+
+## 🛠️ Installation
+
+### Prérequis
+- Node.js 18+
+- MySQL 8.0+
+- Redis (optionnel, pour cache)
 
 ### Installation
-
 ```bash
-npm install @iob/partner-sdk
+cd partner-api
+npm install
+cp .env.example .env
+# Configurer DATABASE_URL dans .env
+npx prisma generate
+npm run dev
 ```
-
-### Utilisation
-
-```javascript
-import IOBPartnerSDK from '@iob/partner-sdk';
-
-const sdk = new IOBPartnerSDK({
-  apiKey: 'your-api-key',
-  apiSecret: 'your-api-secret'
-});
-
-// Récupérer les opérations
-const { operations } = await sdk.getOperations({
-  date_from: '2024-01-01',
-  status: 'approved'
-});
-
-// Export Excel
-const blob = await sdk.exportOperations({
-  format: 'excel',
-  filters: { status: 'approved' }
-});
-```
-
-## 🔔 Système de Webhooks
 
 ### Configuration
-
-```javascript
-// Créer un webhook
-const webhook = await sdk.createWebhook({
-  url: 'https://your-api.com/webhooks/iob',
-  events: ['operation_created', 'operation_approved'],
-  is_active: true
-});
-
-// Validation des signatures
-const isValid = sdk.validateWebhookSignature(
-  payload, 
-  signature, 
-  webhookSecret
-);
+```env
+DATABASE_URL="mysql://user:password@localhost:3306/iob"
+PARTNER_JWT_SECRET="your-secret-key"
+PORT=3001
 ```
 
-### Événements disponibles
+## 📊 Base de Données
 
-- `operation_created` : Nouvelle opération
-- `operation_approved` : Opération approuvée
-- `operation_rejected` : Opération rejetée
-- `operation_cancelled` : Opération annulée
+### Modèles Principaux
+- **Partner** : Partenaires bancaires avec configuration
+- **PartnerUser** : Utilisateurs partenaires avec permissions
+- **Operation** : Transactions filtrées par RefBanque
+- **PartnerWebhook** : Configuration webhooks
+- **PartnerApiLog** : Logs d'accès API
 
-## 📈 Dashboard Partenaire
+### Relations Clés
+- Isolation par `RefBanque` (partenaire)
+- Permissions granulaires par utilisateur
+- Logs complets des accès API
 
-### Fonctionnalités
+## 🚀 Démarrage Rapide
 
-- **Statistiques temps réel** : Volume, commissions, nombre d'opérations
-- **Graphiques interactifs** : Évolution temporelle, répartition par agence
-- **Filtres avancés** : Date, statut, agence, produit
-- **Export de données** : PDF, Excel, CSV
-- **Gestion d'utilisateurs** : Permissions granulaires
-
-### Composants Vue.js
-
-```vue
-<template>
-  <PartnerDashboard>
-    <StatsGrid :stats="stats" />
-    <ChartsSection :data="analyticsData" />
-    <OperationsTable :operations="operations" />
-    <AgencyPerformance :agencies="agencies" />
-  </PartnerDashboard>
-</template>
-```
-
-## 🐳 Déploiement Docker
-
-### Production
-
+### 1. Démarrer l'API
 ```bash
-# Build et déploiement
-docker-compose -f docker-compose.partner.yml up -d --build
-
-# Scaling
-docker-compose -f docker-compose.partner.yml up -d --scale partner-api=3
-
-# Logs
-docker-compose -f docker-compose.partner.yml logs -f partner-api
+cd partner-api
+npm run dev
 ```
 
-### Configuration Nginx
+### 2. Accéder à la Documentation
+- **API Docs** : http://localhost:3001/docs
+- **Health Check** : http://localhost:3001/health
 
-```nginx
-upstream partner_api {
-    server partner-api:3001;
-}
-
-server {
-    listen 443 ssl;
-    server_name partner.iob.com;
-    
-    location /partner-api/ {
-        proxy_pass http://partner_api;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
-```
-
-## 📊 Monitoring
-
-### Métriques disponibles
-
-- **Performance API** : Temps de réponse, taux d'erreur
-- **Utilisation** : Requêtes par partenaire, endpoints populaires
-- **Système** : CPU, mémoire, disque
-- **Base de données** : Connexions, requêtes lentes
-
-### Dashboards Grafana
-
-- Vue d'ensemble système
-- Performance API par partenaire
-- Monitoring des webhooks
-- Alertes automatiques
-
-## 🧪 Tests et Qualité
-
+### 3. Tester l'API
 ```bash
-# Tests unitaires
-npm test
+# Test de santé
+curl http://localhost:3001/health
 
-# Tests d'intégration
-npm run test:integration
-
-# Couverture de code
-npm run test:coverage
-
-# Linting
-npm run lint
-
-# Type checking
-npm run type-check
+# Documentation interactive
+open http://localhost:3001/docs
 ```
 
-## 🔄 CI/CD
+## 📈 Monitoring
 
-### Pipeline GitHub Actions
+### Métriques Disponibles
+- **Temps de réponse** par endpoint
+- **Taux d'erreur** par partenaire
+- **Volume d'utilisation** API
+- **Performance** des requêtes
 
-```yaml
-name: IOB Partner API CI/CD
+### Logs Structurés
+- **Accès API** avec détails complets
+- **Erreurs** avec stack traces
+- **Performance** des requêtes DB
+- **Sécurité** et tentatives d'accès
 
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
+## 🔧 Développement
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: npm ci
-      - run: npm run test
-      - run: npm run build
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Deploy to production
-        run: |
-          docker-compose -f docker-compose.partner.yml up -d --build
+### Scripts Disponibles
+```bash
+npm run dev          # Développement avec hot-reload
+npm run build        # Build production
+npm run start        # Démarrage production
+npm run test         # Tests unitaires
+npm run lint         # Vérification code
 ```
 
-## 📋 Roadmap
-
-### Version 1.1 (Q2 2024)
-- [ ] Interface mobile responsive
-- [ ] Notifications push
-- [ ] API GraphQL
-- [ ] Multi-langue (FR/EN/ES)
-
-### Version 1.2 (Q3 2024)
-- [ ] Analytics prédictifs
-- [ ] Intégration BI
-- [ ] API de réconciliation
-- [ ] Audit trail complet
-
-### Version 2.0 (Q4 2024)
-- [ ] Architecture microservices
-- [ ] Support multi-tenant
-- [ ] Machine Learning insights
-- [ ] Blockchain integration
-
-## 🤝 Contribution
-
-1. Fork le projet
-2. Créez votre branche feature (`git checkout -b feature/AmazingFeature`)
-3. Commitez vos changements (`git commit -m 'Add AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrez une Pull Request
-
-## 📝 Documentation
-
-- **API Documentation** : http://localhost:3001/docs
-- **SDK Documentation** : [partner-sdk/README.md](partner-sdk/README.md)
-- **Architecture Decision Records** : [docs/adr/](docs/adr/)
-- **Deployment Guide** : [docs/deployment.md](docs/deployment.md)
-
-## 🆘 Support
-
-- **Documentation** : https://docs.iob.com/partner-api
-- **Support technique** : support@iob.com
-- **Issues** : https://github.com/iob/partner-interface/issues
-- **Slack** : #iob-partner-support
-
-## 📄 Licence
-
-Ce projet est sous licence MIT. Voir [LICENSE](LICENSE) pour plus de détails.
-
-## 🏆 Estimation Projet
-
-- **Durée** : 3-4 mois de développement
-- **Équipe** : 4 développeurs (1 Backend, 1 Frontend, 1 DevOps, 1 QA)
-- **Budget** : 150K€ développement + 30K€/an maintenance
-- **ROI** : Interface moderne + intégrations API + satisfaction partenaires
+### Structure des Types
+- Types TypeScript complets
+- Validation Joi des requêtes
+- Réponses API standardisées
+- Gestion d'erreurs centralisée
 
 ---
 
-**IOB Partner Interface** - Solution complète pour l'intégration partenaires bancaires 🚀
+**IOB Partner API** - Interface moderne et sécurisée pour partenaires bancaires.

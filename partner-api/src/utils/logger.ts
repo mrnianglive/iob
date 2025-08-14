@@ -37,7 +37,7 @@ const format = winston.format.combine(
 );
 
 // Define which transports the logger must use to print out messages.
-const transports = [
+const transports: winston.transport[] = [
   // Allow console logging
   new winston.transports.Console({
     format,

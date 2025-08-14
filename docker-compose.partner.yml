@@ -12,11 +12,10 @@ services:
       MYSQL_USER: ${MYSQL_USER:-iob_user}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-iob_password}
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./db_structure.sql:/docker-entrypoint-initdb.d/01-structure.sql:ro
-      - ./scripts/seed-data.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - /tmp/dbIOB.sql:/docker-entrypoint-initdb.d/01-dbIOB.sql:ro
     networks:
       - iob_network
     healthcheck:
@@ -90,7 +89,7 @@ services:
   # Frontend Partenaire (Vue.js)
   partner-frontend:
     build:
-      context: ./partner-frontend
+      context: ./iob-frontend
       dockerfile: Dockerfile
       args:
         VITE_API_URL: ${VITE_API_URL:-http://localhost:3001}
@@ -209,4 +208,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 172.25.0.0/16

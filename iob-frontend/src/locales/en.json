@@ -1,0 +1,69 @@
+{
+  "auth": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Sign In",
+    "logout": "Logout",
+    "twoFactor": "Two-Factor Authentication",
+    "enterCode": "Enter verification code"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "todayOperations": "Today's Operations",
+    "totalAmount": "Total Amount",
+    "pendingOperations": "Pending Operations",
+    "recentOperations": "Recent Operations"
+  },
+  "operations": {
+    "title": "Operations",
+    "create": "Create Operation",
+    "type": "Operation Type",
+    "amount": "Amount",
+    "currency": "Currency",
+    "status": "Status",
+    "date": "Date",
+    "reference": "Reference",
+    "billBreakdown": "Bill Breakdown"
+  },
+  "caisse": {
+    "title": "Cash Register",
+    "balance": "Balance",
+    "movements": "Movements",
+    "transfer": "Transfer",
+    "deposit": "Deposit",
+    "withdrawal": "Withdrawal"
+  },
+  "remittance": {
+    "title": "Remittance",
+    "interAgency": "Inter-Agency",
+    "create": "Create Remittance",
+    "destination": "Destination",
+    "source": "Source"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "reports": "Reports",
+    "export": "Export",
+    "period": "Period",
+    "charts": "Charts"
+  },
+  "admin": {
+    "title": "Administration",
+    "users": "Users",
+    "agencies": "Agencies",
+    "products": "Products",
+    "permissions": "Permissions"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  }
+}

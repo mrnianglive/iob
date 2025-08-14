@@ -7,23 +7,27 @@ import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-
+import { createServer } from 'http';
 import { PrismaClient } from '@prisma/client';
-import { logger } from '@/utils/logger';
-import { errorHandler } from '@/middleware/errorHandler';
-import { notFound } from '@/middleware/notFound';
-import { partnerAuthMiddleware } from '@/middleware/partnerAuth';
-import { requestLogger } from '@/middleware/requestLogger';
+import { logger } from './utils/logger';
+import { errorHandler } from './middleware/errorHandler';
+import { notFound } from './middleware/notFound';
+import { requestLogger } from './middleware/requestLogger';
+import { partnerAuthMiddleware } from './middleware/partnerAuth';
+import { WebSocketService } from './services/WebSocketService';
 
 // Routes
-import authRoutes from '@/routes/auth';
-import dashboardRoutes from '@/routes/dashboard';
-import operationsRoutes from '@/routes/operations';
-import agenciesRoutes from '@/routes/agencies';
-import productsRoutes from '@/routes/products';
-import analyticsRoutes from '@/routes/analytics';
-import usersRoutes from '@/routes/users';
-import webhooksRoutes from '@/routes/webhooks';
+import authRoutes from './routes/auth';
+import dashboardRoutes from './routes/dashboard';
+import operationsRoutes from './routes/operations';
+import analyticsRoutes from './routes/analytics';
+import agenciesRoutes from './routes/agencies';
+import productsRoutes from './routes/products';
+import usersRoutes from './routes/users';
+import webhooksRoutes from './routes/webhooks';
+import caisseRoutes from './routes/caisse';
+import remittanceRoutes from './routes/remittance';
+import adminRoutes from './routes/admin';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -783,6 +787,9 @@ app.use(`${API_PREFIX}/products`, partnerAuthMiddleware, productsRoutes);
 app.use(`${API_PREFIX}/analytics`, partnerAuthMiddleware, analyticsRoutes);
 app.use(`${API_PREFIX}/users`, partnerAuthMiddleware, usersRoutes);
 app.use(`${API_PREFIX}/webhooks`, partnerAuthMiddleware, webhooksRoutes);
+app.use(`${API_PREFIX}/caisse`, partnerAuthMiddleware, caisseRoutes);
+app.use(`${API_PREFIX}/remittance`, partnerAuthMiddleware, remittanceRoutes);
+app.use(`${API_PREFIX}/admin`, partnerAuthMiddleware, adminRoutes);
 
 // Error handling middleware
 app.use(notFound);
@@ -801,11 +808,39 @@ process.on('SIGINT', async () => {
   process.exit(0);
 });
 
+// Create HTTP server
+const server = createServer(app);
+
+// Initialize WebSocket service
+const webSocketService = new WebSocketService(server);
+
+// Make WebSocket service available globally
+declare global {
+  var webSocketService: WebSocketService;
+}
+global.webSocketService = webSocketService;
+
 // Start server
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   logger.info(`🚀 IOB Partner API server running on port ${PORT}`);
   logger.info(`📚 API Documentation available at http://localhost:${PORT}/docs`);
   logger.info(`🏥 Health check available at http://localhost:${PORT}/health`);
+  logger.info(`🔌 WebSocket server available at ws://localhost:${PORT}/partner-socket.io`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  logger.info('SIGTERM received, shutting down gracefully...');
+  webSocketService.close();
+  await prisma.$disconnect();
+  process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+  logger.info('SIGINT received, shutting down gracefully...');
+  webSocketService.close();
+  await prisma.$disconnect();
+  process.exit(0);
 });
 
 export default app;

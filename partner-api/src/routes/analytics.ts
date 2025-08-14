@@ -1,298 +1,161 @@
 import { Router } from 'express';
-import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-import Joi from 'joi';
-import { PartnerService } from '@/services/PartnerService';
-import { ExportService } from '@/services/ExportService';
-import { asyncHandler, ValidationError } from '@/middleware/errorHandler';
-import { PARTNER_PERMISSIONS } from '@/types/partner';
+import { AnalyticsController } from '../controllers/AnalyticsController';
+import { PartnerAuthMiddleware } from '../middleware/partnerAuth';
 
 const router = Router();
-const prisma = new PrismaClient();
-const partnerService = new PartnerService(prisma);
-const exportService = new ExportService(prisma);
 
-// Schémas de validation
-const analyticsSchema = Joi.object({
-  date_from: Joi.string().isoDate().required(),
-  date_to: Joi.string().isoDate().required(),
-  granularity: Joi.string().valid('day', 'week', 'month').default('day')
-});
+// Apply partner authentication to all routes
+router.use(PartnerAuthMiddleware.hybridAuth);
 
 /**
  * @swagger
  * tags:
  *   name: Analytics
- *   description: Analytics avancés pour partenaires
+ *   description: Analytics et rapports pour partenaires
  */
 
 /**
  * @swagger
- * /analytics/operations:
+ * /analytics/kpis:
  *   get:
- *     summary: Analytics des opérations
  *     tags: [Analytics]
+ *     summary: Obtenir les KPIs analytics
+ *     description: Récupère les indicateurs clés de performance
  *     security:
  *       - BearerAuth: []
  *       - ApiKeyAuth: []
  *     parameters:
- *       - in: query
- *         name: date_from
- *         required: true
+ *       - name: period
+ *         in: query
+ *         description: Période d'analyse
  *         schema:
  *           type: string
- *           format: date
- *       - in: query
- *         name: date_to
- *         required: true
+ *           enum: [7d, 30d, 90d, 1y]
+ *           default: 30d
+ *       - name: agencyId
+ *         in: query
+ *         description: Filtrer par agence
  *         schema:
- *           type: string
- *           format: date
- *       - in: query
- *         name: granularity
+ *           type: integer
+ *       - name: productId
+ *         in: query
+ *         description: Filtrer par produit
  *         schema:
- *           type: string
- *           enum: [day, week, month]
- *           default: day
+ *           type: integer
  *     responses:
  *       200:
- *         description: Analytics des opérations
+ *         description: KPIs récupérés avec succès
  */
-const getOperationsAnalytics = asyncHandler(async (req: Request, res: Response) => {
-  const partnerId = req.partnerContext?.partnerId;
-  const permissions = req.partnerContext?.permissions || [];
-
-  if (!partnerId) {
-    throw new ValidationError('Partner context not found');
-  }
-
-  if (!permissions.includes(PARTNER_PERMISSIONS.VIEW_ANALYTICS)) {
-    return res.status(403).json({
-      success: false,
-      error: 'View analytics permission required'
-    });
-  }
-
-  const { error, value } = analyticsSchema.validate(req.query);
-  if (error) {
-    throw new ValidationError(error.details[0].message);
-  }
-
-  const dateRange = {
-    start: new Date(value.date_from),
-    end: new Date(value.date_to)
-  };
-
-  const analytics = await partnerService.getPartnerAnalytics(partnerId, dateRange);
-
-  res.status(200).json({
-    success: true,
-    data: {
-      period: {
-        start: dateRange.start,
-        end: dateRange.end,
-        granularity: value.granularity
-      },
-      ...analytics
-    }
-  });
-});
+router.get('/kpis', AnalyticsController.getKPIs);
 
 /**
  * @swagger
- * /analytics/commissions:
+ * /analytics/volume-chart:
  *   get:
- *     summary: Analytics des commissions
  *     tags: [Analytics]
+ *     summary: Obtenir les données du graphique de volume
+ *     description: Récupère les données pour le graphique de volume temporel
  *     security:
  *       - BearerAuth: []
  *       - ApiKeyAuth: []
  *     parameters:
- *       - in: query
- *         name: date_from
- *         required: true
+ *       - name: period
+ *         in: query
+ *         description: Période d'analyse
  *         schema:
  *           type: string
- *           format: date
- *       - in: query
- *         name: date_to
- *         required: true
- *         schema:
- *           type: string
- *           format: date
+ *           enum: [7d, 30d, 90d, 1y]
+ *           default: 30d
  *     responses:
  *       200:
- *         description: Analytics des commissions
+ *         description: Données du graphique récupérées avec succès
  */
-const getCommissionsAnalytics = asyncHandler(async (req: Request, res: Response) => {
-  const partnerId = req.partnerContext?.partnerId;
-  const permissions = req.partnerContext?.permissions || [];
-
-  if (!partnerId) {
-    throw new ValidationError('Partner context not found');
-  }
-
-  if (!permissions.includes(PARTNER_PERMISSIONS.VIEW_ANALYTICS)) {
-    return res.status(403).json({
-      success: false,
-      error: 'View analytics permission required'
-    });
-  }
-
-  const { error, value } = analyticsSchema.validate(req.query);
-  if (error) {
-    throw new ValidationError(error.details[0].message);
-  }
-
-  const dateRange = {
-    start: new Date(value.date_from),
-    end: new Date(value.date_to)
-  };
-
-  // Récupérer toutes les opérations pour l'analyse des commissions
-  const operations = await partnerService.getPartnerOperations(partnerId, {
-    date_from: value.date_from,
-    date_to: value.date_to,
-    limit: 10000
-  });
-
-  // Analyser les commissions
-  const commissionsAnalytics = {
-    total_commissions: operations.data.reduce((sum, op) => sum + Number(op.Commission), 0),
-    average_commission_rate: operations.data.length > 0 
-      ? (operations.data.reduce((sum, op) => sum + Number(op.Commission), 0) / 
-         operations.data.reduce((sum, op) => sum + Number(op.Amount), 0)) * 100
-      : 0,
-    commissions_by_product: operations.data.reduce((acc, op) => {
-      const productName = op.product?.NameProduit || 'Unknown';
-      if (!acc[productName]) {
-        acc[productName] = { count: 0, total_commission: 0, total_volume: 0 };
-      }
-      acc[productName].count += 1;
-      acc[productName].total_commission += Number(op.Commission);
-      acc[productName].total_volume += Number(op.Amount);
-      return acc;
-    }, {} as { [key: string]: { count: number; total_commission: number; total_volume: number } }),
-    commissions_by_agency: operations.data.reduce((acc, op) => {
-      const agencyName = op.cashRegister?.agency?.NameAgence || 'Unknown';
-      if (!acc[agencyName]) {
-        acc[agencyName] = { count: 0, total_commission: 0, total_volume: 0 };
-      }
-      acc[agencyName].count += 1;
-      acc[agencyName].total_commission += Number(op.Commission);
-      acc[agencyName].total_volume += Number(op.Amount);
-      return acc;
-    }, {} as { [key: string]: { count: number; total_commission: number; total_volume: number } }),
-    top_commission_operations: operations.data
-      .sort((a, b) => Number(b.Commission) - Number(a.Commission))
-      .slice(0, 10)
-      .map(op => ({
-        id: op.RefOperation,
-        reference: op.Reference,
-        client: op.ClientName,
-        amount: Number(op.Amount),
-        commission: Number(op.Commission),
-        commission_rate: (Number(op.Commission) / Number(op.Amount)) * 100,
-        date: op.Insert_Time
-      }))
-  };
-
-  res.status(200).json({
-    success: true,
-    data: commissionsAnalytics
-  });
-});
+router.get('/volume-chart', AnalyticsController.getVolumeChart);
 
 /**
  * @swagger
- * /analytics/volumes:
+ * /analytics/type-chart:
  *   get:
- *     summary: Analytics des volumes
  *     tags: [Analytics]
+ *     summary: Obtenir la distribution par type d'opération
+ *     description: Récupère les données pour le graphique en secteurs des types d'opération
  *     security:
  *       - BearerAuth: []
  *       - ApiKeyAuth: []
  *     parameters:
- *       - in: query
- *         name: date_from
- *         required: true
+ *       - name: period
+ *         in: query
+ *         description: Période d'analyse
  *         schema:
  *           type: string
- *           format: date
- *       - in: query
- *         name: date_to
- *         required: true
- *         schema:
- *           type: string
- *           format: date
+ *           enum: [7d, 30d, 90d, 1y]
+ *           default: 30d
  *     responses:
  *       200:
- *         description: Analytics des volumes
+ *         description: Données du graphique récupérées avec succès
  */
-const getVolumesAnalytics = asyncHandler(async (req: Request, res: Response) => {
-  const partnerId = req.partnerContext?.partnerId;
-  const permissions = req.partnerContext?.permissions || [];
+router.get('/type-chart', AnalyticsController.getTypeChart);
 
-  if (!partnerId) {
-    throw new ValidationError('Partner context not found');
-  }
-
-  if (!permissions.includes(PARTNER_PERMISSIONS.VIEW_ANALYTICS)) {
-    return res.status(403).json({
-      success: false,
-      error: 'View analytics permission required'
-    });
-  }
-
-  const { error, value } = analyticsSchema.validate(req.query);
-  if (error) {
-    throw new ValidationError(error.details[0].message);
-  }
-
-  const dateRange = {
-    start: new Date(value.date_from),
-    end: new Date(value.date_to)
-  };
-
-  const analytics = await partnerService.getPartnerAnalytics(partnerId, dateRange);
-
-  // Calculs supplémentaires pour les volumes
-  const operations = await partnerService.getPartnerOperations(partnerId, {
-    date_from: value.date_from,
-    date_to: value.date_to,
-    limit: 10000
-  });
-
-  const volumesAnalytics = {
-    daily_volumes: analytics.volume_by_day,
-    total_volume: operations.data.reduce((sum, op) => sum + Number(op.Amount), 0),
-    average_operation_value: operations.data.length > 0 
-      ? operations.data.reduce((sum, op) => sum + Number(op.Amount), 0) / operations.data.length 
-      : 0,
-    median_operation_value: calculateMedian(operations.data.map(op => Number(op.Amount))),
-    volume_distribution: {
-      small: operations.data.filter(op => Number(op.Amount) < 100).length,
-      medium: operations.data.filter(op => Number(op.Amount) >= 100 && Number(op.Amount) < 1000).length,
-      large: operations.data.filter(op => Number(op.Amount) >= 1000).length
-    },
-    peak_days: analytics.volume_by_day
-      .sort((a: any, b: any) => b.volume - a.volume)
-      .slice(0, 5),
-    volume_trends: calculateVolumeTrends(analytics.volume_by_day as any[])
-  };
-
-  res.status(200).json({
-    success: true,
-    data: volumesAnalytics
-  });
-});
+/**
+ * @swagger
+ * /analytics/report:
+ *   get:
+ *     tags: [Analytics]
+ *     summary: Obtenir le rapport d'analytics
+ *     description: Récupère les données tabulaires pour le rapport
+ *     security:
+ *       - BearerAuth: []
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: period
+ *         in: query
+ *         description: Période d'analyse
+ *         schema:
+ *           type: string
+ *           enum: [7d, 30d, 90d, 1y]
+ *           default: 30d
+ *     responses:
+ *       200:
+ *         description: Rapport récupéré avec succès
+ */
+router.get('/report', AnalyticsController.getReport);
 
 /**
  * @swagger
  * /analytics/export:
- *   post:
- *     summary: Exporter les analytics
+ *   get:
  *     tags: [Analytics]
+ *     summary: Exporter les données analytics
+ *     description: Exporte les données analytics au format Excel
+ *     security:
+ *       - BearerAuth: []
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: period
+ *         in: query
+ *         description: Période d'analyse
+ *         schema:
+ *           type: string
+ *           enum: [7d, 30d, 90d, 1y]
+ *           default: 30d
+ *     responses:
+ *       200:
+ *         description: Fichier Excel généré
+ *         content:
+ *           application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+ *             schema:
+ *               type: string
+ *               format: binary
+ */
+router.get('/export', AnalyticsController.exportData);
+
+/**
+ * @swagger
+ * /analytics/generate-report:
+ *   post:
+ *     tags: [Analytics]
+ *     summary: Générer un rapport personnalisé
+ *     description: Lance la génération d'un rapport analytics personnalisé
  *     security:
  *       - BearerAuth: []
  *       - ApiKeyAuth: []
@@ -303,121 +166,16 @@ const getVolumesAnalytics = asyncHandler(async (req: Request, res: Response) => 
  *           schema:
  *             type: object
  *             required:
- *               - format
- *               - date_from
- *               - date_to
+ *               - period
  *             properties:
- *               format:
+ *               period:
  *                 type: string
- *                 enum: [pdf, excel]
- *               date_from:
- *                 type: string
- *                 format: date
- *               date_to:
- *                 type: string
- *                 format: date
- *               include_charts:
- *                 type: boolean
- *                 default: true
+ *                 enum: [7d, 30d, 90d, 1y]
+ *                 description: Période du rapport
  *     responses:
  *       200:
- *         description: Rapport d'analytics généré
+ *         description: Génération du rapport lancée
  */
-const exportAnalytics = asyncHandler(async (req: Request, res: Response) => {
-  const partnerId = req.partnerContext?.partnerId;
-  const permissions = req.partnerContext?.permissions || [];
-
-  if (!partnerId) {
-    throw new ValidationError('Partner context not found');
-  }
-
-  if (!permissions.includes(PARTNER_PERMISSIONS.EXPORT_DATA)) {
-    return res.status(403).json({
-      success: false,
-      error: 'Export data permission required'
-    });
-  }
-
-  const { format, date_from, date_to, include_charts = true } = req.body;
-
-  if (!format || !date_from || !date_to) {
-    throw new ValidationError('Format, date_from and date_to are required');
-  }
-
-  const dateRange = {
-    start: new Date(date_from),
-    end: new Date(date_to)
-  };
-
-  // Récupérer toutes les données analytics
-  const [stats, analytics, operations] = await Promise.all([
-    partnerService.getPartnerStats(partnerId, dateRange),
-    partnerService.getPartnerAnalytics(partnerId, dateRange),
-    partnerService.getPartnerOperations(partnerId, {
-      date_from,
-      date_to,
-      limit: 10000
-    })
-  ]);
-
-  // Générer le rapport selon le format
-  const reportData = {
-    partner_id: partnerId,
-    period: { start: dateRange.start, end: dateRange.end },
-    summary: stats,
-    analytics,
-    operations: operations.data.slice(0, 100), // Limiter pour le rapport
-    include_charts
-  };
-
-  // Pour cet exemple, on utilise l'ExportService existant
-  const exportResult = await exportService.exportOperations(
-    operations.data,
-    { format: format as 'pdf' | 'excel' }
-  );
-
-  const filename = `analytics_report_${partnerId}_${new Date().toISOString().split('T')[0]}.${format}`;
-  
-  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-  res.setHeader('Content-Type', format === 'pdf' ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  res.send(exportResult.buffer);
-});
-
-// Fonctions utilitaires
-function calculateMedian(values: number[]): number {
-  if (values.length === 0) return 0;
-  
-  const sorted = values.sort((a, b) => a - b);
-  const mid = Math.floor(sorted.length / 2);
-  
-  return sorted.length % 2 !== 0 
-    ? sorted[mid] 
-    : (sorted[mid - 1] + sorted[mid]) / 2;
-}
-
-function calculateVolumeTrends(volumeData: Array<{ date: string; volume: number }>): any {
-  if (volumeData.length < 2) return { trend: 'stable', growth_rate: 0 };
-  
-  const firstHalf = volumeData.slice(0, Math.floor(volumeData.length / 2));
-  const secondHalf = volumeData.slice(Math.floor(volumeData.length / 2));
-  
-  const firstHalfAvg = firstHalf.reduce((sum, item) => sum + item.volume, 0) / firstHalf.length;
-  const secondHalfAvg = secondHalf.reduce((sum, item) => sum + item.volume, 0) / secondHalf.length;
-  
-  const growthRate = firstHalfAvg === 0 ? 0 : ((secondHalfAvg - firstHalfAvg) / firstHalfAvg) * 100;
-  
-  return {
-    trend: growthRate > 5 ? 'growing' : growthRate < -5 ? 'declining' : 'stable',
-    growth_rate: Math.round(growthRate * 100) / 100,
-    first_half_avg: Math.round(firstHalfAvg),
-    second_half_avg: Math.round(secondHalfAvg)
-  };
-}
-
-// Routes
-router.get('/operations', getOperationsAnalytics);
-router.get('/commissions', getCommissionsAnalytics);
-router.get('/volumes', getVolumesAnalytics);
-router.post('/export', exportAnalytics);
+router.post('/generate-report', AnalyticsController.generateReport);
 
 export default router;

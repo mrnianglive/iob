@@ -5,6 +5,7 @@ import 'vue-toastification/dist/index.css';
 
 import App from './App.vue';
 import router from './router';
+import i18n from './i18n';
 
 // Import global styles
 import './assets/css/main.css';
@@ -17,6 +18,9 @@ app.use(createPinia());
 
 // Use Vue Router
 app.use(router);
+
+// Use i18n for internationalization
+app.use(i18n);
 
 // Use Toast notifications
 app.use(Toast, {

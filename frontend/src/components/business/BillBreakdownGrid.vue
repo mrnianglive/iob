@@ -1,10 +1,10 @@
 <template>
   <div class="bill-breakdown-grid">
-    <h3 class="text-lg font-semibold mb-4">Détail du Billetage</h3>
+    <h3 class="text-lg font-semibold mb-4">{{ $t('billBreakdown.title') }}</h3>
     
     <!-- Bills Section -->
     <div class="mb-6">
-      <h4 class="text-md font-medium mb-3 text-gray-700">Billets</h4>
+      <h4 class="text-md font-medium mb-3 text-gray-700">{{ $t('billBreakdown.bills') }}</h4>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div
           v-for="bill in bills"
@@ -35,7 +35,7 @@
 
     <!-- Coins Section -->
     <div class="mb-6">
-      <h4 class="text-md font-medium mb-3 text-gray-700">Pièces</h4>
+      <h4 class="text-md font-medium mb-3 text-gray-700">{{ $t('billBreakdown.coins') }}</h4>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <div
           v-for="coin in coins"
@@ -68,11 +68,11 @@
     <div class="mt-6 p-4 bg-primary-50 rounded-lg">
       <div class="flex justify-between items-center">
         <div>
-          <p class="text-sm text-gray-600">Total Billetage</p>
+          <p class="text-sm text-gray-600">{{ $t('billBreakdown.total') }}</p>
           <p class="text-2xl font-bold text-primary-900">{{ formatCurrency(totalBilletage) }}</p>
         </div>
         <div v-if="expectedAmount" class="text-right">
-          <p class="text-sm text-gray-600">Montant Attendu</p>
+          <p class="text-sm text-gray-600">{{ $t('billBreakdown.expectedAmount') }}</p>
           <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(expectedAmount) }}</p>
         </div>
       </div>
@@ -81,12 +81,12 @@
       <div v-if="expectedAmount" class="mt-3">
         <div v-if="isValid" class="flex items-center text-success-600">
           <CheckCircleIcon class="h-5 w-5 mr-2" />
-          <span class="text-sm font-medium">Billetage correct</span>
+          <span class="text-sm font-medium">{{ $t('billBreakdown.correct') }}</span>
         </div>
         <div v-else class="flex items-center text-danger-600">
           <ExclamationCircleIcon class="h-5 w-5 mr-2" />
           <span class="text-sm font-medium">
-            Différence: {{ formatCurrency(Math.abs(totalBilletage - expectedAmount)) }}
+            {{ $t('billBreakdown.difference') }}: {{ formatCurrency(Math.abs(totalBilletage - expectedAmount)) }}
           </span>
         </div>
       </div>
@@ -99,7 +99,7 @@
         class="btn-outline"
       >
         <XMarkIcon class="h-4 w-4 mr-2" />
-        Effacer tout
+        {{ $t('billBreakdown.clearAll') }}
       </button>
       <button
         v-if="expectedAmount"
@@ -107,7 +107,7 @@
         class="btn-secondary"
       >
         <CalculatorIcon class="h-4 w-4 mr-2" />
-        Calcul automatique
+        {{ $t('billBreakdown.autoCalculate') }}
       </button>
     </div>
   </div>

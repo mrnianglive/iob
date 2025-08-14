@@ -1,0 +1,444 @@
+// This is your Prisma schema file for IOB
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ========== USERS & AUTH ==========
+
+model User {
+  RefUser      Int      @id @default(autoincrement()) @map("RefUser")
+  Login        String   @unique
+  Password     String
+  Name         String
+  Email        String
+  RefPays      Int      // CRITICAL: Country isolation for multi-tenant
+  RefBanque    Int?     // CRITICAL: Partner isolation for multi-tenant
+  IsActive     Boolean  @default(true)
+  Insert_Time  DateTime @default(now())
+  TwoFactorSecret String? @db.Text
+  LastLogin    DateTime?
+  
+  // Relations
+  country            Country           @relation(fields: [RefPays], references: [RefPays])
+  partner            Partner?          @relation(fields: [RefBanque], references: [RefBanque])
+  operations         Operation[]       @relation("UserOperations")
+  approvedOperations1 Operation[]      @relation("Approver1Operations")
+  approvedOperations2 Operation[]      @relation("Approver2Operations")
+  validatedOperations Operation[]      @relation("ValidatorOperations")
+  resetOperations    Operation[]       @relation("ResetOperations")
+  permissions        Permission[]
+  cashRegisters      CashRegisterUser[]
+  approCashRegisters CashRegisterApproUser[]
+  logs              LogConnection[]
+  appros            Appro[]
+  remittances       Remittance[]
+  
+  @@map("TbleUsers")
+  @@index([RefPays])
+  @@index([RefBanque])
+}
+
+model LogConnection {
+  RefLog    Int      @id @default(autoincrement()) @map("RefLog")
+  RefUsers  Int      @map("RefUsers")
+  IP        String   @db.Text
+  LogH      DateTime @db.Time()
+  LogoutH   DateTime @db.Time()
+  DateLog   DateTime @default(now())
+  
+  // Relations
+  user      User     @relation(fields: [RefUsers], references: [RefUser])
+  
+  @@map("LogConnexion")
+  @@index([RefUsers])
+}
+
+model Permission {
+  RefUsers Int @map("RefUsers")
+  access   Int
+  
+  // Relations
+  user     User @relation(fields: [RefUsers], references: [RefUser])
+  
+  @@id([RefUsers, access])
+  @@map("permissions")
+}
+
+// ========== MULTI-TENANT STRUCTURE ==========
+
+model Country {
+  RefPays    Int       @id @default(autoincrement()) @map("RefPays")
+  NamePays   String    @db.Text
+  CodePays   String?   @db.VarChar(10)
+  Currency   String?   @db.VarChar(10)
+  
+  // Relations
+  users      User[]
+  agencies   Agency[]
+  operations Operation[]
+  partners   Partner[]
+  
+  @@map("TblePays")
+}
+
+model Partner {
+  RefBanque   Int       @id @default(autoincrement()) @map("RefBanque")
+  NameBanque  String    @db.Text
+  RefPays     Int
+  
+  // Relations
+  country     Country   @relation(fields: [RefPays], references: [RefPays])
+  users       User[]
+  products    Product[]
+  
+  @@map("TbleBanque")
+  @@index([RefPays])
+}
+
+// ========== AGENCIES & CASH REGISTERS ==========
+
+model Agency {
+  RefAgency   Int       @id @default(autoincrement()) @map("RefAgency")
+  NameAgency  String    @db.Text
+  TelAgence   String?   @db.Text
+  RefPays     Int
+  
+  // Relations
+  country     Country   @relation(fields: [RefPays], references: [RefPays])
+  cashRegisters CashRegister[]
+  accounts    Account[]
+  
+  @@map("TbleAgency")
+  @@index([RefPays])
+}
+
+model CashRegister {
+  RefCaisse   Int       @id @default(autoincrement()) @map("RefCaisse")
+  NameCaisse  String    @db.Text
+  RefAgency   Int
+  NUMCOMPTE   String?   @db.Text
+  
+  // Relations
+  agency      Agency    @relation(fields: [RefAgency], references: [RefAgency])
+  operations  Operation[]
+  users       CashRegisterUser[]
+  approUsers  CashRegisterApproUser[]
+  products    CashRegisterProduct[]
+  appros      Appro[]
+  reports     RapportOp[]
+  remittances Remittance[]
+  openingHours OpeningHours[]
+  
+  @@map("TbleCaisse")
+  @@index([RefAgency])
+}
+
+model CashRegisterUser {
+  RefChmod    Int       @id @default(autoincrement()) @map("RefChmod")
+  RefCaisse   Int
+  RefUsers    Int
+  
+  // Relations
+  cashRegister CashRegister @relation(fields: [RefCaisse], references: [RefCaisse])
+  user        User         @relation(fields: [RefUsers], references: [RefUser])
+  
+  @@map("TbleChmod")
+  @@unique([RefCaisse, RefUsers])
+  @@index([RefCaisse])
+  @@index([RefUsers])
+}
+
+model CashRegisterApproUser {
+  RefChmodAppro Int       @id @default(autoincrement()) @map("RefChmodAppro")
+  RefCaisse     Int
+  RefUsers      Int
+  
+  // Relations
+  cashRegister  CashRegister @relation(fields: [RefCaisse], references: [RefCaisse])
+  user          User         @relation(fields: [RefUsers], references: [RefUser])
+  
+  @@map("TbleChmodAppro")
+  @@unique([RefCaisse, RefUsers])
+  @@index([RefCaisse])
+  @@index([RefUsers])
+}
+
+// ========== PRODUCTS ==========
+
+model Product {
+  RefProduit    Int       @id @default(autoincrement()) @map("RefProduit")
+  NameProduit   String    @db.Text
+  RefBanque     Int
+  StatutProduit String    @db.VarChar(50)
+  img           String?   @db.Text
+  
+  // Relations
+  partner       Partner   @relation(fields: [RefBanque], references: [RefBanque])
+  operations    Operation[]
+  cashRegisters CashRegisterProduct[]
+  remittances   Remittance[]
+  
+  @@map("TbleProduit")
+  @@index([RefBanque])
+}
+
+model CashRegisterProduct {
+  RefChmodProduit Int       @id @default(autoincrement()) @map("RefChmodProduit")
+  RefCaisse       Int
+  RefProduit      Int
+  
+  // Relations
+  cashRegister    CashRegister @relation(fields: [RefCaisse], references: [RefCaisse])
+  product         Product      @relation(fields: [RefProduit], references: [RefProduit])
+  
+  @@map("TbleChmodProduit")
+  @@unique([RefCaisse, RefProduit])
+  @@index([RefCaisse])
+  @@index([RefProduit])
+}
+
+// ========== OPERATIONS ==========
+
+model Operation {
+  RefOperations    Int       @id @default(autoincrement()) @map("RefOperations")
+  RefCaisse        Int
+  NumCompte        String    @db.Text
+  NameClient       String    @db.Text
+  MontantVersement String    @db.Text
+  Remarque         String?   @db.Text
+  Insert_Id        Int
+  Insert_Time      DateTime  @db.Date
+  Approve1_Id      Int?
+  Approve1_Time    DateTime? @db.Date
+  Approve2_Id      Int?
+  Approve2_Time    DateTime? @db.Date
+  datePayement     DateTime  @default(now())
+  Bordereau        String?   @db.Text
+  NameDeposant     String?   @db.Text
+  TelDeposant      String    @db.Text
+  RefType          Int
+  Reset_Id         Int?
+  Reset_At         DateTime?
+  Validate         Int       @default(1)
+  DateValidate     DateTime? @db.Date
+  RefValidate      Int?
+  TypeAppro        Int?
+  RefProduit       Int?
+  TypeRetrait      Int?
+  uniqid           String?   @db.Text
+  ValidateDate     DateTime?
+  SentFromAgency   Int?
+  RefPays          Int       // CRITICAL: Country isolation
+  fraisTimbre      String    @default("0") @db.Text
+  
+  // Relations
+  cashRegister     CashRegister @relation(fields: [RefCaisse], references: [RefCaisse])
+  country          Country      @relation(fields: [RefPays], references: [RefPays])
+  product          Product?     @relation(fields: [RefProduit], references: [RefProduit])
+  type             OperationType @relation(fields: [RefType], references: [RefType])
+  user             User         @relation("UserOperations", fields: [Insert_Id], references: [RefUser])
+  approver1        User?        @relation("Approver1Operations", fields: [Approve1_Id], references: [RefUser])
+  approver2        User?        @relation("Approver2Operations", fields: [Approve2_Id], references: [RefUser])
+  validator        User?        @relation("ValidatorOperations", fields: [RefValidate], references: [RefUser])
+  resetUser        User?        @relation("ResetOperations", fields: [Reset_Id], references: [RefUser])
+  billBreakdown    BillBreakdown?
+  
+  @@map("TbleOperations")
+  @@index([RefCaisse])
+  @@index([RefPays])
+  @@index([RefProduit])
+  @@index([RefType])
+  @@index([Insert_Id])
+  @@index([datePayement])
+}
+
+model BillBreakdown {
+  RefBilletage    Int       @id @default(autoincrement()) @map("RefBilletage")
+  RefOperations   Int       @unique
+  // Bills (values)
+  a1              String    @db.Text // 10000
+  a2              String    @db.Text // Quantity
+  b1              String    @db.Text // 5000
+  b2              String    @db.Text // Quantity
+  c1              String    @db.Text // 2000
+  c2              String    @db.Text // Quantity
+  d1              String    @db.Text // 1000
+  d2              String    @db.Text // Quantity
+  e1              String    @db.Text // 500
+  e2              String    @db.Text // Quantity
+  f1              String    @db.Text // 250
+  f2              String    @db.Text // Quantity
+  g1              String    @db.Text // 200
+  g2              String    @db.Text // Quantity
+  h1              String    @db.Text // 100
+  h2              String    @db.Text // Quantity
+  // Coins
+  i1              String    @db.Text // 50
+  i2              String    @db.Text // Quantity
+  j1              String    @db.Text // 25
+  j2              String    @db.Text // Quantity
+  k1              String    @db.Text // 10
+  k2              String    @db.Text // Quantity
+  l1              String    @db.Text // 5
+  l2              String    @db.Text // Quantity
+  m1              String    @db.Text // 1
+  m2              String    @db.Text // Quantity
+  dateBilletage   DateTime  @default(now())
+  
+  // Relations
+  operation       Operation @relation(fields: [RefOperations], references: [RefOperations])
+  
+  @@map("TbleBilletage")
+}
+
+model OperationType {
+  RefType     Int       @id @default(autoincrement()) @map("RefType")
+  NameType    String    @db.Text
+  
+  // Relations
+  operations  Operation[]
+  remittances Remittance[]
+  
+  @@map("TbleType")
+}
+
+// ========== REMITTANCE ==========
+
+model Remittance {
+  RefRemittance      Int       @id @default(autoincrement()) @map("RefRemittance")
+  RefCaisse          Int
+  RefProduit         Int
+  RefType            Int
+  NumPhone           String    @db.Text
+  NomComplet         String    @db.Text
+  MontantTransaction String    @db.Text
+  Insert_id          Int
+  Insert_time        DateTime  @default(now())
+  Reset_Id           Int?
+  Reset_At           DateTime? @db.Date
+  Validate           Int       @default(1)
+  DateValidate       DateTime? @db.Date
+  RefValidate        Int?
+  ValidateDate       DateTime?
+  RefPays            Int
+  
+  // Relations
+  cashRegister       CashRegister @relation(fields: [RefCaisse], references: [RefCaisse])
+  product            Product      @relation(fields: [RefProduit], references: [RefProduit])
+  type               OperationType @relation(fields: [RefType], references: [RefType])
+  user               User         @relation(fields: [Insert_id], references: [RefUser])
+  
+  @@map("TbleRemittance")
+  @@index([RefCaisse])
+  @@index([RefProduit])
+  @@index([RefType])
+  @@index([Insert_id])
+}
+
+// ========== FINANCIAL ==========
+
+model Appro {
+  RefAppro      Int       @id @default(autoincrement()) @map("RefAppro")
+  RefCaisse     Int
+  MontantAppro  String    @db.Text
+  DateAppro     DateTime  @default(now())
+  RefUsers      Int
+  
+  // Relations
+  cashRegister  CashRegister @relation(fields: [RefCaisse], references: [RefCaisse])
+  user          User         @relation(fields: [RefUsers], references: [RefUser])
+  
+  @@map("TbleAppro")
+  @@index([RefCaisse])
+  @@index([RefUsers])
+}
+
+model Account {
+  RefCompte     Int       @id @default(autoincrement()) @map("RefCompte")
+  RefAgency     Int
+  SoldeCompte   String    @db.Text
+  DateSolde     DateTime  @default(now())
+  
+  // Relations
+  agency        Agency    @relation(fields: [RefAgency], references: [RefAgency])
+  
+  @@map("TbleCompte")
+  @@index([RefAgency])
+}
+
+model RapportOp {
+  RefRapport      Int       @id @default(autoincrement()) @map("RefRapport")
+  SoldeOvEspeces  String    @db.Text
+  SoldeOvOmni     String    @db.Text
+  Versement       String?   @db.Text
+  Retrait         String?   @db.Text
+  ApproOmni       String?   @db.Text
+  SoldeFrEspeces  String    @db.Text
+  SoldeFrOmni     String    @db.Text
+  Date            DateTime  @db.Date
+  RefCaisse       Int
+  
+  // Relations
+  cashRegister    CashRegister @relation(fields: [RefCaisse], references: [RefCaisse])
+  
+  @@map("TbleRapportOp")
+  @@index([RefCaisse])
+  @@index([Date])
+}
+
+// ========== OPENING HOURS ==========
+
+model Day {
+  RefDays     Int       @id @default(autoincrement()) @map("RefDays")
+  NameDays    String    @db.Text
+  
+  // Relations
+  openingHours OpeningHours[]
+  
+  @@map("TbleDays")
+}
+
+model OpeningHours {
+  RefCaisse   Int
+  RefDays     Int
+  HeureDebut  DateTime  @db.Time()
+  HeureFin    DateTime  @db.Time()
+  
+  // Relations
+  cashRegister CashRegister @relation(fields: [RefCaisse], references: [RefCaisse])
+  day         Day          @relation(fields: [RefDays], references: [RefDays])
+  
+  @@id([RefCaisse, RefDays])
+  @@map("TbleOuverture")
+}
+
+// ========== JOBS QUEUE ==========
+
+model Job {
+  id              Int       @id @default(autoincrement())
+  operation_type  String    @db.VarChar(50)
+  operation_id    Int
+  user_id         Int
+  status          JobStatus @default(pending)
+  created_at      DateTime  @default(now())
+  updated_at      DateTime?
+  error_message   String?   @db.Text
+  
+  @@map("TbleJobs")
+  @@index([status])
+  @@index([created_at])
+}
+
+enum JobStatus {
+  pending
+  processing
+  completed
+  failed
+}

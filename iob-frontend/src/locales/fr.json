@@ -1,0 +1,69 @@
+{
+  "auth": {
+    "login": "Connexion",
+    "email": "Email",
+    "password": "Mot de passe",
+    "loginButton": "Se connecter",
+    "logout": "Déconnexion",
+    "twoFactor": "Authentification à deux facteurs",
+    "enterCode": "Entrez le code de vérification"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "todayOperations": "Opérations du jour",
+    "totalAmount": "Montant total",
+    "pendingOperations": "Opérations en attente",
+    "recentOperations": "Opérations récentes"
+  },
+  "operations": {
+    "title": "Opérations",
+    "create": "Créer une opération",
+    "type": "Type d'opération",
+    "amount": "Montant",
+    "currency": "Devise",
+    "status": "Statut",
+    "date": "Date",
+    "reference": "Référence",
+    "billBreakdown": "Détail des billets"
+  },
+  "caisse": {
+    "title": "Caisse",
+    "balance": "Solde",
+    "movements": "Mouvements",
+    "transfer": "Transfert",
+    "deposit": "Dépôt",
+    "withdrawal": "Retrait"
+  },
+  "remittance": {
+    "title": "Remise",
+    "interAgency": "Inter-agences",
+    "create": "Créer une remise",
+    "destination": "Destination",
+    "source": "Source"
+  },
+  "analytics": {
+    "title": "Analyses",
+    "reports": "Rapports",
+    "export": "Exporter",
+    "period": "Période",
+    "charts": "Graphiques"
+  },
+  "admin": {
+    "title": "Administration",
+    "users": "Utilisateurs",
+    "agencies": "Agences",
+    "products": "Produits",
+    "permissions": "Permissions"
+  },
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès"
+  }
+}

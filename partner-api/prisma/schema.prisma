@@ -1,0 +1,258 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Partner {
+  RefBanque  Int           @id @map("RefBanque")
+  NameBanque String        @map("NameBanque") @db.Text
+  RefPays    Int           @map("RefPays")
+  users      PartnerUser[]
+
+  @@index([RefPays], map: "TbleBanque_RefPays_fkey")
+  @@map("TbleBanque")
+}
+
+model Country {
+  RefPays Int           @id @map("RefPays")
+  name    String        @db.Text
+  logo    String?       @db.Text
+  email   String?       @db.Text
+  users   PartnerUser[]
+
+  @@map("tblpays")
+}
+
+model PartnerUser {
+  id             Int       @id @default(autoincrement())
+  email          String    @unique @db.VarChar(255)
+  password       String    @db.VarChar(255)
+  firstName      String    @db.VarChar(100)
+  lastName       String    @db.VarChar(100)
+  phone          String?   @db.VarChar(20)
+  role           UserRole  @default(USER)
+  isActive       Boolean   @default(true)
+  RefBanque      Int
+  RefPays        Int?
+  totpSecret     String?   @db.VarChar(255)
+  totpEnabled    Boolean   @default(false)
+  totpVerifiedAt DateTime?
+  backupCodes    String?   @db.Text
+  apiKey         String?   @unique @db.VarChar(255)
+  apiKeyActive   Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  lastLoginAt    DateTime?
+  partner        Partner   @relation(fields: [RefBanque], references: [RefBanque])
+  country        Country?  @relation(fields: [RefPays], references: [RefPays])
+
+  @@index([RefBanque], map: "partner_users_RefBanque_fkey")
+  @@index([RefPays], map: "partner_users_RefPays_fkey")
+  @@map("partner_users")
+}
+
+model Agency {
+  RefAgency     Int            @id @map("RefAgency")
+  NameAgency    String         @map("NameAgency") @db.Text
+  TelAgence     String?        @map("TelAgence") @db.Text
+  RefPays       Int            @map("RefPays")
+  RefBanque     Int?
+  cashRegisters CashRegister[]
+
+  @@index([RefBanque], map: "TbleAgency_RefBanque_fkey")
+  @@index([RefPays], map: "TbleAgency_RefPays_fkey")
+  @@map("TbleAgency")
+}
+
+model CashRegister {
+  RefCaisse  Int     @id @map("RefCaisse")
+  NameCaisse String  @map("NameCaisse") @db.Text
+  RefAgency  Int     @map("RefAgency")
+  NUMCOMPTE  String? @map("NUMCOMPTE") @db.Text
+  agency     Agency  @relation(fields: [RefAgency], references: [RefAgency])
+
+  @@index([RefAgency], map: "TbleCaisse_RefAgency_fkey")
+  @@map("TbleCaisse")
+}
+
+model Operation {
+  RefOperations    Int       @id @map("RefOperations")
+  RefCaisse        Int?      @map("RefCaisse")
+  RefAgency        Int?      @map("RefAgency")
+  RefPays          Int?      @map("RefPays")
+  RefProduit       Int?      @map("RefProduit")
+  RefType          Int?      @map("RefType")
+  NumCompte        String?   @map("NumCompte") @db.Text
+  NameClient       String?   @map("NameClient") @db.Text
+  MontantVersement String?   @map("MontantVersement") @db.Text
+  Remarque         String?   @map("Remarque") @db.Text
+  Bordereau        String?   @map("Bordereau") @db.Text
+  uniqid           String?   @map("uniqid") @db.Text
+  login            String?   @map("login") @db.Text
+  datePayement     DateTime? @map("datePayement") @db.DateTime(0)
+  Insert_Time      DateTime? @map("Insert_Time") @db.Date
+  ValidateDate     DateTime? @map("ValidateDate") @db.DateTime(0)
+  DateValidate     DateTime? @map("DateValidate") @db.Date
+  Reset_At         DateTime? @map("Reset_At") @db.DateTime(0)
+  Approve1_Time    DateTime? @map("Approve1_Time") @db.Date
+  Approve2_Time    DateTime? @map("Approve2_Time") @db.Date
+  Validate         Int?      @map("Validate")
+  RefValidate      Int?      @map("RefValidate")
+  Approve2_Id      Int?      @map("Approve2_Id")
+  Reset_Id         Int?      @map("Reset_Id")
+  SentFromAgency   Int?      @map("SentFromAgency")
+  TypeAppro        Int?      @map("TypeAppro")
+  TypeRetrait      Int?      @map("TypeRetrait")
+
+  @@index([RefAgency], map: "TbleOperations_RefAgency_fkey")
+  @@index([RefCaisse], map: "TbleOperations_RefCaisse_fkey")
+  @@index([RefPays], map: "TbleOperations_RefPays_fkey")
+  @@index([RefProduit], map: "TbleOperations_RefProduit_fkey")
+  @@map("TbleOperations")
+}
+
+model Product {
+  RefProduit  Int    @id @map("RefProduit")
+  NameProduit String @map("NameProduit") @db.Text
+  RefBanque   Int    @map("RefBanque")
+
+  @@index([RefBanque], map: "TbleProduit_RefBanque_fkey")
+  @@map("TbleProduit")
+}
+
+model Billetage {
+  RefBilletage   Int       @id @map("RefBilletage")
+  RefOperations  Int       @map("RefOperations")
+  a1             String    @map("a1") @db.Text
+  a2             String    @map("a2") @db.Text
+  b1             String    @map("b1") @db.Text
+  b2             String    @map("b2") @db.Text
+  c1             String    @map("c1") @db.Text
+  c2             String    @map("c2") @db.Text
+  d1             String    @map("d1") @db.Text
+  d2             String    @map("d2") @db.Text
+  e1             String    @map("e1") @db.Text
+  e2             String    @map("e2") @db.Text
+  f1             String    @map("f1") @db.Text
+  f2             String    @map("f2") @db.Text
+  g1             String    @map("g1") @db.Text
+  g2             String    @map("g2") @db.Text
+  h1             String    @map("h1") @db.Text
+  h2             String    @map("h2") @db.Text
+  i1             String    @map("i1") @db.Text
+  i2             String    @map("i2") @db.Text
+  j1             String    @map("j1") @db.Text
+  j2             String    @map("j2") @db.Text
+  k1             String    @map("k1") @db.Text
+  k2             String    @map("k2") @db.Text
+  l1             String    @map("l1") @db.Text
+  l2             String    @map("l2") @db.Text
+  m1             String    @map("m1") @db.Text
+  m2             String    @map("m2") @db.Text
+  dateBielletage DateTime? @default(now()) @map("dateBielletage") @db.DateTime(0)
+
+  @@map("TbleBilletage")
+}
+
+model Approval {
+  RefAppro     Int       @id @map("RefAppro")
+  RefCaisse    Int       @map("RefCaisse")
+  MontantAppro String    @map("MontantAppro") @db.Text
+  DateAppro    DateTime? @default(now()) @map("DateAppro") @db.DateTime(0)
+  RefUsers     Int       @map("RefUsers")
+
+  @@map("TbleAppro")
+}
+
+model Account {
+  RefCompte   Int       @id @map("RefCompte")
+  RefAgency   Int       @map("RefAgency")
+  SoldeCompte String    @map("SoldeCompte") @db.Text
+  DateSolde   DateTime? @default(now()) @map("DateSolde") @db.DateTime(0)
+
+  @@map("TbleCompte")
+}
+
+model Permission {
+  RefUsers Int @map("RefUsers")
+  access   Int @map("access")
+
+  @@id([RefUsers, access])
+  @@map("permissions")
+}
+
+model CashPermission {
+  RefChmod  Int @map("RefChmod")
+  RefCaisse Int @map("RefCaisse")
+  RefUsers  Int @map("RefUsers")
+
+  @@id([RefChmod, RefCaisse, RefUsers])
+  @@map("TbleChmod")
+}
+
+model ApprovalPermission {
+  RefChmodAppro Int @map("RefChmodAppro")
+  RefCaisse     Int @map("RefCaisse")
+  RefUsers      Int @map("RefUsers")
+
+  @@id([RefChmodAppro, RefCaisse, RefUsers])
+  @@map("TbleChmodAppro")
+}
+
+model ProductPermission {
+  RefChmodProduit Int @map("RefChmodProduit")
+  RefCaisse       Int @map("RefCaisse")
+  RefProduit      Int @map("RefProduit")
+
+  @@id([RefChmodProduit, RefCaisse, RefProduit])
+  @@map("TbleChmodProduit")
+}
+
+model Day {
+  RefDays  Int    @id @map("RefDays")
+  NameDays String @map("NameDays") @db.Text
+
+  @@map("TbleDays")
+}
+
+model Job {
+  id             Int        @id @map("id")
+  operation_type String     @map("operation_type") @db.VarChar(50)
+  operation_id   Int        @map("operation_id")
+  user_id        Int        @map("user_id")
+  status         JobStatus? @default(pending) @map("status")
+  created_at     DateTime   @default(now()) @map("created_at") @db.Timestamp(0)
+  updated_at     DateTime?  @map("updated_at") @db.Timestamp(0)
+  error_message  String?    @map("error_message") @db.Text
+
+  @@map("TbleJobs")
+}
+
+model ConnectionLog {
+  RefLog   Int       @id @map("RefLog")
+  RefUsers Int       @map("RefUsers")
+  IP       String    @map("IP") @db.Text
+  LogH     DateTime  @map("LogH") @db.Time(0)
+  LogoutH  DateTime  @map("LogoutH") @db.Time(0)
+  DateLog  DateTime? @default(now()) @map("DateLog") @db.DateTime(0)
+
+  @@map("LogConnexion")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  USER
+  VIEWER
+}
+
+enum JobStatus {
+  pending
+  processing
+  completed
+  failed
+}

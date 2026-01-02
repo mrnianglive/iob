@@ -6,13 +6,24 @@ class DBFactory
 {
 	public static function MySQLPDO()
 	{
-		$db = new \PDO('mysql:host=localhost;dbname=iob;charset=utf8', 'root', '');
+		// Support Docker environment variables ou valeurs par défaut
+		$host = getenv('DB_HOST') ?: 'localhost';
+		$dbname = getenv('DB_NAME') ?: 'iob';
+		$user = getenv('DB_USER') ?: 'root';
+		$pass = getenv('DB_PASS') ?: '';
+		
+		$db = new \PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
 		$db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
 		return $db;
 	}
 	public static function MySQLMySQLi()
 	{
-		return new \MySQLi('localhost', 'root', '', 'iob');
+		$host = getenv('DB_HOST') ?: 'localhost';
+		$dbname = getenv('DB_NAME') ?: 'iob';
+		$user = getenv('DB_USER') ?: 'root';
+		$pass = getenv('DB_PASS') ?: '';
+		
+		return new \MySQLi($host, $user, $pass, $dbname);
 	}
 }

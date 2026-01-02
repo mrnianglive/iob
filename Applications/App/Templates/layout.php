@@ -2,6 +2,7 @@
 if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     header('Location: /connexion/doubleauth');
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -12,11 +13,14 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="App">
+    <meta name="keywords"
+        content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 4 admin, bootstrap 4, css3 dashboard, bootstrap 4 dashboard, Ample lite admin bootstrap 4 dashboard, frontend, responsive bootstrap 4 admin template, Ample admin lite dashboard bootstrap 4 dashboard template">
+    <meta name="description"
+        content="Ample Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
     <meta name="robots" content="noindex,nofollow">
     <title>App - <?= $titles; ?></title>
     <!-- Favicon icon -->
-    <link rel="icon" href="/images/favicon.ico">
+    <link rel="icon" href="/images/mlc.ico">
     <link href="/css/wizard.css" rel="stylesheet" type="text/css" />
     <!-- Custom CSS -->
     <link href="/css/style.min.css" rel="stylesheet">
@@ -28,22 +32,6 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
         type="text/css">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
 
-    <style>
-    .circle-img {
-        position: relative;
-        overflow: hidden;
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-    }
-
-    .circle-img img {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    </style>
 </head>
 
 <body>
@@ -77,7 +65,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- Logo text -->
                         <span class="logo-text">
                             <!-- dark Logo text -->
-                            <img src="/images/<?= $_SESSION['logoPays'] ?? 'mlc.png'; ?>" alt="homepage" width="50%" />
+                            <img src="/images/mlc.png" alt="homepage" width="50%" />
                         </span>
                     </a>
                     <!-- ============================================================== -->
@@ -119,18 +107,14 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
-
                         <li>
-                            <a class=" profile-pic" href="#">
-                                <span class="text-white font-medium"><?= $_SESSION['login']; ?></span>
-                            </a>
+                            <a class="profile-pic" href="#">
+                                <img src="/images/mlc.png" alt="user-img" width="36" class="img-circle"><span
+                                    class="text-white font-medium"><?= $_SESSION['login']; ?></span></a>
                         </li>
-
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
-                        <!--create new li with select, where  you can shoose language-->
-
                     </ul>
                 </div>
             </nav>
@@ -145,7 +129,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/"
                                 aria-expanded="false"><i class="fas fa-home fa-fw" aria-hidden="true"></i><span
                                     class="hide-menu">Accueil</span></a></li>
-                        <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or (!empty($CheckOuverture) && $_SESSION['statut'] != 'Niveau1') && $_SESSION['statut'] != 'Control' && $_SESSION['statut'] != 'Head') { ?>
+                        <?php if ($_SESSION['statut'] == 'admin' or (!empty($CheckOuverture) && $_SESSION['statut'] != 'Niveau1') && $_SESSION['statut'] != 'Control' && $_SESSION['statut'] != 'Head') { ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/bielletage/1" aria-expanded="false"><i class="fa fa-plus"
                                     aria-hidden="true"></i><span class="hide-menu">Versement</span></a></li>
@@ -155,12 +139,8 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <?php } ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/remittances/index" aria-expanded="false"><i class="fas fa-exchange"
-                                    aria-hidden="true"></i><span class="hide-menu">Remittance</span></a></li>
-
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/Journal/noverified" aria-expanded="false"><i class="fas fa-exchange"
-                                    aria-hidden="true"></i><span class="hide-menu">Non Verifiées</span> <span
-                                    class="badge badge-danger"> Important ! </span></a></li>
+                                    aria-hidden="true"></i><span class="hide-menu">Remittance</span> <span
+                                    class="badge badge-danger"> Nouveau ! </span></a></li>
 
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Journal/petite_caisse" aria-expanded="false"><i class="fa fa-columns"
@@ -168,7 +148,9 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Journal/index" aria-expanded="false"><i class="fa fa-table"
                                     aria-hidden="true"></i><span class="hide-menu">Journal de Caisse</span></a></li>
-
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Arreter/index" aria-expanded="false"><i class="fa fa-lock"
+                                    aria-hidden="true"></i><span class="hide-menu">Arreter de Caisse </span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Caisse/transfertfond" aria-expanded="false"><i class="fa fa-share"
                                     aria-hidden="true"></i><span class="hide-menu">Sortie de Fond</span></a></li>
@@ -177,18 +159,32 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                                     aria-hidden="true"></i><span class="hide-menu">Appro Caisse</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Analytics/performance" aria-expanded="false"><i class="fa fa-columns"
-                                    aria-hidden="true"></i><span class="hide-menu">Performance</span></a></li></a></li>
-                        <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Niveau1' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'Control') { ?>
+                                    aria-hidden="true"></i><span class="hide-menu">Performance</span> <span
+                                    class="badge badge-danger"> Nouveau ! </span></a></li></a></li>
+                        <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Niveau1' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'Control') { ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Analytics/chart" aria-expanded="false"><i class="fa fa-columns"
                                     aria-hidden="true"></i><span class="hide-menu">Chart</span></a></li>
-                        <!-- <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/Journal/canceled" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Canceled</span></a></li> -->
 
                         <?php } ?>
-                        <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'superadmin') { ?>
+                        
+                        <?php if ($_SESSION['statut'] == 'admin' || $_SESSION['statut'] == 'ChefCaisse' || $_SESSION['statut'] == 'Head' || $_SESSION['statut'] == 'Niveau1' || $_SESSION['statut'] == 'Control') { ?>
+                        <!-- CRM Clients -->
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/Arreter/index" aria-expanded="false"><i class="fa fa-lock"
-                                    aria-hidden="true"></i><span class="hide-menu">Arreter de Caisse </span></a></li>
+                                href="/crm/index" aria-expanded="false"><i class="fas fa-user-friends"
+                                    aria-hidden="true"></i><span class="hide-menu">CRM Clients</span> <span
+                                    class="badge badge-success"> Nouveau ! </span></a></li>
+                        <?php } ?>
+                        
+                        <?php if ($_SESSION['statut'] == 'admin' || $_SESSION['statut'] == 'Control' || $_SESSION['statut'] == 'Niveau1') { ?>
+                        <!-- LCB-FT Anti-Blanchiment -->
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/lcb/index" aria-expanded="false"><i class="fas fa-shield-alt"
+                                    aria-hidden="true"></i><span class="hide-menu">LCB-FT</span> <span
+                                    class="badge badge-warning"> Contrôle </span></a></li>
+                        <?php } ?>
+                        
+                        <?php if ($_SESSION['statut'] == 'admin') { ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Analytics/index" aria-expanded="false"><i class="fa fa-columns"
                                     aria-hidden="true"></i><span class="hide-menu">Analytics</span></a></li>
@@ -213,12 +209,6 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Pannel/links" aria-expanded="false"><i class="fa fa-users"
                                     aria-hidden="true"></i><span class="hide-menu">Links</span></a></li>
-
-                        <?php if ($_SESSION['statut'] == 'superadmin') { ?>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/Pannel/Pays" aria-expanded="false"><i class="fa fa-users"
-                                    aria-hidden="true"></i><span class="hide-menu">Liste Pays</span></a></li>
-                        <?php } ?>
                         <?php } ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Users/myprofile" aria-expanded="false"><i class="fa fa-user"
@@ -260,11 +250,10 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <footer class="footer text-center">
-                <?= $_SESSION['nomPays'] ?? 'MALI CREANCES'; ?> |
+            <footer class="footer text-center"> Dernière Connexion :<?= $_SESSION['LastConnexion']; ?> |
                 <?= date('Y'); ?>
-                © <a href="https://malicreances-sa.com" target="_blank">MALI CREANCES | Tous les droits sont réservés.
-                </a>
+                © <a href="https://malicreances-sa.com" target="_blank">MALI
+                    CREANCES SA</a> CONNCEPTION BY <a href="https://niangaly.ml" target="_blank">NIANGALY</a>
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->
@@ -276,28 +265,6 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-    <script>
-    $(document).ready(function() {
-        // Écouteur d'événements pour le bouton "Non Vérifiée"
-        $('button[data-target="#modal"]').on('click', function() {
-            // Récupérer l'ID de l'opération depuis l'attribut "data-operation-id" du bouton
-            var operationId = $(this).data('operation-id');
-            // Mettre à jour la valeur de l'input avec l'ID de l'opération
-            $('#modal-operation-id').val(operationId);
-            // Afficher l'ID dans le contenu du modal
-            $('#modal-id').text(operationId);
-
-            // Afficher la valeur RefAgency dans le champ de formulaire correspondant
-            var refAgency = $(this).data('ref-agency');
-            $('#modal-ref-agency').val(refAgency);
-
-            var RefProduit = $(this).data('ref-produit');
-            $('#modal-ref-produit').val(RefProduit);
-        });
-    });
-    </script>
-
-
     <script src="/js/wizard.js" type="text/javascript"></script>
     <script src="/js/sweetalert2/sweetalert2.min.js"></script>
     <!-- Bootstrap tether Core JavaScript -->
@@ -307,14 +274,7 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="/scripts/billetage.js"></script>
     <script src="/scripts/Checklogin.js"></script>
     <script src="/scripts/clientName.js"></script>
-    <script src="/scripts/clientlastOp.js"></script>
-    <script src="/scripts/countClient.js"></script>
-
-
-    <script src="/scripts/produitlistbefore.js"></script>
-
-    <!-- <script src="/scripts/produitlist.js"></script> -->
-    <script src="/scripts/produitlistJournal.js"></script>
+    <script src="/scripts/produitlist.js"></script>
     <script src="/scripts/produitlistRemittance.js"></script>
     <script src="/scripts/hidden.js"></script>
     <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -325,7 +285,6 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
     <script src="/js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
     <script src="/js/custom.js"></script>
-    <script src="/scripts/getList.js"></script>
     <script>
     $(document).ready(function() {
         $('#dataTable').DataTable({
@@ -383,98 +342,6 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
         window.location = "/logout";
     });
     </script>
-
-    <script>
-    $(document).ready(function() {
-        $('[data-toggle="tooltip"]').tooltip();
-        $('[data-toggle="modal"]').tooltip();
-    });
-    </script>
-
-
-    <script src="/js/accounting.js"></script>
-
-    <script>
-    // Configure la notation française
-    accounting.settings.number.decimal = ",";
-    accounting.settings.number.thousand = " ";
-
-    var inputElements = document.getElementsByClassName("number-input");
-    for (var i = 0; i < inputElements.length; i++) {
-        inputElements[i].addEventListener("blur", function() {
-            var val = accounting.unformat(this.value);
-            if (!isNaN(val)) {
-                this.value = val;
-            } else {
-                alert("Please enter a valid number");
-                this.focus();
-            }
-        });
-    }
-    </script>
-
-
-
-    <script>
-    $(document).ready(function() {
-        let lastRequest = null;
-
-        function getSoldeData() {
-            // Annuler la requête précédente si elle existe
-            if (lastRequest) {
-                lastRequest.abort();
-            }
-
-            const filters = {
-                Country: $('#RefPays').val(),
-                Agency: $('#RefAgency').val(),
-                Caisse: $('#RefCaisse').val()
-            };
-
-            // Stocker la nouvelle requête
-            lastRequest = $.ajax({
-                url: '/calculate-solde',
-                type: 'POST',
-                data: filters,
-                success: function(response) {
-                    if (response.error) {
-                        console.error('Erreur:', response.error);
-                        return;
-                    }
-                    updateSoldeDisplay(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Erreur Ajax:', error);
-                },
-                complete: function() {
-                    lastRequest = null;
-                }
-            });
-        }
-
-        function updateSoldeDisplay(data) {
-            $('#solde-depot').text(formatNumber(data.sommeVersementGlobal));
-            $('#solde-retrait').text(formatNumber(data.sommeRetraitGlobal));
-            $('#solde-espece').text(formatNumber(data.soldeGlobal));
-        }
-
-        function formatNumber(number) {
-            return new Intl.NumberFormat('fr-FR').format(number);
-        }
-
-        // Utiliser un debounce pour éviter trop d'appels
-        let debounceTimer;
-        $('#RefPays, #RefAgency, #RefCaisse').change(function() {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(getSoldeData, 300);
-        });
-
-        // Chargement initial
-        getSoldeData();
-    });
-    </script>
-
-
 </body>
 
 </html>

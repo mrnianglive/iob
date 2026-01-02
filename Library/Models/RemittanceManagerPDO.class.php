@@ -135,7 +135,9 @@ class RemittanceManagerPDO extends RemittanceManager
 
     public function GetOperations($debut, $fin, $Agence)
     {
-        $requete = $this->dao->prepare("SELECT * FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleProduit ON TbleProduit.RefProduit=TbleRemittance.RefProduit INNER JOIN TbleType ON TbleType.RefType=TbleRemittance.RefType  WHERE  date(TbleRemittance.Insert_time) BETWEEN '$debut' AND '$fin'  AND TbleAgency.RefAgency=:Agence AND TbleRemittance.Reset_Id IS NULL ORDER BY TbleRemittance.RefRemittance DESC");
+        $requete = $this->dao->prepare("SELECT * FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleProduit ON TbleProduit.RefProduit=TbleRemittance.RefProduit INNER JOIN TbleType ON TbleType.RefType=TbleRemittance.RefType  WHERE  date(TbleRemittance.Insert_time) BETWEEN :debut AND :fin  AND TbleAgency.RefAgency=:Agence AND TbleRemittance.Reset_Id IS NULL ORDER BY TbleRemittance.RefRemittance DESC");
+        $requete->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $requete->bindValue(':fin', $fin, \PDO::PARAM_STR);
         $requete->bindValue(':Agence', $Agence, \PDO::PARAM_INT);
         $requete->execute();
         $data = $requete->fetchAll();

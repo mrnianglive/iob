@@ -6,84 +6,88 @@ class JournalController extends \Library\BackController
 {
     public function executeIndex(\Library\HTTPRequest $request)
     {
-        $pageTitle = "Journal de Caisse";
-        $this->page->addVar("titles", $pageTitle);
-
-        $bielletageManager = $this->managers->getManagerOf("Bielletage");
-        $Chmod = $bielletageManager->CheckOuverture();
-        $this->page->addVar("CheckOuverture", $Chmod);
-
-        $pannelManager = $this->managers->getManagerOf("Pannel");
-        $Agence = $pannelManager->UserAgence();
+        $this->page->addVar("titles", "Journal de Caisse"); // Titre de la page
+        $Chmod  = $this->managers->getManagerOf("Bielletage")->CheckOuverture(); //Recuperation de la liste
+        $this->page->addVar("CheckOuverture", $Chmod); // Creation de la variable, ajout d'une variable a la vue
+        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
         $this->page->addVar('UserAgence', $Agence);
-
-        $Debut = $request->postData('Debut');
-        $Fin = $request->postData('Fin');
-        $Value = $request->postData('RefAgency');
-        $RefProduit = $request->postData('RefProduit');
-
-        // $this->page->addVars(compact('Debut', 'Fin', 'Value', 'RefProduit'));
-
-        $this->page->addVar('Debut', $Debut);
-        $this->page->addVar('Fin', $Fin);
-        $this->page->addVar('Value', $Value);
-
-        $this->page->addVar('RefProduit', $RefProduit);
-
-        $ListeAgence = $pannelManager->ListeAgence();
+        $this->page->addVar('Debut', $request->postData('Debut'));
+        $this->page->addVar('Fin', $request->postData('Fin'));
+        $this->page->addVar('Value', $request->postData('RefAgency'));
+        // $Biellet = $this->managers->getManagerOf('Journal')->GetBielletageJournal(NULL, NULL, NULL);
+        // $this->page->addVar('Biellet', $Biellet);
+        $ListeAgence  = $this->managers->getManagerOf("Pannel")->ListeAgence();
         $this->page->addVar("ListeAgence", $ListeAgence);
+        if (!empty($request->postData('RefAgency')) or isset($_GET['value'])) {
+            // Determiner la source des donnees (GET ou POST)
+            if (isset($_GET['debut']) && isset($_GET['fin']) && isset($_GET['value'])) {
+                $debut = $_GET['debut'];
+                $fin = $_GET['fin'];
+                $refAgency = $_GET['value'];
+            } else {
+                $debut = $request->postData('Debut');
+                $fin = $request->postData('Fin');
+                $refAgency = $request->postData('RefAgency');
+            }
+            
+            // Mettre a jour les variables de la vue
+            $this->page->addVar('Debut', $debut);
+            $this->page->addVar('Fin', $fin);
+            $this->page->addVar('Value', $refAgency);
+            
+            // Recuperer les operations
+            $Operations = $this->managers->getManagerOf('Journal')->GetOperations($debut, $fin, $refAgency);
+            $this->page->addVar('Operations', $Operations);
 
-        $journalManager = $this->managers->getManagerOf('Journal');
-        $Operations = [];
+            // Calcul des soldes avec les bonnes valeurs
+            $SoldeRemittanceVersementAgencePeriode = $this->managers->getManagerOf('Journal')->SoldeRemittanceVersementAgencePeriode($debut, $fin, $refAgency);
+            $SoldeRemittanceRetraitAgencePeriode = $this->managers->getManagerOf('Journal')->SoldeRemittanceRetraitAgencePeriode($debut, $fin, $refAgency);
+            $SoldeRemittanceAgence = $SoldeRemittanceVersementAgencePeriode - $SoldeRemittanceRetraitAgencePeriode;
 
-        if (!empty($Value) || isset($_GET['value'])) {
-            $Debut = $_GET['debut'] ?? $Debut;
-            $Fin = $_GET['fin'] ?? $Fin;
-            $Value = $_GET['value'] ?? $Value;
-            $RefProduit = $_GET['produit'] ?? $RefProduit;
-
-            $Operations = $journalManager->GetOperations($Debut, $Fin, $Value, $RefProduit);
-            // $this->page->addVars(compact('Debut', 'Fin', 'Value', 'RefProduit'));
-            $this->page->addVar('Debut', $Debut);
-            $this->page->addVar('Fin', $Fin);
-            $this->page->addVar('Value', $Value);
-            $this->page->addVar('RefProduit', $RefProduit);
+            $sommeVersementPeriode = $this->managers->getManagerOf('Journal')->sommeVersementPeriode($debut, $fin, $refAgency);
+            $this->page->addVar('sommeVersementPeriode', $sommeVersementPeriode);
+            $sommeRetraitPeriode = $this->managers->getManagerOf('Journal')->sommeRetraitPeriode($debut, $fin, $refAgency);
+            $this->page->addVar('sommeRetraitPeriode', $sommeRetraitPeriode);
+            $sommeVersementPeriodeAvecAppro = $this->managers->getManagerOf('Journal')->sommeVersementPeriodeAvecAppro($debut, $fin, $refAgency);
+            $this->page->addVar('sommeVersementPeriodeAvecAppro', $sommeVersementPeriodeAvecAppro);
+            $sommeRetraitPeriodeAvecSortie = $this->managers->getManagerOf('Journal')->sommeRetraitPeriodeAvecSortie($debut, $fin, $refAgency);
+            $this->page->addVar('sommeRetraitPeriodeAvecSortie', $sommeRetraitPeriodeAvecSortie);
+            $Yesterday = $this->managers->getManagerOf('Journal')->YesterdaySoldeAgence($debut, $fin, $refAgency);
+            $Solde = ($sommeVersementPeriodeAvecAppro - $sommeRetraitPeriodeAvecSortie) + $Yesterday + $SoldeRemittanceAgence;
+            $this->page->addVar('Solde', $Solde);
         } else {
-            $Operations = $journalManager->Operations();
+            $Operations = $this->managers->getManagerOf('Journal')->Operations();
+            $this->page->addVar('Operations', $Operations);
+            $sommeVersementPeriode = $this->managers->getManagerOf('Journal')->sommeVersementPeriode();
+            $this->page->addVar('sommeVersementPeriode', $sommeVersementPeriode);
+            $sommeRetraitPeriode = $this->managers->getManagerOf('Journal')->sommeRetraitPeriode();
+            $this->page->addVar('sommeRetraitPeriode', $sommeRetraitPeriode);
+            $sommeVersementPeriodeAvecAppro = $this->managers->getManagerOf('Journal')->sommeVersementPeriodeAvecAppro();
+            $this->page->addVar('sommeVersementPeriodeAvecAppro', $sommeVersementPeriodeAvecAppro);
+            $sommeRetraitPeriodeAvecSortie = $this->managers->getManagerOf('Journal')->sommeRetraitPeriodeAvecSortie();
+            $this->page->addVar('sommeRetraitPeriodeAvecSortie', $sommeRetraitPeriodeAvecSortie);
+
+            $UsersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'));
+            $SoldeGlobal = 0;
+            foreach ($UsersCaisse as $key => $value) {
+                $SoldeGlobal += $value['SoldeDisponibleGlobal'];
+            }
+            $this->page->addVar('Solde', $SoldeGlobal);
         }
-        $this->page->addVar('Operations', $Operations);
+        $this->page->addVar('match', $this->managers->getManagerOf('Journal'));
 
-        $sommeVersementPeriode = $journalManager->sommeVersementPeriode($Debut, $Fin, $Value, $RefProduit);
-        $this->page->addVar('sommeVersementPeriode', $sommeVersementPeriode);
-
-        $sommeRetraitPeriode = $journalManager->sommeRetraitPeriode($Debut, $Fin, $Value, $RefProduit);
-        $this->page->addVar('sommeRetraitPeriode', $sommeRetraitPeriode);
-
-        $UsersCaisse = $journalManager->UserCaisse(date('Y-m-d'));
-        $SoldeGlobal = 0;
-        foreach ($UsersCaisse as $key => $value) {
-            $SoldeGlobal += $value['SoldeDisponibleGlobal'];
-        }
-        $this->page->addVar('Solde', $SoldeGlobal);
-
-        $this->page->addVar('match', $journalManager);
-
-        $permissions = [];
-        $AllPermissions = $pannelManager->UserPermission();
+        $permissions = array();
+        $AllPermissions = $this->managers->getManagerOf('Pannel')->UserPermission();
         foreach ($AllPermissions as $key => $value) {
             $permissions[] = $value['access'];
         }
         $this->page->addVar('permission', $permissions);
     }
-
     public function executeValidate(\Library\HTTPRequest $request)
     {
         $this->managers->getManagerOf("Journal")->ValidateOperations($request);
-        $_SESSION['message']['type'] = 'success';
-        $_SESSION['message']['text'] = 'Opération validée avec succès';
-        $_SESSION['message']['number'] = 2;
         if (!empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {
-            $this->app()->httpResponse()->redirect("/Journal/index/" . $request->postData('Debut') . "/" . $request->postData('Fin') . "/" . $request->postData('RefAgency') . "/" . $request->postData('RefProduit')); //Retour en arriere
+            $this->app()->httpResponse()->redirect("/Journal/index/" . $request->postData('Debut') . "/" . $request->postData('Fin') . "/" . $request->postData('RefAgency')); //Retour en arriere
         } else {
             $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
         }
@@ -91,173 +95,65 @@ class JournalController extends \Library\BackController
     public function executeCancelvalidate(\Library\HTTPRequest $request)
     {
         $this->managers->getManagerOf("Journal")->CancelValidate($request->getData('id'));
-        $_SESSION['message']['type'] = 'success';
-        $_SESSION['message']['text'] = 'Validation annulée avec succès';
-        $_SESSION['message']['number'] = 2;
         $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
     }
 
     public function executeDelete(\Library\HTTPRequest $request)
     {
-        $id = $request->getData('id');
-        
-        try {
-            // Démarrer la suppression en arrière-plan
-            $this->managers->getManagerOf("Journal")->DeleteOperations($id);
-            
-            $this->setMessageAndRedirect('info', 'La suppression est en cours de traitement. Cela peut prendre quelques instants...');
-        } catch (\Exception $e) {
-            // En cas d'erreur, afficher un message d'erreur
-            $this->setMessageAndRedirect('error', 'Erreur lors de la suppression : ' . $e->getMessage());
-        }
-    }
-
-   
-
-    private function setMessageAndRedirect($type, $text)
-    {
-        $_SESSION['message'] = ['type' => $type, 'text' => $text, 'number' => 2];
-        $this->app()->httpResponse()->redirect('/Journal/index');
+        $this->page->addVar("titles", "Suppresion "); // Titre de la page
+        $this->managers->getManagerOf("Journal")->DeleteOperations($request->getData('id'));
+        $this->app()->httpResponse()->redirect('/Journal/index'); //Retour en arriere
     }
 
     public function executePetitecaisse(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Petite Caisse"); // Titre de la page
-        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
-        foreach ($Agence as $key => $value) {
-            if (!empty($request->postData('jour'))) {
-                $date = $request->postData('jour');
-                $this->page->addVar('day', $request->postData('jour'));
-            } else {
-                $date = date('Y-m-d');
-                $this->page->addVar('day', $date);
-            }
-            $Agence[$key]['SommeDepotRemittance'] = floatval($this->managers->getManagerOf("Journal")->SoldeRemittanceVersementAgence($date, $value['RefAgency']));
-            $Agence[$key]['SommeRetraitRemittance'] = floatval($this->managers->getManagerOf("Journal")->SoldeRemittanceRetraitAgence($date, $value['RefAgency']));
-
-            $Agence[$key]['SoldeRemittanceAgence'] = $Agence[$key]['SommeDepotRemittance'] - $Agence[$key]['SommeRetraitRemittance'];
-            $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], $date);
-            $Agence[$key]['validate'] = $this->managers->getManagerOf("Journal")->CheckDailyClose($value['RefAgency'], $date);
-
-            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], $date);
-
-            // Ensure numeric value for YesterdayReserve
-            $Agence[$key]['YesterdayReserve'] = floatval($reserveData['SoldeCompte']);
-
-            // Additionally, if you want to store the date of the last recorded balance
-            $Agence[$key]['LastDate'] = $this->managers->getManagerOf("Journal")->displayDaysSinceLastDate($reserveData['DateSolde']);
-
-
-
-            $Agence[$key]['SommeDepot'] = floatval($this->managers->getManagerOf("Journal")->SommeDepotAgence($date, $value['RefAgency']));
-            $Agence[$key]['SommeSortie'] = floatval($this->managers->getManagerOf("Journal")->SommeRetraitAgence($date, $value['RefAgency']));
-
-            $Agence[$key]['SommeDepotWithRemittance'] = $Agence[$key]['SommeDepot'] + $Agence[$key]['SommeDepotRemittance'];
-            $Agence[$key]['SommeSortieWithRemittance'] = $Agence[$key]['SommeSortie'] + $Agence[$key]['SommeRetraitRemittance'];
-
-            $Agence[$key]['TotalAppoAgenceSansApproInitial'] = floatval($this->managers->getManagerOf("Journal")->TotalApproAgenceSansApproInitial($date, $value['RefAgency']));
-            $Agence[$key]['TotalSortieAgence'] = floatval($this->managers->getManagerOf("Journal")->TotalSortieAgence($date, $value['RefAgency']));
-
-            $Agence[$key]['SommeTimbre'] = floatval($this->managers->getManagerOf("Journal")->SommeFraisTimbreAgence($date, $value['RefAgency']));
-
-            // Calculate ReserveActuelle using numeric values
-            $Agence[$key]['ReserveActuelle'] = $Agence[$key]['YesterdayReserve'] + $Agence[$key]['SommeDepot'] - $Agence[$key]['SommeSortie'] +
-                $Agence[$key]['TotalAppoAgenceSansApproInitial'] - $Agence[$key]['TotalSortieAgence'] + $Agence[$key]['SoldeRemittanceAgence'] + $Agence[$key]['SommeTimbre'];
-
-
-            $Agence[$key]['DayReserve'] = $Agence[$key]['YesterdayReserve'] - floatval($this->managers->getManagerOf("Journal")->TotalApproAgenceAvecApproInitial($date, $value['RefAgency']));
-
-            $Agence[$key]['SommeDepotProduit'] = $this->managers->getManagerOf("Journal")->SommeDepotProduitAgence($date, $value['RefAgency']);
-            $Agence[$key]['SommeSortieProduit'] = $this->managers->getManagerOf("Journal")->SommeRetraitProduitAgence($date, $value['RefAgency']);
+        
+        // Determiner la date
+        if (!empty($request->postData('jour'))) {
+            $date = $request->postData('jour');
+        } else {
+            $date = date('Y-m-d');
         }
+        $this->page->addVar('day', $date);
+        
+        // OPTIMISATION: Utiliser la methode optimisee qui reduit 240+ requetes a 3 requetes
+        $Agence = $this->managers->getManagerOf("Journal")->GetPetiteCaisseDataOptimized($date, $_SESSION['RefUsers']);
+        
+        // Recuperer les donnees de produits pour le tableau remittance (si necessaire)
+        $ListeProduit = $this->managers->getManagerOf("Pannel")->ListeProduit();
+        $Agenc = $this->managers->getManagerOf("Pannel")->ListeAgence();
+        $tab = [];
+        
+        // Note: Cette partie peut aussi etre optimisee si necessaire
+        foreach ($Agenc as $keyagence => $agency) {
+            foreach ($ListeProduit as $key => $produit) {
+                $tab[$keyagence][$key]['SommeDepotRemittanceProduit'] = $this->managers->getManagerOf("Analytics")->SoldeRemittanceVersementAgenceProduit($date, $agency['RefAgency'], $produit['RefProduit']);
+                $tab[$keyagence][$key]['SommeRetraitRemittanceProduit'] = $this->managers->getManagerOf("Analytics")->SoldeRemittanceRetraitAgenceProduit($date, $agency['RefAgency'], $produit['RefProduit']);
+            }
+        }
+        
+        $this->page->addVar('ListeProduit', $ListeProduit);
+        $this->page->addVar('Agenc', $Agenc);
+        $this->page->addVar('tab', $tab);
         $this->page->addVar('Agence', $Agence);
     }
 
     public function executeCancelFermeture(\Library\HTTPRequest $request)
     {
-        $this->managers->getManagerOf("Journal")->CancelFermeture($request->getData('id'), $request->getData('RefAgency'), $request->getData('day'));
-        $_SESSION['message']['type'] = 'success';
-        $_SESSION['message']['text'] = 'Fermeture annulée avec succès';
-        $_SESSION['message']['number'] = 3;
+        // Restriction: Seul l'admin peut annuler une fermeture
+        if ($_SESSION['statut'] !== 'admin') {
+            $_SESSION['message'] = array(
+                'type' => 'error',
+                'text' => 'Seul l\'administrateur peut annuler une fermeture de caisse.',
+                'number' => 2
+            );
+            $this->app()->httpResponse()->redirect("/Journal/petite_caisse");
+            return;
+        }
+        
+        // Appeler la nouvelle methode avec recalcul cascade
+        $this->managers->getManagerOf("Journal")->CancelFermetureWithCascade($request->getData('id'));
         $this->app()->httpResponse()->redirect("/Journal/petite_caisse"); //Retour en arriere
-    }
-
-
-
-    public function executeNoverified(\Library\HTTPRequest $request)
-    {
-        $pageTitle = "Journal de Caisse des opérations non vérifiées";
-        $this->page->addVar("titles", $pageTitle);
-
-        $pannelManager = $this->managers->getManagerOf("Pannel");
-        $ListeAgence = $pannelManager->ListeAgence();
-        $this->page->addVar("ListeAgence", $ListeAgence);
-
-        $JournalManager = $this->managers->getManagerOf("Journal");
-
-        $Operations = $JournalManager->GetOperationsNonVerifiees();
-
-        $CountOperationsNonVerifiees
-            = $JournalManager->CountOperationsNonVerifiees();
-        $this->page->addVar('CountOperationsNonVerifiees', $CountOperationsNonVerifiees);
-
-        $pannelManager = $this->managers->getManagerOf("Pannel");
-        $permissions = [];
-        $AllPermissions = $pannelManager->UserPermission();
-        foreach ($AllPermissions as $key => $value) {
-            $permissions[] = $value['access'];
-        }
-        $this->page->addVar('permission', $permissions);
-        $this->page->addVar('Operations', $Operations);
-    }
-
-
-    public function executeCanceled(\Library\HTTPRequest $request)
-    {
-        $pageTitle = "Journal de Caissse des opérations annulées";
-        $this->page->addVar("titles", $pageTitle);
-
-        $bielletageManager = $this->managers->getManagerOf("Bielletage");
-        $Chmod = $bielletageManager->CheckOuverture();
-        $this->page->addVar("CheckOuverture", $Chmod);
-
-        $pannelManager = $this->managers->getManagerOf("Pannel");
-        $Agence = $pannelManager->UserAgence();
-        $this->page->addVar('UserAgence', $Agence);
-
-        $Debut = $request->postData('Debut');
-        $Fin = $request->postData('Fin');
-        $Value = $request->postData('RefAgency');
-
-        $this->page->addVar('Debut', $Debut);
-        $this->page->addVar('Fin', $Fin);
-        $this->page->addVar('Value', $Value);
-
-        $ListeAgence = $pannelManager->ListeAgence();
-        $this->page->addVar("ListeAgence", $ListeAgence);
-
-        $journalManager = $this->managers->getManagerOf('Journal');
-        $Operations = [];
-
-        if (!empty($Value) || isset($_GET['value'])) {
-            $Debut = $_GET['debut'] ?? $Debut;
-            $Fin = $_GET['fin'] ?? $Fin;
-            $Value = $_GET['value'] ?? $Value;
-
-            $Operations = $journalManager->GetCanceledOperations($Debut, $Fin, $Value);
-            $this->page->addVar('Debut', $Debut);
-            $this->page->addVar('Fin', $Fin);
-            $this->page->addVar('Value', $Value);
-        } else {
-            $Operations = $journalManager->GetCanceledOperations();
-        }
-        $this->page->addVar('Operations', $Operations);
-
-        $permissions = [];
-        $AllPermissions = $pannelManager->UserPermission();
-        foreach ($AllPermissions as $key => $value) {
-            $permissions[] = $value['access'];
-        }
-        $this->page->addVar('permission', $permissions);
     }
 }

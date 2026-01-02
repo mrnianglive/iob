@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Application PHP + Apache
+  app:
+    build: .
+    container_name: iob_app
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_NAME=iob
+      - DB_USER=root
+      - DB_PASS=root
+    networks:
+      - iob_network
+
+  # Base de données MariaDB (compatible ARM + MySQL)
+  db:
+    image: mariadb:10.6
+    container_name: iob_db
+    restart: unless-stopped
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: iob
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+    command: --sql_mode="" --character-set-server=utf8 --collation-server=utf8_general_ci
+    volumes:
+      - iob_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - iob_network
+
+  # PHPMyAdmin (optionnel - pour gérer la base)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: iob_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
+      - db
+    networks:
+      - iob_network
+
+volumes:
+  iob_db_data:
+
+networks:
+  iob_network:
+    driver: bridge
+

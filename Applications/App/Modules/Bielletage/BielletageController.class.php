@@ -2,143 +2,119 @@
 
 namespace Applications\App\Modules\Bielletage;
 
-use DateTime;
-
 class BielletageController extends \Library\BackController
 {
+
     public function executeIndex(\Library\HTTPRequest $request)
     {
-        $this->page->addVar("titles", "Accueil");
+        $this->page->addVar("titles", "Accueil"); // Titre de la page
 
-        $permissions = array_column($this->managers->getManagerOf('Pannel')->UserPermission(), 'access');
-        $this->page->addVar('permission', $permissions);
+        // Récupération des données pour l'affichage de l'accueil
+        $data = $this->getHomeData();
 
-        $Country = $request->postData('RefPays', '');
-        $Agency = $request->postData('RefAgency', '');
-        $Caisse = $request->postData('RefCaisse', '');
+        // Ajout des données à la vue
+        $this->page->addVar("CheckOuverture", $data['checkOuverture']);
+        $this->page->addVar('Operation', $data['operations']);
+        $this->page->addVar('Agence', $data['agence']);
+        $this->page->addVar('Solde', $data['solde']);
+        $this->page->addVar('SoldeGlobal', $data['soldeGlobal']);
+        $this->page->addVar('SommeVersement', $data['sommeVersement']);
+        $this->page->addVar('SommeRetrait', $data['sommeRetrait']);
+        $this->page->addVar('SommeVersementGlobal', $data['sommeVersementGlobal']);
+        $this->page->addVar('SommeRetraitGlobal', $data['sommeRetraitGlobal']);
+        $this->page->addVar('SommeRemittanceDepot', $data['sommeRemittanceDepot']);
+        $this->page->addVar('SommeRemittanceRetrait', $data['sommeRemittanceRetrait']);
+        $this->page->addVar('SoldeRemittance', $data['soldeRemittance']);
+        $this->page->addVar('links', $data['links']);
+    }
+
+    private function getHomeData()
+    {
+        $today = date('Y-m-d');
         
-        $essentialData = $this->getEssentialHomeData($Country, $Agency, $Caisse);
+        // Récupération des données pour l'affichage de l'accueil
+        $checkOuverture = $this->managers->getManagerOf("Bielletage")->CheckOuverture();
+        $operations = $this->managers->getManagerOf('Bielletage')->GetCaisse();
+        
+        // OPTIMISATION: Utiliser la methode optimisee (1 requete au lieu de 10+ par caisse)
+        $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisseOptimized($today);
 
-        $this->page->addVar('FirstLogin', $this->managers->getManagerOf('User')->FirstLogin());
-        $this->page->addVar('CountOperationsNonVerifiees', $this->managers->getManagerOf('Journal')->CountOperationsNonVerifiees());
-
-        foreach ($essentialData as $key => $value) {
-            $this->page->addVar($key, $value);
-        }
-        $this->page->addVar('loadSumsAsynchronously', true);
-    }
-
-    private function getEssentialHomeData($Country, $Agency, $Caisse)
-    {
-        return [
-            'CheckOuverture' => $this->managers->getManagerOf("Bielletage")->CheckOuverture(),
-            'Operation' => $this->managers->getManagerOf('Bielletage')->GetCaisse(date('Y-m-d'), $Country, $Agency, $Caisse),
-            'Pays' => $this->managers->getManagerOf("Pannel")->ListePays(),
-            'ListeAgence' => $this->managers->getManagerOf("Pannel")->ListeAgence(),
-            'ListeCaisse' => $this->managers->getManagerOf("Pannel")->ListeCaisse(),
-            'links' => $this->managers->getManagerOf('Pannel')->GetLinks(),
-            'Country' => $Country,
-            'Agency' => $Agency,
-            'Caisse' => $Caisse,
-        ];
-    }
-
-    public function executeGetSums(\Library\HTTPRequest $request)
-    {
-        try {
-            $date = date('Y-m-d');
-            $Country = $request->getData('Country', '');
-            $Agency = $request->getData('Agency', '');
-            $Caisse = $request->getData('Caisse', '');
-
-            $usersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse($date, $Country, $Agency, $Caisse);
-            
-            $response = array_merge(
-                $this->calculateSums($usersCaisse),
-                ['agence' => $this->getAgenceData()]
-            );
-
-            $this->JsonResponse($response);
-        } catch (\Exception $e) {
-            $this->JsonResponse(['message' => $e->getMessage()], false, 500);
-        }
-    }
-
-    private function calculateSums($usersCaisse)
-    {
-        $sums = [
-            'SommeVersementGlobal' => 0, 'SommeRetraitGlobal' => 0, 'SoldeGlobal' => 0,
-            'Solde' => 0, 'SommeVersement' => 0, 'SommeRetrait' => 0,
-            'SommeRemittanceDepot' => 0, 'SommeRemittanceRetrait' => 0, 'SoldeRemittance' => 0,
-        ];
-
+        // Calcul des totaux
+        $solde = 0;
+        $soldeGlobal = 0;
+        $sommeVersement = 0;
+        $sommeRetrait = 0;
+        $sommeRemittanceDepot = 0;
+        $sommeRemittanceRetrait = 0;
+        $soldeRemittance = 0;
         foreach ($usersCaisse as $user) {
-            $sums['Solde'] += $user['SoldeDisponible'];
-            $sums['SoldeGlobal'] += $user['SoldeDisponibleGlobal'];
-            $sums['SommeVersement'] += $user['TotalVersement'];
-            $sums['SommeRetrait'] += $user['TotalRetrait'];
-            $sums['SommeRemittanceDepot'] += $user['SommeVersementRemittance'];
-            $sums['SommeRemittanceRetrait'] += $user['SommeRetraitRemittance'];
-            $sums['SoldeRemittance'] += $user['SoldeRemittance'];
+            $solde += $user['SoldeDisponible'];
+            $soldeGlobal += $user['SoldeDisponibleGlobal'];
+            $sommeVersement += $user['TotalVersement'];
+            $sommeRetrait += $user['TotalRetrait'];
+            $sommeRemittanceDepot += $user['SommeVersementRemittance'];
+            $sommeRemittanceRetrait += $user['SommeRetraitRemittance'];
+            $soldeRemittance += $user['SoldeRemittance'];
         }
-
-        $sums['SommeVersementGlobal'] = $sums['SommeVersement'] + $sums['SommeRemittanceDepot'];
-        $sums['SommeRetraitGlobal'] = $sums['SommeRetrait'] + $sums['SommeRemittanceRetrait'];
-        $sums['Date'] = date('Y-m-d');
-
-        return $sums;
-    }
-
-    private function getAgenceData()
-    {
-        $agence = $this->managers->getManagerOf("Pannel")->UserAgence();
-        $currentDate = date('Y-m-d');
+        $sommeVersementGlobal = $sommeVersement + $sommeRemittanceDepot;
+        $sommeRetraitGlobal = $sommeRetrait + $sommeRemittanceRetrait;
         
-        foreach ($agence as &$value) {
-            $value['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialAgence($currentDate, $value['RefAgency']);
-            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], $currentDate);
-            $value['YesterdayReserve'] = $reserveData['SoldeCompte'] ?? null;
-            $value['LastDate'] = $reserveData['DateSolde'] ?? null;
-            $value['CheckAgencyBalance'] = $this->checkAgencyBalanceStatus($value['RefAgency']);
-        }
-        return $agence;
+        // OPTIMISATION: Utiliser la methode optimisee pour les agences
+        $agence = $this->managers->getManagerOf("Journal")->UserAgenceOptimized($today);
+
+        // Récupération des liens pour le menu
+        $links = $this->managers->getManagerOf('Pannel')->GetLinks();
+
+        return array(
+            'checkOuverture' => $checkOuverture,
+            'operations' => $operations,
+            'agence' => $agence,
+            'solde' => $solde,
+            'soldeGlobal' => $soldeGlobal,
+            'sommeVersement' => $sommeVersement,
+            'sommeRetrait' => $sommeRetrait,
+            'sommeVersementGlobal' => $sommeVersementGlobal,
+            'sommeRetraitGlobal' => $sommeRetraitGlobal,
+            'sommeRemittanceDepot' => $sommeRemittanceDepot,
+            'sommeRemittanceRetrait' => $sommeRemittanceRetrait,
+            'soldeRemittance' => $soldeRemittance,
+            'links' => $links
+        );
     }
 
-    private function checkAgencyBalanceStatus($RefAgency)
-    {
-        $currentDate = date('Y-m-d');
-        $result = $this->managers->getManagerOf("Bielletage")->HasOperationsSinceLastBalance($RefAgency, $currentDate);
-        $agencyData = $this->managers->getManagerOf("Pannel")->GetAgency($RefAgency);
 
-        $agencyName = is_array($agencyData) ? $agencyData['NameAgency'] ?? 'Inconnue' : $agencyData;
-
-        $data = [
-            'error_message' => '',
-            'success_message' => ''
-        ];
-
-        if ($result !== false) {
-            $data['error_message'] = "{$agencyName}: {$result}";
-        } else {
-            $data['success_message'] = "Tout est en ordre avec le solde de l'agence '{$agencyName}'.";
-        }
-
-        return $data;
-    }
 
     public function executeStopcaisse(\Library\HTTPRequest $request)
     {
+        // Get manager objects
+        $managerBielletage = $this->managers->getManagerOf('Bielletage');
         $managerArreter = $this->managers->getManagerOf('Arreter');
 
-        $Solde = $this->managers->getManagerOf('Journal')->ArreterSingleCaisse($id = $request->getData('id'), date('Y-m-d'));
+        // Get ID from request
+        $id = $request->getData('id');
 
-        $Date = date('Y-m-d H:i:s');
-        $managerArreter->StopCaisse($id, $Solde, $Date);
+        // Get SommeVersement and SommeRetrait
+        $SommeVersement = $managerBielletage->SommeVersementAgence($id, date('Y-m-d'));
+        $SommeRetrait = $managerBielletage->SommeRetraitAgence($id, date('Y-m-d'));
 
+        // Add variables to page
+        $this->page->addVar('SommeVersement', $SommeVersement);
+        $this->page->addVar('SommeRetrait', $SommeRetrait);
+
+        // Get YesterdaySolde
+        $Yesterday = $managerBielletage->YesterdaySolde($id);
+
+        // Calculate Solde
+        $Solde = $SommeVersement - $SommeRetrait;
+
+        // StopCaisse
+        $managerArreter->StopCaisse($id, $Solde, ('Y-m-d H:i:s'));
+
+        // Redirect
         $this->app()->httpResponse()->redirect('/Arreter/index');
     }
 
-    public function executeBielletagebefore(\Library\HTTPRequest $request)
+    public function executeBielletage(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Nouvelle Opération");
 
@@ -151,137 +127,85 @@ class BielletageController extends \Library\BackController
 
         $TypeRetrait = $manager->TypeRetrait();
         $this->page->addVar("TypeRetrait", $TypeRetrait);
-        $ListePays  = $this->managers->getManagerOf("Pannel")->ListePays();
-        $this->page->addVar("ListePays", $ListePays);
 
         $AllPermissions = $this->managers->getManagerOf('Pannel')->UserPermission();
         $permissions = array_column($AllPermissions, 'access');
         $this->page->addVar('permission', $permissions);
     }
 
+
     public function executeInvoice(\Library\HTTPRequest $request)
     {
-        $this->page->addVar("titles", "Bordereau");
+        $this->page->addVar("titles", "Bordereau"); // Titre de la page
         $this->page->setTemplate('bordereau');
         if ($request->method() == 'POST') {
             $reference  = $request->postData('id');
         } else {
             $reference = $request->getData('id');
         }
-
-        $Invoice  = $this->managers->getManagerOf("Bielletage")->GetInvoice($reference);
-        $this->page->addVar("GetInvoice", $Invoice);
-
+        $Invoice  = $this->managers->getManagerOf("Bielletage")->GetInvoice($reference); //Recuperation de la liste
+        $this->page->addVar("GetInvoice", $Invoice); // Creation de la variable, ajout d'une variable a la vue
         $getResetStatus = $this->managers->getManagerOf("Bielletage")->getResetStatus($reference);
-        $this->page->addVar("getResetStatus", $getResetStatus);
-        $numberToLetter = $this->managers->getManagerOf('Arreter')->NumberToLetter(intval($Invoice['MontantVersement']));
-        $this->page->addVar("numberToLetter", $numberToLetter);
-    }
+        $this->page->addVar("getResetStatus", $getResetStatus); // Creation de la variable, ajout d'une variable a la vue
 
+    }
     public function executeAdd(\Library\HTTPRequest $request)
     {
-        $data = $this->extractRequestData($request);
-        $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($data['RefCaisse']);
-        $data['RefAgency'] = $GetAgencyUsingCaisseID['RefAgency'];
-        $data['Today'] = date('Y-m-d');
+        $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($request->postData('RefCaisse'));
+        $YesterdayReserve = $this->managers->getManagerOf("Journal")->YesterdayReserve($GetAgencyUsingCaisseID['RefAgency'], date('Y-m-d'));
+        $VerifAppro  = $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal(date('Y-m-d'), $GetAgencyUsingCaisseID['RefAgency']);
 
-        if (!empty($data['Antidate'])) {
-            $this->managers->getManagerOf("Bielletage")->Add();
-            return;
-        }
+        if (!empty($request->postData('Antidate'))) {
+            //Antidate Operation
+            $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
+        } else {
 
-        $validationResult = $this->validateTransaction($data);
-        if ($validationResult !== true) {
-            $this->redirectWithMessage($validationResult['type'], $validationResult['message'], $validationResult['number'], $data['RefType']);
-            return;
-        }
+            if ($VerifAppro == 0 && ($request->postData('RefType') == 1 || $request->postData('RefType') == 2)) {
+                $_SESSION['message']['type'] = 'warning';
+                $_SESSION['message']['text'] = 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération';
+                $_SESSION['message']['number'] = 2;
+                $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
+            } else {
 
-        $this->managers->getManagerOf("Bielletage")->Add();
-    }
-
-    private function extractRequestData($request)
-    {
-        return [
-            'RefCaisse' => $request->postData('RefCaisse'),
-            'RefType' => $request->postData('RefType'),
-            'TypeAppro' => $request->postData('TypeAppro'),
-            'MontantVersement' => $request->postData('MontantVersement'),
-            'Antidate' => $request->postData('Antidate'),
-        ];
-    }
-
-    private function validateTransaction($data)
-    {
-        $balanceError = $this->ValidYesterdaySold($data['RefAgency'], $data['Today']);
-        if ($balanceError) {
-            return ['type' => 'error', 'message' => $balanceError, 'number' => 5];
-        }
-
-        if ($this->isRequiredApprovisionnement($data['RefType'], $data['RefAgency'], $data['Today'])) {
-            return ['type' => 'warning', 'message' => 'Vous devez approvisionner la caisse avant de pouvoir effectuer une opération', 'number' => 2];
-        }
-
-        if ($data['RefType'] == 3 && $data['TypeAppro'] == 1 && !$this->isValidMontantVersement($data['MontantVersement'], $data['RefAgency'], $data['Today'])) {
-            return ['type' => 'warning', 'message' => 'Le montant de la transaction est supérieur au solde de la réserve.', 'number' => 2];
-        }
-
-        if (in_array($data['RefType'], [2, 4, 5]) && !$this->isValidSoldeCaisse($data['MontantVersement'], $data['RefCaisse'], $data['Today'])) {
-            return ['type' => 'warning', 'message' => 'Le montant de la transaction est supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou contactez votre administrateur.', 'number' => 2];
-        }
-
-        return true;
-    }
-
-    private function redirectWithMessage($type, $text, $number, $RefType)
-    {
-        $_SESSION['message'] = compact('type', 'text', 'number');
-        $this->app()->httpResponse()->redirect('/bielletage/' . $RefType);
-    }
-
-    private function isRequiredApprovisionnement($RefType, $RefAgency, $Today)
-    {
-        $VerifAppro = $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal($Today, $RefAgency);
-        return ($VerifAppro == 0 && in_array($RefType, [1, 2]));
-    }
-
-    private function isValidMontantVersement($MontantVersement, $RefAgency, $Today)
-    {
-        $YesterdayReserve = $this->managers->getManagerOf("Journal")->YesterdayReserve($RefAgency, $Today);
-        return $MontantVersement <= $YesterdayReserve['SoldeCompte'];
-    }
-
-    private function isValidSoldeCaisse($MontantVersement, $RefCaisse, $Today)
-    {
-        $SoldeActuelleCaisse = $this->managers->getManagerOf("Journal")->SoldeActuelleCaisse($Today, $RefCaisse);
-        return $MontantVersement <= $SoldeActuelleCaisse;
-    }
-
-    private function ValidYesterdaySold($RefAgency, $date)
-    {
-        $YesterdayReserveDate = $this->managers->getManagerOf("Journal")->GetLastBalanceDate($RefAgency);
-
-        $lastBalanceDateTime = new \DateTime($YesterdayReserveDate);
-        $currentDateDateTime = new \DateTime($date);
-
-        if ($lastBalanceDateTime->format('Y-m-d') != $currentDateDateTime->modify('-3 day')->format('Y-m-d')) {
-            $operationsSinceLastBalance = $this->managers->getManagerOf("Journal")->HasOperationsSinceLastBalance($RefAgency);
-
-            if (is_string($operationsSinceLastBalance)) {
-                return $operationsSinceLastBalance;
+                if ($request->postData('RefType') == 3 && $request->postData('TypeAppro') == 1) {
+                    if ($request->postData('MontantVersement') <= $YesterdayReserve) {
+                        $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
+                    } else {
+                        $_SESSION['message']['type'] = 'warning';
+                        $_SESSION['message']['text'] = 'Le Montant de la transaction est supérieur au solde de la reserve.';
+                        $_SESSION['message']['number'] = 2;
+                        $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
+                    }
+                } elseif ($request->postData('RefType') == 4 or $request->postData('RefType') == 2 or $request->postData('RefType') == 5) {
+                    $SoldeActuelleCaisse = $this->managers->getManagerOf("Journal")->SoldeActuelleCaisse(date('Y-m-d'), $request->postData('RefCaisse'));
+                    if ($request->postData('MontantVersement') <= $SoldeActuelleCaisse) {
+                        $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
+                    } else {
+                        $_SESSION['message']['type'] = 'warning';
+                        $_SESSION['message']['text'] = 'Le Montant de la transaction supérieur au solde de la caisse. Veuillez faire un appro de la caisse ou Contactez votre administrateur .';
+                        $_SESSION['message']['number'] = 2;
+                        $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
+                    }
+                } else {
+                    $this->managers->getManagerOf("Bielletage")->Add(); //Recuperation de la liste
+                }
             }
         }
-
-        return null;
     }
 
     public function executeDashboard(\Library\HTTPRequest $request)
     {
-        $this->page->addVar("titles", "Dashboard");
-        $Biellet = $this->managers->getManagerOf('Arreter')->GetDailyBielletage(date('Y-m-d'));
+        $today = date('Y-m-d');
+        $this->page->addVar("titles", "Dashboard"); // Titre de la page
+        
+        $Biellet = $this->managers->getManagerOf('Arreter')->GetDailyBielletage($today);
         $this->page->addVar('Biellet', $Biellet);
         $DailyVersement = $this->managers->getManagerOf('Bielletage')->DailyVersement();
         $this->page->addVar('DailyVersement', $DailyVersement);
-        $UsersCaisse = $this->managers->getManagerOf("Journal")->UserCaisse(date('Y-m-d'));
+        
+        // OPTIMISATION: Utiliser la methode optimisee (1 requete au lieu de 10+ par caisse)
+        $UsersCaisse = $this->managers->getManagerOf("Journal")->UserCaisseOptimized($today);
+        
         $Solde = 0;
         $SommeVersement = 0;
         $SommeRetrait = 0;
@@ -299,13 +223,9 @@ class BielletageController extends \Library\BackController
             $SoldeRemittance += $value['SoldeRemittance'];
         }
 
-        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence();
-        foreach ($Agence as $key => $value) {
-            $Agence[$key]['SommeDepot'] = $this->managers->getManagerOf("Journal")->SoldeInitialCaisse(date('Y-m-d'), $value['RefAgency']);
-            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], date('Y-m-d'));
-            $Agence[$key]['YesterdayReserve'] = $reserveData['SoldeCompte'];
-            $Agence[$key]['LastDate'] = $reserveData['DateSolde'] ?? null;
-        }
+        // OPTIMISATION: Utiliser la methode optimisee pour les agences
+        $Agence = $this->managers->getManagerOf("Journal")->UserAgenceOptimized($today);
+        
         $this->page->addVar('Agence', $Agence);
         $this->page->addVar('Solde', $Solde);
         $this->page->addVar('SoldeGlobal', $SoldeGlobal);
@@ -318,70 +238,77 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('SoldeRemittance', $SoldeRemittance);
     }
 
-    public function executeCalculateSolde(\Library\HTTPRequest $request)
+    /**
+     * Affiche la page de reouverture des caisses
+     * Accessible: ChefCaisse, admin, superadmin, Head
+     */
+    public function executeReouvrircaisse(\Library\HTTPRequest $request)
     {
-        try {
-            $date = date('Y-m-d');
-            $filters = [
-                'Country' => $request->postData('Country'),
-                'Agency' => $request->postData('Agency'),
-                'Caisse' => $request->postData('Caisse')
+        $this->page->addVar("titles", "Réouverture de Caisse");
+        
+        // Verifier les droits
+        $allowedRoles = ['ChefCaisse', 'admin', 'superadmin', 'Head'];
+        if (!in_array($_SESSION['statut'], $allowedRoles)) {
+            $_SESSION['message'] = [
+                'type' => 'error',
+                'text' => 'Vous n\'avez pas accès à cette fonctionnalité.',
+                'number' => 2
             ];
-
-            // Optimisation du calcul des soldes avec une seule requête SQL
-            $query = "SELECT 
-                SUM(CASE WHEN type_operation IN ('depot', 'remittance_depot') THEN montant ELSE 0 END) as total_versement,
-                SUM(CASE WHEN type_operation IN ('retrait', 'remittance_retrait') THEN montant ELSE 0 END) as total_retrait,
-                SUM(CASE 
-                    WHEN type_operation IN ('depot', 'remittance_depot') THEN montant 
-                    WHEN type_operation IN ('retrait', 'remittance_retrait') THEN -montant 
-                    ELSE 0 
-                END) as solde_global
-                FROM operations 
-                WHERE date = :date";
-
-            // Ajouter les filtres conditionnellement
-            $params = ['date' => $date];
-            if (!empty($filters['Country'])) {
-                $query .= " AND ref_pays = :country";
-                $params['country'] = $filters['Country'];
-            }
-            if (!empty($filters['Agency'])) {
-                $query .= " AND ref_agency = :agency";
-                $params['agency'] = $filters['Agency'];
-            }
-            if (!empty($filters['Caisse'])) {
-                $query .= " AND ref_caisse = :caisse";
-                $params['caisse'] = $filters['Caisse'];
-            }
-
-            // Exécuter la requête optimisée
-            $result = $this->managers->getManagerOf('Journal')->executeQuery($query, $params);
-
-            $this->JsonResponse([
-                'sommeVersementGlobal' => (float)$result['total_versement'] ?? 0,
-                'sommeRetraitGlobal' => (float)$result['total_retrait'] ?? 0,
-                'soldeGlobal' => (float)$result['solde_global'] ?? 0
-            ]);
-
-        } catch (\Exception $e) {
-            $this->JsonResponse([
-                'error' => $e->getMessage()
-            ], false, 500);
+            $this->app()->httpResponse()->redirect('/');
+            return;
+        }
+        
+        // Recuperer les caisses fermees aujourd'hui
+        $closedCaisses = $this->managers->getManagerOf('Bielletage')->GetClosedCaissesToday();
+        $this->page->addVar('ClosedCaisses', $closedCaisses);
+        
+        // Historique des reouvertures (pour admin seulement)
+        if ($_SESSION['statut'] == 'admin' || $_SESSION['statut'] == 'superadmin') {
+            $history = $this->managers->getManagerOf('Bielletage')->GetReouvertureHistory(20);
+            $this->page->addVar('ReouvertureHistory', $history);
         }
     }
 
-    private function JsonResponse($data, $success = true, $statusCode = 200)
+    /**
+     * Action de reouverture d'une caisse
+     */
+    public function executeDoReopen(\Library\HTTPRequest $request)
     {
-        if (!headers_sent()) {
-            header('Content-Type: application/json');
-            http_response_code($statusCode);
+        $refCaisse = $request->postData('RefCaisse');
+        $motif = $request->postData('Motif');
+        
+        if (empty($refCaisse)) {
+            $_SESSION['message'] = [
+                'type' => 'error',
+                'text' => 'Caisse non spécifiée.',
+                'number' => 2
+            ];
+            $this->app()->httpResponse()->redirect('/bielletage/reouvrircaisse');
+            return;
         }
         
-        echo json_encode([
-            'success' => $success,
-            'data' => $data
-        ]);
+        $result = $this->managers->getManagerOf('Bielletage')->ReopenCaisse($refCaisse, $motif);
+        
+        $_SESSION['message'] = [
+            'type' => $result['success'] ? 'success' : 'error',
+            'text' => $result['message'],
+            'number' => $result['success'] ? 1 : 2
+        ];
+        
+        $this->app()->httpResponse()->redirect('/bielletage/reouvrircaisse');
+    }
+
+    /**
+     * API pour verifier si une caisse peut etre rouverte (AJAX)
+     */
+    public function executeCheckReopen(\Library\HTTPRequest $request)
+    {
+        header('Content-Type: application/json');
+        
+        $refCaisse = $request->getData('id');
+        $result = $this->managers->getManagerOf('Bielletage')->CanReopenCaisse($refCaisse);
+        
+        echo json_encode($result);
         exit;
     }
 }

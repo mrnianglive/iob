@@ -13,33 +13,40 @@ class AnalyticsController extends \Library\BackController
         $TotalRetrait = 0;
         $Commission = 0;
         $CommissionRetrait = 0;
+        
         if (!empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {
-            $Operations = $this->managers->getManagerOf('Analytics')->GetOperations($request->postData('Debut'), $request->postData('Fin'));
+            $debut = $request->postData('Debut');
+            $fin = $request->postData('Fin');
+            
+            // Recuperer les operations pour affichage
+            $Operations = $this->managers->getManagerOf('Analytics')->GetOperations($debut, $fin);
             $this->page->addVar('Operations', $Operations);
-            $this->page->addVar('Debut', $request->postData('Debut'));
-            $this->page->addVar('Fin', $request->postData('Fin'));
-            foreach ($Operations as $Operation) {
-                if ($Operation['RefType'] == 1) {
-                    $TotalVersement += $Operation['MontantVersement'];
-                    if ($TotalVersement <= (500000000)) {
-                        $Commission = $TotalVersement * (0.002);
-                    } elseif ($TotalVersement >= 500000001 && $TotalVersement <= 1000000000) {
-                        $Commission = $TotalVersement * (0.0018);
-                    } elseif ($TotalVersement >= 1000000001) {
-                        $Commission = $TotalVersement * (0.0010);
-                    }
-                } elseif ($Operation['RefType'] == 2) {
-                    $TotalRetrait += $Operation['MontantVersement'];
-                    if ($TotalRetrait <= (500000000)) {
-                        $CommissionRetrait = $TotalRetrait * (0.0015);
-                    } elseif ($TotalRetrait >= 500000001 && $TotalRetrait <= 1000000000) {
-                        $CommissionRetrait = $TotalRetrait * (0.00075);
-                    } elseif ($TotalRetrait >= 1000000001 && $TotalRetrait <= 2000000000) {
-                        $CommissionRetrait = $TotalRetrait * (0.0005);
-                    }
-                }
+            $this->page->addVar('Debut', $debut);
+            $this->page->addVar('Fin', $fin);
+            
+            // OPTIMISATION: Recuperer les totaux directement en SQL au lieu de boucler
+            $totals = $this->managers->getManagerOf('Analytics')->GetOperationsTotals($debut, $fin);
+            $TotalVersement = floatval($totals['TotalVersement']);
+            $TotalRetrait = floatval($totals['TotalRetrait']);
+            
+            // Calcul des commissions
+            if ($TotalVersement <= 500000000) {
+                $Commission = $TotalVersement * 0.002;
+            } elseif ($TotalVersement <= 1000000000) {
+                $Commission = $TotalVersement * 0.0018;
+            } else {
+                $Commission = $TotalVersement * 0.0010;
+            }
+            
+            if ($TotalRetrait <= 500000000) {
+                $CommissionRetrait = $TotalRetrait * 0.0015;
+            } elseif ($TotalRetrait <= 1000000000) {
+                $CommissionRetrait = $TotalRetrait * 0.00075;
+            } elseif ($TotalRetrait <= 2000000000) {
+                $CommissionRetrait = $TotalRetrait * 0.0005;
             }
         }
+        
         $this->page->addVar('totalVersement', $TotalVersement);
         $this->page->addVar('totalRetrait', $TotalRetrait);
         $this->page->addVar('CommissionDepot', $Commission);
@@ -49,35 +56,17 @@ class AnalyticsController extends \Library\BackController
     public function executeChart(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Chart "); // Titre de la page
-
-
-        $Country = isset($_POST['RefPays']) ? $_POST['RefPays'] : '';
-        $Agency = isset($_POST['RefAgency']) ? $_POST['RefAgency'] : '';
-        $Caisse = isset($_POST['RefCaisse']) ? $_POST['RefCaisse'] : '';
-        $Produit = isset($_POST['RefProduit']) ? $_POST['RefProduit'] : '';
-
-        $Charts = $this->managers->getManagerOf('Analytics')->Chart($Country, $Agency, $Caisse, $Produit);
+        
+        // OPTIMISATION: Chart() fait maintenant 1 requete au lieu de 24
+        $Charts = $this->managers->getManagerOf('Analytics')->Chart();
         $this->page->addVar('Chart', $Charts);
-
-        $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
-        $this->page->addVar("Pays", $Pays);
-        $ListeProduit = $this->managers->getManagerOf("Analytics")->ListeProduit();
-        $this->page->addVar("ListeProduit", $ListeProduit);
-
-        $analytics =  $this->managers->getManagerOf("Analytics");
-        $ListeAgence = $analytics->ListeAgence($Country, $Agency);
-
-        foreach ($ListeAgence as $key => $agence) {
-            $ListeAgence[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartAgenceVersement($agence['RefAgency'], $Produit);
-            $ListeAgence[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartAgenceRetrait($agence['RefAgency'], $Produit);
-        }
-
+        
+        // OPTIMISATION: Une seule requete pour toutes les agences au lieu de 2 par agence
+        $ListeAgence = $this->managers->getManagerOf("Analytics")->ChartAllAgencesOptimized();
         $this->page->addVar("ListeAgence", $ListeAgence);
-        $ListeCaisse  =  $analytics->ListeCaisse($Country, $Agency, $Caisse);
-        foreach ($ListeCaisse as $key => $caisse) {
-            $ListeCaisse[$key]['SommeVersement'] = $this->managers->getManagerOf("Analytics")->ChartCaisseVersement($caisse['RefCaisse'], $Produit);
-            $ListeCaisse[$key]['SommeRetrait'] = $this->managers->getManagerOf("Analytics")->ChartCaisseRetrait($caisse['RefCaisse'], $Produit);
-        }
+        
+        // OPTIMISATION: Une seule requete pour toutes les caisses au lieu de 2 par caisse
+        $ListeCaisse = $this->managers->getManagerOf("Analytics")->ChartAllCaissesOptimized();
         $this->page->addVar("ListeCaisse", $ListeCaisse);
     }
 
@@ -86,43 +75,35 @@ class AnalyticsController extends \Library\BackController
         $this->page->addVar("titles", "Analyse des performances"); // Titre de la page
         $ListeBanque  = $this->managers->getManagerOf("Pannel")->ListeBanque();
         $this->page->addVar("ListeBanque", $ListeBanque);
-        $ListePays = $this->managers->getManagerOf("Pannel")->ListePays();
-        $this->page->addVar("ListePays", $ListePays);
-        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
-        $Chmod  = $this->managers->getManagerOf("Bielletage")->CheckOuverture(); //Recuperation de la liste
-        $this->page->addVar("CheckOuverture", $Chmod); // Creation de la variable, ajout d'une variable a la vue
-        foreach ($Agence as $key => $value) {
+        
+        $Chmod  = $this->managers->getManagerOf("Bielletage")->CheckOuverture();
+        $this->page->addVar("CheckOuverture", $Chmod);
 
-            if (!empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {
-                $debut = $request->postData('Debut');
-                $fin = $request->postData('Fin');
-
-                $this->page->addVar('debut', $request->postData('Debut'));
-                $this->page->addVar('fin', $request->postData('Fin'));
-            } else {
-                $debut = date('Y-m-d');
-                $fin = date('Y-m-d');
-                $this->page->addVar('debut', $debut);
-                $this->page->addVar('fin', $fin);
-            }
-            $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgencePerformance($value['RefAgency'], $debut, $fin);
-            $Agence[$key]['NbreOP'] = $this->managers->getManagerOf("Journal")->NbreOperationAgencePerformance($value['RefAgency'], $debut, $fin);
-            $Agence[$key]['NbreOPCanceled'] = $this->managers->getManagerOf("Journal")->NbreOperationAgencePerformanceCanceled($value['RefAgency'], $debut, $fin);
+        // Determiner les dates
+        if (!empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {
+            $debut = $request->postData('Debut');
+            $fin = $request->postData('Fin');
+        } else {
+            $debut = date('Y-m-d');
+            $fin = date('Y-m-d');
         }
+        $this->page->addVar('debut', $debut);
+        $this->page->addVar('fin', $fin);
+        
+        // OPTIMISATION: Une seule methode qui recupere tout au lieu de boucles
+        $Agence = $this->managers->getManagerOf("Journal")->AgencePerformanceOptimized(
+            $_SESSION['RefUsers'], 
+            $debut, 
+            $fin
+        );
         $this->page->addVar('Agence', $Agence);
 
-        $DailyValidate = $this->managers->getManagerOf('Analytics')->CountDayValidate();
-        $this->page->addVar('DailyValidate', $DailyValidate);
-        $MonthValidate = $this->managers->getManagerOf('Analytics')->CountMonthValidate();
-        $this->page->addVar('MonthValidate', $MonthValidate);
-
-        $MonthOperations = $this->managers->getManagerOf('Analytics')->CountMonthOperations();
-        $this->page->addVar('MonthOperations', $MonthOperations);
-
-        $CountWeekOperations = $this->managers->getManagerOf('Analytics')->CountWeekOperations();
-        $this->page->addVar('CountWeekOperations', $CountWeekOperations);
-
-        $CountWeekValidate = $this->managers->getManagerOf('Analytics')->CountWeekValidate();
-        $this->page->addVar('CountWeekValidate', $CountWeekValidate);
+        // OPTIMISATION: Une seule requete pour tous les compteurs au lieu de 5
+        $counters = $this->managers->getManagerOf('Analytics')->GetAllCountersOptimized();
+        $this->page->addVar('DailyValidate', $counters['DailyValidate'] ?? 0);
+        $this->page->addVar('MonthValidate', $counters['MonthValidate'] ?? 0);
+        $this->page->addVar('MonthOperations', $counters['MonthOperations'] ?? 0);
+        $this->page->addVar('CountWeekOperations', $counters['CountWeekOperations'] ?? 0);
+        $this->page->addVar('CountWeekValidate', $counters['CountWeekValidate'] ?? 0);
     }
 }

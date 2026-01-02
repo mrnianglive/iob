@@ -239,6 +239,7 @@ $currentType = $types[$typeId] ?? $types[1];
 
 <form method="POST" action='/bielletage/add' id="operationForm">
     <input type="hidden" name="RefType" value="<?= $typeId ?>">
+    <?= $page->getCsrfInput(); ?>
 
     <div class="row">
         <!-- Colonne Billetage -->

@@ -627,14 +627,16 @@ class JournalManagerPDO extends JournalManager
             preg_match_all('!\d+!', $string, $matches);
             $id = $matches[0][0];
             if (intval($id) > 0) {
-                $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . $id . '%\'');
+                $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE :search');
+                $query->bindValue(':search', '%' . $id . '%', \PDO::PARAM_STR);
                 $query->execute();
                 $data = $query->fetch();
                 return $data;
             }
         } else {
             $id = $Ref;
-            $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE \'%' . $id . '%\'');
+            $query = $this->dao->prepare('SELECT * FROM mytable WHERE Description LIKE :search');
+            $query->bindValue(':search', '%' . $id . '%', \PDO::PARAM_STR);
             $query->execute();
             $data = $query->fetch();
             return $data;

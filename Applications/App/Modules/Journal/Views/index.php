@@ -132,8 +132,9 @@
                   <h5 class="modal-title" id="exampleModalLabel">Confirmation de l'opération <span id="modal-id"></span>
                   </h5>
               </div>
-              <form role="form" method="post" action="/Journal/validate">
-                  <div class="modal-body">
+               <form role="form" method="post" action="/Journal/validate">
+                   <?= $page->getCsrfInput(); ?>
+                   <div class="modal-body">
                       <div class="modal-body">
                           <input type="hidden" class="form-control" id="modal-operation-id" name="RefOperations"
                               value="">

@@ -60,6 +60,7 @@
                         aria-hidden="true">&times;</span></button>
             </div>
             <form role="form" method="post" action="">
+                <?= $page->getCsrfInput(); ?>
                 <div class="modal-body">
 
                     <div class="form-group">

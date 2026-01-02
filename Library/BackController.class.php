@@ -17,11 +17,21 @@
 			$this->setView($action);
 		}
 		public function execute() {
+			$this->validateCSRF();
 			$method = 'execute'.ucfirst($this->action);
 			if (!is_callable(array($this,$method))) {
 				throw new \RuntimeException("L'action $this->action n'est pas définie sur ce module...");
 			}
 			$this->$method($this->app->httpRequest());
+		}
+		protected function validateCSRF() {
+			$request = $this->app->httpRequest();
+			if ($request->method() === 'POST') {
+				$token = $request->postData('csrf_token');
+				if (!$token || !CSRF::validate($token)) {
+					throw new \RuntimeException("Invalid CSRF token");
+				}
+			}
 		}
 		public function page() {
 			return $this->page;

@@ -43,4 +43,12 @@ class Page extends ApplicationComponent
 	{
 		$this->template = $template;
 	}
+	public function getCsrfToken()
+	{
+		return CSRF::getToken();
+	}
+	public function getCsrfInput()
+	{
+		return CSRF::getInput();
+	}
 }

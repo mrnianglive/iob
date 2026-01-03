@@ -99,11 +99,28 @@ class ConnexionController extends \Library\BackController
     {
         $this->page->addVar('titles', 'Logout');
         $this->app()->user()->setAuthenticated(false); //deconnexion de user
-        session_destroy(); //on détruit la session
-        $_SESSION = array(); //on vide le tableau de session
+        
+        // Vider la session avant de la détruire
+        $_SESSION = array();
+        
+        // Supprimer le cookie de session si utilisé
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
+        
+        // Détruire la session
+        session_destroy();
+        
+        // Démarrer une nouvelle session pour le message flash
+        session_start();
         $_SESSION['message']['type'] = 'success';
         $_SESSION['message']['text'] = 'Déconnexion réussie !';
         $_SESSION['message']['number'] = 2;
+        
         $this->app()->httpResponse()->redirect('/');
     }
 

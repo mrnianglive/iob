@@ -1,5 +1,9 @@
+<!-- Chart.js chargé uniquement sur cette page -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+
 <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin') { ?>
 <form method="POST" id="formulaire">
+    <?= $page->getCsrfInput(); ?>
     <div class="input-group">
         <div class="">
             <select class="form-control" name="RefPays" tabindex="1" id="RefPays">

@@ -164,4 +164,49 @@ class PannelController extends \Library\BackController
 
         }
     }
+
+    public function executeFondsRoulement(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Gestion Fonds de Roulement"); // Titre de la page
+        
+        $pannelManager = $this->managers->getManagerOf("Pannel");
+        $ListeAgence = $pannelManager->ListeAgence();
+        
+        // Recuperer les informations de fonds de roulement pour chaque agence
+        foreach ($ListeAgence as $key => $agence) {
+            $ListeAgence[$key]['HistoriqueFonds'] = $pannelManager->GetHistoriqueFondsRoulement($agence['RefAgency']);
+            $ListeAgence[$key]['DerniereInitialisation'] = $pannelManager->GetDerniereInitialisation($agence['RefAgency']);
+        }
+        
+        $this->page->addVar("ListeAgence", $ListeAgence);
+
+        if ($request->method() == 'POST') {
+            if (!empty($request->postData('action'))) {
+                $action = $request->postData('action');
+                
+                if ($action == 'update_plafond') {
+                    // Mettre a jour le plafond
+                    $pannelManager->UpdatePlafondFondsRoulement(
+                        $request->postData('RefAgency'),
+                        $request->postData('PlafondFondsRoulement')
+                    );
+                    $_SESSION['message']['type'] = 'success';
+                    $_SESSION['message']['text'] = 'Plafond mis à jour avec succès !';
+                    $_SESSION['message']['number'] = 2;
+                } elseif ($action == 'initialiser') {
+                    // Initialiser les soldes pour nouvelle annee
+                    $pannelManager->InitialiserFondsRoulement(
+                        $request->postData('RefAgency'),
+                        $request->postData('SoldeEspeces'),
+                        $request->postData('SoldeOmni'),
+                        $request->postData('Commentaire')
+                    );
+                    $_SESSION['message']['type'] = 'success';
+                    $_SESSION['message']['text'] = 'Initialisation effectuée avec succès !';
+                    $_SESSION['message']['number'] = 2;
+                }
+            }
+            $this->app()->httpResponse()->redirect('/Pannel/fonds_roulement');
+        }
+    }
 }

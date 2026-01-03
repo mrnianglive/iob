@@ -1,3 +1,6 @@
+<!-- Chart.js chargé uniquement sur cette page -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+
 <style>
 .client-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

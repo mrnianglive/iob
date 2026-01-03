@@ -1,6 +1,7 @@
   <div class="row">
       <div class="col-md-12">
           <form method="POST" id="formulaire">
+              <?= $page->getCsrfInput(); ?>
               <div class="input-group">
                   <div class="col-md-3">Journée du:
                       <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control">
@@ -121,6 +122,12 @@
                               <th class="border-top-0">Frais Timbre</th>
                               <?php } ?>
                               <th class="border-top-0">Solde Agence</th>
+                              <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
+                              <th class="border-top-0">Fonds Roulement</th>
+                              <th class="border-top-0">Plafond</th>
+                              <th class="border-top-0">Excédent</th>
+                              <th class="border-top-0">En Attente</th>
+                              <?php } ?>
                               <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
                               <th class="border-top-0">Action</th>
                               <?php } ?>
@@ -148,6 +155,23 @@
                               <td><?= number_format($value['SommeTimbre'], 0, '.', '.'); ?></td>
                               <?php } ?>
                               <td><?= number_format($value['ReserveActuelle'], 0, '.', '.'); ?></td>
+                              <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
+                              <td><?= number_format($value['TotalFondsRoulement'] ?? 0, 0, '.', '.'); ?></td>
+                              <td><?= number_format($value['PlafondFondsRoulement'] ?? 0, 0, '.', '.'); ?></td>
+                              <td style="<?= ($value['Excedent'] ?? 0) > 0 ? 'background-color: #ffcccc; font-weight: bold;' : ''; ?>">
+                                  <?= number_format($value['Excedent'] ?? 0, 0, '.', '.'); ?>
+                              </td>
+                              <td>
+                                  <?php if (($value['CountOperationsEnAttente'] ?? 0) > 0) { ?>
+                                      <a href="/Journal/noverified" class="btn btn-warning btn-sm" title="Voir les opérations en attente">
+                                          <?= $value['CountOperationsEnAttente']; ?> ops
+                                          <br><small><?= number_format($value['MontantOperationsEnAttente'] ?? 0, 0, '.', '.'); ?></small>
+                                      </a>
+                                  <?php } else { ?>
+                                      <span class="text-success">0</span>
+                                  <?php } ?>
+                              </td>
+                              <?php } ?>
                               <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Caissier') { ?>
                               <td> <?php if (!empty($value['validate'])) { ?><a
                                       <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin') { ?>
@@ -156,6 +180,7 @@
                                       title="Cliquez ici pour reouvrir l'agence"><i class="fa  fa-lock"></i></a>
                                   <?php } else { ?>
                                   <form method="POST" action="/Arreter/reserve">
+                                      <?= $page->getCsrfInput(); ?>
                                       <input type="hidden" value="<?= $value['ReserveActuelle']; ?>"
                                           name="ReserveActuelle">
                                       <input type="hidden" value="<?= $day; ?>" name="daycloture">

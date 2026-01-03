@@ -1,8 +1,12 @@
+<!-- Chart.js chargé uniquement sur cette page -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+
 <div class="row">
     <div class="col-md-12">
 
         <div class="white-box">
             <form method="POST" id="formulaire">
+                <?= $page->getCsrfInput(); ?>
                 <div class="input-group">
 
                     <div class="col-md-3">Du
@@ -91,9 +95,9 @@
                                         foreach ($value['Afficher'] as $afficher) {
                                             $sommeVersement += $afficher['TotalVersement'];
                                         ?>
-                                    <li><?= number_format($afficher['TotalVersement'], 0, '.', ','); ?></li>
+                                    <li><?= number_format($afficher['TotalVersement'] ?? 0, 0, '.', ','); ?></li>
                                     <?php } ?>
-                                    <li> Total : <?= number_format($sommeVersement, 0, '.', ','); ?></li>
+                                    <li> Total : <?= number_format($sommeVersement ?? 0, 0, '.', ','); ?></li>
                                 </ul>
                             </td>
                             <td>
@@ -103,9 +107,9 @@
                                         foreach ($value['Afficher'] as $afficher) {
                                             $sommeRetrait += $afficher['TotalRetrait'];
                                         ?>
-                                    <li><?= number_format($afficher['TotalRetrait'], 0, '.', ','); ?></li>
+                                    <li><?= number_format($afficher['TotalRetrait'] ?? 0, 0, '.', ','); ?></li>
                                     <?php } ?>
-                                    <li> Total :<?= number_format($sommeRetrait, 0, '.', ','); ?></li>
+                                    <li> Total :<?= number_format($sommeRetrait ?? 0, 0, '.', ','); ?></li>
                                 </ul>
                             </td>
                             <td>

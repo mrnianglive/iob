@@ -1,5 +1,6 @@
 <?php if ($_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'admin') { ?>
 <form method="POST" id="formulaire">
+    <?= $page->getCsrfInput(); ?>
     <div class="input-group">
         <div class="">
             <select class="form-control" name="RefPays" tabindex="1" id="RefPays">
@@ -87,7 +88,8 @@ function formatNumber(number) {
         <div class="white-box analytics-info">
             <h3 class="box-title">DEPOT</h3>
             <ul class="list-inline two-part d-flex align-items-center mb-0">
-                <li class="ml-auto"><span id="SommeVersementGlobal" class="counter text-danger">Chargement...</span>
+                <li class="ml-auto"><span id="SommeVersementGlobal"
+                        class="counter text-danger"><?= number_format($SommeVersementGlobal ?? 0, 0, '.', '.'); ?></span>
                 </li>
             </ul>
             <span>CAISSE</span>
@@ -97,7 +99,8 @@ function formatNumber(number) {
         <div class="white-box analytics-info">
             <h3 class="box-title">RETRAIT</h3>
             <ul class="list-inline two-part d-flex align-items-center mb-0">
-                <li class="ml-auto"><span id="SommeRetraitGlobal" class="counter text-purple">Chargement...</span>
+                <li class="ml-auto"><span id="SommeRetraitGlobal"
+                        class="counter text-purple"><?= number_format($SommeRetraitGlobal ?? 0, 0, '.', '.'); ?></span>
                 </li>
             </ul>
             <span>CAISSE</span>
@@ -107,9 +110,8 @@ function formatNumber(number) {
         <div class="white-box analytics-info">
             <h5 class="box-title">SOLDE ESPECES</h5>
             <ul class="list-inline two-part d-flex align-items-center mb-0">
-                <li class="ml-auto"><span id="SoldeGlobal" class="counter text-info">
-                        Chargement...
-                    </span>
+                <li class="ml-auto"><span id="SoldeGlobal"
+                        class="counter text-info"><?= number_format($SoldeGlobal ?? 0, 0, '.', '.'); ?></span>
                 </li>
             </ul>
             <span>CAISSE</span>

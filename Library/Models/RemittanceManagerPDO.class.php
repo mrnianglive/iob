@@ -55,7 +55,20 @@ class RemittanceManagerPDO extends RemittanceManager
 
             $stmt->execute();
             $id = $this->dao->lastInsertId();
-
+ 
+            // Mettre à jour les stats temps réel après l'insertion
+            try {
+                $statsManager = new StatsManagerPDO($this->dao);
+                $statsManager->incrementRemittanceStats(
+                    $refCaisse,
+                    $refProduit,
+                    $refType,
+                    $montantTransaction
+                );
+            } catch (\Exception $e) {
+                error_log("Erreur Stats Remittance: " . $e->getMessage());
+            }
+ 
             if (!empty($antidate)) {
                 $timestamp = $antidate . ' ' . date('H:i:s');
                 $this->updateTransactionTimestamp($id, $timestamp);

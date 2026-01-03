@@ -1,55 +1,96 @@
 <style>
-    .page-header {
-        background: linear-gradient(135deg, #dc3545 0%, #721c24 100%);
-        color: white;
-        border-radius: 15px;
-        padding: 25px;
-        margin-bottom: 25px;
-    }
-    .info-card {
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-        margin-bottom: 20px;
-    }
-    .info-card .card-header {
-        background: #f8f9fa;
-        border-bottom: 1px solid #e9ecef;
-        font-weight: 600;
-        padding: 15px 20px;
-    }
-    .stat-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 20px;
-        border-bottom: 1px solid #f1f1f1;
-    }
-    .stat-row:last-child { border-bottom: none; }
-    .severity-badge {
-        padding: 6px 15px;
-        border-radius: 20px;
-        font-size: 0.9em;
-        font-weight: 700;
-    }
-    .severity-CRITIQUE { background: #dc3545; color: #fff; }
-    .severity-HAUTE { background: #ffc107; color: #000; }
-    .severity-MOYENNE { background: #17a2b8; color: #fff; }
-    .severity-INFO { background: #6c757d; color: #fff; }
-    .statut-badge {
-        padding: 6px 15px;
-        border-radius: 20px;
-        font-size: 0.9em;
-    }
-    .statut-NOUVELLE { background: #f8d7da; color: #721c24; }
-    .statut-EN_COURS { background: #fff3cd; color: #856404; }
-    .statut-TRAITEE { background: #d4edda; color: #155724; }
-    .statut-DECLAREE_CENTIF { background: #cce5ff; color: #004085; }
-    .action-card {
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-        padding: 25px;
-    }
+.page-header {
+    background: linear-gradient(135deg, #dc3545 0%, #721c24 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.info-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.info-card .card-header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+    padding: 15px 20px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.stat-row:last-child {
+    border-bottom: none;
+}
+
+.severity-badge {
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 700;
+}
+
+.severity-CRITIQUE {
+    background: #dc3545;
+    color: #fff;
+}
+
+.severity-HAUTE {
+    background: #ffc107;
+    color: #000;
+}
+
+.severity-MOYENNE {
+    background: #17a2b8;
+    color: #fff;
+}
+
+.severity-INFO {
+    background: #6c757d;
+    color: #fff;
+}
+
+.statut-badge {
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+}
+
+.statut-NOUVELLE {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.statut-EN_COURS {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.statut-TRAITEE {
+    background: #d4edda;
+    color: #155724;
+}
+
+.statut-DECLAREE_CENTIF {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.action-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+}
 </style>
 
 <div class="page-header">
@@ -135,7 +176,8 @@
             </div>
             <div class="card-body">
                 <p class="mb-1"><strong>Par:</strong> <?= htmlspecialchars($Alerte['TraitePar']) ?></p>
-                <p class="mb-1"><strong>Date:</strong> <?= date('d/m/Y H:i', strtotime($Alerte['DateTraitement'])) ?></p>
+                <p class="mb-1"><strong>Date:</strong> <?= date('d/m/Y H:i', strtotime($Alerte['DateTraitement'])) ?>
+                </p>
                 <hr>
                 <p class="mb-0"><?= nl2br(htmlspecialchars($Alerte['ActionPrise'])) ?></p>
             </div>
@@ -161,13 +203,15 @@
                 </div>
                 <div class="stat-row">
                     <span>Niveau de risque</span>
-                    <span class="text-<?= $Client['NiveauRisque'] == 'ELEVE' ? 'danger' : ($Client['NiveauRisque'] == 'MOYEN' ? 'warning' : 'success') ?>">
+                    <span
+                        class="text-<?= $Client['NiveauRisque'] == 'ELEVE' ? 'danger' : ($Client['NiveauRisque'] == 'MOYEN' ? 'warning' : 'success') ?>">
                         <strong><?= $Client['NiveauRisque'] ?></strong>
                     </span>
                 </div>
                 <div class="stat-row">
                     <span>Volume total</span>
-                    <strong><?= number_format($Client['VolumeTotalDepot'] + $Client['VolumeTotalRetrait'], 0, ',', ' ') ?> F</strong>
+                    <strong><?= number_format($Client['VolumeTotalDepot'] + $Client['VolumeTotalRetrait'], 0, ',', ' ') ?>
+                        F</strong>
                 </div>
                 <div class="stat-row">
                     <span>Nombre d'opérations</span>
@@ -221,6 +265,7 @@
         <div class="action-card">
             <h5><i class="fas fa-gavel mr-2"></i>Traiter cette alerte</h5>
             <form action="/lcb/traiter/<?= $Alerte['RefAlerteLCB'] ?>" method="POST">
+                <?= $page->getCsrfInput(); ?>
                 <div class="form-group">
                     <label>Nouveau statut</label>
                     <select name="statut" class="form-control" required>
@@ -234,7 +279,7 @@
                 <div class="form-group">
                     <label>Commentaire / Action prise</label>
                     <textarea name="commentaire" class="form-control" rows="4" required
-                              placeholder="Décrivez les actions entreprises..."></textarea>
+                        placeholder="Décrivez les actions entreprises..."></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">
                     <i class="fas fa-check mr-2"></i>Valider le traitement
@@ -244,4 +289,3 @@
         <?php endif; ?>
     </div>
 </div>
-

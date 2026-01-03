@@ -7,8 +7,13 @@ class AnalyticsController extends \Library\BackController
     public function executeIndex(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Analytics"); // Titre de la page
-        $this->page->addVar('Debut', $request->postData('Debut'));
-        $this->page->addVar('Fin', $request->postData('Fin'));
+        
+        // Valeurs par défaut pour les dates
+        $debut = $request->postData('Debut') ?? date('Y-m-01');
+        $fin = $request->postData('Fin') ?? date('Y-m-d');
+        $this->page->addVar('Debut', $debut);
+        $this->page->addVar('Fin', $fin);
+        
         $TotalVersement = 0;
         $TotalRetrait = 0;
         $Commission = 0;
@@ -56,6 +61,13 @@ class AnalyticsController extends \Library\BackController
     public function executeChart(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Chart "); // Titre de la page
+        
+        // Charger les listes pour les filtres
+        $Pays = $this->managers->getManagerOf("Pannel")->ListePays();
+        $this->page->addVar("Pays", $Pays);
+        
+        $ListeProduit = $this->managers->getManagerOf("Pannel")->ListeProduit();
+        $this->page->addVar("ListeProduit", $ListeProduit);
         
         // OPTIMISATION: Chart() fait maintenant 1 requete au lieu de 24
         $Charts = $this->managers->getManagerOf('Analytics')->Chart();

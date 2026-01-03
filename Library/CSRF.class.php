@@ -34,8 +34,12 @@ class CSRF
 
         $valid = hash_equals($_SESSION[self::$tokenName], $token);
         
+        // Ne pas supprimer le token après validation réussie
+        // Cela permet de soumettre plusieurs formulaires sans recharger la page
+        // Le token sera régénéré à l'expiration ou à la déconnexion
         if ($valid) {
-            unset($_SESSION[self::$tokenName], $_SESSION[self::$tokenName . '_time']);
+            // Rafraîchir le timestamp pour prolonger la validité
+            $_SESSION[self::$tokenName . '_time'] = time();
         }
 
         return $valid;

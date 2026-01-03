@@ -1,9 +1,30 @@
+<?php 
+// Générer dynamiquement les années disponibles (de 2021 à l'année courante + 1)
+$anneeDebut = 2021;
+$anneeFin = (int)date('Y') + 1;
+$anneeCourante = $Annee ?? date('Y');
+?>
 <div class="row">
     <div class="col-md-12">
 
         <div class="white-box">
 
-            <h3 class="box-title">Appro Caisse</h3>
+            <h3 class="box-title">Appro Caisse - <?= $anneeCourante ?></h3>
+            <div class="form-inline">
+                <div class="form-group">
+                    <label for="Annee">Année:</label>
+                    <select name="Annee" id="Annee" class="form-control"
+                        onchange="window.location.href='/Caisse/ApproCaisse?Annee='+this.value">
+                        <?php for ($y = $anneeFin; $y >= $anneeDebut; $y--): ?>
+                        <option value="<?= $y ?>" <?= $anneeCourante == $y ? 'selected' : '' ?>><?= $y ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+                <span class="text-muted ml-3" style="margin-left: 15px;">
+                    <i class="fa fa-info-circle"></i> Affichage limité aux 500 dernières opérations
+                </span>
+            </div>
+            <br />
             <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'ChefCaisse' or $_SESSION['statut'] == 'Head' or $_SESSION['statut'] == 'superadmin') { ?>
             <a href="/bielletage/3" class="btn btn-primary" data-toggle="tooltip"
                 title="Cliquez ici pour voir Initier "><i class="fa fa-plus"> Initier</i></a> <br /> <br />

@@ -92,8 +92,6 @@
                               </select>
                           </div>
                           <input type="hidden" class="form-control" id="modal-ref-agency" name="RefAgency" readonly>
-                          <input type="hidden" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control">
-                          <input type="hidden" id="Fin" name="Fin" value="<?= $Fin; ?>" class="form-control">
                           <input type="hidden" id="modal-ref-produit" name="RefProduit" class="form-control" readonly>
                       </div>
                   </div>

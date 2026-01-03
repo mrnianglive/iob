@@ -1,6 +1,7 @@
   <div class="row">
       <div class="col-md-12">
           <form method="POST" action="/Analytics/index" id="formulaire">
+              <?= $page->getCsrfInput(); ?>
               <div class="input-group">
                   <div class="col-md-2">Du
                       <input type="date" id="Debut" name="Debut" value="<?= $Debut; ?>" class="form-control ">
@@ -10,21 +11,21 @@
                           onchange="document.getElementById('formulaire').submit();">
                   </div>
                   <div class="col-md-2">Total Depot
-                      <input type="text" value="<?= number_format($totalVersement, 0, '.', ','); ?>"
+                      <input type="text" value="<?= number_format($totalVersement ?? 0, 0, '.', ','); ?>"
                           class="form-control" readonly>
                   </div>
 
                   <div class="col-md-2">Comission Depot
-                      <input type="text" value="<?= number_format($CommissionDepot, 0, '.', ',');   ?>"
+                      <input type="text" value="<?= number_format($CommissionDepot ?? 0, 0, '.', ',');   ?>"
                           class="form-control" readonly>
                   </div>
 
                   <div class="col-md-2">Total Retrait
-                      <input type="text" value="<?= number_format($totalRetrait, 0, '.', ',');   ?>"
+                      <input type="text" value="<?= number_format($totalRetrait ?? 0, 0, '.', ',');   ?>"
                           class="form-control" readonly>
                   </div>
                   <div class="col-md-2">Commision Retrait
-                      <input type="text" value="<?= number_format($CommissionRetrait, 0, '.', ',');   ?>"
+                      <input type="text" value="<?= number_format($CommissionRetrait ?? 0, 0, '.', ',');   ?>"
                           class="form-control" readonly>
                   </div>
               </div>

@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         <form class="form-inline" method="POST">
+            <?= $page->getCsrfInput(); ?>
             <div class="form-group  mb-1">
                 <label for="staticEmail2" class="sr-only">Agence</label>
                 <select class="form-control" name="RefAgency" tabindex="1" required="">
@@ -25,13 +26,13 @@
 
             <div class="form-group mx-sm-3 mb-1">
                 <label for="inputPassword2" class="sr-only">Total Depot</label>
-                <input type="text" value="<?= number_format($SoldeRemittanceVersement, 0, '.', '.');
+                <input type="text" value="<?= number_format($SoldeRemittanceVersement ?? 0, 0, '.', '.');
                                             ?>" class="form-control" readonly>
             </div>
             <div class="form-group mx-sm-3 mb-1">
                 <label for="inputPassword2" class="sr-only">Total Retrait</label>
 
-                <input type="text" value="<?= number_format($SoldeRemittanceRetrait, 0, '.', '.');
+                <input type="text" value="<?= number_format($SoldeRemittanceRetrait ?? 0, 0, '.', '.');
                                             ?>" class="form-control" readonly>
             </div>
 

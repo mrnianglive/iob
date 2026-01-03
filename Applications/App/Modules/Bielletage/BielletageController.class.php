@@ -26,6 +26,14 @@ class BielletageController extends \Library\BackController
         $this->page->addVar('SommeRemittanceRetrait', $data['sommeRemittanceRetrait']);
         $this->page->addVar('SoldeRemittance', $data['soldeRemittance']);
         $this->page->addVar('links', $data['links']);
+        
+        // Variables manquantes pour la vue
+        $FirstLogin = $this->managers->getManagerOf('User')->FirstLogin();
+        $this->page->addVar('FirstLogin', $FirstLogin);
+        
+        $AllPermissions = $this->managers->getManagerOf('Pannel')->UserPermission();
+        $permissions = is_array($AllPermissions) ? array_column($AllPermissions, 'access') : [];
+        $this->page->addVar('permission', $permissions);
     }
 
     private function getHomeData()
@@ -148,12 +156,35 @@ class BielletageController extends \Library\BackController
         $getResetStatus = $this->managers->getManagerOf("Bielletage")->getResetStatus($reference);
         $this->page->addVar("getResetStatus", $getResetStatus); // Creation de la variable, ajout d'une variable a la vue
 
+        // Conversion du montant en lettres
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/config/nombre_en_lettre.php';
+        $montant = $Invoice['MontantVersement'] ?? 0;
+        $numberToLetter = NumberToLetter($montant);
+        $this->page->addVar("numberToLetter", $numberToLetter);
     }
     public function executeAdd(\Library\HTTPRequest $request)
     {
         $GetAgencyUsingCaisseID = $this->managers->getManagerOf("Pannel")->GetAgencyUsingCaisseID($request->postData('RefCaisse'));
-        $YesterdayReserve = $this->managers->getManagerOf("Journal")->YesterdayReserve($GetAgencyUsingCaisseID['RefAgency'], date('Y-m-d'));
-        $VerifAppro  = $this->managers->getManagerOf("Journal")->TotalApproAgenceGlobal(date('Y-m-d'), $GetAgencyUsingCaisseID['RefAgency']);
+        $refAgency = $GetAgencyUsingCaisseID['RefAgency'];
+        $journalManager = $this->managers->getManagerOf("Journal");
+        
+        // Verifier que la veille est cloturee (sauf pour admins et operations antidatees)
+        $allowedRoles = ['admin', 'superadmin'];
+        if (empty($request->postData('Antidate')) && !in_array($_SESSION['statut'], $allowedRoles)) {
+            if (!$journalManager->IsYesterdayClosed($refAgency, date('Y-m-d'))) {
+                $_SESSION['message'] = array(
+                    'type' => 'error',
+                    'text' => 'Vous devez clôturer la journée précédente avant de pouvoir effectuer une nouvelle opération. Veuillez contacter votre administrateur.',
+                    'number' => 2
+                );
+                $this->app()->httpResponse()->redirect('/bielletage/' . $request->postData('RefType'));
+                return;
+            }
+        }
+        
+        $YesterdayReserveData = $journalManager->YesterdayReserve($refAgency, date('Y-m-d'));
+        $YesterdayReserve = $YesterdayReserveData['SoldeCompte'] ?? 0;
+        $VerifAppro  = $journalManager->TotalApproAgenceGlobal(date('Y-m-d'), $refAgency);
 
         if (!empty($request->postData('Antidate'))) {
             //Antidate Operation

@@ -21,6 +21,7 @@
           <div class="card">
               <div class="card-body">
                   <form class="form-horizontal form-material" method="POST" action="">
+                      <?= $page->getCsrfInput(); ?>
                       <div class="form-group mb-4">
                           <label for="example-email" class="col-md-12 p-0">Email</label>
                           <div class="col-md-12 border-bottom p-0">

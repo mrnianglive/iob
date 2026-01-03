@@ -2,666 +2,615 @@
 // Determiner le type d'operation et ses couleurs
 $typeId = $_GET['id'];
 $types = [
-    1 => ['name' => 'Dépôt', 'color' => 'success', 'icon' => 'fa-arrow-down', 'bg' => '#28a745'],
-    2 => ['name' => 'Retrait', 'color' => 'danger', 'icon' => 'fa-arrow-up', 'bg' => '#dc3545'],
-    3 => ['name' => 'Appro Caisse', 'color' => 'info', 'icon' => 'fa-wallet', 'bg' => '#17a2b8'],
-    4 => ['name' => 'Sortie de Fond', 'color' => 'warning', 'icon' => 'fa-sign-out-alt', 'bg' => '#ffc107'],
-    5 => ['name' => 'Transfert Caisse', 'color' => 'primary', 'icon' => 'fa-exchange-alt', 'bg' => '#007bff']
+    1 => ['name' => 'Dépôt', 'color' => 'success', 'icon' => 'fa-arrow-down', 'bg' => '#10b981'],
+    2 => ['name' => 'Retrait', 'color' => 'danger', 'icon' => 'fa-arrow-up', 'bg' => '#f43f5e'],
+    3 => ['name' => 'Appro Caisse', 'color' => 'info', 'icon' => 'fa-wallet', 'bg' => '#0ea5e9'],
+    4 => ['name' => 'Sortie de Fond', 'color' => 'warning', 'icon' => 'fa-sign-out-alt', 'bg' => '#f59e0b'],
+    5 => ['name' => 'Transfert', 'color' => 'primary', 'icon' => 'fa-exchange-alt', 'bg' => '#6366f1']
 ];
 $currentType = $types[$typeId] ?? $types[1];
+
+// Filtrer les caisses ouvertes
+$caissesOuvertes = [];
+if (isset($CheckOuverture) && is_array($CheckOuverture)) {
+    $caissesOuvertes = array_filter($CheckOuverture, function($c) {
+        return $c['caisse'] != $c['RefCaisse'];
+    });
+}
+$nbCaisses = count($caissesOuvertes);
 ?>
 
 <style>
-:root {
-    --op-color: <?=$currentType['bg'] ?>;
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+.io-app {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #f1f5f9;
+    padding: 10px;
+    min-height: calc(100vh - 100px);
 }
 
-.operation-header {
-    background: linear-gradient(135deg, var(--op-color) 0%, <?=$currentType['bg'] ?>dd 100%);
-    color: white;
-    padding: 20px;
-    border-radius: 15px 15px 0 0;
-    margin: -15px -15px 20px -15px;
-}
-
-.operation-header h2 {
-    margin: 0;
-    font-weight: 700;
-}
-
-.billetage-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-    padding: 25px;
-    margin-bottom: 20px;
-}
-
-.billetage-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 8px;
-}
-
-.billetage-table th {
-    background: #f8f9fa;
-    padding: 12px 15px;
-    font-weight: 600;
-    color: #495057;
-    text-align: center;
-    border-radius: 8px;
-}
-
-.billetage-table td {
-    padding: 8px 10px;
-    vertical-align: middle;
-}
-
-.denomination-badge {
-    background: linear-gradient(135deg, var(--op-color), <?=$currentType['bg'] ?>cc);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-weight: 700;
-    font-size: 1.1em;
-    display: inline-block;
-    min-width: 100px;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.qty-input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #e9ecef;
-    border-radius: 10px;
-    font-size: 1.1em;
-    font-weight: 600;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.qty-input:focus {
-    border-color: var(--op-color);
-    box-shadow: 0 0 0 3px <?=$currentType['bg'] ?>33;
-    outline: none;
-}
-
-.subtotal-display {
-    background: #f8f9fa;
-    padding: 12px 15px;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 1.1em;
-    text-align: right;
-    color: #212529;
-}
-
-.grand-total-card {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    color: white;
-    border-radius: 15px;
-    padding: 25px;
-    text-align: center;
-    position: sticky;
-    top: 80px;
-    z-index: 100;
-}
-
-.grand-total-label {
-    font-size: 0.9em;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    opacity: 0.8;
-    margin-bottom: 5px;
-}
-
-.grand-total-value {
-    font-size: 2.5em;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
-
-.form-section {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-    padding: 25px;
-    margin-top: 20px;
-}
-
-.form-section .section-title {
-    font-size: 1.1em;
-    font-weight: 700;
-    color: #495057;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #e9ecef;
-}
-
-.modern-input {
-    border: 2px solid #e9ecef;
-    border-radius: 10px;
-    padding: 12px 15px;
-    transition: all 0.3s ease;
-}
-
-.modern-input:focus {
-    border-color: var(--op-color);
-    box-shadow: 0 0 0 3px <?=$currentType['bg'] ?>33;
-}
-
-.modern-select {
-    border: 2px solid #e9ecef;
-    border-radius: 10px;
-    padding: 12px 15px;
-    appearance: none;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23495057' d='M6 9L1 4h10z'/%3E%3C/svg%3E") no-repeat right 15px center;
-    background-color: white;
-}
-
-.btn-submit {
-    background: linear-gradient(135deg, var(--op-color), <?=$currentType['bg'] ?>dd);
-    border: none;
-    color: white;
-    padding: 15px 40px;
-    border-radius: 12px;
-    font-size: 1.1em;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px <?=$currentType['bg'] ?>44;
-}
-
-.btn-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px <?=$currentType['bg'] ?>66;
-    color: white;
-}
-
-.billets-section,
-.pieces-section {
-    margin-bottom: 20px;
-}
-
-.section-label {
+/* Compact Header */
+.io-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-weight: 700;
-    color: #495057;
-    margin-bottom: 15px;
-    font-size: 1em;
+    justify-content: space-between;
+    background: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border: 1px solid #e2e8f0;
 }
-
-.section-label i {
-    width: 35px;
-    height: 35px;
-    background: var(--op-color);
-    color: white;
+.io-header-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.io-type-badge {
+    width: 40px;
+    height: 40px;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+    background: <?= $currentType['bg'] ?>;
+    font-size: 1.2rem;
+}
+.io-title-text h1 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 0;
+    color: #1e293b;
+    text-transform: uppercase;
+}
+.io-title-text p {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin: 0;
+    font-weight: 500;
 }
 
-/* Animation pour le total */
-@keyframes pulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.02);
-    }
+/* Total Monitor Fixed Size */
+.io-monitor {
+    background: #0f172a;
+    border-radius: 10px;
+    padding: 10px 25px;
+    min-width: 250px;
+    text-align: right;
+    border: 1px solid #334155;
+}
+.io-monitor-label {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.io-monitor-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #22c55e;
+    line-height: 1;
 }
 
-.total-updated {
-    animation: pulse 0.3s ease;
+/* Layout Grid */
+.io-main-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 12px;
+    align-items: start;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .denomination-badge {
-        padding: 8px 12px;
-        font-size: 0.9em;
-        min-width: 70px;
-    }
-
-    .grand-total-value {
-        font-size: 1.8em;
-    }
+@media (max-width: 1200px) {
+    .io-main-layout { grid-template-columns: 1fr; }
 }
+
+/* Sections */
+.io-section {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.io-section-header {
+    background: #f8fafc;
+    padding: 10px 15px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.io-section-header i { color: <?= $currentType['bg'] ?>; font-size: 0.9rem; }
+.io-section-header span {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Cash Counting Area - Side by Side */
+.io-cash-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+}
+.io-column-divider { border-right: 1px solid #f1f5f9; }
+
+/* Table Styling - Ultra Tighter */
+.io-table { width: 100%; border-collapse: collapse; }
+.io-table th {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: #94a3b8;
+    background: #f8fafc;
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+.io-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid #f8fafc;
+    height: 44px;
+}
+.io-table tr:hover { background: #fdfdfd; }
+
+/* Denomination Styling */
+.io-denom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.io-denom-pill {
+    min-width: 65px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 3px 8px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+}
+.io-denom-pill.high { 
+    background: <?= $currentType['bg'] ?>10;
+    border-color: <?= $currentType['bg'] ?>30;
+    color: <?= $currentType['bg'] ?>;
+}
+
+/* Input Styling */
+.io-input-qty {
+    width: 80px;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: all 0.2s;
+    background: #fff;
+    color: #1e293b;
+}
+.io-input-qty:focus {
+    outline: none;
+    border-color: <?= $currentType['bg'] ?>;
+    box-shadow: 0 0 0 3px <?= $currentType['bg'] ?>15;
+    background: white;
+}
+.io-input-qty::placeholder { color: #cbd5e1; }
+
+.io-subtotal {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+    text-align: right;
+}
+.io-subtotal.active { color: <?= $currentType['bg'] ?>; }
+
+/* Right Panel Elements */
+.io-form-body { padding: 15px; }
+.io-field-group { margin-bottom: 12px; }
+.io-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+}
+.io-control {
+    width: 100%;
+    padding: 9px 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1e293b;
+    transition: border 0.2s;
+}
+.io-control:focus {
+    outline: none;
+    border-color: <?= $currentType['bg'] ?>;
+    background: white;
+}
+.io-control::placeholder { color: #94a3b8; font-weight: 400; }
+
+.io-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Status Badge for Caisse */
+.io-caisse-badge {
+    padding: 8px 12px;
+    background: white;
+    border: 1px solid #22c55e20;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #166534;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+.io-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 0 4px #22c55e15; animation: blink 2s infinite; }
+@keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+/* Fix Antidate */
+.io-antidate {
+    background: #fffbeb;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #fef3c7;
+}
+
+/* Actions */
+.io-actions { padding: 15px; border-top: 1px solid #f1f5f9; background: #f8fafc; }
+.io-btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: <?= $currentType['bg'] ?>;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px <?= $currentType['bg'] ?>30;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.io-btn-primary:hover {
+    filter: brightness(1.05);
+    box-shadow: 0 6px 15px <?= $currentType['bg'] ?>40;
+    transform: translateY(-1px);
+}
+.io-btn-cancel {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 8px;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 10px;
+}
+.io-btn-cancel:hover { color: #64748b; }
+
+/* Clear Button */
+.io-btn-clear {
+    margin-left: auto;
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-transform: uppercase;
+}
+.io-btn-clear:hover {
+    background: #fee2e2;
+    color: #ef4444;
+    border-color: #fecaca;
+}
+
+/* Hide arrows on number inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
 </style>
 
-<form method="POST" action='/bielletage/add' id="operationForm">
-    <input type="hidden" name="RefType" value="<?= $typeId ?>">
-    <?= $page->getCsrfInput(); ?>
+<div class="io-app">
+    <form method="POST" action='/bielletage/add' id="operationForm">
+        <input type="hidden" name="RefType" value="<?= $typeId ?>">
+        <?= $page->getCsrfInput(); ?>
 
-    <div class="row">
-        <!-- Colonne Billetage -->
-        <div class="col-lg-8">
-            <div class="billetage-card">
-                <div class="operation-header">
-                    <h2><i class="fas <?= $currentType['icon'] ?> mr-2"></i> <?= $currentType['name'] ?></h2>
-                    <small>Saisissez le billetage de l'opération</small>
-                </div>
-
-                <!-- BILLETS -->
-                <div class="billets-section">
-                    <div class="section-label">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span>BILLETS</span>
-                    </div>
-
-                    <table class="billetage-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 30%">Coupure (FCFA)</th>
-                                <th style="width: 35%">Quantité</th>
-                                <th style="width: 35%">Sous-total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                            $billets = [
-                                ['id' => 'a', 'val' => 10000],
-                                ['id' => 'b', 'val' => 5000],
-                                ['id' => 'c', 'val' => 2000],
-                                ['id' => 'd', 'val' => 1000],
-                                ['id' => 'e', 'val' => 500]
-                            ];
-                            foreach ($billets as $b): ?>
-                            <tr>
-                                <td>
-                                    <span class="denomination-badge"><?= number_format($b['val'], 0, '', ' ') ?></span>
-                                    <input type="hidden" id="<?= $b['id'] ?>1" name="<?= $b['id'] ?>1"
-                                        value="<?= $b['val'] ?>">
-                                </td>
-                                <td>
-                                    <input type="number" class="qty-input" id="<?= $b['id'] ?>2" name="<?= $b['id'] ?>2"
-                                        placeholder="0" min="0" data-value="<?= $b['val'] ?>" autocomplete="off">
-                                </td>
-                                <td>
-                                    <div class="subtotal-display" id="<?= $b['id'] ?>3">0</div>
-                                    <input type="hidden" name="<?= $b['id'] ?>3" id="<?= $b['id'] ?>3_hidden" value="0">
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- PIECES -->
-                <div class="pieces-section">
-                    <div class="section-label">
-                        <i class="fas fa-coins"></i>
-                        <span>PIÈCES</span>
-                    </div>
-
-                    <table class="billetage-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 30%">Coupure (FCFA)</th>
-                                <th style="width: 35%">Quantité</th>
-                                <th style="width: 35%">Sous-total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                            $pieces = [
-                                ['id' => 'f', 'val' => 250],
-                                ['id' => 'g', 'val' => 200],
-                                ['id' => 'h', 'val' => 100],
-                                ['id' => 'i', 'val' => 50],
-                                ['id' => 'j', 'val' => 25],
-                                ['id' => 'k', 'val' => 10],
-                                ['id' => 'l', 'val' => 5],
-                                ['id' => 'm', 'val' => 1]
-                            ];
-                            foreach ($pieces as $p): ?>
-                            <tr>
-                                <td>
-                                    <span class="denomination-badge"><?= number_format($p['val'], 0, '', ' ') ?></span>
-                                    <input type="hidden" id="<?= $p['id'] ?>1" name="<?= $p['id'] ?>1"
-                                        value="<?= $p['val'] ?>">
-                                </td>
-                                <td>
-                                    <input type="number" class="qty-input" id="<?= $p['id'] ?>2" name="<?= $p['id'] ?>2"
-                                        placeholder="0" min="0" data-value="<?= $p['val'] ?>" autocomplete="off">
-                                </td>
-                                <td>
-                                    <div class="subtotal-display" id="<?= $p['id'] ?>3">0</div>
-                                    <input type="hidden" name="<?= $p['id'] ?>3" id="<?= $p['id'] ?>3_hidden" value="0">
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+        <!-- HEADER -->
+        <header class="io-header">
+            <div class="io-header-title">
+                <div class="io-type-badge"><i class="fas <?= $currentType['icon'] ?>"></i></div>
+                <div class="io-title-text">
+                    <h1><?= $currentType['name'] ?></h1>
+                    <p>Enregistrement de l'opération de caisse</p>
                 </div>
             </div>
-        </div>
-
-        <!-- Colonne Total + Formulaire -->
-        <div class="col-lg-4">
-            <!-- Total flottant -->
-            <div class="grand-total-card" id="totalCard">
-                <div class="grand-total-label">MONTANT TOTAL</div>
-                <div class="grand-total-value" id="grandTotal">0</div>
-                <small>FCFA</small>
+            <div class="io-monitor">
+                <div class="io-monitor-label">Total G&eacute;n&eacute;ral</div>
+                <div class="io-monitor-val" id="grandTotal">0</div>
                 <input type="hidden" name="MontantVersement" id="totalInput" value="0">
             </div>
+        </header>
 
-            <!-- Formulaire infos -->
-            <div class="form-section">
-                <div class="section-title">
-                    <i class="fas fa-info-circle mr-2"></i>Informations de l'opération
+        <div class="io-main-layout">
+            <!-- LEFT AREA: Cash Entry -->
+            <div class="io-section shadow-sm">
+                <div class="io-section-header">
+                    <i class="fas fa-calculator"></i>
+                    <span>Comptage du num&eacute;raire</span>
+                    <button type="button" class="io-btn-clear" id="btn-clear-all">
+                        <i class="fas fa-trash-alt"></i>
+                        Effacer
+                    </button>
                 </div>
-
-                <?php if ($typeId == 5): // Transfert Caisse2Caisse ?>
-                <div class="form-group">
-                    <label class="font-weight-bold">Caisse Source</label>
-                    <select class="form-control modern-select" name="RefCaisse" required>
-                        <?php foreach ($CheckOuverture as $Caisse): 
-                                if ($Caisse['caisse'] != $Caisse['RefCaisse']): ?>
-                        <option value="<?= $Caisse['RefCaisse'] ?>">
-                            <?= $Caisse['NameCaisse'] . " - " . $Caisse['NameAgency'] ?>
-                        </option>
-                        <?php endif; endforeach; ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="font-weight-bold">Caisse Destination</label>
-                    <select class="form-control modern-select" name="Destination" required>
-                        <?php foreach ($CheckOuverture as $Caisse): 
-                                if ($Caisse['caisse'] != $Caisse['RefCaisse']): ?>
-                        <option value="<?= $Caisse['RefCaisse'] ?>">
-                            <?= $Caisse['NameCaisse'] . " - " . $Caisse['NameAgency'] ?>
-                        </option>
-                        <?php endif; endforeach; ?>
-                    </select>
-                </div>
-                <input type="hidden" name="Remarque" value="Transfert Caisse2Caisse">
-                <input type="hidden" name="NameDeposant"
-                    value="<?= $_SESSION['PrenomUsers'] . " " . $_SESSION['NomUsers'] ?>">
-                <input type="hidden" name="TelDeposant" value="NULL">
-
-                <?php elseif ($typeId == 3): // Appro Caisse ?>
-                <div class="form-group">
-                    <label class="font-weight-bold">Caisse</label>
-                    <select class="form-control modern-select" name="RefCaisse" required>
-                        <?php foreach ($CheckOuverture as $Caisse): 
-                                if ($Caisse['caisse'] != $Caisse['RefCaisse']): ?>
-                        <option value="<?= $Caisse['RefCaisse'] ?>">
-                            <?= $Caisse['NameCaisse'] . " - " . $Caisse['NameAgency'] ?>
-                        </option>
-                        <?php endif; endforeach; ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="font-weight-bold">Type d'Appro</label>
-                    <select class="form-control modern-select" name="TypeAppro" required>
-                        <?php 
-                            $isAdmin = in_array($_SESSION['statut'], ['admin', 'Control', 'Head']);
-                            foreach ($TypeAppro as $type): 
-                                if ($isAdmin || $type['RefTypeAppro'] == 1): ?>
-                        <option value="<?= $type['RefTypeAppro'] ?>"><?= $type['NameTypeAppro'] ?></option>
-                        <?php endif; endforeach; ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="font-weight-bold">Numéro de compte</label>
-                    <input type="text" class="form-control modern-input" name="NumCompte" id="NumCompte"
-                        autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label class="font-weight-bold">Client</label>
-                    <input type="text" class="form-control modern-input" name="NameClient" id="NameClient" required
-                        autocomplete="off">
-                </div>
-                <input type="hidden" name="Remarque" value="NULL">
-                <input type="hidden" name="NameDeposant"
-                    value="<?= $_SESSION['PrenomUsers'] . " " . $_SESSION['NomUsers'] ?>">
-                <input type="hidden" name="TelDeposant" value="NULL">
-
-                <?php elseif ($typeId == 4): // Sortie de fond ?>
-                <div class="form-group">
-                    <label class="font-weight-bold">Caisse</label>
-                    <select class="form-control modern-select" name="RefCaisse" required>
-                        <?php foreach ($CheckOuverture as $Caisse): 
-                                if ($Caisse['caisse'] != $Caisse['RefCaisse']): ?>
-                        <option value="<?= $Caisse['RefCaisse'] ?>">
-                            <?= $Caisse['NameCaisse'] . " - " . $Caisse['NameAgency'] ?>
-                        </option>
-                        <?php endif; endforeach; ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="font-weight-bold">Numéro de compte</label>
-                    <input type="text" class="form-control modern-input" name="NumCompte" id="NumCompte" required
-                        autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label class="font-weight-bold">Client</label>
-                    <input type="text" class="form-control modern-input" name="NameClient" id="NameClient" required
-                        autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label class="font-weight-bold">Remarque</label>
-                    <input type="text" class="form-control modern-input" name="Remarque" required autocomplete="off">
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="font-weight-bold">Déposant</label>
-                            <input type="text" class="form-control modern-input" name="NameDeposant" required
-                                autocomplete="off">
-                        </div>
+                
+                <div class="io-cash-grid">
+                    <!-- Column 1: Billets -->
+                    <div class="io-column-divider">
+                        <table class="io-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">BILLETS</th>
+                                </tr>
+                                <tr>
+                                    <th>Valeur</th>
+                                    <th style="text-align:center">Qt&eacute;</th>
+                                    <th style="text-align:right">Montant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $billets = [
+                                    ['id' => 'a', 'val' => 10000],
+                                    ['id' => 'b', 'val' => 5000],
+                                    ['id' => 'c', 'val' => 2000],
+                                    ['id' => 'd', 'val' => 1000],
+                                    ['id' => 'e', 'val' => 500]
+                                ];
+                                foreach ($billets as $b): ?>
+                                <tr>
+                                    <td>
+                                        <div class="io-denom">
+                                            <div class="io-denom-pill high"><?= number_format($b['val'], 0, '', ' ') ?></div>
+                                            <input type="hidden" id="<?= $b['id'] ?>1" name="<?= $b['id'] ?>1" value="<?= $b['val'] ?>">
+                                        </div>
+                                    </td>
+                                    <td style="text-align:center">
+                                        <input type="number" class="io-input-qty qty-input" id="<?= $b['id'] ?>2" name="<?= $b['id'] ?>2" 
+                                               placeholder="0" min="0" data-value="<?= $b['val'] ?>" autocomplete="off">
+                                    </td>
+                                    <td style="text-align:right">
+                                        <div class="io-subtotal" id="<?= $b['id'] ?>3">0</div>
+                                        <input type="hidden" name="<?= $b['id'] ?>3" id="<?= $b['id'] ?>3_hidden" value="0">
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="font-weight-bold">Téléphone</label>
-                            <input type="text" class="form-control modern-input" name="TelDeposant" required
-                                autocomplete="off">
-                        </div>
+
+                    <!-- Column 2: Pièces -->
+                    <div>
+                        <table class="io-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">PI&Egrave;CES</th>
+                                </tr>
+                                <tr>
+                                    <th>Valeur</th>
+                                    <th style="text-align:center">Qt&eacute;</th>
+                                    <th style="text-align:right">Montant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $pieces = [
+                                    ['id' => 'f', 'val' => 250], ['id' => 'g', 'val' => 200],
+                                    ['id' => 'h', 'val' => 100], ['id' => 'i', 'val' => 50],
+                                    ['id' => 'j', 'val' => 25], ['id' => 'k', 'val' => 10],
+                                    ['id' => 'l', 'val' => 5], ['id' => 'm', 'val' => 1]
+                                ];
+                                foreach ($pieces as $p): ?>
+                                <tr>
+                                    <td>
+                                        <div class="io-denom">
+                                            <div class="io-denom-pill"><?= $p['val'] ?></div>
+                                            <input type="hidden" id="<?= $p['id'] ?>1" name="<?= $p['id'] ?>1" value="<?= $p['val'] ?>">
+                                        </div>
+                                    </td>
+                                    <td style="text-align:center">
+                                        <input type="number" class="io-input-qty qty-input" id="<?= $p['id'] ?>2" name="<?= $p['id'] ?>2" 
+                                               placeholder="0" min="0" data-value="<?= $p['val'] ?>" autocomplete="off">
+                                    </td>
+                                    <td style="text-align:right">
+                                        <div class="io-subtotal" id="<?= $p['id'] ?>3">0</div>
+                                        <input type="hidden" name="<?= $p['id'] ?>3" id="<?= $p['id'] ?>3_hidden" value="0">
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            </div>
 
-                <?php else: // Depot (1) ou Retrait (2) ?>
-                <div class="form-group">
-                    <label class="font-weight-bold">Caisse</label>
-                    <select class="form-control modern-select" name="RefCaisse" id="RefCaisse" required>
-                        <?php foreach ($CheckOuverture as $Caisse): 
-                                if ($Caisse['caisse'] != $Caisse['RefCaisse']): ?>
-                        <option value="<?= $Caisse['RefCaisse'] ?>">
-                            <?= $Caisse['NameCaisse'] . " - " . $Caisse['NameAgency'] ?>
-                        </option>
-                        <?php endif; endforeach; ?>
-                    </select>
+            <!-- RIGHT AREA: Details & Action -->
+            <div class="io-section shadow-sm">
+                <div class="io-section-header">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Informations Op&eacute;ration</span>
                 </div>
-                <div class="form-group">
-                    <label class="font-weight-bold">Produit</label>
-                    <select class="form-control modern-select" name="RefProduit" id="RefProduit" required>
-                        <option value="">Sélectionner un produit</option>
-                    </select>
-                </div>
-                <div class="form-group" id="numCompteGroup" style="display:none;">
-                    <label class="font-weight-bold">Numéro de compte</label>
-                    <input type="text" class="form-control modern-input" name="NumCompte" id="NumCompte"
-                        autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label class="font-weight-bold">Client</label>
-                    <input type="text" class="form-control modern-input" name="NameClient" id="NameClient" required
-                        autocomplete="off">
-                </div>
-
-                <?php if ($typeId == 2): // Retrait - afficher les frais ?>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="font-weight-bold">Frais</label>
-                            <input type="text" class="form-control modern-input" id="frais" name="frais" readonly
-                                value="0">
+                
+                <div class="io-form-body">
+                    <?php if ($typeId == 5): // Transfert ?>
+                        <div class="io-field-group">
+                            <label class="io-label">Caisse Source</label>
+                            <select class="io-control" name="RefCaisse" required>
+                                <?php foreach ($CheckOuverture as $Caisse): if ($Caisse['caisse'] != $Caisse['RefCaisse']): ?>
+                                <option value="<?= $Caisse['RefCaisse'] ?>"><?= $Caisse['NameCaisse'] ?></option>
+                                <?php endif; endforeach; ?>
+                            </select>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="font-weight-bold">Net à payer</label>
-                            <input type="text" class="form-control modern-input bg-light" id="mtotal" readonly
-                                value="0">
+                        <div class="io-field-group">
+                            <label class="io-label">Caisse Destination</label>
+                            <select class="io-control" name="Destination" required>
+                                <?php foreach ($CheckOuverture as $Caisse): if ($Caisse['caisse'] != $Caisse['RefCaisse']): ?>
+                                <option value="<?= $Caisse['RefCaisse'] ?>"><?= $Caisse['NameCaisse'] ?></option>
+                                <?php endif; endforeach; ?>
+                            </select>
                         </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="font-weight-bold">Type de retrait</label>
-                    <select class="form-control modern-select" name="TypeRetrait" id="TypeRetrait" required>
-                        <?php foreach ($TypeRetrait as $type): ?>
-                        <option value="<?= $type['RefTypeRetrait'] ?>"><?= $type['NameTypeRetrait'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <?php endif; ?>
+                        <input type="hidden" name="Remarque" value="Transfert Caisse2Caisse">
+                        <input type="hidden" name="NameDeposant" value="<?= $_SESSION['PrenomUsers'] . " " . $_SESSION['NomUsers'] ?>">
+                        <input type="hidden" name="TelDeposant" value="NULL">
 
-                <div class="form-group">
-                    <label class="font-weight-bold">Remarque</label>
-                    <input type="text" class="form-control modern-input" name="Remarque" required autocomplete="off">
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="font-weight-bold">Déposant</label>
-                            <input type="text" class="form-control modern-input" name="NameDeposant" required
-                                autocomplete="off">
+                    <?php else: // Depot/Retrait/Appro/Sortie ?>
+                        <div class="io-field-group">
+                            <label class="io-label">Caisse / Agence</label>
+                            <?php if ($nbCaisses == 1): $singleCaisse = reset($caissesOuvertes); ?>
+                                <input type="hidden" name="RefCaisse" id="RefCaisse" value="<?= $singleCaisse['RefCaisse'] ?>">
+                                <div class="io-caisse-badge">
+                                    <div class="io-dot"></div>
+                                    <span><?= $singleCaisse['NameCaisse'] ?></span>
+                                </div>
+                            <?php else: ?>
+                                <select class="io-control" name="RefCaisse" id="RefCaisse" required>
+                                    <?php foreach ($caissesOuvertes as $Caisse): ?>
+                                    <option value="<?= $Caisse['RefCaisse'] ?>"><?= $Caisse['NameCaisse'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            <?php endif; ?>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="font-weight-bold">Téléphone</label>
-                            <input type="text" class="form-control modern-input" name="TelDeposant" required
-                                autocomplete="off">
+
+                        <?php if ($typeId == 1 || $typeId == 2): ?>
+                        <div class="io-field-group">
+                            <label class="io-label">Produit / Partenaire</label>
+                            <select class="io-control" name="RefProduit" id="RefProduit" required>
+                                <option value="">S&eacute;lectionner...</option>
+                            </select>
                         </div>
-                    </div>
+                        
+                        <div class="io-field-group hidden" id="numCompteGroup">
+                            <label class="io-label">N° de Compte</label>
+                            <input type="text" class="io-control" name="NumCompte" id="NumCompte" placeholder="Compte client">
+                        </div>
+                        <?php endif; ?>
+
+                        <div class="io-field-group">
+                            <label class="io-label">Nom du Client</label>
+                            <input type="text" class="io-control" name="NameClient" id="NameClient" required placeholder="Nom complet">
+                        </div>
+
+                        <div class="io-grid-2">
+                            <div class="io-field-group">
+                                <label class="io-label">D&eacute;posant</label>
+                                <input type="text" class="io-control" name="NameDeposant" required placeholder="Nom">
+                            </div>
+                            <div class="io-field-group">
+                                <label class="io-label">T&eacute;l&eacute;phone</label>
+                                <input type="text" class="io-control" name="TelDeposant" required placeholder="Mobile">
+                            </div>
+                        </div>
+
+                        <div class="io-field-group">
+                            <label class="io-label">Motif / Remarque</label>
+                            <input type="text" class="io-control" name="Remarque" required placeholder="...">
+                        </div>
+
+                        <?php if ($typeId == 2): // Retrait ?>
+                            <div class="io-grid-2">
+                                <div class="io-field-group">
+                                    <label class="io-label">Frais</label>
+                                    <input type="text" class="io-control" id="frais" name="frais" readonly value="0" style="background:#f1f5f9;">
+                                </div>
+                                <div class="io-field-group">
+                                    <label class="io-label">Net &agrave; Payer</label>
+                                    <input type="text" class="io-control" id="mtotal" readonly value="0" style="background:#f1f5f9;">
+                                </div>
+                            </div>
+                            <div class="io-field-group">
+                                <label class="io-label">Type de Retrait</label>
+                                <select class="io-control" name="TypeRetrait" id="TypeRetrait" required>
+                                    <?php foreach ($TypeRetrait as $type): ?>
+                                    <option value="<?= $type['RefTypeRetrait'] ?>"><?= $type['NameTypeRetrait'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                    <?php if (isset($permission) && in_array(3, $permission)): ?>
+                        <div class="io-field-group io-antidate">
+                            <label class="io-label"><i class="fas fa-calendar-alt"></i> Date r&eacute;troactive</label>
+                            <input type="date" class="io-control" name="Antidate">
+                        </div>
+                    <?php endif; ?>
                 </div>
-                <?php endif; ?>
 
-                <?php if (in_array(3, $permission)): ?>
-                <div class="form-group">
-                    <label class="font-weight-bold"><i class="fas fa-calendar-alt mr-1"></i> Antidate</label>
-                    <input type="date" class="form-control modern-input" name="Antidate">
+                <div class="io-actions">
+                    <button type="submit" class="io-btn-primary">
+                        <i class="fas fa-check-circle"></i>
+                        Valider l'Op&eacute;ration
+                    </button>
+                    <a href="/" class="io-btn-cancel">Annuler la saisie</a>
                 </div>
-                <?php endif; ?>
-
-                <button type="submit" class="btn btn-submit btn-block mt-4">
-                    <i class="fas fa-check-circle mr-2"></i> VALIDER L'OPÉRATION
-                </button>
-
-                <a href="/" class="btn btn-outline-secondary btn-block mt-2">
-                    <i class="fas fa-arrow-left mr-2"></i> Annuler
-                </a>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 
 <script>
-$(function() {
-    // Calcul automatique des sous-totaux et du total
-    function calculateTotals() {
-        let grandTotal = 0;
-
-        // Parcourir tous les inputs de quantité
+$(document).ready(function() {
+    // Bouton Clear All avec délégation pour être sûr qu'il soit capturé
+    $(document).on('click', '#btn-clear-all', function(e) {
+        e.preventDefault();
+        
+        // Vider tous les inputs
         $('.qty-input').each(function() {
-            const qty = parseInt($(this).val()) || 0;
-            const value = parseInt($(this).data('value'));
-            const subtotal = qty * value;
-            const id = $(this).attr('id').charAt(0);
-
-            // Mettre à jour l'affichage du sous-total
-            $('#' + id + '3').text(subtotal.toLocaleString('fr-FR'));
-            $('#' + id + '3_hidden').val(subtotal);
-
-            grandTotal += subtotal;
+            $(this).val('');
         });
 
-        // Mettre à jour le total général avec animation
-        $('#grandTotal').addClass('total-updated').text(grandTotal.toLocaleString('fr-FR'));
-        $('#totalInput').val(grandTotal);
+        // Réinitialiser les affichages de sous-totaux
+        $('.io-subtotal').text('0').removeClass('active');
+        
+        // Réinitialiser le total général
+        $('#grandTotal').text('0');
+        $('#totalInput').val('0');
 
-        // Pour les retraits, calculer les frais
-        <?php if ($typeId == 2): ?>
-        const frais = Math.round(grandTotal * 0.01); // 1% de frais exemple
-        const netAPayer = grandTotal - frais;
-        $('#frais').val(frais.toLocaleString('fr-FR'));
-        $('#mtotal').val(netAPayer.toLocaleString('fr-FR'));
-        <?php endif; ?>
+        // Réinitialiser les frais (si présents)
+        if($('#frais').length) $('#frais').val('0');
+        if($('#mtotal').length) $('#mtotal').val('0');
 
-        setTimeout(() => $('#grandTotal').removeClass('total-updated'), 300);
-    }
-
-    // Écouter les changements sur les inputs
-    $('.qty-input').on('input change', calculateTotals);
-
-    // Navigation clavier améliorée
-    $('.qty-input').on('keydown', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            const inputs = $('.qty-input');
-            const currentIndex = inputs.index(this);
-            if (currentIndex < inputs.length - 1) {
-                inputs.eq(currentIndex + 1).focus().select();
-            }
-        }
-    });
-
-    // Focus automatique sur le premier champ
-    $('.qty-input').first().focus();
-
-    // Charger les produits selon la caisse (pour dépôt/retrait)
-    <?php if ($typeId == 1 || $typeId == 2): ?>
-
-    function loadProducts() {
-        const caisseId = $('#RefCaisse').val();
-        if (caisseId) {
-            $.get('/config/requeteliste.php', {
-                id: caisseId
-            }, function(data) {
-                $('#RefProduit').html(data);
-            });
-        }
-    }
-
-    $('#RefCaisse').on('change', loadProducts);
-    loadProducts(); // Charger au démarrage
-
-    // Afficher/masquer le numéro de compte selon le produit
-    $('#RefProduit').on('change', function() {
-        if ($(this).val() == '1') { // Ecobank
-            $('#numCompteGroup').slideDown();
-            $('#NumCompte').prop('required', true);
-        } else {
-            $('#numCompteGroup').slideUp();
-            $('#NumCompte').prop('required', false);
-        }
-    });
-    <?php endif; ?>
-
-    // Validation avant soumission
-    $('#operationForm').on('submit', function(e) {
-        const total = parseInt($('#totalInput').val()) || 0;
-        if (total <= 0) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Montant invalide',
-                text: 'Le montant total doit être supérieur à 0',
-                confirmButtonColor: '<?= $currentType['bg'] ?>'
-            });
-            return false;
-        }
+        // Focus sur le premier champ
+        $('.qty-input').first().focus();
+        
+        console.log('Billetage réinitialisé');
     });
 });
 </script>

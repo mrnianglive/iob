@@ -79,7 +79,7 @@
                           <tr>
                               <td>Depot</td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($SommeVersement, 0, '.', '.');
+                                      <?= number_format($SommeVersement ?? 0, 0, '.', '.');
                                         ?>
                                   </span>
                               </td>
@@ -87,7 +87,7 @@
                           <tr>
                               <td>Retrait</td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($SommeRetrait, 0, '.', '.');
+                                      <?= number_format($SommeRetrait ?? 0, 0, '.', '.');
                                         ?>
                                   </span>
                               </td>
@@ -95,7 +95,7 @@
                           <tr>
                               <td>Solde Especes</td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($Solde, 0, '.', ',');
+                                      <?= number_format($Solde ?? 0, 0, '.', ',');
                                         ?>
                                   </span>
                               </td>
@@ -106,7 +106,7 @@
                           <tr>
                               <td>REMITTANCE|Depot </td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($SommeRemittanceDepot, 0, '.', '.');
+                                      <?= number_format($SommeRemittanceDepot ?? 0, 0, '.', '.');
                                         ?>
                                   </span>
                               </td>
@@ -114,7 +114,7 @@
                           <tr>
                               <td>REMITTANCE|Retrait</td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($SommeRemittanceRetrait, 0, '.', '.');
+                                      <?= number_format($SommeRemittanceRetrait ?? 0, 0, '.', '.');
                                         ?>
                                   </span>
                               </td>
@@ -122,7 +122,7 @@
                           <tr>
                               <td> REMITTANCE|Solde </td>
                               <td><span class="counter text-danger">
-                                      <?= number_format($SoldeRemittance, 0, '.', '.');
+                                      <?= number_format($SoldeRemittance ?? 0, 0, '.', '.');
                                         ?>
                                   </span>
                               </td>
@@ -148,10 +148,10 @@
                           <tr>
                               <td></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['LundiVersement'], 0, '.', ',');
+                                  <?= number_format($DailyVersement['LundiVersement'] ?? 0, 0, '.', ',');
                                     ?></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['LundiRetrait'], 0, '.', ',');
+                                  <?= number_format($DailyVersement['LundiRetrait'] ?? 0, 0, '.', ',');
                                     ?></td>
                           </tr>
                           <tr>
@@ -163,10 +163,10 @@
                           <tr>
                               <td></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['MardiVersement'], '0', '.', ',');
+                                  <?= number_format($DailyVersement['MardiVersement'] ?? 0, 0, '.', ',');
                                     ?></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['MardiRetrait'], 0, '.', ',');
+                                  <?= number_format($DailyVersement['MardiRetrait'] ?? 0, 0, '.', ',');
                                     ?></td>
                           </tr>
                           <tr>
@@ -178,10 +178,10 @@
                           <tr>
                               <td></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['MercrediVersement'], 0, '.', ',');
+                                  <?= number_format($DailyVersement['MercrediVersement'] ?? 0, 0, '.', ',');
                                     ?></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['MercrediRetrait'], 0, '.', ',');
+                                  <?= number_format($DailyVersement['MercrediRetrait'] ?? 0, 0, '.', ',');
                                     ?></td>
                           </tr>
                           <tr>
@@ -193,10 +193,10 @@
                           <tr>
                               <td></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['JeudiVersement'], 0, '.', ',');
+                                  <?= number_format($DailyVersement['JeudiVersement'] ?? 0, 0, '.', ',');
                                     ?></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['JeudiRetrait'], 0, '.', ',');
+                                  <?= number_format($DailyVersement['JeudiRetrait'] ?? 0, 0, '.', ',');
                                     ?></td>
                           </tr>
                           <tr>
@@ -208,10 +208,10 @@
                           <tr>
                               <td></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['VendrediVersement'], 0, '.', ',');
+                                  <?= number_format($DailyVersement['VendrediVersement'] ?? 0, 0, '.', ',');
                                     ?></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['VendrediRetrait'], 0, '.', ',');
+                                  <?= number_format($DailyVersement['VendrediRetrait'] ?? 0, 0, '.', ',');
                                     ?></td>
                           </tr>
                           <tr>
@@ -223,10 +223,10 @@
                           <tr>
                               <td></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['SamediVersement'], 0, '.', ',');
+                                  <?= number_format($DailyVersement['SamediVersement'] ?? 0, 0, '.', ',');
                                     ?></td>
                               <td class="counter text-danger">
-                                  <?= number_format($DailyVersement['SamediRetrait'], 0, '.', ',');
+                                  <?= number_format($DailyVersement['SamediRetrait'] ?? 0, 0, '.', ',');
                                     ?></td>
                           </tr>
                       </tbody>

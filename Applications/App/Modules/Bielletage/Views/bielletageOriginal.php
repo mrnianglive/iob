@@ -21,6 +21,7 @@
         </li>
     </ul>
     <form method="POST" action='/bielletage/add'>
+        <?= $page->getCsrfInput(); ?>
         <br />
         <div class="tab-content">
             <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">

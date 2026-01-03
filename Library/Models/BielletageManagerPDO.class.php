@@ -45,7 +45,7 @@ class BielletageManagerPDO extends BielletageManager
         $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
         $requete->execute();
         $Result = $requete->fetch();
-        return $Result['RefCaisse'];
+        return $Result ? $Result['RefCaisse'] : null;
     }
     public function CheckAfterRapport($Caisse)
     {
@@ -323,6 +323,20 @@ class BielletageManagerPDO extends BielletageManager
                     if (isset($Refoperations)) {
                         $lcbManager = new LCBManagerPDO($this->dao);
                         $lcbManager->analyzeTransaction($Refoperations);
+                    }
+
+                    // 3. Mettre à jour les stats temps réel
+                    if (isset($Refoperations)) {
+                        try {
+                            $statsManager = new StatsManagerPDO($this->dao);
+                            $statsManager->incrementOperationStats(
+                                $_POST['RefCaisse'],
+                                $_POST['RefType'],
+                                $_POST['MontantVersement']
+                            );
+                        } catch (\Exception $e) {
+                            error_log("Erreur Stats: " . $e->getMessage());
+                        }
                     }
                 } catch (\Exception $e) {
                     // Log l'erreur mais ne bloque pas l'operation

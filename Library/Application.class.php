@@ -59,7 +59,10 @@ abstract class Application
 		}
 
 		try {
-			$matchedRoute = $router->getRoute($this->httpRequest->requestURI());
+			// Extraire uniquement le path sans la query string pour le matching
+			$uri = $this->httpRequest->requestURI();
+			$path = parse_url($uri, PHP_URL_PATH);
+			$matchedRoute = $router->getRoute($path);
 		} catch (\Exception $e) {
 			if ($e->getCode() == \Library\Router::NO_ROUTE) {
 				$this->httpResponse->redirect404();

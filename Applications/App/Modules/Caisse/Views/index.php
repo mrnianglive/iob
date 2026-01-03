@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-md-5">
         <form method="POST" id="formulaire">
+            <?= $page->getCsrfInput(); ?>
             <select class="form-control" name="RefCaisse" tabindex="1" required=""
                 onchange="document.getElementById('formulaire').submit();">
                 <option>Veuillez Choisir</option>

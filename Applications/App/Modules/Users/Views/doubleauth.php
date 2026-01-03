@@ -40,6 +40,7 @@
           <div class="card">
               <div class="card-body">
                   <form class="form-horizontal form-material" method="POST">
+                      <?= $page->getCsrfInput(); ?>
                       <div class="form-group mb-4">
                           <label class="col-md-12 p-0">Secret CODE</label>
                           <div class="col-md-12 border-bottom p-0">

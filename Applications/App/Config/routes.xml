@@ -12,6 +12,7 @@
 	<route url="/Journal/delete/([0-9]+)" module="Journal" vars="id" action="delete"/>
 	<route url="/Journal/validate" module="Journal" action="validate"/>
 	<route url="/Journal/cancelvalidate/([0-9]+)" vars="id" module="Journal" action="cancelvalidate"/>
+	<route url="/Journal/noverified" module="Journal" action="noverified"/>
 	<route url="/Arreter/index" module="Arreter" action="index"/>
 	<route url="/Arreter/close/([0-9]+)" vars="id" module="Bielletage" action="stopcaisse"/>
 	<route url="/Arreter/View/([0-9]+)" vars="id" module="Arreter" action="View"/>
@@ -48,6 +49,7 @@
 	<route url="/Arreter/reserve/uv" module="Arreter" action="reserveuv"/>
 	<route url="/Arreter/cancel/([0-9]+)" module="Journal" vars="id" action="cancelFermeture"/>
 	<route url="/Pannel/links" module="Pannel" action="links"/>
+	<route url="/Pannel/fonds_roulement" module="Pannel" action="fondsRoulement"/>
 
 	<route url="/Users/doubleauth/([0-9]+)" module="Users" vars="id" action="doubleauth"/>
 	<route url="/connexion/doubleauth" module="Connexion" action="doubleauth"/>

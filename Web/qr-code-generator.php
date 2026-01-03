@@ -1,13 +1,12 @@
 <?php
 
-// Inclusion de la bibliothèque QR code
-require_once 'phpqrcode/qrlib.php';
-
 // Récupération du texte à encoder dans le QR code
-$text = $_GET['text'];
+$text = isset($_GET['text']) ? urlencode($_GET['text']) : 'default';
+$size = isset($_GET['size']) ? intval($_GET['size']) : 150;
 
-// Configuration de la taille de l'image QR code
-$size = 400;
+// Utiliser l'API externe QR Server (gratuit et fiable)
+$qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size={$size}x{$size}&data={$text}";
 
-// Génération de l'image QR code
-QRcode::png($text, false, QR_ECLEVEL_L, 80, 2);
+// Rediriger vers l'image QR
+header("Location: {$qrUrl}");
+exit;

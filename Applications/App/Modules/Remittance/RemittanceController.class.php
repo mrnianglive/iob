@@ -26,7 +26,7 @@ class RemittanceController extends \Library\BackController
         $this->page->addVar('Value', $request->postData('RefAgency'));
         $SoldeRemittanceVersement = 0;
         $SoldeRemittanceRetrait = 0;
-        $Antidate = $_POST['Antidate'];
+        $Antidate = $request->postData('Antidate') ?? '';
 
         if ($request->method() == 'POST' && $request->postData('RefCaisse')) {
             $RefCaisse = $request->postData('RefCaisse');

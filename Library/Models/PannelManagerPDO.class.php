@@ -60,6 +60,28 @@ class PannelManagerPDO extends PannelManager
         return $ListeProduit;
     }
 
+    /**
+     * Récupère les produits auxquels les caisses d'une agence ont accès
+     * via la table TbleChmodProduit
+     * @param int $refAgency L'ID de l'agence
+     * @return array Liste des produits accessibles
+     */
+    public function ListeProduitByAgence($refAgency)
+    {
+        $sql = "SELECT DISTINCT p.RefProduit, p.NameProduit, p.StatutProduit, b.NameBanque
+                FROM TbleProduit p
+                INNER JOIN TbleBanque b ON b.RefBanque = p.RefBanque
+                INNER JOIN TbleChmodProduit cp ON cp.RefProduit = p.RefProduit
+                INNER JOIN TbleCaisse c ON c.RefCaisse = cp.RefCaisse
+                WHERE c.RefAgency = :RefAgency
+                ORDER BY p.NameProduit";
+        
+        $requete = $this->dao->prepare($sql);
+        $requete->bindValue(':RefAgency', $refAgency, \PDO::PARAM_INT);
+        $requete->execute();
+        return $requete->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
 
     public function AddProduit()
     {
@@ -294,5 +316,53 @@ class PannelManagerPDO extends PannelManager
         $requete->execute();
         $data = $requete->fetch();
         return $data;
+    }
+
+    public function UpdatePlafondFondsRoulement($refAgency, $plafond)
+    {
+        $requete = $this->dao->prepare('UPDATE TbleAgency SET PlafondFondsRoulement = :plafond WHERE RefAgency = :RefAgency');
+        $requete->bindValue(':plafond', $plafond, \PDO::PARAM_STR);
+        $requete->bindValue(':RefAgency', $refAgency, \PDO::PARAM_INT);
+        $requete->execute();
+    }
+
+    public function InitialiserFondsRoulement($refAgency, $soldeEspeces, $soldeOmni, $commentaire = null)
+    {
+        $date = date('Y-m-d');
+        
+        // Inserer dans TbleFondsRoulement
+        $requete = $this->dao->prepare('INSERT INTO TbleFondsRoulement (RefAgency, DateFonds, SoldeEspeces, SoldeOmni, TypeMouvement, RefUsers, Commentaire) VALUES (:RefAgency, :DateFonds, :SoldeEspeces, :SoldeOmni, :TypeMouvement, :RefUsers, :Commentaire)');
+        $requete->bindValue(':RefAgency', $refAgency, \PDO::PARAM_INT);
+        $requete->bindValue(':DateFonds', $date, \PDO::PARAM_STR);
+        $requete->bindValue(':SoldeEspeces', $soldeEspeces, \PDO::PARAM_STR);
+        $requete->bindValue(':SoldeOmni', $soldeOmni, \PDO::PARAM_STR);
+        $requete->bindValue(':TypeMouvement', 'INITIALISATION', \PDO::PARAM_STR);
+        $requete->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $requete->bindValue(':Commentaire', $commentaire, \PDO::PARAM_STR);
+        $requete->execute();
+        
+        // Mettre a jour DateInitialisation dans TbleAgency
+        $requeteUpdate = $this->dao->prepare('UPDATE TbleAgency SET DateInitialisation = :date, SoldeOmniReference = :soldeOmni WHERE RefAgency = :RefAgency');
+        $requeteUpdate->bindValue(':date', $date, \PDO::PARAM_STR);
+        $requeteUpdate->bindValue(':soldeOmni', $soldeOmni, \PDO::PARAM_STR);
+        $requeteUpdate->bindValue(':RefAgency', $refAgency, \PDO::PARAM_INT);
+        $requeteUpdate->execute();
+    }
+
+    public function GetHistoriqueFondsRoulement($refAgency)
+    {
+        $requete = $this->dao->prepare('SELECT * FROM TbleFondsRoulement WHERE RefAgency = :RefAgency ORDER BY DateFonds DESC, DateCreation DESC LIMIT 10');
+        $requete->bindValue(':RefAgency', $refAgency, \PDO::PARAM_INT);
+        $requete->execute();
+        return $requete->fetchAll();
+    }
+
+    public function GetDerniereInitialisation($refAgency)
+    {
+        $requete = $this->dao->prepare('SELECT * FROM TbleFondsRoulement WHERE RefAgency = :RefAgency AND TypeMouvement = :TypeMouvement ORDER BY DateFonds DESC LIMIT 1');
+        $requete->bindValue(':RefAgency', $refAgency, \PDO::PARAM_INT);
+        $requete->bindValue(':TypeMouvement', 'INITIALISATION', \PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetch();
     }
 }

@@ -226,6 +226,7 @@
                 </button>
             </div>
             <form method="POST" action="/bielletage/do_reopen">
+                <?= $page->getCsrfInput(); ?>
                 <div class="modal-body">
                     <input type="hidden" name="RefCaisse" id="reopenCaisseId">
 

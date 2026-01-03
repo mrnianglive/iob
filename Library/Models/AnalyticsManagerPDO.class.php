@@ -9,9 +9,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
 
     public function GetOperations($debut, $fin)
     {
-        $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleUsers ON TbleUsers.Refusers=TbleOperations.Insert_Id    WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  date(TbleOperations.Approve2_Time) BETWEEN :debut AND :fin  AND(TbleOperations.Reftype=1 OR TbleOperations.Reftype=2 ) AND SUBSTRING(TbleOperations.NumCompte,1,8) !=15009792    ORDER BY TbleOperations.datePayement ASC");
-        $requete->bindValue(':debut', $debut, \PDO::PARAM_STR);
-        $requete->bindValue(':fin', $fin, \PDO::PARAM_STR);
+        $requete = $this->dao->prepare("SELECT * FROM TbleOperations INNER JOIN TbleType ON TbleType.RefType=TbleOperations.RefType INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency INNER JOIN TbleUsers ON TbleUsers.Refusers=TbleOperations.Insert_Id    WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND  TbleOperations.Approve2_Time >= :debut AND TbleOperations.Approve2_Time <= :fin  AND(TbleOperations.Reftype=1 OR TbleOperations.Reftype=2 ) AND LEFT(TbleOperations.NumCompte,8) !='15009792'    ORDER BY TbleOperations.datePayement ASC");
+        $requete->bindValue(':debut', $debut . ' 00:00:00', \PDO::PARAM_STR);
+        $requete->bindValue(':fin', $fin . ' 23:59:59', \PDO::PARAM_STR);
         $requete->execute();
         $data = $requete->fetchAll();
         return $data;
@@ -29,13 +29,13 @@ class AnalyticsManagerPDO extends AnalyticsManager
         FROM TbleOperations 
         WHERE Approve2_Id IS NOT NULL 
             AND Reset_Id IS NULL 
-            AND DATE(Approve2_Time) BETWEEN :debut AND :fin  
+            AND Approve2_Time >= :debut AND Approve2_Time <= :fin
             AND (RefType = 1 OR RefType = 2) 
-            AND SUBSTRING(NumCompte, 1, 8) != '15009792'";
+            AND LEFT(NumCompte, 8) != '15009792'";
         
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':debut', $debut, \PDO::PARAM_STR);
-        $stmt->bindValue(':fin', $fin, \PDO::PARAM_STR);
+        $stmt->bindValue(':debut', $debut . ' 00:00:00', \PDO::PARAM_STR);
+        $stmt->bindValue(':fin', $fin . ' 23:59:59', \PDO::PARAM_STR);
         $stmt->execute();
         
         return $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -50,10 +50,74 @@ class AnalyticsManagerPDO extends AnalyticsManager
 
     public function ChartAgenceVersement($agence)
     {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND MONTH(Approve2_Time)=:mois AND YEAR(Approve2_Time)=:year AND (TbleOperations.RefType=1) AND TbleAgency.RefAgency=:agency');
-        $requeteSUm->bindValue(':mois', date('m'), \PDO::PARAM_STR);
-        $requeteSUm->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+        $debut = date('Y-m-01 00:00:00');
+        $fin = date('Y-m-t 23:59:59');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time >= :debut AND Approve2_Time <= :fin AND (TbleOperations.RefType=1) AND TbleAgency.RefAgency=:agency');
+        $requeteSUm->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':fin', $fin, \PDO::PARAM_STR);
         $requeteSUm->bindValue(':agency', $agence, \PDO::PARAM_STR);
+        $requeteSUm->execute();
+        $data = $requeteSUm->fetch();
+        return $data['TotalVersment'];
+    }
+
+    public function ChartAgenceRetrait($agence)
+    {
+        $debut = date('Y-m-01 00:00:00');
+        $fin = date('Y-m-t 23:59:59');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time >= :debut AND Approve2_Time <= :fin AND (TbleOperations.RefType=2) AND TbleAgency.RefAgency=:agency');
+        $requeteSUm->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':fin', $fin, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':agency', $agence, \PDO::PARAM_STR);
+        $requeteSUm->execute();
+        $data = $requeteSUm->fetch();
+        return $data['TotalVersment'];
+    }
+
+    public function ChartCaisseVersement($caisse)
+    {
+        $debut = date('Y-m-01 00:00:00');
+        $fin = date('Y-m-t 23:59:59');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time >= :debut AND Approve2_Time <= :fin AND (TbleOperations.RefType=1) AND TbleCaisse.RefCaisse=:caisse');
+        $requeteSUm->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':fin', $fin, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':caisse', $caisse, \PDO::PARAM_STR);
+        $requeteSUm->execute();
+        $data = $requeteSUm->fetch();
+        return $data['TotalVersment'];
+    }
+
+    public function ChartCaisseRetrait($caisse)
+    {
+        $debut = date('Y-m-01 00:00:00');
+        $fin = date('Y-m-t 23:59:59');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time >= :debut AND Approve2_Time <= :fin AND (TbleOperations.RefType=2) AND TbleCaisse.RefCaisse=:caisse');
+        $requeteSUm->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':fin', $fin, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':caisse', $caisse, \PDO::PARAM_STR);
+        $requeteSUm->execute();
+        $data = $requeteSUm->fetch();
+        return $data['TotalVersment'];
+    }
+    public function ChartVersment($mois)
+    {
+        $debut = date('Y-' . $mois . '-01 00:00:00');
+        $fin = date('Y-' . $mois . '-t 23:59:59');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations   WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time >= :debut AND Approve2_Time <= :fin AND (TbleOperations.RefType=1)  ');
+        $requeteSUm->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':fin', $fin, \PDO::PARAM_STR);
+        $requeteSUm->execute();
+        $data = $requeteSUm->fetch();
+        return $data['TotalVersment'];
+    }
+
+    public function ChartRetrait($mois)
+    {
+        $debut = date('Y-' . $mois . '-01 00:00:00');
+        $fin = date('Y-' . $mois . '-t 23:59:59');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations   WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time >= :debut AND Approve2_Time <= :fin AND (TbleOperations.RefType=2)  ');
+        $requeteSUm->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':fin', $fin, \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         return $data['TotalVersment'];
@@ -154,8 +218,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
 
     public function CountDayValidate()
     {
-        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND DATE(ValidateDate)=:jour');
-        $requete->bindValue(':jour', date('Y-m-d'), \PDO::PARAM_STR);
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND ValidateDate >= :debut AND ValidateDate <= :fin');
+        $requete->bindValue(':debut', date('Y-m-d') . ' 00:00:00', \PDO::PARAM_STR);
+        $requete->bindValue(':fin', date('Y-m-d') . ' 23:59:59', \PDO::PARAM_STR);
         $requete->execute();
         $result = $requete->fetch();
         return $result['Nbre'];
@@ -163,9 +228,11 @@ class AnalyticsManagerPDO extends AnalyticsManager
 
     public function CountMonthValidate()
     {
-        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND YEAR(ValidateDate)=:year AND MONTH(ValidateDate)=:mois');
-        $requete->bindValue(':mois', date('m'), \PDO::PARAM_STR);
-        $requete->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+        $debut = date('Y-m-01 00:00:00');
+        $fin = date('Y-m-t 23:59:59');
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND ValidateDate >= :debut AND ValidateDate <= :fin');
+        $requete->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $requete->bindValue(':fin', $fin, \PDO::PARAM_STR);
         $requete->execute();
         $result = $requete->fetch();
         return $result['Nbre'];
@@ -173,9 +240,11 @@ class AnalyticsManagerPDO extends AnalyticsManager
 
     public function CountMonthOperations()
     {
-        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND YEAR(Approve2_time)=:year AND MONTH(Approve2_time)=:mois');
-        $requete->bindValue(':mois', date('m'), \PDO::PARAM_STR);
-        $requete->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+        $debut = date('Y-m-01 00:00:00');
+        $fin = date('Y-m-t 23:59:59');
+        $requete = $this->dao->prepare('SELECT COUNT(RefOperations) AS Nbre FROM TbleOperations INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_time >= :debut AND Approve2_time <= :fin');
+        $requete->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $requete->bindValue(':fin', $fin, \PDO::PARAM_STR);
         $requete->execute();
         $result = $requete->fetch();
         return $result['Nbre'];
@@ -203,17 +272,18 @@ class AnalyticsManagerPDO extends AnalyticsManager
      */
     public function GetAllCountersOptimized()
     {
-        $today = date('Y-m-d');
-        $mois = date('m');
-        $year = date('Y');
+        $todayStart = date('Y-m-d 00:00:00');
+        $todayEnd = date('Y-m-d 23:59:59');
+        $monthStart = date('Y-m-01 00:00:00');
+        $monthEnd = date('Y-m-t 23:59:59');
         
         $sql = "SELECT 
             -- Validations du jour
-            SUM(CASE WHEN DATE(ValidateDate) = :today THEN 1 ELSE 0 END) AS DailyValidate,
+            SUM(CASE WHEN ValidateDate >= :todayStart AND ValidateDate <= :todayEnd THEN 1 ELSE 0 END) AS DailyValidate,
             -- Validations du mois
-            SUM(CASE WHEN YEAR(ValidateDate) = :year AND MONTH(ValidateDate) = :mois THEN 1 ELSE 0 END) AS MonthValidate,
+            SUM(CASE WHEN ValidateDate >= :monthStart AND ValidateDate <= :monthEnd THEN 1 ELSE 0 END) AS MonthValidate,
             -- Operations du mois
-            SUM(CASE WHEN YEAR(Approve2_time) = :year2 AND MONTH(Approve2_time) = :mois2 THEN 1 ELSE 0 END) AS MonthOperations,
+            SUM(CASE WHEN Approve2_time >= :monthStart AND Approve2_time <= :monthEnd THEN 1 ELSE 0 END) AS MonthOperations,
             -- Operations de la semaine
             SUM(CASE WHEN Approve2_time > NOW() - INTERVAL 7 DAY THEN 1 ELSE 0 END) AS CountWeekOperations,
             -- Validations de la semaine
@@ -222,11 +292,10 @@ class AnalyticsManagerPDO extends AnalyticsManager
         WHERE Approve2_Id IS NOT NULL AND Reset_Id IS NULL";
         
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':today', $today, \PDO::PARAM_STR);
-        $stmt->bindValue(':year', $year, \PDO::PARAM_STR);
-        $stmt->bindValue(':mois', $mois, \PDO::PARAM_STR);
-        $stmt->bindValue(':year2', $year, \PDO::PARAM_STR);
-        $stmt->bindValue(':mois2', $mois, \PDO::PARAM_STR);
+        $stmt->bindValue(':todayStart', $todayStart, \PDO::PARAM_STR);
+        $stmt->bindValue(':todayEnd', $todayEnd, \PDO::PARAM_STR);
+        $stmt->bindValue(':monthStart', $monthStart, \PDO::PARAM_STR);
+        $stmt->bindValue(':monthEnd', $monthEnd, \PDO::PARAM_STR);
         $stmt->execute();
         
         return $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -252,10 +321,11 @@ class AnalyticsManagerPDO extends AnalyticsManager
 
     public function UvDepot($Agence, $produit, $date)
     {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS MontantDepot FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=1 AND DATE(TbleUv.DateDepot)=:jour');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS MontantDepot FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=1 AND DateDepot >= :debut AND DateDepot <= :fin');
         $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSUm->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
-        $requeteSUm->bindValue(':jour', $date, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':debut', $date . ' 00:00:00', \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':fin', $date . ' 23:59:59', \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         return $data['MontantDepot'];
@@ -263,10 +333,11 @@ class AnalyticsManagerPDO extends AnalyticsManager
 
     public function UvRetrait($Agence, $produit, $date)
     {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS Montant FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=2 AND DATE(TbleUv.DateDepot)=:jour');
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantDepot) AS Montant FROM TbleUv WHERE RefAgency=:RefAgency AND RefProduit=:RefProduit AND RefType=2 AND DateDepot >= :debut AND DateDepot <= :fin');
         $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSUm->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
-        $requeteSUm->bindValue(':jour', $date, \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':debut', $date . ' 00:00:00', \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':fin', $date . ' 23:59:59', \PDO::PARAM_STR);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
         return $data['Montant'];
@@ -275,8 +346,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
     public function SoldeRemittanceVersementAgenceProduit($Date, $Agence, $produit)
     {
         if ($produit != 1) {
-            $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE DATE(TbleRemittance.Insert_time)=:jour AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=1  AND TbleRemittance.Reset_Id IS NULL AND TbleRemittance.RefProduit=:RefProduit');  //AND RefCaisse=:RefCaisse  
-            $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
+            $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE Insert_time >= :debut AND Insert_time <= :fin AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=1  AND TbleRemittance.Reset_Id IS NULL AND TbleRemittance.RefProduit=:RefProduit');
+            $requete->bindValue(':debut', $Date . ' 00:00:00', \PDO::PARAM_STR);
+            $requete->bindValue(':fin', $Date . ' 23:59:59', \PDO::PARAM_STR);
             $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
             $requete->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
             $requete->execute();
@@ -291,8 +363,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
     public function SoldeRemittanceRetraitAgenceProduit($Date, $Agence, $produit)
     {
         if ($produit != 1) {
-            $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE DATE(TbleRemittance.Insert_time)=:jour AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=2  AND TbleRemittance.Reset_Id IS NULL AND TbleRemittance.RefProduit=:RefProduit');  //AND RefCaisse=:RefCaisse  
-            $requete->bindValue(':jour', $Date, \PDO::PARAM_STR);
+            $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleRemittance.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE Insert_time >= :debut AND Insert_time <= :fin AND TbleAgency.RefAgency=:RefAgency AND TbleRemittance.RefType=2  AND TbleRemittance.Reset_Id IS NULL AND TbleRemittance.RefProduit=:RefProduit');
+            $requete->bindValue(':debut', $Date . ' 00:00:00', \PDO::PARAM_STR);
+            $requete->bindValue(':fin', $Date . ' 23:59:59', \PDO::PARAM_STR);
             $requete->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
             $requete->bindValue(':RefProduit', $produit, \PDO::PARAM_INT);
             $requete->execute();
@@ -306,8 +379,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
 
     public function SommeDepotAgence($Date, $Agence)
     {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleAgency.RefAgency=:RefAgency AND (TbleOperations.RefType=1)');
-        $requeteSUm->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time >= :debut AND Approve2_Time <= :fin  AND TbleAgency.RefAgency=:RefAgency AND (TbleOperations.RefType=1)');
+        $requeteSUm->bindValue(':debut', $Date . ' 00:00:00', \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':fin', $Date . ' 23:59:59', \PDO::PARAM_STR);
         $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
@@ -315,8 +389,9 @@ class AnalyticsManagerPDO extends AnalyticsManager
     }
     public function SommeRetraitAgence($Date, $Agence)
     {
-        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time=:jour  AND TbleAgency.RefAgency=:RefAgency AND (TbleOperations.RefType=2)');
-        $requeteSUm->bindValue(':jour', $Date, \PDO::PARAM_STR);
+        $requeteSUm = $this->dao->prepare('SELECT SUM(MontantVersement) AS TotalVersment FROM TbleOperations  INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse=TbleOperations.RefCaisse INNER JOIN TbleAgency ON TbleAgency.RefAgency=TbleCaisse.RefAgency WHERE TbleOperations.Approve2_Id IS NOT NULL AND TbleOperations.Reset_Id IS NULL AND Approve2_Time >= :debut AND Approve2_Time <= :fin  AND TbleAgency.RefAgency=:RefAgency AND (TbleOperations.RefType=2)');
+        $requeteSUm->bindValue(':debut', $Date . ' 00:00:00', \PDO::PARAM_STR);
+        $requeteSUm->bindValue(':fin', $Date . ' 23:59:59', \PDO::PARAM_STR);
         $requeteSUm->bindValue(':RefAgency', $Agence, \PDO::PARAM_INT);
         $requeteSUm->execute();
         $data = $requeteSUm->fetch();
@@ -330,6 +405,8 @@ class AnalyticsManagerPDO extends AnalyticsManager
      */
     public function ChartAllAgencesOptimized()
     {
+        $debut = date('Y-m-01 00:00:00');
+        $fin = date('Y-m-t 23:59:59');
         $sql = "SELECT 
             a.RefAgency, a.NameAgency,
             COALESCE(SUM(CASE WHEN o.RefType = 1 THEN o.MontantVersement ELSE 0 END), 0) AS SommeVersement,
@@ -339,15 +416,42 @@ class AnalyticsManagerPDO extends AnalyticsManager
         LEFT JOIN TbleOperations o ON o.RefCaisse = c.RefCaisse 
             AND o.Approve2_Id IS NOT NULL 
             AND o.Reset_Id IS NULL 
-            AND MONTH(o.Approve2_Time) = :mois 
-            AND YEAR(o.Approve2_Time) = :year
+            AND o.Approve2_Time >= :debut 
+            AND o.Approve2_Time <= :fin
             AND (o.RefType = 1 OR o.RefType = 2)
         GROUP BY a.RefAgency, a.NameAgency
         ORDER BY a.NameAgency";
         
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':mois', date('m'), \PDO::PARAM_STR);
-        $stmt->bindValue(':year', date('Y'), \PDO::PARAM_STR);
+        $stmt->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $stmt->bindValue(':fin', $fin, \PDO::PARAM_STR);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function ChartAllCaissesOptimized()
+    {
+        $debut = date('Y-m-01 00:00:00');
+        $fin = date('Y-m-t 23:59:59');
+        $sql = "SELECT 
+            c.RefCaisse, c.NameCaisse, a.NameAgency,
+            COALESCE(SUM(CASE WHEN o.RefType = 1 THEN o.MontantVersement ELSE 0 END), 0) AS SommeVersement,
+            COALESCE(SUM(CASE WHEN o.RefType = 2 THEN o.MontantVersement ELSE 0 END), 0) AS SommeRetrait
+        FROM TbleCaisse c
+        INNER JOIN TbleAgency a ON a.RefAgency = c.RefAgency
+        LEFT JOIN TbleOperations o ON o.RefCaisse = c.RefCaisse 
+            AND o.Approve2_Id IS NOT NULL 
+            AND o.Reset_Id IS NULL 
+            AND o.Approve2_Time >= :debut 
+            AND o.Approve2_Time <= :fin
+            AND (o.RefType = 1 OR o.RefType = 2)
+        GROUP BY c.RefCaisse, c.NameCaisse, a.NameAgency
+        ORDER BY a.NameAgency, c.NameCaisse";
+        
+        $stmt = $this->dao->prepare($sql);
+        $stmt->bindValue(':debut', $debut, \PDO::PARAM_STR);
+        $stmt->bindValue(':fin', $fin, \PDO::PARAM_STR);
         $stmt->execute();
         
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);

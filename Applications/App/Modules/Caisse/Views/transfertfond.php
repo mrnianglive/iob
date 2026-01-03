@@ -4,6 +4,7 @@
 
             <h3 class="box-title">Sortie de Fond</h3>
             <form method="POST" action="/Caisse/transfertfond" id="formulaire">
+                <?= $page->getCsrfInput(); ?>
                 <div class="input-group">
                     <div class="">Agence
                         <select class="form-control" name="RefAgency" tabindex="1" required="" id="RefAgency">

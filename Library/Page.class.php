@@ -22,6 +22,7 @@ class Page extends ApplicationComponent
 		}
 
 		$user = $this->app->user();
+		$page = $this;
 		extract($this->vars);
 
 		ob_start();

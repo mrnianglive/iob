@@ -30,8 +30,8 @@
         }
     });
     </script>
-    <?= $page->getCsrfInput(); ?>
+    <?= \Library\CSRF::getInput(); ?>
     </br>
     <button class="btn btn-lg btn-primary btn-block" type="submit" id="register">Connexion</button>
-    <p class="mt-5 mb-3 text-muted">&copy; MALI CREANCES 2021 Developed by NIANGALY</p>
+    <p class="mt-5 mb-3 text-muted">&copy; IOB AGENCY | MALI CREANCES <?= date('Y'); ?></p>
 </form>

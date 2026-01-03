@@ -1,6 +1,7 @@
   <div class="row">
       <div class="col-md-12">
           <form method="POST" action="/Journal/index" id="formulaire">
+              <?= $page->getCsrfInput(); ?>
               <div class="input-group">
                   <div class="">Agence
                       <select class="form-control" name="RefAgency" tabindex="1" required="" id="RefAgency">
@@ -20,8 +21,10 @@
                   </div>
 
                   <div class="col-md-2">Produit
-                      <select class="form-control" name="RefProduit" tabindex="1" id="RefProduit" required="">
-                          <option></option>
+                      <select class="form-control" name="RefProduit" tabindex="1" id="RefProduit"
+                          data-selected-produit="<?= $RefProduit ?? '' ?>">
+                          <option value="">Tous les produits</option>
+                          <!-- Chargé dynamiquement via JS -->
                       </select>
                   </div>
                   <div class=""></br>
@@ -30,11 +33,11 @@
                   </div>
 
                   <div class="col-md-2 ">Total Depot
-                      <input type="text" value="<?= number_format($sommeVersementPeriode, 0, '.', '.'); ?>"
+                      <input type="text" value="<?= number_format($sommeVersementPeriode ?? 0, 0, '.', '.'); ?>"
                           class="form-control" readonly>
                   </div>
                   <div class="col-md-2">Total Retrait
-                      <input type="text" value="<?= number_format($sommeRetraitPeriode, 0, '.', '.'); ?>"
+                      <input type="text" value="<?= number_format($sommeRetraitPeriode ?? 0, 0, '.', '.'); ?>"
                           class="form-control" readonly>
                   </div>
                   <!-- <div class="col-md-2">Solde Especes
@@ -132,9 +135,9 @@
                   <h5 class="modal-title" id="exampleModalLabel">Confirmation de l'opération <span id="modal-id"></span>
                   </h5>
               </div>
-               <form role="form" method="post" action="/Journal/validate">
-                   <?= $page->getCsrfInput(); ?>
-                   <div class="modal-body">
+              <form role="form" method="post" action="/Journal/validate">
+                  <?= $page->getCsrfInput(); ?>
+                  <div class="modal-body">
                       <div class="modal-body">
                           <input type="hidden" class="form-control" id="modal-operation-id" name="RefOperations"
                               value="">
@@ -166,3 +169,80 @@
           </div>
       </div>
   </div>
+
+  <script>
+// Attendre que jQuery soit disponible
+(function waitForJQuery() {
+    if (typeof $ === 'undefined' || typeof jQuery === 'undefined') {
+        setTimeout(waitForJQuery, 100);
+        return;
+    }
+
+    $(document).ready(function() {
+        console.log('Journal index JS loaded');
+
+        // Charger les produits quand une agence est sélectionnée
+        function loadProduitsByAgence(refAgency, selectedProduit) {
+            var $select = $('#RefProduit');
+            console.log('Loading products for agency:', refAgency);
+            $select.html('<option value="">Chargement...</option>');
+
+            if (!refAgency) {
+                $select.html('<option value="">Sélectionnez une agence</option>');
+                return;
+            }
+
+            $.ajax({
+                url: '/config/requeteProduitByAgence.php',
+                type: 'GET',
+                data: {
+                    RefAgency: refAgency
+                },
+                dataType: 'json',
+                success: function(data) {
+                    console.log('Products received:', data);
+                    var options = '<option value="">Tous les produits</option>';
+                    $.each(data, function(refProduit, nameProduit) {
+                        var selected = (selectedProduit == refProduit) ? 'selected' :
+                            '';
+                        options += '<option value="' + refProduit + '" ' + selected +
+                            '>' + nameProduit + '</option>';
+                    });
+                    $select.html(options);
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', status, error);
+                    $select.html('<option value="">Erreur de chargement</option>');
+                }
+            });
+        }
+
+        // Écouter le changement d'agence
+        $('#RefAgency').on('change', function() {
+            console.log('Agency changed to:', $(this).val());
+            loadProduitsByAgence($(this).val(), '');
+        });
+
+        // Charger les produits au chargement de la page si une agence est sélectionnée
+        var initialAgency = $('#RefAgency').val();
+        var selectedProduit = $('#RefProduit').data('selected-produit') || '';
+        console.log('Initial agency:', initialAgency, 'Selected produit:', selectedProduit);
+        if (initialAgency) {
+            loadProduitsByAgence(initialAgency, selectedProduit);
+        }
+
+        // Modal - Pré-remplir les champs
+        $('#modal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var operationId = button.data('operation-id');
+            var refAgency = button.data('ref-agency');
+            var refProduit = button.data('ref-produit');
+
+            $('#modal-id').text(operationId);
+            $('#modal-operation-id').val(operationId);
+            $('#modal-ref-agency').val(refAgency);
+            $('#modal-ref-produit').val(refProduit);
+        });
+    });
+})();
+  </script>

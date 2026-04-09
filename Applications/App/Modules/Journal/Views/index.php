@@ -92,7 +92,7 @@
                                       onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vérifcation ?');">
                                       Verifiée le <span><?= $value['DateValidate']; ?></span>
                                       <?php if (!empty($value['SentFromAgency'])) { ?>
-                                          <br><small>De: <?= $value['SentFromAgency']; ?></small>
+                                          <br><small><?= preg_replace('/^MLC-/i', '', $value['SentFromAgency']); ?></small>
                                       <?php } ?></a>
                                   <?php   } ?>
                               </td>

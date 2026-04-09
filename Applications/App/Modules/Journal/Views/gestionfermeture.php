@@ -110,16 +110,29 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    // Charger les données initiales si une agence est sélectionnée
-    if ($('#RefAgency').val()) {
-        loadClosureData();
+// Wait for jQuery to be loaded
+function waitForJQuery(callback) {
+    if (typeof $ !== 'undefined') {
+        callback();
+    } else {
+        setTimeout(function() {
+            waitForJQuery(callback);
+        }, 100);
     }
+}
 
-    // Recharger quand le formulaire est soumis
-    $('#filterForm').on('submit', function(e) {
-        e.preventDefault();
-        loadClosureData();
+waitForJQuery(function() {
+    $(document).ready(function() {
+        // Charger les données initiales si une agence est sélectionnée
+        if ($('#RefAgency').val()) {
+            loadClosureData();
+        }
+
+        // Recharger quand le formulaire est soumis
+        $('#filterForm').on('submit', function(e) {
+            e.preventDefault();
+            loadClosureData();
+        });
     });
 });
 

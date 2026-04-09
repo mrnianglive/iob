@@ -152,17 +152,17 @@
                               <td> <?php if (!empty($value['validate'])) { ?><a
                                       <?php if ($_SESSION['statut'] == 'superadmin' or  $_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'Control') { ?>
                                       href="/Arreter/cancel/<?= $value['validate']['RefCompte']; ?>/<?= $value['RefAgency']; ?>/<?= $day; ?>"
-                                      <?php } ?> class="btn btn-success" data-toggle="tooltip"
-                                      title="Cliquez ici pour reouvrir l'agence"><i class="fa  fa-lock"></i></a>
+                                      <?php } ?> class="btn btn-secondary btn-sm" data-toggle="tooltip"
+                                      title="Cliquez ici pour reouvrir l'agence"><i class="fa fa-undo"></i></a>
                                   <?php } else { ?>
                                   <form method="POST" action="/Arreter/reserve">
                                       <input type="hidden" value="<?= $value['ReserveActuelle']; ?>"
                                           name="ReserveActuelle">
                                       <input type="hidden" value="<?= $day; ?>" name="daycloture">
                                       <input type="hidden" value="<?= $value['RefAgency']; ?>" name="RefAgency">
-                                      <button type="submit" class="btn btn-danger" data-toggle="tooltip"
+                                      <button type="submit" class="btn btn-secondary btn-sm" data-toggle="tooltip"
                                           title="Cliquez ici pour fermer les caisses de l'agence"><i
-                                              class="fa fa-unlock"></i></button>
+                                              class="fa fa-lock"></i></button>
                                   </form>
                                   <?php } ?>
                               </td>

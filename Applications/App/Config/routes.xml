@@ -75,6 +75,7 @@
 	<route url="/api/get-sums" module="Bielletage" action="getSums" />
 	<route url="/Journal/getTotals" module="Journal" action="getTotals"/>
 	<route url="/Journal/petite_caisse/data" module="Journal" action="getPetiteCaisseData"/>
+	<route url="/Journal/getPetiteCaisseData" module="Journal" action="getPetiteCaisseData"/>
 	<route url="/Journal/gestion_fermeture" module="Journal" action="gestionfermeture"/>
 	<route url="/Journal/getClosureStatus" module="Journal" action="getClosureStatus"/>
 	<route url="/Journal/fermerAgence" module="Journal" action="fermerAgence"/>

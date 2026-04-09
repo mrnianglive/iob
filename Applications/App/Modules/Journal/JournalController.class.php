@@ -127,6 +127,9 @@ class JournalController extends \Library\BackController
         if (!empty($request->postData('jour'))) {
             $date = $request->postData('jour');
             $this->page->addVar('day', $request->postData('jour'));
+        } elseif (!empty($request->getData('jour'))) {
+            $date = $request->getData('jour');
+            $this->page->addVar('day', $request->getData('jour'));
         } else {
             $date = date('Y-m-d');
             $this->page->addVar('day', $date);
@@ -271,6 +274,32 @@ class JournalController extends \Library\BackController
             $selectedAgency = $Agence[0]['RefAgency'];
             $this->page->addVar('selectedAgency', $selectedAgency);
         }
+    }
+
+    public function executeGetPetiteCaisseData(\Library\HTTPRequest $request)
+    {
+        $date = $request->postData('jour');
+        
+        if (!$date) {
+            $this->jsonResponse(['error' => 'Date parameter missing'], 400);
+            return;
+        }
+
+        // Pour admin/control/superadmin : toutes les agences, sinon seulement les agences de l'utilisateur
+        if ($_SESSION['statut'] == 'admin' || $_SESSION['statut'] == 'superadmin' || $_SESSION['statut'] == 'Control') {
+            $Agence = $this->managers->getManagerOf("Pannel")->ListeAgence();
+        } else {
+            $Agence = $this->managers->getManagerOf("Pannel")->UserAgence();
+        }
+
+        $journalManager = $this->managers->getManagerOf("Journal");
+        $petiteCaisseData = $journalManager->GetPetiteCaisseDataOptimized($date, $Agence);
+
+        $this->jsonResponse([
+            'success' => true,
+            'data' => $petiteCaisseData,
+            'date' => $date
+        ]);
     }
 
     public function executeGetClosureStatus(\Library\HTTPRequest $request)

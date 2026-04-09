@@ -1,16 +1,14 @@
   <div class="row">
       <div class="col-md-12">
-          <form method="POST" id="formulaire">
-              <div class="input-group">
-                  <div class="col-md-3">Journée du:
-                      <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control">
-                  </div>
-                  <div class=""></br>
-                      <button type="submit" class="btn btn-primary" data-toggle="tooltip"
-                          title="Cliquer ici pour charger les informations"><i class="fa fa-search"></i></button>
-                  </div>
+          <div class="input-group">
+              <div class="col-md-3">Journée du:
+                  <input type="date" id="jour" name="jour" value="<?= $day; ?>" class="form-control">
               </div>
-          </form><br />
+              <div class=""></br>
+                  <button type="button" id="loadDataBtn" class="btn btn-primary" data-toggle="tooltip"
+                      title="Cliquer ici pour charger les informations"><i class="fa fa-search"></i></button>
+              </div>
+          </div><br />
           <div class="white-box">
               <h3 class="box-title">Petite Caisse</h3>
               <div class="table-responsive">
@@ -208,3 +206,51 @@
           </div>
       </div>
   </div>
+
+  <script>
+$(document).ready(function() {
+    // Store current data for comparison
+    var currentData = <?= json_encode($Agence); ?>;
+
+    // Load data via AJAX when button is clicked
+    $('#loadDataBtn').on('click', function() {
+        var date = $('#jour').val();
+        if (!date) {
+            alert('Veuillez sélectionner une date');
+            return;
+        }
+
+        // Show loading indicator
+        $('#loadDataBtn').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+            url: '/Journal/getPetiteCaisseData',
+            type: 'POST',
+            data: {
+                jour: date
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // Update the page by reloading with the new date
+                    window.location.href = '/Journal/petite_caisse?jour=' + date;
+                } else {
+                    alert('Erreur: ' + (response.error || 'Unknown error'));
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Erreur de chargement: ' + error);
+            },
+            complete: function() {
+                $('#loadDataBtn').prop('disabled', false).html(
+                    '<i class="fa fa-search"></i>');
+            }
+        });
+    });
+
+    // Also trigger on date change
+    $('#jour').on('change', function() {
+        $('#loadDataBtn').click();
+    });
+});
+  </script>

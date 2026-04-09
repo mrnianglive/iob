@@ -17,17 +17,14 @@ class JournalController extends \Library\BackController
         $Agence = $pannelManager->UserAgence();
         $this->page->addVar('UserAgence', $Agence);
 
-        $Debut = $request->postData('Debut');
-        $Fin = $request->postData('Fin');
-        $Value = $request->postData('RefAgency');
-        $RefProduit = $request->postData('RefProduit');
-
-        // $this->page->addVars(compact('Debut', 'Fin', 'Value', 'RefProduit'));
+        $Debut = $request->postData('Debut') ?: $request->getData('debut');
+        $Fin = $request->postData('Fin') ?: $request->getData('fin');
+        $Value = $request->postData('RefAgency') ?: $request->getData('value');
+        $RefProduit = $request->postData('RefProduit') ?: $request->getData('produit');
 
         $this->page->addVar('Debut', $Debut);
         $this->page->addVar('Fin', $Fin);
         $this->page->addVar('Value', $Value);
-
         $this->page->addVar('RefProduit', $RefProduit);
 
         $ListeAgence = $pannelManager->ListeAgence();
@@ -36,18 +33,8 @@ class JournalController extends \Library\BackController
         $journalManager = $this->managers->getManagerOf('Journal');
         $Operations = [];
 
-        if (!empty($Value) || isset($_GET['value'])) {
-            $Debut = $_GET['debut'] ?? $Debut;
-            $Fin = $_GET['fin'] ?? $Fin;
-            $Value = $_GET['value'] ?? $Value;
-            $RefProduit = $_GET['produit'] ?? $RefProduit;
-
+        if (!empty($Value)) {
             $Operations = $journalManager->GetOperations($Debut, $Fin, $Value, $RefProduit);
-            // $this->page->addVars(compact('Debut', 'Fin', 'Value', 'RefProduit'));
-            $this->page->addVar('Debut', $Debut);
-            $this->page->addVar('Fin', $Fin);
-            $this->page->addVar('Value', $Value);
-            $this->page->addVar('RefProduit', $RefProduit);
         } else {
             $Operations = $journalManager->Operations();
         }
@@ -83,9 +70,13 @@ class JournalController extends \Library\BackController
         $_SESSION['message']['text'] = 'Opération validée avec succès';
         $_SESSION['message']['number'] = 2;
         if (!empty($request->postData('Debut')) && !empty($request->postData('Fin'))) {
-            $this->app()->httpResponse()->redirect("/Journal/index/" . $request->postData('Debut') . "/" . $request->postData('Fin') . "/" . $request->postData('RefAgency') . "/" . $request->postData('RefProduit')); //Retour en arriere
+            $url = "/Journal/index/" . $request->postData('Debut') . "/" . $request->postData('Fin') . "/" . $request->postData('RefAgency');
+            if (!empty($request->postData('RefProduit'))) {
+                $url .= "/" . $request->postData('RefProduit');
+            }
+            $this->app()->httpResponse()->redirect($url);
         } else {
-            $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
+            $this->app()->httpResponse()->redirect("/Journal/index");
         }
     }
     public function executeCancelvalidate(\Library\HTTPRequest $request)
@@ -94,7 +85,9 @@ class JournalController extends \Library\BackController
         $_SESSION['message']['type'] = 'success';
         $_SESSION['message']['text'] = 'Validation annulée avec succès';
         $_SESSION['message']['number'] = 2;
-        $this->app()->httpResponse()->redirect("/Journal/index"); //Retour en arriere
+        // Redirect back to the referring page to preserve filters
+        $referer = $_SERVER['HTTP_REFERER'] ?? '/Journal/index';
+        $this->app()->httpResponse()->redirect($referer);
     }
 
     public function executeDelete(\Library\HTTPRequest $request)

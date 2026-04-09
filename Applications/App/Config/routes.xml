@@ -16,6 +16,7 @@
 	<route url="/Journal/noverified" module="Journal" action="noverified"/>
 
 	<route url="/Journal/index/([0-9]{4}-[0-9]{2}-[0-9]{2})/([0-9]{4}-[0-9]{2}-[0-9]{2})/([0-9]+)/([0-9]+)" vars="debut,fin,value,produit" module="Journal" action="index"/>
+	<route url="/Journal/index/([0-9]{4}-[0-9]{2}-[0-9]{2})/([0-9]{4}-[0-9]{2}-[0-9]{2})/([0-9]+)" vars="debut,fin,value" module="Journal" action="index"/>
 
 
 	<route url="/Journal/canceled" module="Journal" action="canceled"/>

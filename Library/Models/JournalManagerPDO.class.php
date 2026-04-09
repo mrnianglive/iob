@@ -30,11 +30,12 @@ class JournalManagerPDO extends JournalManager
 
     public function GetOperations($debut, $fin, $Agence, $produit)
     {
-        $sql = "SELECT * FROM operations 
-                WHERE Approve2_Id IS NOT NULL 
-                AND Reset_Id IS NULL 
-                AND DATE(Approve2_Time) BETWEEN :debut AND :fin 
-                AND RefAgency = :Agence";
+        $sql = "SELECT o.*, a.NameAgency AS SentFromAgency FROM operations o
+                LEFT JOIN TbleAgency a ON a.RefAgency = o.SentFromAgency
+                WHERE o.Approve2_Id IS NOT NULL 
+                AND o.Reset_Id IS NULL 
+                AND DATE(o.Approve2_Time) BETWEEN :debut AND :fin 
+                AND o.RefAgency = :Agence";
 
         $params = [
             ':debut' => $debut,
@@ -43,13 +44,13 @@ class JournalManagerPDO extends JournalManager
         ];
 
         if ($produit) {
-            $sql .= " AND RefProduit = :produit";
+            $sql .= " AND o.RefProduit = :produit";
             $params[':produit'] = $produit;
         } else {
-            $sql .= " AND RefProduit IS NULL";
+            $sql .= " AND o.RefProduit IS NULL";
         }
 
-        $sql .= " ORDER BY datePayement DESC";
+        $sql .= " ORDER BY o.datePayement DESC";
 
         $requete = $this->dao->prepare($sql);
         $requete->execute($params);

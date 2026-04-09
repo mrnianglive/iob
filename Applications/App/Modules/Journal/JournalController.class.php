@@ -233,7 +233,7 @@ class JournalController extends \Library\BackController
         $this->page->addVar('permission', $permissions);
     }
 
-    public function executeGestionFermeture(\Library\HTTPRequest $request)
+    public function executeGestionfermeture(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Gestion des Fermetures");
 

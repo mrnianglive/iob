@@ -1205,7 +1205,16 @@ class JournalManagerPDO extends JournalManager
         }
 
         $agencyIds = array_column($agencies, 'RefAgency');
-        $placeholders = implode(',', array_fill(0, count($agencyIds), '?'));
+        
+        // Build IN clause with named parameters
+        $agencyParams = [];
+        $agencyPlaceholders = [];
+        foreach ($agencyIds as $i => $id) {
+            $paramName = ':agency' . $i;
+            $agencyParams[$paramName] = $id;
+            $agencyPlaceholders[] = $paramName;
+        }
+        $agencyInClause = implode(',', $agencyPlaceholders);
         
         $sql = "
             SELECT 
@@ -1330,21 +1339,22 @@ class JournalManagerPDO extends JournalManager
                 WHERE (RefAgency, DateSolde) IN (
                     SELECT RefAgency, MAX(DateSolde)
                     FROM TbleCompte
-                    WHERE RefAgency IN ($placeholders)
+                    WHERE RefAgency IN ($agencyInClause)
                     AND DateSolde < :date
                     GROUP BY RefAgency
                 )
             ) yc ON yc.RefAgency = a.RefAgency
-            WHERE a.RefAgency IN ($placeholders)
+            WHERE a.RefAgency IN ($agencyInClause)
         ";
 
-        $params = array_merge([$date, $date, $date, $date, $date, $date, $date, $date, $date, $date], $agencyIds, [$date], $agencyIds, [$date]);
-        
         $requete = $this->dao->prepare($sql);
-        foreach ($params as $i => $param) {
-            $type = is_int($param) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
-            $requete->bindValue($i + 1, $param, $type);
+        $requete->bindValue(':date', $date, \PDO::PARAM_STR);
+        
+        // Bind agency parameters
+        foreach ($agencyParams as $paramName => $value) {
+            $requete->bindValue($paramName, $value, \PDO::PARAM_INT);
         }
+        
         $requete->execute();
         $results = $requete->fetchAll(\PDO::FETCH_ASSOC);
 

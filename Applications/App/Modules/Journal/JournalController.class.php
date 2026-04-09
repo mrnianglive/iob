@@ -278,28 +278,32 @@ class JournalController extends \Library\BackController
 
     public function executeGetPetiteCaisseData(\Library\HTTPRequest $request)
     {
-        $date = $request->postData('jour');
-        
-        if (!$date) {
-            $this->jsonResponse(['error' => 'Date parameter missing'], 400);
-            return;
+        try {
+            $date = $request->postData('jour');
+            
+            if (!$date) {
+                $this->jsonResponse(['error' => 'Date parameter missing'], 400);
+                return;
+            }
+
+            // Pour admin/control/superadmin : toutes les agences, sinon seulement les agences de l'utilisateur
+            if ($_SESSION['statut'] == 'admin' || $_SESSION['statut'] == 'superadmin' || $_SESSION['statut'] == 'Control') {
+                $Agence = $this->managers->getManagerOf("Pannel")->ListeAgence();
+            } else {
+                $Agence = $this->managers->getManagerOf("Pannel")->UserAgence();
+            }
+
+            $journalManager = $this->managers->getManagerOf("Journal");
+            $petiteCaisseData = $journalManager->GetPetiteCaisseDataOptimized($date, $Agence);
+
+            $this->jsonResponse([
+                'success' => true,
+                'data' => $petiteCaisseData,
+                'date' => $date
+            ]);
+        } catch (\Exception $e) {
+            $this->jsonResponse(['error' => $e->getMessage()], 500);
         }
-
-        // Pour admin/control/superadmin : toutes les agences, sinon seulement les agences de l'utilisateur
-        if ($_SESSION['statut'] == 'admin' || $_SESSION['statut'] == 'superadmin' || $_SESSION['statut'] == 'Control') {
-            $Agence = $this->managers->getManagerOf("Pannel")->ListeAgence();
-        } else {
-            $Agence = $this->managers->getManagerOf("Pannel")->UserAgence();
-        }
-
-        $journalManager = $this->managers->getManagerOf("Journal");
-        $petiteCaisseData = $journalManager->GetPetiteCaisseDataOptimized($date, $Agence);
-
-        $this->jsonResponse([
-            'success' => true,
-            'data' => $petiteCaisseData,
-            'date' => $date
-        ]);
     }
 
     public function executeGetClosureStatus(\Library\HTTPRequest $request)

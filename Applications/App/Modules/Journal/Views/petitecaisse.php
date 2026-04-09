@@ -178,7 +178,7 @@
                                           </div>
                                           <div class='modal-body'>
                                               <ul>
-                                                  <?php foreach ([$value['SommeDepotProduit'], $value['SommeSortieProduit']] as $index => $products) : ?>
+                                                  <?php foreach ([$value['SommeDepotProduit'] ?? [], $value['SommeSortieProduit'] ?? []] as $index => $products) : ?>
                                                   <h5><?= $index === 0 ? 'Dépôt' : 'Retrait' ?></h5>
                                                   <?php foreach ($products as $product => $total) : ?>
                                                   <li><?= $product ?> :
@@ -223,7 +223,7 @@ waitForJQuery(function() {
     $(document).ready(function() {
         // Store current data for comparison
         var currentData = <?= json_encode($Agence); ?>;
-        
+
         // Load data via AJAX when button is clicked
         $('#loadDataBtn').on('click', function() {
             var date = $('#jour').val();
@@ -231,19 +231,23 @@ waitForJQuery(function() {
                 alert('Veuillez sélectionner une date');
                 return;
             }
-            
+
             // Show loading indicator
-            $('#loadDataBtn').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
-            
+            $('#loadDataBtn').prop('disabled', true).html(
+                '<i class="fa fa-spinner fa-spin"></i>');
+
             $.ajax({
                 url: '/Journal/getPetiteCaisseData',
                 type: 'POST',
-                data: { jour: date },
+                data: {
+                    jour: date
+                },
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
                         // Update the page by reloading with the new date
-                        window.location.href = '/Journal/petite_caisse?jour=' + date;
+                        window.location.href = '/Journal/petite_caisse?jour=' +
+                            date;
                     } else {
                         alert('Erreur: ' + (response.error || 'Unknown error'));
                     }
@@ -252,15 +256,16 @@ waitForJQuery(function() {
                     alert('Erreur de chargement: ' + error);
                 },
                 complete: function() {
-                    $('#loadDataBtn').prop('disabled', false).html('<i class="fa fa-search"></i>');
+                    $('#loadDataBtn').prop('disabled', false).html(
+                        '<i class="fa fa-search"></i>');
                 }
             });
         });
-        
+
         // Also trigger on date change
         $('#jour').on('change', function() {
             $('#loadDataBtn').click();
         });
     });
 });
-</script>
+  </script>

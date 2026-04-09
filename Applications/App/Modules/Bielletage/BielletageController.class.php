@@ -371,7 +371,7 @@ class BielletageController extends \Library\BackController
         }
     }
 
-    private function JsonResponse($data, $success = true, $statusCode = 200)
+    protected function JsonResponse($data, $success = true, $statusCode = 200)
     {
         if (!headers_sent()) {
             header('Content-Type: application/json');

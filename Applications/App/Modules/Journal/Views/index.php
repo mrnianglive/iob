@@ -90,7 +90,10 @@
                                       href="/Journal/cancelvalidate/<?= $value['RefOperations']; ?>"
                                       class="btn btn-success"
                                       onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vérifcation ?');">
-                                      Verifiée le <span><?= $value['DateValidate']; ?></span></a>
+                                      Verifiée le <span><?= $value['DateValidate']; ?></span>
+                                      <?php if (!empty($value['SentFromAgency'])) { ?>
+                                          <br><small>De: <?= $value['SentFromAgency']; ?></small>
+                                      <?php } ?></a>
                                   <?php   } ?>
                               </td>
                               <?php } ?>

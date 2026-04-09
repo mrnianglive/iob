@@ -240,40 +240,26 @@ class JournalController extends \Library\BackController
     {
         $this->page->addVar("titles", "Gestion des Fermetures");
 
-        // Pour admin/control/superadmin : toutes les agences, sinon seulement les agences de l'utilisateur
+        // Determine the date
+        if (!empty($request->postData('jour'))) {
+            $date = $request->postData('jour');
+        } elseif (!empty($request->getData('jour'))) {
+            $date = $request->getData('jour');
+        } else {
+            $date = date('Y-m-d');
+        }
+        $this->page->addVar('day', $date);
+
+        // Get agencies based on user role
         if ($_SESSION['statut'] == 'admin' || $_SESSION['statut'] == 'superadmin' || $_SESSION['statut'] == 'Control') {
             $Agence = $this->managers->getManagerOf("Pannel")->ListeAgence();
         } else {
             $Agence = $this->managers->getManagerOf("Pannel")->UserAgence();
         }
+
+        // Use optimized method that combines all queries
+        $Agence = $this->managers->getManagerOf("Journal")->GetPetiteCaisseDataOptimized($date, $Agence);
         $this->page->addVar('Agence', $Agence);
-
-        $currentYear = date('Y');
-        $currentMonth = date('n');
-
-        if ($request->postData('year')) {
-            $year = $request->postData('year');
-            $this->page->addVar('year', $year);
-        } else {
-            $year = $currentYear;
-            $this->page->addVar('year', $year);
-        }
-
-        if ($request->postData('month')) {
-            $month = $request->postData('month');
-            $this->page->addVar('month', $month);
-        } else {
-            $month = $currentMonth;
-            $this->page->addVar('month', $month);
-        }
-
-        if ($request->postData('RefAgency')) {
-            $selectedAgency = $request->postData('RefAgency');
-            $this->page->addVar('selectedAgency', $selectedAgency);
-        } elseif (!empty($Agence)) {
-            $selectedAgency = $Agence[0]['RefAgency'];
-            $this->page->addVar('selectedAgency', $selectedAgency);
-        }
     }
 
     public function executeGetPetiteCaisseData(\Library\HTTPRequest $request)
@@ -329,9 +315,18 @@ class JournalController extends \Library\BackController
 
     public function executeFermerAgence(\Library\HTTPRequest $request)
     {
+        // Server-side permission validation
+        if ($_SESSION['statut'] == 'Caissier') {
+            $_SESSION['message']['type'] = 'error';
+            $_SESSION['message']['text'] = 'Non autorisé : Les caissiers ne peuvent pas fermer les agences';
+            $_SESSION['message']['number'] = 3;
+            $this->app()->httpResponse()->redirect("/Journal/gestion_fermeture");
+            return;
+        }
+
         $agency = $request->postData('RefAgency');
-        $date = $request->postData('date');
-        $solde = $request->postData('SoldeActuelle');
+        $date = $request->postData('daycloture');
+        $solde = $request->postData('ReserveActuelle');
 
         if (!$agency || !$date || $solde === null) {
             $_SESSION['message']['type'] = 'error';
@@ -341,7 +336,16 @@ class JournalController extends \Library\BackController
             return;
         }
 
-        $time = $date . ' ' . date('H:i:s');
+        // Chronological validation
+        $canClose = $this->managers->getManagerOf("Journal")->CanCloseDay($agency, $date);
+        if (!$canClose['can_close']) {
+            $_SESSION['message']['type'] = 'warning';
+            $_SESSION['message']['text'] = $canClose['message'];
+            $_SESSION['message']['number'] = 3;
+            $this->app()->httpResponse()->redirect("/Journal/gestion_fermeture");
+            return;
+        }
+
         $this->managers->getManagerOf("Journal")->Reserve();
 
         $_SESSION['message']['type'] = 'success';

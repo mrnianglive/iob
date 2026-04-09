@@ -122,54 +122,26 @@ class JournalController extends \Library\BackController
 
     public function executePetitecaisse(\Library\HTTPRequest $request)
     {
-        $this->page->addVar("titles", "Petite Caisse"); // Titre de la page
-        $Agence  = $this->managers->getManagerOf("Pannel")->UserAgence(); //Recuperation de la liste
-        foreach ($Agence as $key => $value) {
-            if (!empty($request->postData('jour'))) {
-                $date = $request->postData('jour');
-                $this->page->addVar('day', $request->postData('jour'));
-            } else {
-                $date = date('Y-m-d');
-                $this->page->addVar('day', $date);
-            }
-            $Agence[$key]['SommeDepotRemittance'] = floatval($this->managers->getManagerOf("Journal")->SoldeRemittanceVersementAgence($date, $value['RefAgency']));
-            $Agence[$key]['SommeRetraitRemittance'] = floatval($this->managers->getManagerOf("Journal")->SoldeRemittanceRetraitAgence($date, $value['RefAgency']));
+        $this->page->addVar("titles", "Petite Caisse");
 
-            $Agence[$key]['SoldeRemittanceAgence'] = $Agence[$key]['SommeDepotRemittance'] - $Agence[$key]['SommeRetraitRemittance'];
-            $Agence[$key]['Afficher'] = $this->managers->getManagerOf("Journal")->CaisseAgence($value['RefAgency'], $date);
-            $Agence[$key]['validate'] = $this->managers->getManagerOf("Journal")->CheckDailyClose($value['RefAgency'], $date);
-
-            $reserveData = $this->managers->getManagerOf("Journal")->YesterdayReserve($value['RefAgency'], $date);
-
-            // Ensure numeric value for YesterdayReserve
-            $Agence[$key]['YesterdayReserve'] = floatval($reserveData['SoldeCompte']);
-
-            // Additionally, if you want to store the date of the last recorded balance
-            $Agence[$key]['LastDate'] = $this->managers->getManagerOf("Journal")->displayDaysSinceLastDate($reserveData['DateSolde']);
-
-
-
-            $Agence[$key]['SommeDepot'] = floatval($this->managers->getManagerOf("Journal")->SommeDepotAgence($date, $value['RefAgency']));
-            $Agence[$key]['SommeSortie'] = floatval($this->managers->getManagerOf("Journal")->SommeRetraitAgence($date, $value['RefAgency']));
-
-            $Agence[$key]['SommeDepotWithRemittance'] = $Agence[$key]['SommeDepot'] + $Agence[$key]['SommeDepotRemittance'];
-            $Agence[$key]['SommeSortieWithRemittance'] = $Agence[$key]['SommeSortie'] + $Agence[$key]['SommeRetraitRemittance'];
-
-            $Agence[$key]['TotalAppoAgenceSansApproInitial'] = floatval($this->managers->getManagerOf("Journal")->TotalApproAgenceSansApproInitial($date, $value['RefAgency']));
-            $Agence[$key]['TotalSortieAgence'] = floatval($this->managers->getManagerOf("Journal")->TotalSortieAgence($date, $value['RefAgency']));
-
-            $Agence[$key]['SommeTimbre'] = floatval($this->managers->getManagerOf("Journal")->SommeFraisTimbreAgence($date, $value['RefAgency']));
-
-            // Calculate ReserveActuelle using numeric values
-            $Agence[$key]['ReserveActuelle'] = $Agence[$key]['YesterdayReserve'] + $Agence[$key]['SommeDepot'] - $Agence[$key]['SommeSortie'] +
-                $Agence[$key]['TotalAppoAgenceSansApproInitial'] - $Agence[$key]['TotalSortieAgence'] + $Agence[$key]['SoldeRemittanceAgence'] + $Agence[$key]['SommeTimbre'];
-
-
-            $Agence[$key]['DayReserve'] = $Agence[$key]['YesterdayReserve'] - floatval($this->managers->getManagerOf("Journal")->TotalApproAgenceAvecApproInitial($date, $value['RefAgency']));
-
-            $Agence[$key]['SommeDepotProduit'] = $this->managers->getManagerOf("Journal")->SommeDepotProduitAgence($date, $value['RefAgency']);
-            $Agence[$key]['SommeSortieProduit'] = $this->managers->getManagerOf("Journal")->SommeRetraitProduitAgence($date, $value['RefAgency']);
+        if (!empty($request->postData('jour'))) {
+            $date = $request->postData('jour');
+            $this->page->addVar('day', $request->postData('jour'));
+        } else {
+            $date = date('Y-m-d');
+            $this->page->addVar('day', $date);
         }
+
+        // Get agencies based on user role
+        if ($_SESSION['statut'] == 'admin' || $_SESSION['statut'] == 'superadmin' || $_SESSION['statut'] == 'Control') {
+            $Agence = $this->managers->getManagerOf("Pannel")->ListeAgence();
+        } else {
+            $Agence = $this->managers->getManagerOf("Pannel")->UserAgence();
+        }
+
+        // Use optimized method that combines all queries into 1-2 SQL queries
+        $Agence = $this->managers->getManagerOf("Journal")->GetPetiteCaisseDataOptimized($date, $Agence);
+
         $this->page->addVar('Agence', $Agence);
     }
 
@@ -259,5 +231,89 @@ class JournalController extends \Library\BackController
             $permissions[] = $value['access'];
         }
         $this->page->addVar('permission', $permissions);
+    }
+
+    public function executeGestionFermeture(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Gestion des Fermetures");
+
+        // Pour admin/control/superadmin : toutes les agences, sinon seulement les agences de l'utilisateur
+        if ($_SESSION['statut'] == 'admin' || $_SESSION['statut'] == 'superadmin' || $_SESSION['statut'] == 'Control') {
+            $Agence = $this->managers->getManagerOf("Pannel")->ListeAgence();
+        } else {
+            $Agence = $this->managers->getManagerOf("Pannel")->UserAgence();
+        }
+        $this->page->addVar('Agence', $Agence);
+
+        $currentYear = date('Y');
+        $currentMonth = date('n');
+
+        if ($request->postData('year')) {
+            $year = $request->postData('year');
+            $this->page->addVar('year', $year);
+        } else {
+            $year = $currentYear;
+            $this->page->addVar('year', $year);
+        }
+
+        if ($request->postData('month')) {
+            $month = $request->postData('month');
+            $this->page->addVar('month', $month);
+        } else {
+            $month = $currentMonth;
+            $this->page->addVar('month', $month);
+        }
+
+        if ($request->postData('RefAgency')) {
+            $selectedAgency = $request->postData('RefAgency');
+            $this->page->addVar('selectedAgency', $selectedAgency);
+        } elseif (!empty($Agence)) {
+            $selectedAgency = $Agence[0]['RefAgency'];
+            $this->page->addVar('selectedAgency', $selectedAgency);
+        }
+    }
+
+    public function executeGetClosureStatus(\Library\HTTPRequest $request)
+    {
+        $year = $request->postData('year');
+        $month = $request->postData('month');
+        $agency = $request->postData('RefAgency');
+
+        if (!$year || !$month || !$agency) {
+            $this->jsonResponse(['error' => 'Missing parameters'], 400);
+            return;
+        }
+
+        $journalManager = $this->managers->getManagerOf("Journal");
+        $closures = $journalManager->GetMonthlyClosureStatus($agency, $year, $month);
+        $daysWithOps = $journalManager->GetDaysWithOperations($agency, $year, $month);
+
+        $this->jsonResponse([
+            'closures' => $closures,
+            'daysWithOps' => $daysWithOps
+        ]);
+    }
+
+    public function executeFermerAgence(\Library\HTTPRequest $request)
+    {
+        $agency = $request->postData('RefAgency');
+        $date = $request->postData('date');
+        $solde = $request->postData('SoldeActuelle');
+
+        if (!$agency || !$date || $solde === null) {
+            $_SESSION['message']['type'] = 'error';
+            $_SESSION['message']['text'] = 'Paramètres manquants';
+            $_SESSION['message']['number'] = 3;
+            $this->app()->httpResponse()->redirect("/Journal/gestion_fermeture");
+            return;
+        }
+
+        $time = $date . ' ' . date('H:i:s');
+        $this->managers->getManagerOf("Journal")->Reserve();
+
+        $_SESSION['message']['type'] = 'success';
+        $_SESSION['message']['text'] = 'Fermeture effectuée avec succès';
+        $_SESSION['message']['number'] = 3;
+        $this->app()->httpResponse()->redirect("/Journal/gestion_fermeture");
     }
 }

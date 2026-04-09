@@ -527,6 +527,157 @@ class JournalManagerPDO extends JournalManager
         return $ListeCaisse;
     }
 
+    public function CaisseAgenceOptimized($Agence, $Date)
+    {
+        $sql = "
+            SELECT 
+                c.RefCaisse,
+                c.NameCaisse,
+                a.RefAgency,
+                a.NameAgency,
+                COALESCE(srv.SommeVersementRemittance, 0) as SoldeRemittanceVersement,
+                COALESCE(srr.SommeRetraitRemittance, 0) as SoldeRemittanceRetrait,
+                COALESCE(noc.NbreOperation, 0) as NbreOperation,
+                COALESCE(si.SoldeInitial, 0) as SoldeInitial,
+                COALESCE(sig.SoldeInitialGlobal, 0) as SoldeInitialGlobal,
+                COALESCE(tac.TotalAppro, 0) as TotalAppro,
+                COALESCE(svc.TotalVersement, 0) as TotalVersement,
+                COALESCE(src.TotalRetrait, 0) as TotalRetrait,
+                COALESCE(tsc.TotalSortieCaisse, 0) as TotalSortieCaisse,
+                COALESCE(tft.TotalFraisTimbre, 0) as TotalFraisTimbre
+            FROM TbleCaisse c
+            INNER JOIN TbleAgency a ON a.RefAgency = c.RefAgency
+            LEFT JOIN (
+                SELECT 
+                    RefCaisse,
+                    SUM(MontantTransaction) as SommeVersementRemittance
+                FROM TbleRemittance 
+                WHERE DATE(Insert_time) = :date
+                AND RefType = 1
+                AND Reset_Id IS NULL
+                GROUP BY RefCaisse
+            ) srv ON srv.RefCaisse = c.RefCaisse
+            LEFT JOIN (
+                SELECT 
+                    RefCaisse,
+                    SUM(MontantTransaction) as SommeRetraitRemittance
+                FROM TbleRemittance 
+                WHERE DATE(Insert_time) = :date
+                AND RefType = 2
+                AND Reset_Id IS NULL
+                GROUP BY RefCaisse
+            ) srr ON srr.RefCaisse = c.RefCaisse
+            LEFT JOIN (
+                SELECT 
+                    RefCaisse,
+                    COUNT(*) as NbreOperation
+                FROM TbleOperations 
+                WHERE Approve2_Id IS NOT NULL
+                AND Reset_Id IS NULL
+                AND DATE(Approve2_Time) = :date
+                GROUP BY RefCaisse
+            ) noc ON noc.RefCaisse = c.RefCaisse
+            LEFT JOIN (
+                SELECT 
+                    RefCaisse,
+                    SUM(MontantVersement) as SoldeInitial
+                FROM TbleOperations 
+                WHERE Approve2_Id IS NOT NULL
+                AND Reset_Id IS NULL
+                AND DATE(Approve2_Time) = :date
+                AND RefType = 1
+                AND TypeAppro = 1
+                GROUP BY RefCaisse
+            ) si ON si.RefCaisse = c.RefCaisse
+            LEFT JOIN (
+                SELECT 
+                    RefCaisse,
+                    SUM(MontantVersement) as SoldeInitialGlobal
+                FROM TbleOperations 
+                WHERE Approve2_Id IS NOT NULL
+                AND Reset_Id IS NULL
+                AND DATE(Approve2_Time) = :date
+                AND RefType = 1
+                GROUP BY RefCaisse
+            ) sig ON sig.RefCaisse = c.RefCaisse
+            LEFT JOIN (
+                SELECT 
+                    RefCaisse,
+                    SUM(MontantVersement) as TotalAppro
+                FROM TbleOperations 
+                WHERE Approve2_Id IS NOT NULL
+                AND Reset_Id IS NULL
+                AND DATE(Approve2_Time) = :date
+                AND RefType = 3
+                GROUP BY RefCaisse
+            ) tac ON tac.RefCaisse = c.RefCaisse
+            LEFT JOIN (
+                SELECT 
+                    RefCaisse,
+                    SUM(MontantVersement) as TotalVersement
+                FROM TbleOperations 
+                WHERE Approve2_Id IS NOT NULL
+                AND Reset_Id IS NULL
+                AND DATE(Approve2_Time) = :date
+                AND RefType = 1
+                GROUP BY RefCaisse
+            ) svc ON svc.RefCaisse = c.RefCaisse
+            LEFT JOIN (
+                SELECT 
+                    RefCaisse,
+                    SUM(MontantVersement) as TotalRetrait
+                FROM TbleOperations 
+                WHERE Approve2_Id IS NOT NULL
+                AND Reset_Id IS NULL
+                AND DATE(Approve2_Time) = :date
+                AND RefType = 2
+                GROUP BY RefCaisse
+            ) src ON src.RefCaisse = c.RefCaisse
+            LEFT JOIN (
+                SELECT 
+                    RefCaisse,
+                    SUM(MontantVersement) as TotalSortieCaisse
+                FROM TbleOperations 
+                WHERE Approve2_Id IS NOT NULL
+                AND Reset_Id IS NULL
+                AND DATE(Approve2_Time) = :date
+                AND RefType = 4
+                GROUP BY RefCaisse
+            ) tsc ON tsc.RefCaisse = c.RefCaisse
+            LEFT JOIN (
+                SELECT 
+                    RefCaisse,
+                    SUM(MontantVersement) as TotalFraisTimbre
+                FROM TbleOperations 
+                WHERE Approve2_Id IS NOT NULL
+                AND Reset_Id IS NULL
+                AND DATE(Approve2_Time) = :date
+                AND RefType = 5
+                GROUP BY RefCaisse
+            ) tft ON tft.RefCaisse = c.RefCaisse
+            WHERE a.RefAgency = :refAgency
+        ";
+
+        $requete = $this->dao->prepare($sql);
+        $requete->bindValue(':date', $Date, \PDO::PARAM_STR);
+        $requete->bindValue(':refAgency', $Agence, \PDO::PARAM_INT);
+        $requete->execute();
+        $ListeCaisse = $requete->fetchAll(\PDO::FETCH_ASSOC);
+
+        // Calculate derived values
+        foreach ($ListeCaisse as &$caisse) {
+            $caisse['SoldeRemittance'] = $caisse['SoldeRemittanceVersement'] - $caisse['SoldeRemittanceRetrait'];
+            $caisse['SoldeDisponible'] = $caisse['SoldeInitialGlobal'] 
+                + $caisse['TotalVersement'] 
+                - $caisse['TotalRetrait'] 
+                - $caisse['TotalSortieCaisse'] 
+                + $caisse['SoldeRemittance'] 
+                + $caisse['TotalFraisTimbre'];
+        }
+
+        return $ListeCaisse;
+    }
+
     public function SoldeRemittanceVersement($Date, $Caisse)
     {
         $requete = $this->dao->prepare('SELECT SUM(MontantTransaction) AS SoldeRemittance FROM TbleRemittance WHERE DATE(Insert_time)=:jour AND RefCaisse=:RefCaisse AND RefType=1 AND Reset_Id IS NULL');  //AND RefCaisse=:RefCaisse  
@@ -983,6 +1134,263 @@ class JournalManagerPDO extends JournalManager
         $requete->execute();
         $Result = $requete->fetch();
         return $Result;
+    }
+
+    public function GetMonthlyClosureStatus($agency, $year, $month)
+    {
+        $startDate = sprintf('%04d-%02d-01', $year, $month);
+        $endDate = sprintf('%04d-%02d-31', $year, $month);
+
+        $query = $this->dao->prepare("
+            SELECT DATE(DateSolde) as closure_date, RefCompte, SoldeCompte
+            FROM TbleCompte
+            WHERE RefAgency = :RefAgency
+            AND DateSolde BETWEEN :startDate AND :endDate
+            ORDER BY DateSolde
+        ");
+        $query->bindValue(':RefAgency', $agency, \PDO::PARAM_INT);
+        $query->bindValue(':startDate', $startDate, \PDO::PARAM_STR);
+        $query->bindValue(':endDate', $endDate, \PDO::PARAM_STR);
+        $query->execute();
+
+        $closures = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        $status = [];
+        foreach ($closures as $closure) {
+            $day = date('j', strtotime($closure['closure_date']));
+            $status[$day] = [
+                'closed' => true,
+                'RefCompte' => $closure['RefCompte'],
+                'SoldeCompte' => $closure['SoldeCompte']
+            ];
+        }
+
+        return $status;
+    }
+
+    public function GetDaysWithOperations($agency, $year, $month)
+    {
+        $startDate = sprintf('%04d-%02d-01', $year, $month);
+        $endDate = sprintf('%04d-%02d-31', $year, $month);
+
+        $query = $this->dao->prepare("
+            SELECT DISTINCT DATE(Approve2_Time) as op_date
+            FROM TbleOperations
+            INNER JOIN TbleCaisse ON TbleCaisse.RefCaisse = TbleOperations.RefCaisse
+            WHERE TbleCaisse.RefAgency = :RefAgency
+            AND Approve2_Time BETWEEN :startDate AND :endDate
+            AND Approve2_Id IS NOT NULL
+            AND Reset_Id IS NULL
+            ORDER BY op_date
+        ");
+        $query->bindValue(':RefAgency', $agency, \PDO::PARAM_INT);
+        $query->bindValue(':startDate', $startDate, \PDO::PARAM_STR);
+        $query->bindValue(':endDate', $endDate, \PDO::PARAM_STR);
+        $query->execute();
+
+        $days = [];
+        $results = $query->fetchAll(\PDO::FETCH_ASSOC);
+        foreach ($results as $row) {
+            $day = date('j', strtotime($row['op_date']));
+            $days[$day] = true;
+        }
+
+        return $days;
+    }
+
+    public function GetPetiteCaisseDataOptimized($date, $agencies)
+    {
+        if (empty($agencies)) {
+            return [];
+        }
+
+        $agencyIds = array_column($agencies, 'RefAgency');
+        $placeholders = implode(',', array_fill(0, count($agencyIds), '?'));
+        
+        $sql = "
+            SELECT 
+                a.RefAgency,
+                a.NameAgency,
+                COALESCE(srv.SommeVersementRemittance, 0) as SommeDepotRemittance,
+                COALESCE(srr.SommeRetraitRemittance, 0) as SommeRetraitRemittance,
+                COALESCE(sd.SommeDepot, 0) as SommeDepot,
+                COALESCE(sr.SommeRetrait, 0) as SommeRetrait,
+                COALESCE(taas.TotalAppro, 0) as TotalAppoAgenceSansApproInitial,
+                COALESCE(tsa.TotalSortie, 0) as TotalSortieAgence,
+                COALESCE(sft.SommeFraisTimbre, 0) as SommeTimbre,
+                COALESCE(taac.TotalAppro, 0) as TotalApproAgenceAvecApproInitial,
+                COALESCE(c.RefCompte, 0) as RefCompte,
+                c.DateSolde,
+                yc.SoldeCompte as YesterdaySoldeCompte,
+                yc.DateSolde as YesterdayDateSolde
+            FROM TbleAgency a
+            LEFT JOIN (
+                SELECT 
+                    c.RefAgency,
+                    SUM(r.MontantTransaction) as SommeVersementRemittance
+                FROM TbleRemittance r
+                INNER JOIN TbleCaisse c ON c.RefCaisse = r.RefCaisse
+                WHERE DATE(r.Insert_time) = :date
+                AND r.RefType = 1
+                AND r.Reset_Id IS NULL
+                GROUP BY c.RefAgency
+            ) srv ON srv.RefAgency = a.RefAgency
+            LEFT JOIN (
+                SELECT 
+                    c.RefAgency,
+                    SUM(r.MontantTransaction) as SommeRetraitRemittance
+                FROM TbleRemittance r
+                INNER JOIN TbleCaisse c ON c.RefCaisse = r.RefCaisse
+                WHERE DATE(r.Insert_time) = :date
+                AND r.RefType = 2
+                AND r.Reset_Id IS NULL
+                GROUP BY c.RefAgency
+            ) srr ON srr.RefAgency = a.RefAgency
+            LEFT JOIN (
+                SELECT 
+                    c.RefAgency,
+                    SUM(o.MontantVersement) as SommeDepot
+                FROM TbleOperations o
+                INNER JOIN TbleCaisse c ON c.RefCaisse = o.RefCaisse
+                WHERE o.Approve2_Id IS NOT NULL
+                AND o.Reset_Id IS NULL
+                AND DATE(o.Approve2_Time) = :date
+                AND o.RefType = 1
+                GROUP BY c.RefAgency
+            ) sd ON sd.RefAgency = a.RefAgency
+            LEFT JOIN (
+                SELECT 
+                    c.RefAgency,
+                    SUM(o.MontantVersement) as SommeRetrait
+                FROM TbleOperations o
+                INNER JOIN TbleCaisse c ON c.RefCaisse = o.RefCaisse
+                WHERE o.Approve2_Id IS NOT NULL
+                AND o.Reset_Id IS NULL
+                AND DATE(o.Approve2_Time) = :date
+                AND o.RefType = 2
+                GROUP BY c.RefAgency
+            ) sr ON sr.RefAgency = a.RefAgency
+            LEFT JOIN (
+                SELECT 
+                    c.RefAgency,
+                    SUM(o.MontantVersement) as TotalAppro
+                FROM TbleOperations o
+                INNER JOIN TbleCaisse c ON c.RefCaisse = o.RefCaisse
+                WHERE o.Approve2_Id IS NOT NULL
+                AND o.Reset_Id IS NULL
+                AND DATE(o.Approve2_Time) = :date
+                AND o.RefType = 3
+                AND o.TypeAppro = 2
+                GROUP BY c.RefAgency
+            ) taas ON taas.RefAgency = a.RefAgency
+            LEFT JOIN (
+                SELECT 
+                    c.RefAgency,
+                    SUM(o.MontantVersement) as TotalSortie
+                FROM TbleOperations o
+                INNER JOIN TbleCaisse c ON c.RefCaisse = o.RefCaisse
+                WHERE o.Approve2_Id IS NOT NULL
+                AND o.Reset_Id IS NULL
+                AND DATE(o.Approve2_Time) = :date
+                AND o.RefType = 4
+                GROUP BY c.RefAgency
+            ) tsa ON tsa.RefAgency = a.RefAgency
+            LEFT JOIN (
+                SELECT 
+                    c.RefAgency,
+                    SUM(o.MontantVersement) as SommeFraisTimbre
+                FROM TbleOperations o
+                INNER JOIN TbleCaisse c ON c.RefCaisse = o.RefCaisse
+                WHERE o.Approve2_Id IS NOT NULL
+                AND o.Reset_Id IS NULL
+                AND DATE(o.Approve2_Time) = :date
+                AND o.RefType = 5
+                GROUP BY c.RefAgency
+            ) sft ON sft.RefAgency = a.RefAgency
+            LEFT JOIN (
+                SELECT 
+                    c.RefAgency,
+                    SUM(o.MontantVersement) as TotalAppro
+                FROM TbleOperations o
+                INNER JOIN TbleCaisse c ON c.RefCaisse = o.RefCaisse
+                WHERE o.Approve2_Id IS NOT NULL
+                AND o.Reset_Id IS NULL
+                AND DATE(o.Approve2_Time) = :date
+                AND o.RefType = 3
+                AND o.TypeAppro = 1
+                GROUP BY c.RefAgency
+            ) taac ON taac.RefAgency = a.RefAgency
+            LEFT JOIN TbleCompte c ON c.RefAgency = a.RefAgency AND DATE(c.DateSolde) = :date
+            LEFT JOIN (
+                SELECT 
+                    RefAgency,
+                    SoldeCompte,
+                    DateSolde
+                FROM TbleCompte
+                WHERE (RefAgency, DateSolde) IN (
+                    SELECT RefAgency, MAX(DateSolde)
+                    FROM TbleCompte
+                    WHERE RefAgency IN ($placeholders)
+                    AND DateSolde < :date
+                    GROUP BY RefAgency
+                )
+            ) yc ON yc.RefAgency = a.RefAgency
+            WHERE a.RefAgency IN ($placeholders)
+        ";
+
+        $params = array_merge([$date, $date, $date, $date, $date, $date, $date, $date, $date, $date], $agencyIds, [$date], $agencyIds, [$date]);
+        
+        $requete = $this->dao->prepare($sql);
+        foreach ($params as $i => $param) {
+            $type = is_int($param) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
+            $requete->bindValue($i + 1, $param, $type);
+        }
+        $requete->execute();
+        $results = $requete->fetchAll(\PDO::FETCH_ASSOC);
+
+        // Index results by RefAgency
+        $indexed = [];
+        foreach ($results as $row) {
+            $refAgency = $row['RefAgency'];
+            $indexed[$refAgency] = $row;
+        }
+
+        // Get caisse data for each agency using optimized method
+        $caisseData = [];
+        foreach ($agencies as $agency) {
+            $refAgency = $agency['RefAgency'];
+            $caisseData[$refAgency] = $this->CaisseAgenceOptimized($refAgency, $date);
+        }
+
+        // Merge data
+        $finalData = [];
+        foreach ($agencies as $agency) {
+            $refAgency = $agency['RefAgency'];
+            $finalData[$refAgency] = array_merge($agency, $indexed[$refAgency] ?? []);
+            $finalData[$refAgency]['Afficher'] = $caisseData[$refAgency] ?? [];
+            $finalData[$refAgency]['validate'] = !empty($indexed[$refAgency]['RefCompte']) ? $indexed[$refAgency] : null;
+            
+            // Calculate derived values
+            $finalData[$refAgency]['SoldeRemittanceAgence'] = $finalData[$refAgency]['SommeDepotRemittance'] - $finalData[$refAgency]['SommeRetraitRemittance'];
+            $finalData[$refAgency]['SommeDepotWithRemittance'] = $finalData[$refAgency]['SommeDepot'] + $finalData[$refAgency]['SommeDepotRemittance'];
+            $finalData[$refAgency]['SommeSortieWithRemittance'] = $finalData[$refAgency]['SommeRetrait'] + $finalData[$refAgency]['SommeRetraitRemittance'];
+            $finalData[$refAgency]['YesterdayReserve'] = floatval($finalData[$refAgency]['YesterdaySoldeCompte'] ?? 0);
+            $finalData[$refAgency]['LastDate'] = $this->displayDaysSinceLastDate($finalData[$refAgency]['YesterdayDateSolde']);
+            $finalData[$refAgency]['ReserveActuelle'] = $finalData[$refAgency]['YesterdayReserve'] 
+                + $finalData[$refAgency]['SommeDepot'] 
+                - $finalData[$refAgency]['SommeRetrait'] 
+                + $finalData[$refAgency]['TotalAppoAgenceSansApproInitial'] 
+                - $finalData[$refAgency]['TotalSortieAgence'] 
+                + $finalData[$refAgency]['SoldeRemittanceAgence'] 
+                + $finalData[$refAgency]['SommeTimbre'];
+            $finalData[$refAgency]['DayReserve'] = $finalData[$refAgency]['YesterdayReserve'] - $finalData[$refAgency]['TotalApproAgenceAvecApproInitial'];
+            
+            // Get product data (still separate queries for now)
+            $finalData[$refAgency]['SommeDepotProduit'] = $this->SommeDepotProduitAgence($date, $refAgency);
+            $finalData[$refAgency]['SommeRetraitProduit'] = $this->SommeRetraitProduitAgence($date, $refAgency);
+        }
+
+        return array_values($finalData);
     }
     public function SentFromAgency($Agence)
     {

@@ -165,6 +165,11 @@ if (!isset($_SESSION['DoubleAuth']) && isset($_SESSION['secret'])) {
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Journal/petite_caisse" aria-expanded="false"><i class="fa fa-columns"
                                     aria-hidden="true"></i><span class="hide-menu">Petite Caisse</span></a></li>
+                        <?php if ($_SESSION['statut'] == 'admin' or $_SESSION['statut'] == 'superadmin' or $_SESSION['statut'] == 'Control') { ?>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/Journal/gestion_fermeture" aria-expanded="false"><i class="fa fa-calendar-check"
+                                    aria-hidden="true"></i><span class="hide-menu">Gestion Fermetures</span></a></li>
+                        <?php } ?>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/Journal/index" aria-expanded="false"><i class="fa fa-table"
                                     aria-hidden="true"></i><span class="hide-menu">Journal de Caisse</span></a></li>

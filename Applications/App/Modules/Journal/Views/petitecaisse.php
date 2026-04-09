@@ -245,9 +245,18 @@ waitForJQuery(function() {
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        // Update the page by reloading with the new date
-                        window.location.href = '/Journal/petite_caisse?jour=' +
-                            date;
+                        // Create a form and submit it via POST to avoid 404 with GET parameters
+                        var form = $('<form>', {
+                            'method': 'POST',
+                            'action': '/Journal/petite_caisse'
+                        });
+                        form.append($('<input>', {
+                            'type': 'hidden',
+                            'name': 'jour',
+                            'value': date
+                        }));
+                        $('body').append(form);
+                        form.submit();
                     } else {
                         alert('Erreur: ' + (response.error || 'Unknown error'));
                     }
@@ -256,8 +265,7 @@ waitForJQuery(function() {
                     alert('Erreur de chargement: ' + error);
                 },
                 complete: function() {
-                    $('#loadDataBtn').prop('disabled', false).html(
-                        '<i class="fa fa-search"></i>');
+                    $('#loadDataBtn').prop('disabled', false).html('<i class="fa fa-search"></i>');
                 }
             });
         });
